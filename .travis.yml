@@ -16,4 +16,4 @@ before_script:
   - bundle exec rake db:test:prepare
 addons:
   code_climate:
-    repo_token: d13d3cdceb1684185a66e8ce0ff3f5f4aba8a14ed3aa7417beef7854782c1859
+    repo_token: a0f1e92e8d67e64420e951acd304cfb931515182e7b6c4aaafb7cb82bf9baf53
