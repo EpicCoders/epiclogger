@@ -14,6 +14,3 @@ before_script:
   - bundle exec rake db:schema:load
   - bundle exec rake db:migrate
   - bundle exec rake db:test:prepare
-addons:
-  code_climate:
-    repo_token: a0f1e92e8d67e64420e951acd304cfb931515182e7b6c4aaafb7cb82bf9baf53
