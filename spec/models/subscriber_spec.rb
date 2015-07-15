@@ -1,42 +1,42 @@
 require 'rails_helper'
 
  
-describe User do
+describe Subscriber do
 
-  let(:user) { build(:user) }
+  let(:subscriber) { build(:subscriber) }
 
   it "has a valid factory" do
-    expect(build(:user)).to be_valid
+    expect(build(:subscriber)).to be_valid
   end
 
   describe "ActiveModel validations" do
     it "is invalid without a name" do 
-      expect(user).to validate_presence_of :name
+      expect(subscriber).to validate_presence_of :name
     end 
 
     it "is invalid without an email" do 
-      expect(user).to validate_presence_of :email
+      expect(subscriber).to validate_presence_of :email
     end 
 
     it "is invalid without a website " do 
-      expect(user).to validate_presence_of :website
+      expect(subscriber).to validate_presence_of :website
     end 
 
     it "is invalid with duplication email" do 
-      expect(user).to validate_uniqueness_of :email
+      expect(subscriber).to validate_uniqueness_of :email
     end 
   end
 
    describe "ActiveRecord associations" do
-       
+
      it "belongs_to a website" do
-      expect(user).to belong_to(:website)
+      expect(subscriber).to belong_to(:website)
      end
-       
+
     it "has many errors" do
-      expect(user).to have_and_belong_to_many(:issues)
+      expect(subscriber).to have_and_belong_to_many(:issues)
      end
-       
+
    end
 
 end

@@ -16,8 +16,8 @@ describe Issue do
   end
 
    describe "ActiveRecord associations" do
-     it "has and belongs to many users" do
-      expect(issue).to have_and_belong_to_many(:users)
+     it "has and belongs to many subscribers" do
+      expect(issue).to have_and_belong_to_many(:subscribers)
      end
    end
 

@@ -7,7 +7,7 @@ Rails.application.routes.draw do
 
   resources :errors, only: [:show, :index]
   # resources :members, only: [:index]
-  resources :users, only: [:index]
+  resources :subscribers, only: [:index]
   resources :accounts, only: [:show]
   resources :installations, only: [:show, :index]
   resources :settings, only: [:index]
@@ -18,7 +18,7 @@ Rails.application.routes.draw do
   namespace :api, defaults: {format: :json} do
     namespace :v1 do
       resources :errors, only: [:create, :index, :show]
-      resources :users, only: [:index]
+      resources :subscribers, only: [:index]
       resources :members, only: [:show]
       resources :websites, only: [:index]
     end

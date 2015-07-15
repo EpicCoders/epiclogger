@@ -28,8 +28,8 @@ describe Website do
       expect(website).to belong_to(:member)
      end
        
-     it "has many users" do
-      expect(website).to have_many(:users)
+     it "has many subscribers" do
+      expect(website).to have_many(:subscribers)
      end
        
     it "has many errors" do
