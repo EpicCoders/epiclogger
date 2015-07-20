@@ -37,3 +37,13 @@ PubSub.subscribe('assigned.website', (ev, website)->
       $.getJSON '/api/v1/errors/' + gon.error_id, { website_id: website.id }, (data) ->
         $('#errordetails').render data, directive
 )
+
+$('#solve').on 'click', (e)->
+  e.preventDefault();
+  $.ajax
+    data: { status: 'resolved' }
+    url: Routes.error_url(gon.error_id)
+    type: 'PUT'
+    success: (result)->
+      debugger;
+  return
