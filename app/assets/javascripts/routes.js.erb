@@ -1,1 +1,1 @@
-<%= JsRoutes.generate() %>
+<%= JsRoutes.generate(default_url_options: {:host => ENV['APP_DOMAIN']}, url_links: true, exclude: [/admin/] ) %>
