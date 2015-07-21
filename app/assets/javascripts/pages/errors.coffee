@@ -41,9 +41,9 @@ PubSub.subscribe('assigned.website', (ev, website)->
 $('#solve').on 'click', (e)->
   e.preventDefault();
   $.ajax
-    data: { status: 'resolved' }
-    url: Routes.error_url(gon.error_id)
+    data: {error: {status: 'resolved'}}
+    url: Routes.api_v1_error_url(gon.error_id)
     type: 'PUT'
     success: (result)->
-      debugger;
+      alert 'Status updated'
   return

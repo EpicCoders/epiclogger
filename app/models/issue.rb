@@ -5,6 +5,8 @@ class Issue < ActiveRecord::Base
   belongs_to :website
   enumerize :status, in: {:unresolved => 1, :resolved => 2}, default: :unresolved
 
-
   validates :description, :presence => true, length: {minimum: 10}
+
+  attr_accessor :status
+
 end
