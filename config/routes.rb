@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   get 'signup' => 'members#new', :as => :signup
   delete 'logout' => 'sessions#destroy', :as => :logout
 
-  resources :errors, only: [:show, :index, :edit]
+  resources :errors, only: [:show, :index]
   # resources :members, only: [:index]
   resources :subscribers, only: [:index]
   resources :accounts, only: [:show]

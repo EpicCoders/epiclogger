@@ -14,12 +14,9 @@ class Api::V1::ErrorsController < Api::V1::ApiController
 
    def update
     @error = Issue.find(params[:id])
-    if @error.update_attributes(error_params)
-      Website.find(@error.website_id).subscribers.each do |member|
-        UserMailer.issue_solved(@error, member).deliver_now
-      end
-    end
+    @error.update_attributes(error_params)
   end
+
 
   private
     def error_params
