@@ -63,7 +63,6 @@ $('.messageTextarea').keydown((event) ->
   return
 $('form#notify').submit ->
   dataString = $('.messageTextarea').val()
-  theid = $(this).attr('data-the_id')
   $.ajax
     url: Routes.notify_subscribers_api_v1_error_url(gon.error_id)
     type: 'POST'
