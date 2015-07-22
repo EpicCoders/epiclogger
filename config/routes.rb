@@ -17,7 +17,11 @@ Rails.application.routes.draw do
   }
   namespace :api, defaults: {format: :json} do
     namespace :v1 do
-      resources :errors, only: [:create, :index, :show, :update]
+      resources :errors, only: [:create, :index, :show, :update] do
+        member do
+          post :notify_subscribers
+        end
+      end
       resources :subscribers, only: [:index]
       resources :members, only: [:show]
       resources :websites, only: [:index]

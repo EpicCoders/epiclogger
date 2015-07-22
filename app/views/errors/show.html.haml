@@ -32,10 +32,10 @@
     .panel.panel-default
       .panel-heading Update
       .panel-body
-        %form
+        %form#notify
           .form-group
             %label.subscribers_count{:for => "subscriber_update"}
-            %textarea#subscriber_update.form-control{:rows => "3"}
+            %textarea#subscriber_update.form-control.messageTextarea{:rows => "3"}
           .row
             .col-md-9.col-xs-7
               .checkbox
