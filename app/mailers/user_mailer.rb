@@ -5,7 +5,7 @@ class UserMailer < ApplicationMailer
     @message = message
     @website = Website.find(@issue.website_id)
     @member = subscriber
-    mail(to: @member.email, subject: 'Notification from a subscriber')
+    mail(to: @member.email, subject: 'Subscriber notification')
   end
 
 end
