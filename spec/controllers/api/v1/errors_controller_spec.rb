@@ -1,26 +1,44 @@
 require 'rails_helper'
 
-RSpec.describe Api::V1::ErrorsController, :type => :controller do
+describe Api::V1::ErrorsController, :type => :controller do
+  let(:member) { FactoryGirl.create :member }
+  let(:website) { FactoryGirl.create :website, member: member }
+  let(:issue_error) { FactoryGirl.create :issue, website: website }
+  let(:subscriber) { FactoryGirl.create :subscriber, email: 'newsub@email.com', website: website }
+  let!(:issue_subscriber) { FactoryGirl.create :subscriber_issue, issue: issue_error, subscriber: subscriber }
+  let(:message) { 'caca maca mesage' }
 
-  describe "NotifySubscribers"  do
-    let(:issue) { FactoryGirl.create(:issue) } 
-    let(:subscriber) { FactoryGirl.create :subscriber, issue_id: issue.id }
+  describe 'POST #notify_subscribers' do
+    it 'should email subscribers' do
+      mailer = double('UserMailer')
+      expect(mailer).to receive(:deliver_now)
+      expect(UserMailer).to receive(:issue_solved).with(issue_error, subscriber, message).and_return(mailer).once
 
-    it "should email subscribers" do
-      subscriber = FactoryGirl.create(:member)
-      post :notify_subscribers, {message: 'asdadasdad', id: issue.id}
-      expect(UserMailer).to receive(:issue_solved).once
-      subscriber.notify_subscribers
+      post :notify_subscribers, { message: message, id: issue_error.id, format: :json }
     end
+    # here we create another subscriber with issue_subscriber so the email is called twice
+    it 'should email 2 subscribers'
+    # use assigns here
+    it 'should assign error'
+    it 'should assign message'
   end
 
-
-  describe "PUT #update" do
-    it "shoult update error stauts" do
-      error = FactoryGirl.create :issue
-    end
+  describe 'GET #index' do
+    it 'should get current_site errors'
+    it 'should render json'
   end
 
+  describe 'GET #show' do
+    it 'should assign error'
+    it 'should render json'
+  end
+
+  describe 'PUT #update' do
+    it 'should assign error'
+    it 'should update error status'
+    it 'should not allow update of other parameters other than status'
+    it 'should render json'
+  end
 end
 
 

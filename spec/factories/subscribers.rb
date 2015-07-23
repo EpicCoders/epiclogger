@@ -4,7 +4,7 @@ FactoryGirl.define do
     email "testuser@google.com"
     association :website
 
-    issues {[FactoryGirl.create(:issue)]}
+    # issues {[FactoryGirl.create(:issue)]}
   end
 
 end

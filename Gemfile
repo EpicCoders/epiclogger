@@ -53,7 +53,6 @@ gem 'puma'
 group :development do
   gem "better_errors"
   gem "binding_of_caller"
-  gem 'pry'
 
   gem 'spring'
   gem 'spring-commands-rspec'
@@ -67,6 +66,7 @@ group :test do
 end
 
 group :development, :test do
+  gem 'pry'
   gem 'rspec-rails', '~> 3.2.1'
   gem 'factory_girl_rails'
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
