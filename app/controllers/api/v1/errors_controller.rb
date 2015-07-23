@@ -22,7 +22,7 @@ class Api::V1::ErrorsController < Api::V1::ApiController
     @message = params[:message]
     @error.subscribers.each do |member|
       UserMailer.issue_solved(@error, member, @message).deliver_now
-    end 
+    end
   end
 
 
