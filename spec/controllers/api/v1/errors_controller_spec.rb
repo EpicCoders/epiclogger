@@ -23,29 +23,36 @@ describe Api::V1::ErrorsController, :type => :controller do
     end
     # use assigns here
     it 'should assign error' do
+      # call create. use assigns like i wrote it below
       expect(UserMailer).to assigns(:issue_error).to(:website)
     end
     it 'should assign message' do
+      # call create. use assigns like i wrote it below
       expect(UserMailer).to assigns(:message).to(issue_error)
     end
   end
 
   describe 'GET #index' do
+    # call the fucking get :index method wtf ....
     it 'should get current_site errors' do
       get :issue_error
       member.should_receive(:issue_error)
     end
     it 'should render json' do
+      # look below
       expext(response).to respond_with 200
       expect(response).to respond_with_content_type(:json)
     end
   end
 
   describe 'GET #show' do
+    # don't forget to use get :show here as reponse does not assign itself ... wtf
     it 'should assign error' do
-      expect(:show).to assigns(:issue_error).to(:website)
+      # look below how i wrote the assigns test this is shit!
+      # expect(:show).to assigns(:issue_error).to(:website)
     end
     it 'should render json' do
+      # look below how i wrote this test!
       expext(response).to respond_with 200
       expect(response).to respond_with_content_type(:json)
     end
@@ -53,19 +60,23 @@ describe Api::V1::ErrorsController, :type => :controller do
 
   describe 'PUT #update' do
     it 'should assign error' do
-      expect(:subscriber).to assigns(:issue_error).to(:issue_subscriber)
+      put :update, { id: issue_error.id, error: {status: issue_error.status }, format: :json }
+      expect(assigns(:error)).to eq(issue_error)
     end
     it 'should update error status' do
-      put :update, status: issue_error.status
-      response.should be_successful
+      put :update, { id: issue_error.id, error: { status: issue_error.status }, format: :json }
+      # here check if issue_error.status is updated please use changed()
+      expect(response).to be_successful
     end
     it 'should not allow update of other parameters other than status' do
-      put :update, status: issue_error.status, web: issue_error.website
-      response.should_not be_successful
+      put :update, { id: issue_error.id, error: { status: issue_error.status, web: issue_error.website }, format: :json }
+      # here check if the other attribute not web is changed... !! strong params filters the wrong arguments so there is no error
+      expect(response).not_to be_successful
     end
     it 'should render json' do
-      expect(response).to respond with 200
-      expect(response).to respond_with_content_type(:json)
+      put :update, { id: issue_error.id, error: { status: issue_error.status, web: issue_error.website }, format: :json }
+      expect(response).to be_successful
+      expect(response.content_type).to eq('application/json')
     end
   end
 end
