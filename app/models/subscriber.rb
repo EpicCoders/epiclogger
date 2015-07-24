@@ -3,5 +3,5 @@ class Subscriber < ActiveRecord::Base
   has_and_belongs_to_many :issues, join_table: "subscriber_issues"
 
   validates_presence_of :name, :email, :website
-  validates_uniqueness_of :email, scope: [:website]
+  validates_uniqueness_of :email, scope: :website_id
 end

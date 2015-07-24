@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :member do
-    email "hello@google.com"
+    sequence(:email) { |n| "person#{n}@example.com" }
     name "Test User 1"
     provider "email"
     confirmed_at Time.now

@@ -1,11 +1,11 @@
 require 'rails_helper'
 
 describe Api::V1::ErrorsController, :type => :controller do
-  let(:member) { FactoryGirl.create :member }
-  let(:website) { FactoryGirl.create :website, member: member }
-  let(:issue_error) { FactoryGirl.create :issue, website: website, status: 'status' }
-  let(:subscriber) { FactoryGirl.create :subscriber, email: 'newsub@email.com', website: website }
-  let!(:issue_subscriber) { FactoryGirl.create :subscriber_issue, issue: issue_error, subscriber: subscriber }
+  let(:member) { create :member }
+  let(:website) { create :website, member: member }
+  let(:issue_error) { create :issue, website: website }
+  let(:subscriber) { create :subscriber, website: website }
+  let!(:issue_subscriber) { create :subscriber_issue, issue: issue_error, subscriber: subscriber }
   let(:message) { 'caca maca mesage' }
 
   describe 'POST #notify_subscribers' do
@@ -18,7 +18,7 @@ describe Api::V1::ErrorsController, :type => :controller do
     end
     # here we create another subscriber with issue_subscriber so the email is called twice
     it 'should email 2 subscribers' do
-      FactoryGirl.create :subscriber, :issue_subscriber
+      create :subscriber, :issue_subscriber
       expect(UserMailer).to receive(:issue_solved).with(issue_error, subscriber, message).and_return(mailer).twice
     end
     # use assigns here
