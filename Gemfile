@@ -63,10 +63,10 @@ group :test do
   gem 'capybara'
   gem 'shoulda-matchers', require: false
   gem "codeclimate-test-reporter", require: false
-  gem 'faker'
 end
 
 group :development, :test do
+  gem 'faker'
   gem 'pry'
   gem 'rspec-rails', '~> 3.2.1'
   gem 'factory_girl_rails'
