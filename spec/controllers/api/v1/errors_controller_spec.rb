@@ -40,7 +40,7 @@ describe Api::V1::ErrorsController, :type => :controller do
     end
     it 'should render json' do
       # look below
-      expext(response).to respond_with 200
+      expect(response).to respond_with 200
       expect(response).to respond_with_content_type(:json)
     end
   end
@@ -53,7 +53,7 @@ describe Api::V1::ErrorsController, :type => :controller do
     end
     it 'should render json' do
       # look below how i wrote this test!
-      expext(response).to respond_with 200
+      expect(response).to respond_with 200
       expect(response).to respond_with_content_type(:json)
     end
   end
