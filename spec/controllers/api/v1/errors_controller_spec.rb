@@ -19,10 +19,12 @@ describe Api::V1::ErrorsController, :type => :controller do
 
     #here we create another subscriber with issue_subscriber so the email is called twice
     it 'should email 2 subscribers' do
-      subscriber = FactoryGirl.create(:subscriber, website: website)
-      post :notify_subscribers, { id: issue_error.id, error: {status: issue_error.status }, format: :json }
-      # subscriber = FactoryGirl.create :subscriber, {issue_subscriber: issue_error.id , website: website}
-      expect(UserMailer).to receive(:issue_solved).with(issue_error, subscriber, message).and_return(UserMailer).twice
+      subscriber2 = create :subscriber, website: website
+      subscriber_issue = create :subscriber_issue, issue: issue_error, subscriber: subscriber2
+      mailer = double('UserMailer')
+      expect(mailer).to receive(:deliver_now)
+      expect(UserMailer).to receive(:issue_solved).with(issue_error, subscriber, message).and_return(mailer).twice
+      post :notify_subscribers, { message: message, id: issue_error.id, format: :json }
     end
 
     it 'should assign error' do
