@@ -1,6 +1,10 @@
 require 'rails_helper'
+include Devise::TestHelpers
+
 
 describe Api::V1::ErrorsController, :type => :controller do
+
+
   let(:member) { create :member }
   let(:website) { create :website, member: member }
   let(:issue_error) { create :issue, website: website }
@@ -22,8 +26,8 @@ describe Api::V1::ErrorsController, :type => :controller do
       subscriber2 = create :subscriber, website: website
       subscriber_issue = create :subscriber_issue, issue: issue_error, subscriber: subscriber2
       mailer = double('UserMailer')
-      expect(mailer).to receive(:deliver_now)
-      expect(UserMailer).to receive(:issue_solved).with(issue_error, subscriber, message).and_return(mailer).twice
+      expect(mailer).to receive(:deliver_now).twice
+      expect(UserMailer).to receive(:issue_solved).with(issue_error, an_instance_of(Subscriber), message).and_return(mailer).twice
       post :notify_subscribers, { message: message, id: issue_error.id, format: :json }
     end
 
@@ -40,19 +44,21 @@ describe Api::V1::ErrorsController, :type => :controller do
     end
   end
 
-  # describe 'GET #index' do
-  #   it 'should get current_site errors' do
-  #     FactoryGirl.create( website: {website: website.id, title: "Wazzaa",domain: "wazzaa@website.com", member: member.id })
-  #     get :index, { website: website, member: member.id, format: :json}
-  #     expect(assigns(:website)).to eq(website.id)
-  #   end
+  describe 'GET #index' do
+    it 'should get current_site errors' do
+      # sign_in member
+      auth_request(member)
+      binding.pry
+      get :index, { id: member.websites.first.id, errors: website.issues, subscribers: website.subscribers.count, format: :json}
+      expect(assigns(:website)).to eq(website.id)
+    end
 
-  #   it 'should render json' do
-  #     get :index, errors: { website: website.id, error: issue_error.id , format: :json }
-  #     expect(response).to be_successful
-  #     expect(response.content_type).to eq('application/json')
-  #   end
-  # end
+    # it 'should render json' do
+    #   get :index, errors: { website: website.id, error: issue_error.id , format: :json }
+    #   expect(response).to be_successful
+    #   expect(response.content_type).to eq('application/json')
+    # end
+  end
 
   # describe 'GET #show' do
   #   it 'should assign error' do
