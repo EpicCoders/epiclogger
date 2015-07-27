@@ -3,8 +3,6 @@ include Devise::TestHelpers
 
 
 describe Api::V1::ErrorsController, :type => :controller do
-
-
   let(:member) { create :member }
   let(:website) { create :website, member: member }
   let(:issue_error) { create :issue, website: website }
@@ -45,12 +43,10 @@ describe Api::V1::ErrorsController, :type => :controller do
   end
 
   describe 'GET #index' do
-    it 'should get current_site errors' do
-      # sign_in member
-      auth_request(member)
-      binding.pry
-      get :index, { id: member.websites.first.id, errors: website.issues, subscribers: website.subscribers.count, format: :json}
-      expect(assigns(:website)).to eq(website.id)
+    it 'should assign current_site errors' do
+      auth_member(member)
+      get :index, { website_id: website.id, format: :json}
+      expect(assigns(:errors)).to eq([issue_error])
     end
 
     # it 'should render json' do
