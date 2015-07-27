@@ -11,6 +11,8 @@ describe Api::V1::ErrorsController, :type => :controller do
   let(:message) { 'asdada' }
 
   describe 'POST #notify_subscribers' do
+    before { auth_member(member) }
+
     it 'should email subscribers' do
       mailer = double('UserMailer')
       expect(mailer).to receive(:deliver_now)
@@ -47,6 +49,12 @@ describe Api::V1::ErrorsController, :type => :controller do
       auth_member(member)
       get :index, { website_id: website.id, format: :json}
       expect(assigns(:errors)).to eq([issue_error])
+    end
+
+    it 'should give error if not logged in' do
+      get :index, { website_id: website.id, format: :json}
+      expect(response.body).to eq({errors: ['Authorized users only.']}.to_json)
+      expect(response).to have_http_status(401)
     end
 
     # it 'should render json' do
