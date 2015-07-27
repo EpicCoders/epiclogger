@@ -6,7 +6,7 @@ describe Api::V1::ErrorsController, :type => :controller do
   let(:issue_error) { create :issue, website: website }
   let(:subscriber) { create :subscriber, website: website }
   let!(:issue_subscriber) { create :subscriber_issue, issue: issue_error, subscriber: subscriber }
-  let(:message) { 'caca maca mesage' }
+  let(:message) { 'asdada' }
 
   describe 'POST #notify_subscribers' do
     it 'should email subscribers' do
@@ -16,63 +16,77 @@ describe Api::V1::ErrorsController, :type => :controller do
 
       post :notify_subscribers, { message: message, id: issue_error.id, format: :json }
     end
-    # here we create another subscriber with issue_subscriber so the email is called twice
+
+    #here we create another subscriber with issue_subscriber so the email is called twice
     it 'should email 2 subscribers' do
-      create :subscriber, :issue_subscriber
+      subscriber = FactoryGirl.create :subscriber, {issue_subscriber: issue_error.id , website: website}
       expect(UserMailer).to receive(:issue_solved).with(issue_error, subscriber, message).and_return(mailer).twice
     end
-    # use assigns here
+
     it 'should assign error' do
+      post :notify_subscribers, { id: issue_error.id, error: {status: issue_error.status }, format: :json }
+      expect(assigns(:error)).to eq(issue_error)
       # call create. use assigns like i wrote it below
-      expect(UserMailer).to assigns(:issue_error).to(:website)
     end
+
     it 'should assign message' do
       # call create. use assigns like i wrote it below
-      expect(UserMailer).to assigns(:message).to(issue_error)
+      post :notify_subscribers, { message: 'asdada', id: issue_error.id, format: :json }
+      expect(assigns(:message)).to eq('asdada')
     end
   end
 
   describe 'GET #index' do
-    # call the fucking get :index method wtf ....
     it 'should get current_site errors' do
-      get :issue_error
-      member.should_receive(:issue_error)
+      #Factory not registered: {:website=>{:website=>981, :title=>"Wazzaa", :domain=>"wazzaa@website.com", :member=>989}}
+      FactoryGirl.create( website: {website: website.id, title: "Wazzaa",domain: "wazzaa@website.com", member: member.id })
+      get :index, { website: website, member: member.id, format: :json}
+      expect(assigns(:website)).to eq(website.id)
     end
+
     it 'should render json' do
-      # look below
-      expect(response).to respond_with 200
-      expect(response).to respond_with_content_type(:json)
+      #undefined method `issues' for nil:NilClass
+      get :index, errors: { website: website.id, error: issue_error.id , format: :json }
+      expect(response).to be_successful
+      expect(response.content_type).to eq('application/json')
     end
   end
 
   describe 'GET #show' do
-    # don't forget to use get :show here as reponse does not assign itself ... wtf
     it 'should assign error' do
-      # look below how i wrote the assigns test this is shit!
-      # expect(:show).to assigns(:issue_error).to(:website)
+      #Factory not registered: {:website=>{:website=>983, :title=>"Wazzaa", :domain=>"wazzaa@website.com", :member=>991}}
+      FactoryGirl.create( website: {website: website.id, title: "Wazzaa",domain: "wazzaa@website.com", member: member.id })
+      get :show, { id: issue_error.id, error: {status: issue_error.status }, format: :json }
+      expect(assigns(:error)).to eq(issue_error)
     end
     it 'should render json' do
-      # look below how i wrote this test!
-      expect(response).to respond_with 200
-      expect(response).to respond_with_content_type(:json)
+      get :show, { id: issue_error.id, error: { status: issue_error.status, web: issue_error.website }, format: :json }
+      expect(response).to be_successful
+      expect(response.content_type).to eq('application/json')
     end
   end
 
   describe 'PUT #update' do
     it 'should assign error' do
+      #undefined method `issues' for nil:NilClass
       put :update, { id: issue_error.id, error: {status: issue_error.status }, format: :json }
       expect(assigns(:error)).to eq(issue_error)
     end
+
     it 'should update error status' do
-      put :update, { id: issue_error.id, error: { status: issue_error.status }, format: :json }
-      # here check if issue_error.status is updated please use changed()
+      put :update, { id: issue_error.id, error: { error: issue_error.status }, web: website.id, format: :json }
+      #expected result to have changed from "unresolved" to "resolved", but did not change
+      expect{:update}.to change{issue_error.status}.from("unresolved").to("resolved")
       expect(response).to be_successful
     end
+
     it 'should not allow update of other parameters other than status' do
-      put :update, { id: issue_error.id, error: { status: issue_error.status, web: issue_error.website }, format: :json }
-      # here check if the other attribute not web is changed... !! strong params filters the wrong arguments so there is no error
-      expect(response).not_to be_successful
+      put :update, { id: issue_error.id, error: { error: issue_error.status }, web: website, format: :json }
+      expect{:update}.not_to change{issue_error.status}.from("unresolved")
+      #expected the response not to have status code 200 but it did
+      expect(response).not_to have_http_status(200)
     end
+
     it 'should render json' do
       put :update, { id: issue_error.id, error: { status: issue_error.status, web: issue_error.website }, format: :json }
       expect(response).to be_successful
@@ -80,4 +94,3 @@ describe Api::V1::ErrorsController, :type => :controller do
     end
   end
 end
-
