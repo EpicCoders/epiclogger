@@ -21,7 +21,7 @@ class Api::V1::ErrorsController < Api::V1::ApiController
     @error = Issue.find(params[:id])
     @message = params[:message]
     @error.subscribers.each do |member|
-      UserMailer.issue_solved(@error, member, @message).deliver_now
+      UserMailer.notify_subscriber(@error, member, @message).deliver_now
     end
   end
 

@@ -1,6 +1,6 @@
 class UserMailer < ApplicationMailer
 
-  def issue_solved(issue, subscriber, message)
+  def notify_subscriber(issue, subscriber, message)
     @issue = issue
     @message = message
     @website = Website.find(@issue.website_id)

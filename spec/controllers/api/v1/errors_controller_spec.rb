@@ -16,7 +16,7 @@ describe Api::V1::ErrorsController, :type => :controller do
     it 'should email subscribers' do
       mailer = double('UserMailer')
       expect(mailer).to receive(:deliver_now)
-      expect(UserMailer).to receive(:issue_solved).with(issue_error, subscriber, message).and_return(mailer).once
+      expect(UserMailer).to receive(:notify_subscriber).with(issue_error, subscriber, message).and_return(mailer).once
 
       post :notify_subscribers, { message: message, id: issue_error.id, format: :json }
     end
@@ -26,7 +26,7 @@ describe Api::V1::ErrorsController, :type => :controller do
       subscriber_issue = create :subscriber_issue, issue: issue_error, subscriber: subscriber2
       mailer = double('UserMailer')
       expect(mailer).to receive(:deliver_now).twice
-      expect(UserMailer).to receive(:issue_solved).with(issue_error, an_instance_of(Subscriber), message).and_return(mailer).twice
+      expect(UserMailer).to receive(:notify_subscriber).with(issue_error, an_instance_of(Subscriber), message).and_return(mailer).twice
       post :notify_subscribers, { message: message, id: issue_error.id, format: :json }
     end
 
