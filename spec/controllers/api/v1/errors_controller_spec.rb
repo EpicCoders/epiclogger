@@ -65,13 +65,19 @@ describe Api::V1::ErrorsController, :type => :controller do
   describe 'GET #show' do
     it 'should assign error' do
       auth_member(member)
-      get :show, { id: issue_error.id, error: {status: issue_error.status }, website_id: website.id, format: :json }
+      get :show, { id: issue_error.id, website_id: website.id, format: :json }
       expect(assigns(:error)).to eq(issue_error)
+    end
+
+    it 'should give error if not logged in' do
+      get :show, { id: issue_error.id, website_id: website.id, format: :json }
+      expect(response.body).to eq({errors: ['Authorized users only.']}.to_json)
+      expect(response).to have_http_status(401)
     end
 
     it 'should render json' do
       auth_member(member)
-      get :show, { id: issue_error.id, error: {status: issue_error.status }, website_id: website.id, format: :json }
+      get :show, { id: issue_error.id, website_id: website.id, format: :json }
       expect(response).to be_successful
       expect(response.content_type).to eq('application/json')
     end
@@ -86,20 +92,22 @@ describe Api::V1::ErrorsController, :type => :controller do
 
     it 'should update error status' do
       auth_member(member)
-      expect { 
+      expect {
         put :update, { id: issue_error.id,  error: { status: "resolved" }, website_id: website.id, format: :json}
         issue_error.reload
-        }.to change(issue_error, :status).from('unresolved').to('resolved')
+      }.to change(issue_error, :status).from('unresolved').to('resolved')
     end
 
     it 'should not allow update of other parameters other than status' do
       auth_member(member)
-      expect{ put :update, { id: issue_error.id, error: { error: issue_error.status }, website: website.id, format: :json }}.to_not change(issue_error, :status).from("unresolved")
+      expect{
+        put :update, { id: issue_error.id, error: { error: issue_error.status }, website: website.id, format: :json }
+      }.to_not change(issue_error, :status).from("unresolved")
     end
 
     it 'should render json' do
       auth_member(member)
-      put :update, { id: issue_error.id, error: { status: issue_error.status }, format: :json }
+      put :update, { id: issue_error.id, error: { status: 'resolved' }, format: :json }
       expect(response).to be_successful
       expect(response.content_type).to eq('application/json')
     end
