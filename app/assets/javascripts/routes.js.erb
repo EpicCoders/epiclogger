@@ -1,1 +1,1 @@
-<%= JsRoutes.generate(default_url_options: { :host => 'localhost:3000' }, url_links: true, exclude: [/admin/] ) %>
+<%= JsRoutes.generate(default_url_options: { :host => ENV['APP_DOMAIN'] }, url_links: true, exclude: [/admin/] ) %>
