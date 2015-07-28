@@ -21,7 +21,6 @@ describe Api::V1::ErrorsController, :type => :controller do
       post :notify_subscribers, { message: message, id: issue_error.id, format: :json }
     end
 
-    #here we create another subscriber with issue_subscriber so the email is called twice
     it 'should email 2 subscribers' do
       subscriber2 = create :subscriber, website: website
       subscriber_issue = create :subscriber_issue, issue: issue_error, subscriber: subscriber2
@@ -34,11 +33,9 @@ describe Api::V1::ErrorsController, :type => :controller do
     it 'should assign error' do
       post :notify_subscribers, { id: issue_error.id, error: {status: issue_error.status }, format: :json }
       expect(assigns(:error)).to eq(issue_error)
-      # call create. use assigns like i wrote it below
     end
 
     it 'should assign message' do
-      # call create. use assigns like i wrote it below
       post :notify_subscribers, { message: 'asdada', id: issue_error.id, format: :json }
       expect(assigns(:message)).to eq('asdada')
     end
@@ -57,51 +54,54 @@ describe Api::V1::ErrorsController, :type => :controller do
       expect(response).to have_http_status(401)
     end
 
-    # it 'should render json' do
-    #   get :index, errors: { website: website.id, error: issue_error.id , format: :json }
-    #   expect(response).to be_successful
-    #   expect(response.content_type).to eq('application/json')
-    # end
+    it 'should render json' do
+      auth_member(member)
+      get :index, { website_id: website.id, format: :json}
+      expect(response).to be_successful
+      expect(response.content_type).to eq('application/json')
+    end
   end
 
-  # describe 'GET #show' do
-  #   it 'should assign error' do
-  #     FactoryGirl.create( website: {website: website.id, title: "Wazzaa",domain: "wazzaa@website.com", member: member.id })
-  #     get :show, { id: issue_error.id, error: {status: issue_error.status }, format: :json }
-  #     expect(assigns(:error)).to eq(issue_error)
-  #   end
-  #   it 'should render json' do
-  #     get :show, { id: issue_error.id, error: { status: issue_error.status, web: issue_error.website }, format: :json }
-  #     expect(response).to be_successful
-  #     expect(response.content_type).to eq('application/json')
-  #   end
-  # end
+  describe 'GET #show' do
+    it 'should assign error' do
+      auth_member(member)
+      get :show, { id: issue_error.id, error: {status: issue_error.status }, website_id: website.id, format: :json }
+      expect(assigns(:error)).to eq(issue_error)
+    end
 
-  # describe 'PUT #update' do
-  #   it 'should assign error' do
-  #     put :update, { id: issue_error.id, error: {status: issue_error.status }, format: :json }
-  #     expect(assigns(:error)).to eq(issue_error)
-  #   end
+    it 'should render json' do
+      auth_member(member)
+      get :show, { id: issue_error.id, error: {status: issue_error.status }, website_id: website.id, format: :json }
+      expect(response).to be_successful
+      expect(response.content_type).to eq('application/json')
+    end
+  end
 
-  #   it 'should update error status' do
-  #     put :update, { id: issue_error.id, error: { error: issue_error.status }, web: website.id, format: :json }
-  #     # here check if issue_error.status is updated please use changed()
-  #     # expect(:update).to change(issue_error.status, :status)
-  #     expect{:update}.to change{issue_error.status}.from("unresolved").to("resolved")
-  #     expect(response).to be_successful
-  #   end
+  describe 'PUT #update' do
+    it 'should assign error' do
+      auth_member(member)
+      put :update, { id: issue_error.id, error: {status: issue_error.status }, format: :json }
+      expect(assigns(:error)).to eq(issue_error)
+    end
 
-  #   it 'should not allow update of other parameters other than status' do
-  #     put :update, { id: issue_error.id, error: { error: issue_error.status }, web: website, format: :json }
-  #     # here check if the other attribute not web is changed... !! strong params filters the wrong arguments so there is no error
-  #     expect{:update}.not_to change{issue_error.status}.from("unresolved")
-  #     expect(response).not_to have_http_status(200)
-  #   end
+    it 'should update error status' do
+      auth_member(member)
+      expect { 
+        put :update, { id: issue_error.id,  error: { status: "resolved" }, website_id: website.id, format: :json}
+        issue_error.reload
+        }.to change(issue_error, :status).from('unresolved').to('resolved')
+    end
 
-  #   it 'should render json' do
-  #     put :update, { id: issue_error.id, error: { status: issue_error.status, web: issue_error.website }, format: :json }
-  #     expect(response).to be_successful
-  #     expect(response.content_type).to eq('application/json')
-  #   end
-  # end
+    it 'should not allow update of other parameters other than status' do
+      auth_member(member)
+      expect{ put :update, { id: issue_error.id, error: { error: issue_error.status }, website: website.id, format: :json }}.to_not change(issue_error, :status).from("unresolved")
+    end
+
+    it 'should render json' do
+      auth_member(member)
+      put :update, { id: issue_error.id, error: { status: issue_error.status }, format: :json }
+      expect(response).to be_successful
+      expect(response.content_type).to eq('application/json')
+    end
+  end
 end
