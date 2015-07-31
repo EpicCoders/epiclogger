@@ -1,7 +1,6 @@
 class Api::V1::ApiController < ActionController::Base
   include DeviseTokenAuth::Concerns::SetUserByToken
   # before_action :configure_permitted_parameters, if: :devise_controller?
-  before_filter :set_websites_from_header
   layout nil
   before_action :authenticate_member!
 
@@ -12,15 +11,11 @@ class Api::V1::ApiController < ActionController::Base
     render json: {:alert => exception.message}
   end
 
-  def set_websites_from_header
-    app_key = request.headers['HTTP_APP_KEY']
-    app_id = request.headers['HTTP_APP_ID']
-    @current_site ||= Website.find_by_app_id_and_app_key(app_id, app_key)
-  end
-
   def current_site
     if params[:website_id] && current_member
       @current_site ||= current_member.websites.where("websites.id = ?", params[:website_id]).try(:first)
+    else
+      @current_site ||= Website.find_by_app_id_and_app_key(request.headers['HTTP_APP_ID'], request.headers['HTTP_APP_KEY'])
     end
   end
 

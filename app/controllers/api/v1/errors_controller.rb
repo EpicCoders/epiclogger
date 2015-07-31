@@ -6,16 +6,17 @@ class Api::V1::ErrorsController < Api::V1::ApiController
   end
 
   def create
-    @subscriber = Subscriber.where("email = ? and website_id = ?", params['email'], @current_site.id)
-    @error = Issue.where("website_id = ? and page_title = ?", @current_site.id , params['page_title'])
-    if @subscriber.blank?
-      @subscriber = @current_site.subscribers.create( email: params['email'], name: params['email'], website_id: @current_site.id)
+    binding.pry
+    subscriber = current_site.subscribers.find_by(email: params[:email])
+    error = current_site.issues.find_by(page_title: params[:page_title])
+    if subscriber
+      subscriber = current_site.subscribers.create( email: params['email'], name: params['email'], website_id: current_site.id)
     end
 
-    if @error.blank?
-      @error = @current_site.issues.create(description: 'Issue description..', website_id: @current_site.id)
-      @message = Message.create(content: params['message'], issue_id: @error.id )
-      SubscriberIssue.create(subscriber_id: @subscriber.id, issue_id: @error.id)
+    if error
+      error = current_site.issues.create(description: 'Issue description..', website_id: current_site.id)
+      message = Message.create(content: params['message'], issue_id: error.id)
+      SubscriberIssue.create(subscriber_id: subscriber.id, issue_id: error.id)
     end
   end
 
