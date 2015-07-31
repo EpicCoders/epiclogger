@@ -16,7 +16,6 @@ class Api::V1::ApiController < ActionController::Base
     app_key = request.headers['HTTP_APP_KEY']
     app_id = request.headers['HTTP_APP_ID']
     @current_site ||= Website.find_by_app_id_and_app_key(app_id, app_key)
-    binding.pry
   end
 
   def current_site
