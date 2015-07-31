@@ -1,6 +1,7 @@
 class Api::V1::ApiController < ActionController::Base
   include DeviseTokenAuth::Concerns::SetUserByToken
   # before_action :configure_permitted_parameters, if: :devise_controller?
+  before_filter :set_websites_from_header
   layout nil
   before_action :authenticate_member!
 
@@ -9,6 +10,13 @@ class Api::V1::ApiController < ActionController::Base
   rescue_from ActiveRecord::RecordNotFound do |exception|
     # we save this exception as it is not an error if the restaurant or a parameter is not given
     render json: {:alert => exception.message}
+  end
+
+  def set_websites_from_header
+    app_key = request.headers['HTTP_APP_KEY']
+    app_id = request.headers['HTTP_APP_ID']
+    @current_site ||= Website.find_by_app_id_and_app_key(app_id, app_key)
+    binding.pry
   end
 
   def current_site

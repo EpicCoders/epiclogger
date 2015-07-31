@@ -6,6 +6,16 @@ class Api::V1::ErrorsController < Api::V1::ApiController
   end
 
   def create
+    @subscriber = Subscriber.where("email = ? and website_id = ?", params['email'], @current_site.id)
+    @error = Issue.where("description = ?", params['message'])
+    if @subscriber.blank?
+      @subscriber = Subscriber.create( email: params['email'], name: params['email'], created_at: Time.now, updated_at: Time.now, website_id: @current_site.id)
+    end
+
+    if @error.blank?
+      @error = Issue.create(description: params['message'], created_at: Time.now, updated_at: Time.now, status: 1, website_id: @current_site.id)
+      SubscriberIssue.create(subscriber_id: @subscriber.id, issue_id: @error.id,created_at: Time.now, updated_at: Time.now)
+    end
   end
 
   def show
