@@ -6,10 +6,10 @@ class Api::V1::ErrorsController < Api::V1::ApiController
 	end
 
 	def create
-		subscriber = current_site.subscribers.create_with(name: params[:name]).find_or_create_by(email: params[:email])
-		error = current_site.issues.find_or_create_by(page_title: params[:page_title], description: 'etc', status: :unresolved)
-		error.subscribers.find_or_create_by(subscriber_id: subscriber.id)
-		message = Message.create(content: params['message'], issue_id: error.id)
+		subscriber = current_site.subscribers.create_with(name: params[:name]).find_or_create_by!(email: params[:email])
+		@error = current_site.issues.find_or_create_by(page_title: params[:page_title], description: 'etcdasdasadsad', status: :unresolved)
+		SubscriberIssue.find_or_create_by(subscriber_id: subscriber.id, issue_id: @error.id)
+		message = Message.create(content: params['message'], issue_id: @error.id)
 	end
 
 	def show
