@@ -1,5 +1,4 @@
 # important don't add $ -> here when using PubSub as the event will be assigned every time
-debugger;
 console.log "errors loaded"
 directive = {
   errors:{
