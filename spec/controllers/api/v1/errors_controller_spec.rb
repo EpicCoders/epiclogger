@@ -10,6 +10,48 @@ describe Api::V1::ErrorsController, :type => :controller do
   let!(:issue_subscriber) { create :subscriber_issue, issue: issue_error, subscriber: subscriber }
   let(:message) { 'asdada' }
 
+  describe 'POST #create' do
+
+    it 'should create subscriber' do
+      auth_member(member)
+      expect {
+        post :create, {subscriber: {name: 'Name for subscriber', email: 'email@example2.com'}}
+      }.to change(Subscriber, :count).by( 1 )
+    end
+
+    it 'should create issue' do
+      auth_member(member)
+      expect {
+        post :create, {issue: {description: 'Description for current error', page_title: 'Title for new page'}}
+        }.to change(Issue, :count).by( 1 )
+      expect(response).to be_successful
+    end
+
+    it 'should create subscriber_issue' do
+      auth_member(member)
+      expect {
+        post :create, {subscriber_issue:{ issue_id: issue_error.id, subscriber_id: subscriber.id}}
+      }.to change(SubscriberIssue, :count).by( 1 )
+    end
+
+    it 'should not create issue if issue exists' do
+      auth_member(member)
+      subscriber1 = create :subscriber, name: 'Name for subscriber', email: 'email@example1.com'
+      error1 = create :issue, status: 'unresolved', description: 'Description for current error', page_title: 'Title for new page'
+      subscriber_issue1 = create :subscriber_issue, issue_id: issue_error.id, subscriber_id: subscriber.id
+      expect{
+        post :create, { id: error1.id, website_id: website.id, email: subscriber1.email, name: subscriber1.name, format: :json }
+      }.to change(Issue, :count).by(0)
+    end
+
+    it 'should create message' do
+      expect {
+        post :create, message: {content: 'content for message', issue_id: issue_error.id}
+      }.to change(Message, :count).by( 1 )
+    end
+
+  end
+
   describe 'POST #notify_subscribers' do
     before { auth_member(member) }
 
