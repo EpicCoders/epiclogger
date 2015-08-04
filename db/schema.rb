@@ -11,20 +11,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150730064121) do
+ActiveRecord::Schema.define(version: 20150804083109) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
 
   create_table "issues", force: :cascade do |t|
-    t.text     "description",     null: false
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.text     "description",             null: false
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
     t.integer  "website_id"
     t.string   "page_title"
-    t.integer  "occurrences"
-    t.datetime "last_occurrence"
+    t.integer  "occurrences", default: 0
     t.integer  "status"
   end
 

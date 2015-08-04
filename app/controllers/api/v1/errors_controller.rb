@@ -7,7 +7,9 @@ class Api::V1::ErrorsController < Api::V1::ApiController
 
 	def create
 		subscriber = current_site.subscribers.create_with(name: error_params[:name]).find_or_create_by!(email: error_params[:email])
-		@error = current_site.issues.create_with(description: 'etcdasdasadsad', status: :unresolved).find_or_create_by(page_title: error_params[:page_title])
+		@error = current_site.issues.create_with(description: 'etcdasdasadsad').find_or_create_by(page_title: error_params[:page_title])
+    @error.increment!(:occurrences)
+
 		SubscriberIssue.create_with(issue_id: @error.id).find_or_create_by(subscriber_id: subscriber.id)
 		message = Message.create(content: error_params['message'], issue_id: @error.id)
 	end
