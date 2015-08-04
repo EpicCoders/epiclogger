@@ -49,8 +49,12 @@ describe Api::V1::ErrorsController, :type => :controller do
     end
 
     it 'should increment occurrences' do
+      error1 = create :issue, website: website, status: 'unresolved', page_title: 'New title'
+      expect{ post :create, params, error1.reload
+      }.to change(error1, :ocurrentces).by(1)
     # create a new error (error1)
     # then do expect { ...(request) + error1.reload }.to change(error1, :occurrences).by(1)
+    end
   end
 
   describe 'POST #notify_subscribers' do
