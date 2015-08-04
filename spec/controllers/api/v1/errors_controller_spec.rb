@@ -1,6 +1,4 @@
 require 'rails_helper'
-include Devise::TestHelpers
-
 
 describe Api::V1::ErrorsController, :type => :controller do
   let(:member) { create :member }
@@ -9,51 +7,61 @@ describe Api::V1::ErrorsController, :type => :controller do
   let(:subscriber) { create :subscriber, website: website }
   let!(:issue_subscriber) { create :subscriber_issue, issue: issue_error, subscriber: subscriber }
   let(:message) { 'asdada' }
-  let(:default_params) { {format: :json} }
+  let(:default_params) { {website_id: website.id, format: :json} }
 
   describe 'POST #create' do
-    before { auth_member(member) }
     let(:params) { default_params.merge({error: {name: 'Name for subscriber', email: 'email@example2.com', page_title: 'New title', message: 'new message'}}) }
 
-    it 'should create subscriber' do
-      expect {
-        post :create, params
-      }.to change(Subscriber, :count).by( 1 )
-    end
+    context 'if logged in' do
+      before { auth_member(member) }
+      it 'should create subscriber' do
+        expect {
+          post :create, params
+        }.to change(Subscriber, :count).by( 1 )
+      end
 
-    it 'should create issue' do
-      expect {
-        post :create, params
-      }.to change(Issue, :count).by( 1 )
-    end
+      it 'should create issue' do
+        expect {
+          post :create, params
+        }.to change(Issue, :count).by( 1 )
+      end
 
-    it 'should create subscriber_issue' do
-      expect {
-        post :create, params
-      }.to change(SubscriberIssue, :count).by( 1 )
-    end
+      it 'should create subscriber_issue' do
+        expect {
+          post :create, params
+        }.to change(SubscriberIssue, :count).by( 1 )
+      end
 
-    it 'should create message' do
-      expect {
-        post :create, params
-      }.to change(Message, :count).by( 1 )
-    end
+      it 'should create message' do
+        expect {
+          post :create, params
+        }.to change(Message, :count).by( 1 )
+      end
 
-    it 'should not create issue if issue exists' do
-      subscriber1 = create :subscriber, website: website, name: 'Name for subscriber', email: 'email@example2.com'
-      error1 = create :issue, website: website, status: 'unresolved', page_title: 'New title'
-      create :subscriber_issue, issue: error1, subscriber: subscriber1
-      expect{
-        post :create, params
-      }.to change(Issue, :count).by(0)
-    end
+      it 'should not create issue if issue exists' do
+        subscriber1 = create :subscriber, website: website, name: 'Name for subscriber', email: 'email@example2.com'
+        error1 = create :issue, website: website, status: 'unresolved', page_title: 'New title'
+        create :subscriber_issue, issue: error1, subscriber: subscriber1
+        expect{
+          post :create, params
+        }.to change(Issue, :count).by(0)
+      end
 
-    it 'should increment occurrences' do
-      error1 = create :issue, website: website, page_title: 'New title'
-      expect{
+      it 'should increment occurrences' do
+        error1 = create :issue, website: website, page_title: 'New title'
+        expect{
+          post :create, params
+          error1.reload
+        }.to change(error1, :occurrences).by(1)
+      end
+    end
+    context 'not logged in' do
+      it 'should get current site' do
+        request.env['HTTP_APP_ID'] = website.app_id
+        request.env['HTTP_APP_KEY'] = website.app_key
         post :create, params
-        error1.reload
-      }.to change(error1, :occurrences).by(1)
+        expect(assigns(:current_site)).to eq(website)
+      end
     end
   end
 
