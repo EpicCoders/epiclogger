@@ -32,6 +32,6 @@ class Api::V1::ErrorsController < Api::V1::ApiController
 
 	private
 		def error_params
-			params.require(:error).permit(:status, :description, :page_title, messages_attributes: [ :content, :issue_id ], subscribers_attributes: [:name, :email])
+			params.require(:error).permit(:status, :description, :page_title, :message, :name, :email)
 		end
 end

@@ -9,58 +9,56 @@ describe Api::V1::ErrorsController, :type => :controller do
   let(:subscriber) { create :subscriber, website: website }
   let!(:issue_subscriber) { create :subscriber_issue, issue: issue_error, subscriber: subscriber }
   let(:message) { 'asdada' }
+  let(:default_params) { {format: :json} }
 
   describe 'POST #create' do
+    before { auth_member(member) }
+    let(:params) { default_params.merge({error: {name: 'Name for subscriber', email: 'email@example2.com', page_title: 'New title', message: 'new message'}}) }
 
     it 'should create subscriber' do
-      auth_member(member)
       expect {
-        post :create, {subscriber: {name: 'Name for subscriber', email: 'email@example2.com'}}
+        post :create, params
       }.to change(Subscriber, :count).by( 1 )
     end
 
     it 'should create issue' do
-      auth_member(member)
       expect {
-        post :create, {issue: {description: 'Description for current error', page_title: 'Title for new page'}}
-        }.to change(Issue, :count).by( 1 )
-      expect(response).to be_successful
+        post :create, params
+      }.to change(Issue, :count).by( 1 )
     end
 
     it 'should create subscriber_issue' do
-      auth_member(member)
       expect {
-        post :create, {subscriber_issue:{ issue_id: issue_error.id, subscriber_id: subscriber.id}}
+        post :create, params
       }.to change(SubscriberIssue, :count).by( 1 )
-    end
-
-    it 'should not create issue if issue exists' do
-      auth_member(member)
-      subscriber1 = create :subscriber, name: 'Name for subscriber', email: 'email@example1.com'
-      error1 = create :issue, status: 'unresolved', description: 'Description for current error', page_title: 'Title for new page'
-      subscriber_issue1 = create :subscriber_issue, issue_id: issue_error.id, subscriber_id: subscriber.id
-      expect{
-        post :create, { id: error1.id, website_id: website.id, email: subscriber1.email, name: subscriber1.name, format: :json }
-      }.to change(Issue, :count).by(0)
     end
 
     it 'should create message' do
       expect {
-        post :create, message: {content: 'content for message', issue_id: issue_error.id}
+        post :create, params
       }.to change(Message, :count).by( 1 )
     end
 
+    it 'should not create issue if issue exists' do
+      subscriber1 = create :subscriber, website: website, name: 'Name for subscriber', email: 'email@example2.com'
+      error1 = create :issue, website: website, status: 'unresolved', page_title: 'New title'
+      create :subscriber_issue, issue: error1, subscriber: subscriber1
+      expect{
+        post :create, params
+      }.to change(Issue, :count).by(0)
+    end
   end
 
   describe 'POST #notify_subscribers' do
     before { auth_member(member) }
+    let(:params) { default_params.merge({ message: message, id: issue_error.id }) }
 
     it 'should email subscribers' do
       mailer = double('UserMailer')
       expect(mailer).to receive(:deliver_now)
       expect(UserMailer).to receive(:notify_subscriber).with(issue_error, subscriber, message).and_return(mailer).once
 
-      post :notify_subscribers, { message: message, id: issue_error.id, format: :json }
+      post :notify_subscribers, params
     end
 
     it 'should email 2 subscribers' do
@@ -69,71 +67,78 @@ describe Api::V1::ErrorsController, :type => :controller do
       mailer = double('UserMailer')
       expect(mailer).to receive(:deliver_now).twice
       expect(UserMailer).to receive(:notify_subscriber).with(issue_error, an_instance_of(Subscriber), message).and_return(mailer).twice
-      post :notify_subscribers, { message: message, id: issue_error.id, format: :json }
+      post :notify_subscribers, params
     end
 
     it 'should assign error' do
-      post :notify_subscribers, { id: issue_error.id, error: {status: issue_error.status }, format: :json }
+      post :notify_subscribers, default_params.merge({ id: issue_error.id, error: {status: issue_error.status }})
       expect(assigns(:error)).to eq(issue_error)
     end
 
     it 'should assign message' do
-      post :notify_subscribers, { message: 'asdada', id: issue_error.id, format: :json }
+      post :notify_subscribers, params
       expect(assigns(:message)).to eq('asdada')
     end
   end
 
   describe 'GET #index' do
-    it 'should assign current_site errors' do
-      auth_member(member)
-      get :index, { website_id: website.id, format: :json}
-      expect(assigns(:errors)).to eq([issue_error])
+    let(:params) { default_params.merge({ website_id: website.id}) }
+
+    context 'if logged in' do
+      before { auth_member(member) }
+
+      it 'should render json' do
+        get :index, params
+        expect(response).to be_successful
+        expect(response.content_type).to eq('application/json')
+      end
+
+      it 'should assign current_site errors' do
+        auth_member(member)
+        get :index, params
+        expect(assigns(:errors)).to eq([issue_error])
+      end
     end
 
     it 'should give error if not logged in' do
-      get :index, { website_id: website.id, format: :json}
+      get :index, params
       expect(response.body).to eq({errors: ['Authorized users only.']}.to_json)
       expect(response).to have_http_status(401)
-    end
-
-    it 'should render json' do
-      auth_member(member)
-      get :index, { website_id: website.id, format: :json}
-      expect(response).to be_successful
-      expect(response.content_type).to eq('application/json')
     end
   end
 
   describe 'GET #show' do
-    it 'should assign error' do
-      auth_member(member)
-      get :show, { id: issue_error.id, website_id: website.id, format: :json }
-      expect(assigns(:error)).to eq(issue_error)
+    let(:params) { default_params.merge({ id: issue_error.id, website_id: website.id}) }
+    context 'if logged in' do
+      before { auth_member(member) }
+
+      it 'should assign error' do
+        get :show, params
+        expect(assigns(:error)).to eq(issue_error)
+      end
+
+      it 'should render json' do
+        get :show, params
+        expect(response).to be_successful
+        expect(response.content_type).to eq('application/json')
+      end
     end
 
     it 'should give error if not logged in' do
-      get :show, { id: issue_error.id, website_id: website.id, format: :json }
+      get :show, params
       expect(response.body).to eq({errors: ['Authorized users only.']}.to_json)
       expect(response).to have_http_status(401)
-    end
-
-    it 'should render json' do
-      auth_member(member)
-      get :show, { id: issue_error.id, website_id: website.id, format: :json }
-      expect(response).to be_successful
-      expect(response.content_type).to eq('application/json')
     end
   end
 
   describe 'PUT #update' do
+    before { auth_member(member) }
     it 'should assign error' do
-      auth_member(member)
       put :update, { id: issue_error.id, error: {status: issue_error.status }, format: :json }
       expect(assigns(:error)).to eq(issue_error)
     end
 
     it 'should update error status' do
-      auth_member(member)
       expect {
         put :update, { id: issue_error.id,  error: { status: "resolved" }, website_id: website.id, format: :json}
         issue_error.reload
@@ -141,14 +146,12 @@ describe Api::V1::ErrorsController, :type => :controller do
     end
 
     it 'should not allow update of other parameters other than status' do
-      auth_member(member)
       expect{
-        put :update, { id: issue_error.id, error: { error: issue_error.status }, website: website.id, format: :json }
+        put :update, { id: issue_error.id, error: { error: 'some' }, website: website.id, format: :json }
       }.to_not change(issue_error, :status).from("unresolved")
     end
 
     it 'should render json' do
-      auth_member(member)
       put :update, { id: issue_error.id, error: { status: 'resolved' }, format: :json }
       expect(response).to be_successful
       expect(response.content_type).to eq('application/json')
