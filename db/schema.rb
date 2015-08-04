@@ -94,7 +94,7 @@ ActiveRecord::Schema.define(version: 20150730064121) do
     t.integer  "member_id",  null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer  "app_id"
+    t.string   "app_id"
     t.string   "app_key"
   end
 
