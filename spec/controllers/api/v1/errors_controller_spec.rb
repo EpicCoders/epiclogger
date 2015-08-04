@@ -54,8 +54,6 @@ describe Api::V1::ErrorsController, :type => :controller do
         post :create, params
         error1.reload
       }.to change(error1, :occurrences).by(1)
-    # create a new error (error1)
-    # then do expect { ...(request) + error1.reload }.to change(error1, :occurrences).by(1)
     end
   end
 
