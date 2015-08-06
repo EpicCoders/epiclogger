@@ -6,7 +6,6 @@ directive = {
       href: (params) ->
         Routes.error_path(this.id)
     }
-    # debugger;
     occurrences:
       html: () ->
         "#{this.occurrences} occurrences"

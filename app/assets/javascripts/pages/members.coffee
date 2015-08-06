@@ -14,7 +14,7 @@ form_signup.submit((e)->
   ).then((resp) ->
     console.log "we have success"
     console.log resp
-    window.location.href = '/errors'
+    window.location.href = '/websites'
   ).fail ((resp) ->
     EpicLogger.addAlert(resp.data.errors.full_messages)
     console.log "we failed"
