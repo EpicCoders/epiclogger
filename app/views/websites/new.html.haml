@@ -2,14 +2,15 @@
   .col-sm-9.b-r
     %br/
     %h4 Add new website
-    %form{:role => "form"}
-      .form-group.col-lg-7
-        %label
-        %h5 Title
-        %input.form-control{:placeholder => "insert title", :type => "text"}/
-        %h5 Website domain
-        %input.form-control{:placeholder => "www.domain.com", :type => "text"}/
-        %button.btn.btn-sm.btn-success.pull-right.m-t-n-xs{:type => "button"} Add website
+    %form#addWebsite.col-lg-7{:action => "", :method => "post"}
+      %label.control-label Title
+      %input#title.form-control{:placeholder => "insert title", :type => "text"}/
+      %br/
+      %label.control-label Website domain
+      %input#domain.form-control{:placeholder => "www.domain.com", :type => "text"}/
+      %br/
+      %button.btn.btn-warning.m-t-n-xs{:href => "#"} Cancel
+      %button.btn.btn-success.m-t-n-xs{:type => "submit"} Save
   #filterpanel.col-lg-3.col-md-4.sidepanel
     %h4 Order by
     .panelbox
