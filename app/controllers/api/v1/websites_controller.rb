@@ -6,6 +6,7 @@ class Api::V1::WebsitesController < Api::V1::ApiController
   end
 
   def create
+    @website = Website.create(domain: website_params[:domain], title: website_params[:title], member_id: current_member.id)
   end
 
   private
