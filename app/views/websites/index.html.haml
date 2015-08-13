@@ -1,12 +1,23 @@
 .row
   .col-sm-9.b-r
-    %form{:role => "form"}
-      .form-group.col-lg-7
-        %br/
-        %a
-          = link_to 'Add Page', new_website_path(), class: 'btn btn-success m-t-n-xs', target: '_self'
-        #get-websites
-        %br/
+    %br/
+    %a
+      = link_to 'Add New Website', new_website_path(), class: 'btn btn-success m-t-n-xs', target: '_self'
+    %br/
+    %br/
+    .row
+      .col-lg-12
+        .ibox.float-e-margins
+          .ibox-title
+          .ibox-content
+            %table.table.table-bordered
+              %thead
+                %tr
+                  %th Title
+                  %th Domain
+                  %th App Id
+                  %th App Key
+              %tbody#get-websites
   #filterpanel.col-lg-3.col-md-4.sidepanel
     %h4 Order by
     .panelbox
