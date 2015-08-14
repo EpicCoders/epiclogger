@@ -20,7 +20,6 @@
       #websites-sidebar.options
         %p.title{onclick: 'EpicLogger.pickWebsite(this)', 'data-id'=> ""} Another site
     %ul.nav.nav-pills.nav-stacked
-      = nav_link "Websites", websites_path(), {}, 'fa fa-desktop'
       = nav_link "Errors", errors_url(), {}, 'exclamation-triangle'
       = nav_link "Users", subscribers_url(), {}, 'users'
     %ul.nav.nav-pills.nav-stacked
