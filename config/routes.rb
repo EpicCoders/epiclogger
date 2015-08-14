@@ -21,6 +21,9 @@ Rails.application.routes.draw do
         member do
           post :notify_subscribers
         end
+        collection do
+          get :add_error
+        end
       end
       resources :subscribers, only: [:index]
       resources :members, only: [:show]

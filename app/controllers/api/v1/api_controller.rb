@@ -15,7 +15,7 @@ class Api::V1::ApiController < ActionController::Base
     if params[:website_id] && current_member
       @current_site ||= current_member.websites.where("websites.id = ?", params[:website_id]).try(:first)
     else
-      @current_site ||= Website.find_by_app_id_and_app_key(request.headers['HTTP_APP_ID'], request.headers['HTTP_APP_KEY'])
+      @current_site ||= Website.find_by_app_id_and_app_key(JSON.parse(params["auth"])["app_id"],JSON.parse(params["auth"])["app_key"])
     end
   end
 
