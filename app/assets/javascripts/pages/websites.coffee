@@ -3,7 +3,7 @@ PubSub.subscribe('auth.validation.success', (ev, member)->
   $.getJSON('/api/v1/websites', {member: member.id}, (data)->
   	$.each data, (i, websites) ->
   		$.each websites, (index, website) ->
-    		$('.get-websites').render website
+    		$('.get-websites').render websites
   )
 )
 

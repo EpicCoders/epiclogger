@@ -1,1 +1,1 @@
-json.(@member, :id, :email)
+json.(@member, :id, :email, :confirmed_at)

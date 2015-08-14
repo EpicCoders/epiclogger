@@ -4,10 +4,10 @@
     %h4 Add new website
     %form#addWebsite.col-lg-7{:action => "", :method => "post"}
       %label.control-label Title
-      %input#title.form-control{:placeholder => "insert title", :type => "text", :name => 'title'}/
+      %input#title.form-control{:placeholder => "insert title", :required => "required", :type => "text", :name => 'title'}/
       %br/
       %label.control-label Website domain
-      %input#domain.form-control{:placeholder => "www.domain.com", :type => "text", :name => 'domain'}/
+      %input#domain.form-control{:placeholder => "www.domain.com", :required => "required", :type => "text", :name => 'domain'}/
       %br/
       %button.btn.btn-success.m-t-n-xs{:type => "submit"} Save
   #filterpanel.col-lg-3.col-md-4.sidepanel

@@ -34,17 +34,27 @@ window.EpicLogger = (->
 
   pickWebsite: (el, website_id)->
     # we check to see if we are calling this from a link call
-    if el!=undefined
-      website_id = $(el).data('id')
-    # let's find the website_id in the websites from the database
-    for website in memberWebsites
-      if website.id==parseInt(website_id)
-        pickedWebsite = website
-        console.log 'assigned website'
-        PubSub.publishSync('assigned.website', pickedWebsite)
-        $('.picked-website').render pickedWebsite # render the current website
-        $.cookie('pickedWebsite', website.id) # save the website id in the cookies
-        false
+    if memberWebsites != null
+      $('#navLink').hide()
+      if el!=undefined
+        website_id = $(el).data('id')
+      $('#navLink').show()
+      # let's find the website_id in the websites from the database
+      appended = false
+      for website in memberWebsites
+        if !appended
+          $('.options').append '<p class="once" ><a href="/websites/new">Add new site</a></p>'
+          appended = true
+        if website.id==parseInt(website_id)
+          pickedWebsite = website
+          console.log 'assigned website'
+          PubSub.publishSync('assigned.website', pickedWebsite)
+          $('.picked-website').render pickedWebsite # render the current website
+          $.cookie('pickedWebsite', website.id) # save the website id in the cookies
+          false
+    else
+       $('#navLink').show()
+
 
   setMemberDetails: ->
     $.getJSON('/api/v1/websites', (data)->
@@ -107,7 +117,6 @@ window.EpicLogger = (->
         EpicLogger.doneLoad()
         EpicLogger.setMemberDetails()
         EpicLogger.renderMember()
-        debugger;
       else if ev == 'auth.validation.error'
         current_path = window.location.pathname
         console.log current_path
