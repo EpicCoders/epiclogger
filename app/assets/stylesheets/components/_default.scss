@@ -156,7 +156,34 @@ img.profileimg {
     border-bottom: 1px solid #1c1f35;
     margin-bottom: 40px;
     cursor: pointer;
-    #websites-sidebar a.title, p {
+    ul{
+      list-style: none;
+      margin-bottom: 10px;
+      padding-left: 15px;
+      li a{
+        background: transparent;
+        border: none;
+        display: block;
+        color: #fff;
+        padding: 10px 0 0 0;
+        &:hover{
+          background: transparent;
+          border: none;
+          text-decoration: none;
+        }
+      }
+    }
+    #add-new a{
+      color: #fff;
+      padding-bottom: 10px;
+      display: block;
+      border-top: 1px solid #1c1f35;
+    }
+    #add-new a:hover, a:hover {
+      color: #4ec287;
+      text-decoration: none;
+    }
+    a.title, p {
       margin: 0;
       padding: 10px;
       transition: all 50ms ease-in-out;
@@ -164,11 +191,8 @@ img.profileimg {
         float: right;
         margin: 2px;
       }
-      &:hover {
-        color: #4ec287;
-      }
     }
-    .options {
+    .options, #add-new {
       display: none;
     }
     &.closed p span {

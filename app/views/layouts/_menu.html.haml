@@ -9,16 +9,17 @@
         %a.right{:href => "#", :onclick => 'EpicLogger.logout()'} Log out
     %button.btn.btn-primary.fa.fa-bars.visible-sm.visible-xs.pull-right{"data-toggle" => "collapse", :href => "#collapse_menu"}
   #collapse_menu.collapse.in
-    %ul.nav.nav-pills.nav-stacked
-      #navLink.nav.nav-pills.nav-stacked
-        = nav_link "Add New Site", new_website_path(), {}, 'fa fa-globe'
     .selectbox.closed
       %p.picked-website
         %strong.title Current Site Name
         %span.closed.fa.fa-chevron-down
         %span.open.fa.fa-chevron-up
-      #websites-sidebar.options
-        %p.title{onclick: 'EpicLogger.pickWebsite(this)', 'data-id'=> ""} Another site
+      %ul#websites-sidebar.options
+        = nav_link "Some website", '#', {:class=>'title', 'data-id'=>'', 'onclick'=>'EpicLogger.pickWebsite(this)'}
+      #add-new.nav.nav-pills.nav-stacked
+        = link_to new_website_path(), class: 'title' do
+          = icon('globe')
+          Add new website
     %ul.nav.nav-pills.nav-stacked
       = nav_link "Errors", errors_url(), {}, 'exclamation-triangle'
       = nav_link "Users", subscribers_url(), {}, 'users'

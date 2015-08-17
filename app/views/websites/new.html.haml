@@ -1,55 +1,23 @@
 .row
-  .col-sm-9.b-r
+  .col-md-12.pagecontainer
+    .pagetitle
+      %h3 Add new website
     %br/
-    %h4 Add new website
-    %br/
-    %form#addWebsite.col-lg-7{:action => "", :method => "post"}
-      %label.control-label Website title
-      %input#title.form-control{:placeholder => "insert title", :required => "required", :type => "text", :name => 'title'}/
-      %br/
-      %label.control-label Website domain
-      %input#domain.form-control{:placeholder => "www.domain.com", :required => "required", :type => "url", :name => 'website'}/
-      %br/
-      %button.btn.btn-success.m-t-n-xs{:type => "submit"} Save
-      %a.btn.btn-warning.m-t-n-xs{:href => "/websites"} Cancel
-  #filterpanel.col-lg-3.col-md-4.sidepanel
-    %h4 Order by
-    .panelbox
-      .form-group
-        %select#sortinput.form-control{:name => "sortinput"}
-          %option Last occurrence
-          %option Occurrences
-          %option Users subscribed
-          %option Page
-    %h4 Filter
-    #filterbox.panelbox
-      %form.panel.panel-default
-        %h5{"data-target" => "#collapse_page", "data-toggle" => "collapse"}
-          Page
-          %span.fa.fa-chevron-down
-        #collapse_page.collapse
-          .checkbox
-            %label
-              %input{:type => "checkbox", :value => ""}/
-              Homepage
-          .checkbox
-            %label
-              %input{:type => "checkbox", :value => ""}/
-              Dashboard
-          .checkbox
-            %label
-              %input{:type => "checkbox", :value => ""}/
-              Settings
-      %form.panel.panel-default
-        %h5{"data-target" => "#collapse_os", "data-toggle" => "collapse"}
-          Operating Systems
-          %span.open.fa.fa-chevron-down
-        #collapse_os.collapse
-          .checkbox
-            %label
-              %input{:type => "checkbox", :value => ""}/
-              Windows 8
-          .checkbox
-            %label
-              %input{:type => "checkbox", :value => ""}/
-              Windows 7
+    .row
+      .col-md-6
+        .panel.panel-default
+          .panel-heading Enter the website details below
+          .panel-body
+            %form#addWebsite{:action => "", :method => "post"}
+              .form-group
+                %label.control-label Name
+                %input#title.form-control{:placeholder => "Website name", :required => "required", :type => "text", :name => 'title'}/
+              .form-group
+                %label.control-label Domain
+                %input#domain.form-control{:placeholder => "http://www.domain.com", :required => "required", :type => "url", :name => 'website'}/
+              .form-group
+                %button.btn.btn-success.m-t-n-xs{:type => "submit"} Save
+      .col-md-6
+        .well.wel-sm
+          %p After adding the website domain we are going to offer you a javascript code to add to your error pages so the users will get recorded when they receive errors.
+          %p You will be able to get in contact with your users after the errors are received and send them messages to let them know the issues are resolved.

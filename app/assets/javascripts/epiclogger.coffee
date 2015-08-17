@@ -18,10 +18,12 @@ window.EpicLogger = (->
         select.removeClass 'open'
         select.addClass 'closed'
         select.find('.options').slideUp 80
+        select.find('#add-new').slideUp 80
       else
         select.removeClass 'closed'
         select.addClass 'open'
         select.find('.options').slideDown 80
+        select.find('#add-new').slideDown 80
 
   logout: ->
     $.auth.signOut()
@@ -36,7 +38,6 @@ window.EpicLogger = (->
     # we check to see if we are calling this from a link call
     $('#navLink').show()
     if memberWebsites != null
-      $('.options').append '<p class="nav nav-pills nav-stacked"><a href="/websites/new" style="text-decoration: none">Add new site</a></p>'
       $('#navLink').hide()
       if el!=undefined
         website_id = $(el).data('id')
@@ -48,6 +49,7 @@ window.EpicLogger = (->
           PubSub.publishSync('assigned.website', pickedWebsite)
           $('.picked-website').render pickedWebsite # render the current website
           $.cookie('pickedWebsite', website.id) # save the website id in the cookies
+    false
 
   setMemberDetails: ->
     $.getJSON('/api/v1/websites', (data)->
