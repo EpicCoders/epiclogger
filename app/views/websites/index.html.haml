@@ -1,29 +1,29 @@
 .row
-  .col-sm-9.b-r
+  .col-md-12.pagecontainer
+    .pagetitle
+      %h3 User Websites
+    %a.button.btn.btn-primary.fa.fa-plus.pull-right{:href => "/websites/new"}
+      Add new site
+    .clearfix
     %br/
-    %a
-      = link_to 'Add New Website', new_website_path(), class: 'btn btn-success m-t-n-xs', target: '_self'
-    %br/
-    %br/
-    .row
-      .col-lg-12
-        .ibox.float-e-margins
-          .ibox-title
-          .ibox-content
-            %table.table.table-bordered
-              %thead
-                %tr
-                  %th Title
-                  %th Domain
-                  %th App Key
-                  %th App Id
-              %tbody.get-websites.websites
-                %tr
-                  %td.domain
-                  %td.title
-                  %td.app_key
-                  %td.app_id
-
+    .panel.panel-default
+      %table.table
+        %thead
+          %tr
+            %th Title
+            %th Domain
+            %th App Key
+            %th App Id
+            %th Remove
+        %tbody.get-websites.websites
+          %tr
+            %td.domain
+            %td.title
+            %td.app_key
+            %td.app_id
+            %td
+              %button.btn.btn-danger.btn-sm.pull-right.fa.fa-close#removeRecord
+                Remove
   #filterpanel.col-lg-3.col-md-4.sidepanel
     %h4 Order by
     .panelbox
