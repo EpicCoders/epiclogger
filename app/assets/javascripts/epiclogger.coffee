@@ -36,7 +36,7 @@ window.EpicLogger = (->
     # we check to see if we are calling this from a link call
     $('#navLink').show()
     if memberWebsites != null
-      $('.options').append '<p class="nav nav-pills nav-stacked" id="navLink" ><a href="/websites/new">Add new site</a></p>'
+      $('.options').append '<p class="nav nav-pills nav-stacked"><a href="/websites/new" style="text-decoration: none">Add new site</a></p>'
       $('#navLink').hide()
       if el!=undefined
         website_id = $(el).data('id')
