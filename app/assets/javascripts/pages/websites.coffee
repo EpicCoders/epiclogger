@@ -1,8 +1,8 @@
-PubSub.subscribe('auth.validation.success', (ev, member)->
-  $.getJSON('/api/v1/websites', {member: member.id}, (data)->
-  	$.each data, (i, websites) ->
-    	$('.get-websites').render websites
-  )
+PubSub.subscribe('assigned.website', (ev, website)->
+  switch gon.action
+    when "index"
+      $.getJSON Routes.api_v1_websites_url(), {member_id: $.auth.user.id}, (data) ->
+        $('#websites-container').render data
 )
 
 console.log "errors here"

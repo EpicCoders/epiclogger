@@ -1,24 +1,25 @@
 .row
   .col-md-12.pagecontainer
     .pagetitle
-      %h3 User Websites
-    %a.button.btn.btn-primary.fa.fa-plus.pull-right{:href => "/websites/new"}
-      Add new site
+      %h3 Websites
+    = link_to new_website_path(), class: 'btn btn-primary pull-right' do
+      = icon('plus')
+      Add new website
     .clearfix
     %br/
     .panel.panel-default
-      %table.table
+      %table.table#websites-container
         %thead
           %tr
             %th Title
             %th Domain
             %th App Key
             %th App Id
-            %th Remove
-        %tbody.get-websites.websites
+            %th
+        %tbody.websites
           %tr
-            %td.domain
             %td.title
+            %td.domain
             %td.app_key
             %td.app_id
             %td
