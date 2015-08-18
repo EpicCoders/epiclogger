@@ -2,23 +2,26 @@
   .col-md-12.pagecontainer
     .pagetitle
     %h3 Installation and configuration
-    %table.table#current-website
-      %thead
-        %tr
-          %th Website Title
-          %th Website Domain
-          %th App Key
-          %th App Id
-      %tbody.websites
-        %tr
-          %td.title
-          %td.domain
-          %td.app_key
-          %td.app_id
-      %br/
-    .panel.panel-default.codeview
+    .panel.panel-primary.codeview
+      .panel-heading Current site information
+      .panel-body
+        .codepanel
+          %table.table#current-website
+            %thead
+              %tr
+                %th Website Title
+                %th Website Domain
+                %th App Key
+                %th App Id
+            %tbody.websites
+              %tr
+                %td.title
+                %td.domain
+                %td.app_key
+                %td.app_id
+    .panel.panel-primary.codeview
       .panel-heading Website Configuration
-      %small Engage developers with users to solve errors. This is the js library that sends errors to our server. Use the iframe functionality to show the form,autofill the email address, removed unused css code.
+      %p Engage developers with users to solve errors. This is the js library that sends errors to our server. Use the iframe functionality to show the form,autofill the email address, removed unused css code.
       .panel-body
         .codepanel
           %p
