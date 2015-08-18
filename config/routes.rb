@@ -28,7 +28,7 @@ Rails.application.routes.draw do
       end
       resources :subscribers, only: [:index]
       resources :members, only: [:show]
-      resources :websites, only: [:index, :create, :destroy]
+      resources :websites, only: [:index, :create, :destroy, :show]
     end
   end
 end

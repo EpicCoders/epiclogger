@@ -9,6 +9,10 @@ class Api::V1::WebsitesController < Api::V1::ApiController
     @website = Website.create(domain: website_params[:domain], title: website_params[:title], member_id: current_member.id)
   end
 
+  def show
+    @website = Website.find_by_id(params[:id])
+  end
+
   def destroy
     @website = Website.find(parmas[:id])
     @website.destroy()
