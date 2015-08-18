@@ -15,6 +15,15 @@ $('#addWebsite').submit (e) ->
 	  data: { website: { domain: $('#addWebsite').find('#domain').val(), title: $('#addWebsite').find('#title').val() } }
 	  success: (data) ->
 	  	alert ' Mesaj ca s-a adaugat ba'
-	  	window.location = "/websites"
+	  	EpicLogger.pickWebsite(undefined, data.id)
+	  	window.location = "/installations/show"
 	return
 return
+
+# $('a.delete').click ->
+#   console.log 'getting website id'
+#   website_id = $(this).attr 'id'
+#   # we just need to add the key/value pair for the DELETE method
+#   # as the second argument to the JQuery $.post() call
+#   $.post Routes.api_v1_websites_url(website_id), { _method: 'delete' }, null, 'script'
+#   false

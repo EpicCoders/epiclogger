@@ -10,6 +10,7 @@ class Api::V1::WebsitesController < Api::V1::ApiController
   end
 
   def destroy
+    @website = Website.find(parmas[:id])
     @website.destroy()
   end
 

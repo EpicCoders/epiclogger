@@ -23,5 +23,7 @@
             %td.app_key
             %td.app_id
             %td
+              / = link_to "Delete", website_delete_path(website), remote: true, class: "btn btn-danger btn-sm pull-right fa fa-close"
+              / = link_to 'Delete', websites_path(), :class => 'delete'
               %button.btn.btn-danger.btn-sm.pull-right.fa.fa-close#removeRecord
                 Remove
