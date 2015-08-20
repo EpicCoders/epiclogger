@@ -2,7 +2,7 @@ directive = {
   websites:{
     delete_website:
       href: (params) ->
-        Routes.website_path(this.id)
+        Routes.api_v1_website_path(this.id)
   }
 }
 

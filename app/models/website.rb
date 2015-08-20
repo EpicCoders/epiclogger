@@ -1,7 +1,7 @@
 class Website < ActiveRecord::Base
   belongs_to :member
-  has_many :subscribers
-  has_many :issues
+  has_many :subscribers, dependent: :destroy
+  has_many :issues, dependent: :destroy
 
   validates :title, :presence => true
   validates :domain, :presence => true
