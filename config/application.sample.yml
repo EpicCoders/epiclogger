@@ -5,3 +5,4 @@ GITHUB_KEY:         ENTER-KEY
 GITHUB_SECRET:      ENTER-SECRET-KEY
 
 MAILER_HOST:        epiclogger.dev
+APP_DOMAIN:         epiclogger.dev
