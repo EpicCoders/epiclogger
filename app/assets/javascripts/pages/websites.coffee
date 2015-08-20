@@ -1,14 +1,16 @@
-# directive = {
-#   url: {
-#   	href: (params) ->
-#   		Routes.website_path(this.id)
-# 	}
-# }
+directive = {
+  websites:{
+    delete_website:
+      href: (params) ->
+        Routes.website_path(this.id)
+  }
+}
+
 PubSub.subscribe('assigned.website', (ev, website)->
   switch gon.action
     when "index"
       $.getJSON Routes.api_v1_websites_url(), {member_id: $.auth.user.id}, (data) ->
-        $('#websites-container').render data
+        $('#websites-container').render data, directive
 )
 
 console.log "errors here"

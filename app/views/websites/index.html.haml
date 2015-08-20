@@ -23,7 +23,7 @@
             %td.app_key
             %td.app_id
             %td
-              = link_to 'Delete', :href => api_v1_website_path(36), :confirm => 'Are you sure?', :method => :delete, :remote => "true", :class => "delete-website"
+              = link_to 'Delete', api_v1_website_path(36), :confirm => 'Are you sure?', :method => :delete, :remote => "true", :class => "delete_website"
               / # = link_to 'Delete', '/api/v1/websites/', :class => 'remote-delete btn btn-danger btn-sm fa fa-close pull-right'
               / %button.btn.btn-danger.btn-sm.pull-right.fa.fa-close#get-id
               /   Remove
