@@ -120,7 +120,7 @@ window.EpicLogger = (->
       else if ev == 'auth.signOut.success'
         window.location.href = '/login'
       else if ev == 'auth.oAuthSignIn.success' or ev == 'auth.signIn.success'
-        window.location.href = '/errors'
+        window.location.href = '/installations'
       console.log ev
       console.log msg
       # console.log $.auth.user

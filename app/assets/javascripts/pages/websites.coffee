@@ -1,3 +1,9 @@
+# directive = {
+#   url: {
+#   	href: (params) ->
+#   		Routes.website_path(this.id)
+# 	}
+# }
 PubSub.subscribe('assigned.website', (ev, website)->
   switch gon.action
     when "index"
@@ -15,15 +21,17 @@ $('#addWebsite').submit (e) ->
 	  data: { website: { domain: $('#addWebsite').find('#domain').val(), title: $('#addWebsite').find('#title').val() } }
 	  success: (data) ->
 	  	alert ' Mesaj ca s-a adaugat ba'
-	  	EpicLogger.pickWebsite(undefined, data.id)
+	  	EpicLogger.setMemberDetails()
 	  	window.location = "/installations/show"
 	return
 return
 
-# $('a.delete').click ->
-#   console.log 'getting website id'
-#   website_id = $(this).attr 'id'
-#   # we just need to add the key/value pair for the DELETE method
-#   # as the second argument to the JQuery $.post() call
-#   $.post Routes.api_v1_websites_url(website_id), { _method: 'delete' }, null, 'script'
-#   false
+# $('#get-id').on 'click', (e)->
+# 	$(this).closest('tr').attr('id')
+# 	console.log 'id is here' + $(this).closest('tr').attr('id')
+
+
+$('a.delete-website').click ->
+  website_id = $(this).closest('tr').attr('id')
+  $.post '/api/v1/websites/' + website_id, { _method: 'delete' }, null, 'script'
+  false
