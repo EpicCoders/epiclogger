@@ -31,13 +31,3 @@ $('#addWebsite').submit (e) ->
 	  	window.location = "/installations/show"
 	return
 return
-
-# $('#get-id').on 'click', (e)->
-# 	$(this).closest('tr').attr('id')
-# 	console.log 'id is here' + $(this).closest('tr').attr('id')
-
-
-$('a.delete-website').click ->
-  website_id = $(this).closest('tr').attr('id')
-  $.post '/api/v1/websites/' + website_id, { _method: 'delete' }, null, 'script'
-  false
