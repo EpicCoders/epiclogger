@@ -1,5 +1,8 @@
 directive = {
   websites:{
+    website_row:
+      id: (params)->
+        "website_" + this.id
     delete_website:
       href: (params) ->
         Routes.api_v1_website_path(this.id)
@@ -7,6 +10,7 @@ directive = {
 }
 
 PubSub.subscribe('assigned.website', (ev, website)->
+  console.log gon.action
   switch gon.action
     when "index"
       $.getJSON Routes.api_v1_websites_url(), {member_id: $.auth.user.id}, (data) ->
