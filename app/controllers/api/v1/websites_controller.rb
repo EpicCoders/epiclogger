@@ -10,11 +10,11 @@ class Api::V1::WebsitesController < Api::V1::ApiController
   end
 
   def show
-    @website = Website.find_by_id(params[:id])
+    @website = current_member.websites.find(params[:id])
   end
 
   def destroy
-    @website = Website.find(params[:id])
+    @website = current_member.websites.find(params[:id])
     @website.destroy()
   end
 

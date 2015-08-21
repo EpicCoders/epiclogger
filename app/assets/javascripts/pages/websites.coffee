@@ -26,7 +26,6 @@ $('#addWebsite').submit (e) ->
 	  dataType: 'json'
 	  data: { website: { domain: $('#addWebsite').find('#domain').val(), title: $('#addWebsite').find('#title').val() } }
 	  success: (data) ->
-	  	alert ' Mesaj ca s-a adaugat ba'
 	  	EpicLogger.setMemberDetails()
 	  	window.location = "/installations/show"
 	return
