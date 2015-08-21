@@ -16,25 +16,25 @@ describe Api::V1::ErrorsController, :type => :controller do
       before { auth_member(member) }
       it 'should create subscriber' do
         expect {
-          post :create, params
+          post :add_error, params
         }.to change(Subscriber, :count).by( 1 )
       end
 
       it 'should create issue' do
         expect {
-          post :create, params
+          post :add_error, params
         }.to change(Issue, :count).by( 1 )
       end
 
       it 'should create subscriber_issue' do
         expect {
-          post :create, params
+          post :add_error, params
         }.to change(SubscriberIssue, :count).by( 1 )
       end
 
       it 'should create message' do
         expect {
-          post :create, params
+          post :add_error, params
         }.to change(Message, :count).by( 1 )
       end
 
@@ -43,23 +43,24 @@ describe Api::V1::ErrorsController, :type => :controller do
         error1 = create :issue, website: website, status: 'unresolved', page_title: 'New title'
         create :subscriber_issue, issue: error1, subscriber: subscriber1
         expect{
-          post :create, params
+          post :add_error, params
         }.to change(Issue, :count).by(0)
       end
 
       it 'should increment occurrences' do
         error1 = create :issue, website: website, page_title: 'New title'
         expect{
-          post :create, params
+          post :add_error, params
           error1.reload
         }.to change(error1, :occurrences).by(1)
       end
     end
     context 'not logged in' do
+      before { auth_member(member) }
       it 'should get current site' do
         request.env['HTTP_APP_ID'] = website.app_id
         request.env['HTTP_APP_KEY'] = website.app_key
-        post :create, params
+        post :add_error, params
         expect(assigns(:current_site)).to eq(website)
       end
     end
