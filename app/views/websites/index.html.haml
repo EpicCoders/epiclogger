@@ -15,13 +15,13 @@
             %th Domain
             %th App Key
             %th App Id
-            %th Remove Website
+            %th.text-right Actions
         %tbody.websites
           %tr.website_row{"id"=>1}
             %td.title
             %td.domain
             %td.app_key
             %td.app_id
-            %td
+            %td.text-right
               = link_to 'Delete', api_v1_websites_path(), :method => :delete, :remote => "true", data: {confirm: "Are you sure?"}, :class => "delete_website"
 
