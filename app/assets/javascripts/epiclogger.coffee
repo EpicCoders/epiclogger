@@ -26,6 +26,7 @@ window.EpicLogger = (->
         select.find('#add-new').slideDown 80
 
   logout: ->
+    $.cookie 'picked-website', null
     $.auth.signOut()
 
   doLoad: ->

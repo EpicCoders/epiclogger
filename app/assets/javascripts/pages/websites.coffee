@@ -5,7 +5,8 @@ directive = {
         "website_" + this.id
     delete_website:
       href: (params) ->
-        Routes.api_v1_website_path(this.id)
+        id = this.id
+        Routes.api_v1_website_path({id})
   }
 }
 
@@ -22,12 +23,17 @@ console.log "errors here"
 $('#addWebsite').submit (e) ->
   e.preventDefault()
   $.ajax
-	  url: Routes.api_v1_websites_url()
-	  type: 'post'
-	  dataType: 'json'
-	  data: { website: { domain: $('#addWebsite').find('#domain').val(), title: $('#addWebsite').find('#title').val() } }
-	  success: (data) ->
-	  	EpicLogger.setMemberDetails()
-	  	window.location = "/installations/show"
-	return
+    url: Routes.api_v1_websites_url()
+    type: 'post'
+    dataType: 'json'
+    data: { website: { domain: $('#addWebsite').find('#domain').val(), title: $('#addWebsite').find('#title').val() } }
+    success: (data) ->
+      EpicLogger.setMemberDetails()
+      window.location = "/installations/show"
+  return
 return
+
+$('.delete_website').click ->
+  console.log 'this should appear'
+  debugger;
+  $(this).closest('tr').remove()
