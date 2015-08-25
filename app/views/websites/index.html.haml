@@ -1,10 +1,11 @@
 .row
   .col-md-12.pagecontainer
     .pagetitle
-      %h3 Websites
-    = link_to new_website_path(), class: 'btn btn-primary pull-right' do
-      = icon('plus')
-      Add new website
+      %h3
+        Websites
+        = link_to new_website_path(), class: 'btn btn-primary pull-right' do
+          = icon('plus')
+          Add new website
     .clearfix
     %br/
     .panel.panel-default
@@ -23,5 +24,5 @@
             %td.app_key
             %td.app_id
             %td.text-right
-              = link_to 'Delete', api_v1_websites_path(), :method => :delete, :remote => "true", data: {confirm: "Are you sure?"}, :class => "delete_website"
+              = link_to ' Delete', api_v1_websites_path(), :method => :delete, :remote => "true", data: {confirm: "Are you sure?"}, :class => "delete_website btn btn-danger pull-right fa fa-close"
 

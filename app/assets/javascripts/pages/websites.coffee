@@ -27,12 +27,7 @@ $('#addWebsite').submit (e) ->
     dataType: 'json'
     data: { website: { domain: $('#addWebsite').find('#domain').val(), title: $('#addWebsite').find('#title').val() } }
     success: (data) ->
-      EpicLogger.setMemberDetails()
+      EpicLogger.setMemberDetails(data.id)
       window.location = "/installations/show"
   return
 return
-
-$('.delete_website').click ->
-  console.log 'this should appear'
-  debugger;
-  $(this).closest('tr').remove()

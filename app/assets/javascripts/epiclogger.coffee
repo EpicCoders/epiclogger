@@ -26,7 +26,7 @@ window.EpicLogger = (->
         select.find('#add-new').slideDown 80
 
   logout: ->
-    $.cookie 'picked-website', null
+    $.cookie 'pickedWebsite', null
     $.auth.signOut()
 
   doLoad: ->
@@ -52,13 +52,16 @@ window.EpicLogger = (->
           $.cookie('pickedWebsite', website.id) # save the website id in the cookies
     false
 
-  setMemberDetails: ->
+  setMemberDetails: (picked_id)->
     $.getJSON('/api/v1/websites', (data)->
       memberWebsites = data.websites
-      if $.cookie('pickedWebsite')!=undefined
-        EpicLogger.pickWebsite(undefined, $.cookie('pickedWebsite'))
+      if picked_id != undefined
+        EpicLogger.pickWebsite(undefined, picked_id).delay( 800 )
       else
-        EpicLogger.pickWebsite(undefined, data.websites[0].id)
+        if $.cookie('pickedWebsite')!=undefined
+          EpicLogger.pickWebsite(undefined, $.cookie('pickedWebsite'))
+        else
+          EpicLogger.pickWebsite(undefined, data.websites[0].id)
       PubSub.publish('details.websites', data );
 
       directive = {
