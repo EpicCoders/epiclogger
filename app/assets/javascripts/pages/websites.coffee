@@ -5,7 +5,8 @@ directive = {
         "website_" + this.id
     delete_website:
       href: (params) ->
-        Routes.api_v1_website_path(this.id)
+        id = this.id
+        Routes.api_v1_websites_path({id})
   }
 }
 
@@ -15,6 +16,7 @@ PubSub.subscribe('assigned.website', (ev, website)->
     when "index"
       $.getJSON Routes.api_v1_websites_url(), {member_id: $.auth.user.id}, (data) ->
         $('#websites-container').render data, directive
+        console.log 'data loaded'
 )
 
 console.log "errors here"
