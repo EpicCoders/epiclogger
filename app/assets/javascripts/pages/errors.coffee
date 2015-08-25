@@ -32,6 +32,10 @@ PubSub.subscribe('assigned.website', (ev, website)->
   switch gon.action
     when "index"
       $.getJSON '/api/v1/errors', { website_id: website.id }, (data) ->
+        if data.errors.length > 0
+          $('#missing-errors').hide()
+        else
+          $('#missing-errors').show()
         $('#errorscontainer').render data, directive
     when 'show'
       $.getJSON '/api/v1/errors/' + gon.error_id, { website_id: website.id }, (data) ->
