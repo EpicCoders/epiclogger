@@ -99,14 +99,12 @@ window.EpicLogger = (->
     alert(msg)
 
   authInitialization: ->
-    $.ajaxSetup(
-      beforeSend: (xhr, settings) ->
-        # append outbound auth headers
-        $.auth.appendAuthHeaders(xhr, settings)
-    )
     $.auth.configure({
       apiUrl: '/api/v1'
     })
+    $(document).on('ajax:beforeSend', [$.rails.linkClickSelector,$.rails.buttonClickSelector].join(','), (e, xhr, settings) ->
+      $.auth.appendAuthHeaders(xhr, settings)
+    )
     PubSub.subscribe('auth', (ev, msg)->
       if ev == 'auth.validation.success'
         EpicLogger.doneLoad()
