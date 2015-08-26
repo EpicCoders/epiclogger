@@ -26,7 +26,7 @@ window.EpicLogger = (->
         select.find('#add-new').slideDown 80
 
   logout: ->
-    $.cookie 'pickedWebsite', null
+    $.removeCookie('pickedWebsite', {path: '/'})
     $.auth.signOut()
 
   doLoad: ->
@@ -46,17 +46,20 @@ window.EpicLogger = (->
       for website in memberWebsites
         if website.id==parseInt(website_id)
           pickedWebsite = website
-          console.log 'assigned website'
-          PubSub.publishSync('assigned.website', pickedWebsite)
-          $('.picked-website').render pickedWebsite # render the current website
-          $.cookie('pickedWebsite', website.id) # save the website id in the cookies
+
+      pickedWebsite = memberWebsites[0] if pickedWebsite == undefined
+      console.log 'assigned website'
+      $('.picked-website').render pickedWebsite # render the current website
+      $.cookie('pickedWebsite', pickedWebsite.id, { path: '/' }) # save the website id in the cookies
+      console.log pickedWebsite
+      PubSub.publishSync('assigned.website', pickedWebsite)
     false
 
   setMemberDetails: (picked_id)->
     $.getJSON('/api/v1/websites', (data)->
       memberWebsites = data.websites
       if picked_id != undefined
-        EpicLogger.pickWebsite(undefined, picked_id).delay( 800 )
+        EpicLogger.pickWebsite(undefined, picked_id
       else
         if $.cookie('pickedWebsite')!=undefined
           EpicLogger.pickWebsite(undefined, $.cookie('pickedWebsite'))
