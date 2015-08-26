@@ -1,0 +1,27 @@
+.row
+  .col-md-9.pagecontainer
+    .pagetitle
+      %h3
+        Site Users
+        = link_to new_website_path(), class: 'btn btn-primary pull-right' do
+          = icon('plus')
+          Add user
+    .clearfix
+    %br/
+    .panel.panel-default
+      %table.table#members-container
+        %thead
+          %tr
+            %th User Name
+            %th Email
+            %th Access
+            %th Actions
+        %tbody.subscribers
+          %tr
+            %td.name
+            %td.email
+            %td
+            %td
+              %button.btn.btn-danger.btn-sm.pull-right
+                %span.fa.fa-close
+                Remove user

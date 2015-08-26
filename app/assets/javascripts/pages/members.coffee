@@ -22,3 +22,12 @@ form_signup.submit((e)->
   )
 )
 
+PubSub.subscribe('assigned.website', (ev, website)->
+  console.log gon.action
+  switch gon.action
+    when "index"
+      $.getJSON Routes.api_v1_subscribers_url(), { website_id: website.id }, (data) ->
+        $('#members-container').render data
+        console.log 'data loaded'
+)
+

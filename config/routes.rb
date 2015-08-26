@@ -7,7 +7,7 @@ Rails.application.routes.draw do
 
   resources :errors, only: [:show, :index]
   resources :websites, only: [:index, :new, :show]
-  # resources :members, only: [:index]
+  resources :members, only: [:index]
   resources :subscribers, only: [:index]
   resources :accounts, only: [:show]
   resources :installations, only: [:show, :index]
@@ -27,7 +27,7 @@ Rails.application.routes.draw do
         end
       end
       resources :subscribers, only: [:index]
-      resources :members, only: [:show]
+      resources :members, only: [:show, :index]
       resources :websites, only: [:index, :create, :destroy, :show]
     end
   end
