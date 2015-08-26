@@ -5,6 +5,7 @@ class Api::V1::WebsitesController < Api::V1::ApiController
 
   def create
     @website = Website.create(domain: website_params[:domain], title: website_params[:title], member_id: current_member.id)
+    @subscriber = Subscriber.create(name: current_member.name, email: current_member.email, website_id: @website.id, role: 1)
   end
 
   def show

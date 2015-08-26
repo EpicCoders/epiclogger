@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150804083109) do
+ActiveRecord::Schema.define(version: 20150826144253) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -78,11 +78,12 @@ ActiveRecord::Schema.define(version: 20150804083109) do
   add_index "subscriber_issues", ["subscriber_id"], name: "index_subscriber_issues_on_subscriber_id", using: :btree
 
   create_table "subscribers", force: :cascade do |t|
-    t.string   "name",       null: false
-    t.string   "email",      null: false
+    t.string   "name",                   null: false
+    t.string   "email",                  null: false
     t.integer  "website_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+    t.integer  "role",       default: 2
   end
 
   add_index "subscribers", ["email"], name: "index_subscribers_on_email", unique: true, using: :btree
