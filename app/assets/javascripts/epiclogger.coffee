@@ -59,7 +59,7 @@ window.EpicLogger = (->
     $.getJSON('/api/v1/websites', (data)->
       memberWebsites = data.websites
       if picked_id != undefined
-        EpicLogger.pickWebsite(undefined, picked_id
+        EpicLogger.pickWebsite(undefined, picked_id)
       else
         if $.cookie('pickedWebsite')!=undefined
           EpicLogger.pickWebsite(undefined, $.cookie('pickedWebsite'))
