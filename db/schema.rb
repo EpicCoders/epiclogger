@@ -90,7 +90,7 @@ ActiveRecord::Schema.define(version: 20150827092954) do
   create_table "website_members", force: :cascade do |t|
     t.integer "member_id"
     t.integer "website_id"
-    t.integer "role"
+    t.integer "role",       default: 2
   end
 
   add_index "website_members", ["member_id"], name: "index_website_members_on_member_id", using: :btree
