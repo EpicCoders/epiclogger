@@ -1,3 +1,3 @@
 json.subscribers @subscribers do |subscriber|
-  json.(subscriber, :id, :name, :email, :created_at, :updated_at, :website_id, :role)
+  json.(subscriber, :id, :name, :email, :created_at, :updated_at, :website_id, :define_role)
 end
