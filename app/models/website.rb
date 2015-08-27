@@ -2,6 +2,8 @@ class Website < ActiveRecord::Base
   belongs_to :member
   has_many :subscribers, dependent: :destroy
   has_many :issues, dependent: :destroy
+  has_many :website_members, -> { uniq }, dependent: :destroy, autosave: true, inverse_of: :website
+  has_many :members, through: :website_members, inverse_of: :website
 
   validates :title, :presence => true
   validates :domain, :presence => true
