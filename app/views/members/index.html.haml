@@ -15,13 +15,11 @@
             %th User Name
             %th Email
             %th Access
-            %th Actions
+            %th.text-right Actions
         %tbody.subscribers
-          %tr
+          %tr.subscriber_row{"id"=>1}
             %td.name
             %td.email
             %td.define_role
-            %td
-              %button.btn.btn-danger.btn-sm.pull-right
-                %span.fa.fa-close
-                Remove user
+            %td.text-right
+              = link_to ' Remove user', api_v1_subscribers_path(), :method => :delete, :remote => "true", data: {confirm: "Are you sure?"}, :class => "delete_subscriber btn btn-danger pull-right fa fa-close"

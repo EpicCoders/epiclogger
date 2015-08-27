@@ -26,7 +26,7 @@ Rails.application.routes.draw do
           get :add_error
         end
       end
-      resources :subscribers, only: [:index]
+      resources :subscribers, only: [:index, :destroy]
       resources :members, only: [:show, :index]
       resources :websites, only: [:index, :create, :destroy, :show]
     end

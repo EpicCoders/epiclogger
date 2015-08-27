@@ -21,12 +21,22 @@ form_signup.submit((e)->
     console.log resp
   )
 )
+directive = {
+  subscribers:{
+    subscriber_row:
+      id: (params)->
+        "subscriber_" + this.id
+    delete_subscriber:
+      href: (params) ->
+        Routes.api_v1_subscriber_path(this.id, {format: 'js'})
+  }
+}
 
 PubSub.subscribe('assigned.website', (ev, website)->
   console.log gon.action
   switch gon.action
     when "index"
       $.getJSON Routes.api_v1_subscribers_url(), { website_id: website.id }, (data) ->
-        $('#members-container').render data
+        $('#members-container').render data, directive
 )
 
