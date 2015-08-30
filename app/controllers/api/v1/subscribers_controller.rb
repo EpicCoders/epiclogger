@@ -5,6 +5,7 @@ class Api::V1::SubscribersController < Api::V1::ApiController
   end
 
   def create
+    UserMailer.subscriber_invitation(params[:subscriber][:website], subscriber_params[:email], current_member).deliver_now
   end
 
   def destroy
