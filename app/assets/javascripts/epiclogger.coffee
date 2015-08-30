@@ -50,7 +50,7 @@ window.EpicLogger = (->
       pickedWebsite = memberWebsites[0] if pickedWebsite == undefined
       console.log 'assigned website'
       $('.picked-website').render pickedWebsite # render the current website
-      cookie = $.cookie('pickedWebsite', pickedWebsite.id, { path: '/' }) # save the website id in the cookies
+      $.cookie('pickedWebsite', pickedWebsite.id, { path: '/' }) # save the website id in the cookies
       console.log pickedWebsite
       PubSub.publishSync('assigned.website', pickedWebsite)
     return pickedWebsite
