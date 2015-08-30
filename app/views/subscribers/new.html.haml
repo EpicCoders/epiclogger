@@ -1,0 +1,21 @@
+.row
+  .col-md-12.pagecontainer
+    .pagetitle
+      %h3 Add new subscriber
+    %br/
+    .row
+      .col-md-6
+        .panel.panel-default
+          .panel-heading Enter the subscriber details below
+          .panel-body
+            %form#addSubscriber{:action => "", :method => "post"}
+              .form-group
+                %label.control-label Email
+                %input#getEmail.form-control{:placeholder => "Enter email here", :required => "required", :type => "email", :name => 'getEmail'}/
+              .form-group
+                %button.btn.btn-primary.m-t-n-xs{:type => "submit"} Send invitation
+      .col-md-6
+        .well.wel-sm
+          %p We will send an email with a link that will allow current website subscriber to login/sign up on our site for free.
+          %p The signed in user will be able to see the errors of your current website.
+          %p Thanks.
