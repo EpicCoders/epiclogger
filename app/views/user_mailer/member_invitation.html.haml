@@ -1,4 +1,4 @@
 Hi, my name is #{@member.name},
 %p You where invited to subscribe to website '#{@website[:domain]}'.
 %p
-  To accept invitation, just follow this link: #{link_to 'Accept Invitation', signup_url() + '?token=' + @token} and complete the registration form.
+  To accept invitation, just follow this link: #{link_to 'Accept Invitation', invitation_url(@website[:id]) + '?token=' + @token + '&email=' + @email} and complete the registration form.

@@ -12,7 +12,8 @@ class UserMailer < ApplicationMailer
     @member = inviter
     @website = website
     @token = invitation_token
-    mail(to: email, subject: 'Invite Members')
+    @email = email
+    mail(to: @email, subject: 'Invite Members')
   end
 
 end
