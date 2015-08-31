@@ -11,12 +11,9 @@ form_signup.submit((e)->
     email: form_signup.find('#email').val()
     password: form_signup.find('#password').val()
     password_confirmation: form_signup.find('#passwod_confirm').val()
-    website_id: gon.website_id
-    token: gon.token
   ).then((resp) ->
     console.log "we have success"
     console.log resp
-    # window.location.href = '/websites'
   ).fail ((resp) ->
     EpicLogger.addAlert(resp.data.errors.full_messages)
     console.log "we failed"
