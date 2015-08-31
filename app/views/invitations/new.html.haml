@@ -1,14 +1,14 @@
 .row
   .col-md-12.pagecontainer
     .pagetitle
-      %h3 Add new subscriber
+      %h3 Add subscriber to your website
     %br/
     .row
       .col-md-6
         .panel.panel-default
           .panel-heading Enter the subscriber details below
           .panel-body
-            %form#addSubscriber{:action => "", :method => "post"}
+            %form#addMember{:action => "", :method => "post"}
               .form-group
                 %label.control-label Email
                 %input#getEmail.form-control{:placeholder => "Enter email here", :required => "required", :type => "email", :name => 'getEmail'}/

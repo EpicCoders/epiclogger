@@ -6,7 +6,9 @@ class Subscriber < ActiveRecord::Base
   validates_uniqueness_of :email, scope: :website_id
 
   def define_role
-    member_id = Member.where("email=?", self.email).first.id
-    WebsiteMember.where("member_id = ? AND website_id =?", member_id, Website.find(website_id).id).first.role
+  	member = Member.where("email=?", self.email)
+    if member.present?
+    	WebsiteMember.where("member_id = ? AND website_id =?", member.first.id, Website.find(website_id).id).first.role
+    end
   end
 end

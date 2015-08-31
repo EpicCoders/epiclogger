@@ -8,7 +8,8 @@ Rails.application.routes.draw do
   resources :errors, only: [:show, :index]
   resources :websites, only: [:index, :new, :show]
   resources :members, only: [:index]
-  resources :subscribers, only: [:index, :new]
+  resources :invitations, only:[:new]
+  resources :subscribers, only: [:index]
   resources :accounts, only: [:show]
   resources :installations, only: [:show, :index]
   resources :settings, only: [:index]
@@ -26,7 +27,8 @@ Rails.application.routes.draw do
           get :add_error
         end
       end
-      resources :subscribers, only: [:index, :create, :destroy]
+      resources :invitations, only: [:create]
+      resources :subscribers, only: [:index, :destroy]
       resources :members, only: [:show, :index]
       resources :websites, only: [:index, :create, :destroy, :show]
     end
