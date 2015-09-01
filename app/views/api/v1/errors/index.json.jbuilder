@@ -3,3 +3,6 @@ json.errors @errors do |error|
   json.last_occurrence error.updated_at
   json.users_count error.subscribers.count
 end
+
+json.page @page.to_i
+json.pages @pages

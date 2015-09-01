@@ -1,5 +1,5 @@
 # important don't add $ -> here when using PubSub as the event will be assigned every time
-console.log "errors loaded"
+
 directive = {
   errors:{
     warning: {
@@ -27,20 +27,39 @@ directive = {
       "Send an update to #{this.subscribers_count} subscribers"
 }
 PubSub.subscribe('assigned.website', (ev, website)->
-  console.log 'getting errors'
-
   switch gon.action
     when "index"
-      $.getJSON '/api/v1/errors', { website_id: website.id }, (data) ->
-        if data.errors.length > 0
-          $('#missing-errors').hide()
-        else
-          $('#missing-errors').show()
-        $('#errorscontainer').render data, directive
+      page = 1
+      $.getJSON '/api/v1/errors', { website_id: website.id, page: page }, (data) ->
+        render(data)
+      $('.next').on 'click', () ->
+        page = page + 1
+        request(website.id, page)
+      $('.previous').on 'click', () ->
+        page = page - 1
+        request(website.id, page)
     when 'show'
       $.getJSON '/api/v1/errors/' + gon.error_id, { website_id: website.id }, (data) ->
         $('#errordetails').render data, directive
 )
+
+request = (website_id, page) ->
+  $.getJSON '/api/v1/errors', { website_id: website_id, page: page }, (data) ->
+    render(data)
+
+render = (data) ->
+  if data.errors.length > 0
+    $('#missing-errors').hide()
+
+    # start the pagination
+    $('.pagination-text').html(data.page + '/' + data.pages)
+    $('.next').addClass('disabled') if data.page == data.pages
+    $('.next').removeClass('disabled') if data.page != data.pages
+    $('.previous').removeClass('disabled') if data.page != 1
+    $('.previous').addClass('disabled') if data.page == 1
+  else
+    $('#missing-errors').show()
+  $('#errorscontainer').render data, directive
 
 $('#solve').on 'click', (e)->
   e.preventDefault();
@@ -73,6 +92,5 @@ $('form#notify').submit ->
     data: {message: dataString}
     success: (data) ->
       # finish load
-      console.log data, dataString, 'fail'
       return
   false

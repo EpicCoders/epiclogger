@@ -2,7 +2,9 @@ class Api::V1::ErrorsController < Api::V1::ApiController
   skip_before_action :authenticate_member!, except: [:index, :show, :update, :notify_subscribers]
 
   def index
-    @errors = current_site.issues
+    @page = params[:page] || 1
+    @errors = current_site.issues.page @page
+    @pages = @errors.total_pages
   end
 
   def create
@@ -44,7 +46,10 @@ class Api::V1::ErrorsController < Api::V1::ApiController
 
   private
     def error_params
-      params[:error] = JSON.parse(params[:error]) if params[:error].is_a?(String)
-      params.require(:error).permit(:status, :description, :page_title, :message, :name, :email)
+      if params[:error].is_a?(String)
+        error_params ||= JSON.parse(params[:error])
+      else
+        error_params ||= params[:error]
+      end
     end
 end

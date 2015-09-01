@@ -50,6 +50,9 @@ gem "figaro"
 # Add server puma
 gem 'puma'
 
+# Add Kaminari for pagination.
+gem 'kaminari'
+
 group :development do
   gem "better_errors"
   gem "binding_of_caller"

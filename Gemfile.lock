@@ -152,6 +152,9 @@ GEM
       sprockets-rails
     json (1.8.3)
     jwt (1.5.0)
+    kaminari (0.16.3)
+      actionpack (>= 3.0.0)
+      activesupport (>= 3.0.0)
     launchy (2.4.3)
       addressable (~> 2.3)
     letter_opener (1.4.1)
@@ -334,6 +337,7 @@ DEPENDENCIES
   jquery-rails
   jquery-turbolinks
   js-routes
+  kaminari
   letter_opener
   momentjs-rails
   nprogress-rails
