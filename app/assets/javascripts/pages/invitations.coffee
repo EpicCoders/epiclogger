@@ -5,7 +5,7 @@ PubSub.subscribe('assigned.website', (ev, website)->
       url: Routes.api_v1_invitations_url()
       type: 'post'
       dataType: 'json'
-      data: { member: { email: $('#addMember').find('#getEmail').val(), website: EpicLogger.pickWebsite() } }
+      data: { member: { email: $('#addMember').find('#getEmail').val(), website_id: website.id } }
       success: (data) ->
         window.location = "/members"
     return

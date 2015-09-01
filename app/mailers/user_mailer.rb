@@ -8,9 +8,9 @@ class UserMailer < ApplicationMailer
     mail(to: @member.email, subject: 'Subscriber notification')
   end
 
-  def member_invitation(website, email, invitation_token, inviter)
-    @member = inviter
-    @website = website
+  def member_invitation(website_id, email, invitation_token, inviter_id)
+    @member = Member.find(inviter_id)
+    @website = Website.find(website_id)
     @token = invitation_token
     @email = email
     mail(to: @email, subject: 'Invite Members')

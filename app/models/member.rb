@@ -4,8 +4,8 @@ class Member < ActiveRecord::Base
           :recoverable, :rememberable, :trackable, :validatable,
           :confirmable
   include DeviseTokenAuth::Concerns::User
-  has_many :websites
-  has_many :website_members, -> { uniq }, dependent: :destroy, autosave: true, inverse_of: :member
+  has_many :website_members, -> { uniq }, dependent: :destroy, autosave: true, inverse_of: :website
+  has_many :websites, through: :website_members, inverse_of: :member
 
   validates :name, presence: true
   validates :email, presence: true, uniqueness: true

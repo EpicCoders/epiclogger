@@ -5,7 +5,7 @@ class Api::V1::WebsitesController < Api::V1::ApiController
 
   def create
     @website = Website.create( domain: website_params[:domain], title: website_params[:title], member_id: current_member.id )
-    WebsiteMember.create( member_id: current_member.id, website_id: @website.id, role: 1 )
+    WebsiteMember.create( member_id: current_member.id, website_id: @website.id, role: WebsiteMember.role.find_value(:owner).value )
   end
 
   def show
