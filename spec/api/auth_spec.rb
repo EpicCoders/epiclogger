@@ -23,7 +23,7 @@ describe "Auth API" do
     expect(response).to be_success
 
     json = JSON.parse(response.body)
-    expect(json).to eq({'errors'=> []})
+    expect(json).to eq({'errors'=> []}, 'page' => 1, 'pages' => 0)
   end
 
 end
