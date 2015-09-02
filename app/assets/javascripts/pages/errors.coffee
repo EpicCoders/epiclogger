@@ -30,8 +30,7 @@ PubSub.subscribe('assigned.website', (ev, website)->
   switch gon.action
     when "index"
       page = 1
-      $.getJSON '/api/v1/errors', { website_id: website.id, page: page }, (data) ->
-        render(data)
+      request(website.id, page)
       $('.next').on 'click', () ->
         page = page + 1
         request(website.id, page)
@@ -44,7 +43,7 @@ PubSub.subscribe('assigned.website', (ev, website)->
 )
 
 request = (website_id, page) ->
-  $.getJSON '/api/v1/errors', { website_id: website_id, page: page }, (data) ->
+  $.getJSON Routes.api_v1_errors_path(), { website_id: website_id, page: page }, (data) ->
     render(data)
 
 render = (data) ->
