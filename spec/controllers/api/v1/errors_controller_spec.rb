@@ -2,7 +2,8 @@ require 'rails_helper'
 
 describe Api::V1::ErrorsController, :type => :controller do
   let(:member) { create :member }
-  let(:website) { create :website, member: member }
+  let(:website) { create :website }
+  let!(:website_member) { create :website_member, website: website, member: member }
   let(:issue_error) { create :issue, website: website }
   let(:subscriber) { create :subscriber, website: website }
   let!(:issue_subscriber) { create :subscriber_issue, issue: issue_error, subscriber: subscriber }

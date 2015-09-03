@@ -34,7 +34,6 @@ class Api::V1::ErrorsController < Api::V1::ApiController
   end
 
   def add_error
-    error_params
     subscriber = current_site.subscribers.create_with(name: "test").find_or_create_by!(email: error_params["email"])
     @error = current_site.issues.create_with(description: 'dasdasdsa').find_or_create_by(page_title: error_params["page_title"])
     @error.increment!(:occurrences)
@@ -46,10 +45,12 @@ class Api::V1::ErrorsController < Api::V1::ApiController
 
   private
     def error_params
+      # params[:error] = JSON.parse(params[:error]) if params[:error].is_a?(String)
+      # params.require(:error).permit(:status, :description, :page_title, :message, :name, :email)
       if params[:error].is_a?(String)
         error_params ||= JSON.parse(params[:error])
       else
-        error_params ||= params[:error]
+        error_params ||= params.require(:error).permit(:status, :description, :page_title, :message, :name, :email)
       end
     end
 end

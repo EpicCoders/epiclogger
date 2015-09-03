@@ -7,7 +7,6 @@ class Website < ActiveRecord::Base
 
   validates :title, :presence => true
   validates :domain, :presence => true
-  validates :member, :presence => true
 
   before_create :generate_keys_for_website
 

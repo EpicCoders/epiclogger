@@ -1,8 +1,9 @@
 require 'rails_helper'
 
 describe "Auth API" do
-  let!(:member) { FactoryGirl.create(:member) }
-  let!(:website) { FactoryGirl.create(:website, member_id: member.id) }
+  let!(:member) { create :member }
+  let!(:website) { create :website  }
+  let!(:website_member) { create :website_member, website: website, member: member }
 
   it 'can login with valid credentials' do
     post '/api/v1/auth/sign_in', {email: member.email, password: "hello123"}
