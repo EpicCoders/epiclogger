@@ -28,8 +28,8 @@ Rails.application.routes.draw do
         end
       end
       resources :invitations, only: [:create]
-      resources :subscribers, only: [:index, :destroy]
-      resources :members, only: [:show, :create, :index]
+      resources :subscribers, only: [:index]
+      resources :members, only: [:show, :create, :index, :destroy]
       resources :websites, only: [:index, :create, :destroy, :show]
     end
   end

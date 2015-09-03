@@ -28,13 +28,16 @@ form_signup.submit((e)->
   )
 )
 directive = {
-  subscribers:{
-    subscriber_row:
+  members:{
+    role:
+      html: ()->
+        "#{this.role}"
+    member_row:
       id: (params)->
-        "subscriber_" + this.id
-    delete_subscriber:
+        "member_" + this.id
+    delete_member:
       href: (params) ->
-        Routes.api_v1_subscriber_path(this.id, {format: 'js'})
+        Routes.api_v1_member_path(this.id, {format: 'js'})
   }
 }
 
@@ -42,7 +45,7 @@ PubSub.subscribe('assigned.website', (ev, website)->
   console.log gon.action
   switch gon.action
     when "index"
-      $.getJSON Routes.api_v1_subscribers_url(), { website_id: website.id }, (data) ->
+      $.getJSON Routes.api_v1_members_url(), { website_id: website.id }, (data) ->
         $('#members-container').render data, directive
 )
 

@@ -2,7 +2,6 @@ class InvitationsController < ApplicationController
   def new
   end
   def show
-    binding.pry
     if @member = Member.find_by_email(params[:email])
       WebsiteMember.where( invitation_token: params[:token] ).update_all( member_id: @member.id )
       redirect_to login_url()
