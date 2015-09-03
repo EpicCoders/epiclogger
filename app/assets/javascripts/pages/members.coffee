@@ -18,7 +18,7 @@ form_signup.submit((e)->
       url: Routes.api_v1_members_url()
       type: 'post'
       dataType: 'json'
-      data: { website_member: { website_id: gon.website_id, token: gon.token, email: form_signup.find('#email').val() } }
+      data: { website_member: { website_id: gon.website_id, website_member_id: gon.website_member_id, email: form_signup.find('#email').val() } }
       success: (data) ->
         window.location.href = '/websites'
   ).fail ((resp) ->

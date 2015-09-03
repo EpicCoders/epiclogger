@@ -6,7 +6,7 @@ class MembersController < ApplicationController
   end
 
   def new
-    gon.token = params[:token]
+    gon.website_member_id = params[:website_member_id]
     gon.website_id = params[:website_id]
   end
 
