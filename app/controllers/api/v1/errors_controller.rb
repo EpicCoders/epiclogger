@@ -7,15 +7,6 @@ class Api::V1::ErrorsController < Api::V1::ApiController
     @pages = @errors.total_pages
   end
 
-  def create
-    # subscriber = current_site.subscribers.create_with(name: error_params[:name]).find_or_create_by!(email: error_params[:email])
-    # @error = current_site.issues.create_with(description: 'etcdasdasadsad').find_or_create_by(page_title: error_params[:page_title])
-  #   @error.increment!(:occurrences)
-
-    # SubscriberIssue.create_with(issue_id: @error.id).find_or_create_by(subscriber_id: subscriber.id)
-    # message = Message.create(content: error_params['message'], issue_id: @error.id)
-  end
-
   def show
     @error = current_site.issues.where('issues.id = ?', params[:id]).first
   end
@@ -45,8 +36,6 @@ class Api::V1::ErrorsController < Api::V1::ApiController
 
   private
     def error_params
-      # params[:error] = JSON.parse(params[:error]) if params[:error].is_a?(String)
-      # params.require(:error).permit(:status, :description, :page_title, :message, :name, :email)
       if params[:error].is_a?(String)
         error_params ||= JSON.parse(params[:error])
       else
