@@ -127,6 +127,7 @@ describe Api::V1::ErrorsController, :type => :controller do
 
   describe 'GET #show' do
     let(:params) { default_params.merge({ id: issue_error.id, website_id: website.id}) }
+    render_views
     context 'if logged in' do
       before { auth_member(member) }
 
@@ -139,6 +140,22 @@ describe Api::V1::ErrorsController, :type => :controller do
         get :show, params
         expect(response).to be_successful
         expect(response.content_type).to eq('application/json')
+      end
+
+      it 'should render the expected json' do
+        get :show, params
+        expect(response).to be_successful
+        expect(response.body).to eq({
+          id: issue_error.id,
+          description: issue_error.description,
+          created_at: issue_error.created_at,
+          website_id: issue_error.website_id,
+          page_title: issue_error.page_title,
+          occurrences: issue_error.occurrences,
+          last_occurrence: issue_error.updated_at,
+          subscribers: issue_error.subscribers,
+          subscribers_count: issue_error.subscribers.count
+        }.to_json)
       end
     end
 
