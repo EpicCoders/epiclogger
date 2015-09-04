@@ -24,7 +24,21 @@ describe Api::V1::WebsitesController, :type => :controller do
         expect(assigns(:websites)).to eq([website])
       end
 
-      it 'should render the right json'
+      it 'should render the right json' do
+        get :index, params
+        expect(response).to be_successful
+        expect(response.body).to eq({
+          websites: [
+            {
+              id: website.id,
+              title: website.title,
+              domain: website.domain,
+              app_id: website.app_id,
+              app_key: website.app_key
+            }
+          ]
+        }.to_json)
+      end
     end
 
     it 'should give error if not logged in' do
@@ -58,7 +72,18 @@ describe Api::V1::WebsitesController, :type => :controller do
         }.to change(WebsiteMember, :count).by(1)
       end
 
-      it 'should render the right json'
+      it 'should render the right json' do
+        post :create, params
+        website = Website.find_by_domain('www.google.com')
+        expect(response).to be_successful
+        expect(response.body).to eq({
+          id: website.id,
+          domain: website.domain,
+          created_at: website.created_at,
+          updated_at: website.updated_at,
+          title: website.title
+          }.to_json)
+      end
     end
 
     it 'should give error if not logged in' do
@@ -110,5 +135,12 @@ describe Api::V1::WebsitesController, :type => :controller do
   end
 
   describe 'DELETE #destroy' do
+    # before { auth_member(member) }
+    # let(:params) { { id: website.id} }
+    # it 'should delete website' do
+    #   expect{
+    #     delete :destroy, params
+    #     }.to change(Website,:count).by(-1)
+    # end
   end
 end
