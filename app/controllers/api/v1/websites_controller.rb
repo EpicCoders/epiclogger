@@ -13,7 +13,6 @@ class Api::V1::WebsitesController < Api::V1::ApiController
   end
 
   def destroy
-    # binding.pry
     @website = current_member.websites.find(params[:id])
     @website.destroy()
   end

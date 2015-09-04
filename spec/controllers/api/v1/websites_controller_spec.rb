@@ -135,12 +135,35 @@ describe Api::V1::WebsitesController, :type => :controller do
   end
 
   describe 'DELETE #destroy' do
-    # before { auth_member(member) }
-    # let(:params) { { id: website.id} }
-    # it 'should delete website' do
-    #   expect{
-    #     delete :destroy, params
-    #     }.to change(Website,:count).by(-1)
-    # end
+    let(:params) { default_params.merge({ id: website.id, format: :js}) }
+
+    context 'it is logged in' do
+      before { auth_member(member) }
+
+      it 'should delete website' do
+        expect{
+          delete :destroy, params
+        }.to change(Website,:count).by(-1)
+      end
+      it 'should delete only website from current member' do
+        member2 = create :member
+        website2 = create :website
+        website_member2 = create :website_member, member: member2, website: website2
+        expect {
+          delete :destroy, default_params.merge({ id: website2.id, format: :js })
+        }.to change(Website, :count).by(0)
+      end
+      it 'should render js template' do
+        delete :destroy, params
+        expect(response.body).to eq("$('tr#website_#{website.id}').remove();\n")
+        expect(response.content_type).to eq('text/javascript')
+        expect(response).to have_http_status(200)
+      end
+    end
+    it 'should give error if not logged in' do
+      delete :destroy, params
+      expect(response.body).to eq({errors: ['Authorized users only.']}.to_json)
+      expect(response).to have_http_status(401)
+    end
   end
 end
