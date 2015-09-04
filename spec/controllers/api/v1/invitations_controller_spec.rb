@@ -31,13 +31,17 @@ describe Api::V1::InvitationsController, :type => :controller do
         }.to change(WebsiteMember, :count).by( 1 )
       end
 
-      # it 'should email user' do
-      #   mailer = double('UserMailer')
-      #   expect(mailer).to receive(:deliver_now)
-      #   expect(UserMailer).to receive(:create).with(website.id, member.email, website_member.id, member.id).and_return(mailer).once
+      it 'should email user' do
+        mailer = double('UserMailer')
+        expect(mailer).to receive(:deliver_now)
+        expect(UserMailer).to receive(:member_invitation).with(website.id, member.email, an_instance_of(Fixnum), member.id).and_return(mailer).once
 
-      #   post :create, params
-      # end
+        post :create, params
+      end
+      it 'should render some message' do
+        post :create, params
+        expect(response.body).to eq({success: true, message: 'Invitation created and sent'}.to_json)
+      end
     end
     it 'should give error if not logged in' do
       post :create, params
