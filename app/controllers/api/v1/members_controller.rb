@@ -2,16 +2,11 @@ class Api::V1::MembersController < Api::V1::ApiController
   skip_before_action :authenticate_member!, only: [:create]
 
   def index
-    @members = []
-    current_site.website_members.each do |item|
-      member = []
-      member.push(Member.find(item.member_id), item.role)
-      @members.push(member)
-    end
+    @members = current_site.members.select('members.*, website_members.role')
   end
 
   def create
-    WebsiteMember.find_by_invitation_token(params[:website_member][:token]).update_attributes(:member_id => Member.find_by_email(params[:website_member][:email]).id, :website_id => params[:website_member][:website_id])
+    WebsiteMember.find_by_invitation_token(website_member[:token]).update_attributes(:member_id => Member.find_by_email(website_member[:email]).id, :website_id => website_member[:website_id])
   end
 
   def show
@@ -21,5 +16,9 @@ class Api::V1::MembersController < Api::V1::ApiController
   def destroy
     @member = Member.find(params[:id])
     @member.destroy()
+  end
+  private
+  def website_member
+    params.require(:website_member).permit(:token, :email, :website_id)
   end
 end

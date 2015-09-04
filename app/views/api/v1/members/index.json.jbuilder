@@ -1,4 +1,4 @@
 json.members @members do |member|
-  json.(member[0], :id, :name, :email)
-  json.role member[1]
+  json.(member, :id, :name, :email)
+  json.role WebsiteMember.role.find_value(member.role)
 end
