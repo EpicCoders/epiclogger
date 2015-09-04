@@ -9,7 +9,7 @@ describe Api::V1::InvitationsController, :type => :controller do
   render_views # this is used so we can check the json response from the controller
 
   describe 'POST #create' do
-    let(:params) { default_params.merge({member: { website_id: website.id, email: member.email }}) }
+    let(:params) { default_params.merge({member: { email: member.email }}) }
 
     context 'if logged in' do
       before { auth_member(member) }
@@ -23,6 +23,20 @@ describe Api::V1::InvitationsController, :type => :controller do
         post :create, params
         expect(response).to be_successful
         expect(response.content_type).to eq('application/json')
+      end
+      context 'not website of current member' do
+        let(:website2) { create :website }
+        let(:params) { default_params.merge({member: { email: member.email }, website_id: website2.id }) }
+        it 'should not create member' do
+          expect {
+            post :create, params
+          }.to change(WebsiteMember, :count).by( 0 )
+        end
+        it 'should raise 401 not authorized' do
+          post :create, params
+          expect(response.body).to eq({errors: 'You are not the user of this website.'}.to_json)
+          expect(response).to have_http_status(401)
+        end
       end
 
       it 'should create website_member' do
