@@ -19,6 +19,7 @@ Rails.application.routes.draw do
   }
   namespace :api, defaults: {format: :json} do
     namespace :v1 do
+      get 'store' => 'errors#add_error', as: :store
       resources :errors, only: [:create, :index, :show, :update] do
         member do
           post :notify_subscribers
