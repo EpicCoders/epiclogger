@@ -18,8 +18,10 @@ Rails.application.routes.draw do
     omniauth_callbacks: 'overrides/omniauth_callbacks'
   }
   namespace :api, defaults: {format: :json} do
+    scope module: 'v1' do
+      get '/:id/store' => 'errors#add_error', as: :store
+    end
     namespace :v1 do
-      get 'store' => 'errors#add_error', as: :store
       resources :errors, only: [:create, :index, :show, :update] do
         member do
           post :notify_subscribers
