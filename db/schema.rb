@@ -11,20 +11,43 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150903121817) do
+ActiveRecord::Schema.define(version: 20150906055347) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
 
+  create_table "grouped_issues", force: :cascade do |t|
+    t.integer  "website_id"
+    t.integer  "logger"
+    t.integer  "level"
+    t.text     "message"
+    t.string   "view"
+    t.integer  "status"
+    t.integer  "times_seen"
+    t.datetime "first_seen"
+    t.datetime "last_seen"
+    t.text     "data"
+    t.integer  "score"
+    t.datetime "time_spent_total"
+    t.integer  "time_spent_count"
+    t.datetime "resolved_at"
+    t.datetime "active_at"
+    t.string   "platform"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+  end
+
   create_table "issues", force: :cascade do |t|
-    t.text     "description",             null: false
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
+    t.text     "description", null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
     t.integer  "website_id"
     t.string   "page_title"
-    t.integer  "occurrences", default: 0
-    t.integer  "status"
+    t.integer  "group_id"
+    t.string   "platform"
+    t.text     "data"
+    t.integer  "time_spent"
   end
 
   add_index "issues", ["website_id"], name: "index_issues_on_website_id", using: :btree
