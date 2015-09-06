@@ -1,5 +1,5 @@
 json.errors @errors do |error|
-  json.(error, :id, :description, :created_at, :website_id, :page_title, :occurrences)
+  json.(error, :id, :description, :created_at, :website_id, :page_title)
   json.last_occurrence error.updated_at
   json.users_count error.subscribers.count
 end
