@@ -1,4 +1,4 @@
 Hi,
 %p You now have access to #{@website[:domain]} website. The invitation was sent by #{@member.name}.
 %p
-  To accept invitation, just follow this link: #{link_to 'Accept Invitation', invitation_url(id: @website[:id], token: @token, email: @email)} and complete the registration form.
+  To accept invitation, just follow this link: #{link_to 'Accept Invitation', invitation_url(id: @token, email: @email)} and complete the registration form.

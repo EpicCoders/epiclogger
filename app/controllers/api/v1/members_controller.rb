@@ -6,7 +6,7 @@ class Api::V1::MembersController < Api::V1::ApiController
   end
 
   def create
-    WebsiteMember.find_by_invitation_token(website_member[:token]).update_attributes(:member_id => Member.find_by_email(website_member[:email]).id, :website_id => website_member[:website_id])
+    WebsiteMember.find_by_invitation_token(website_member[:token]).update_attributes(:member_id => Member.find_by_email(website_member[:email]).id)
   end
 
   def show
