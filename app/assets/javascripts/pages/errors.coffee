@@ -42,6 +42,16 @@ PubSub.subscribe('assigned.website', (ev, website)->
         $('#errordetails').render data, directive
 )
 
+SortByUsersSubscribed = (a, b) ->
+  aError = a.users_count
+  bError = b.users_count
+  if aError < bError then 1 else if aError > bError then -1 else 0
+
+SortByLastOccurrence = (a, b) ->
+  aTime = a.last_occurrence
+  bTime = b.last_occurrence
+  if aTime < bTime then 1 else if aTime > bTime then -1 else 0
+
 request = (website_id, page) ->
   $.getJSON Routes.api_v1_errors_path(), { website_id: website_id, page: page }, (data) ->
     render(data)
@@ -58,7 +68,12 @@ render = (data) ->
     $('.previous').addClass('disabled') if data.page == 1
   else
     $('#missing-errors').show()
-  $('#errorscontainer').render data, directive
+  # $('#errorscontainer').render data, directive
+
+  if $('#sortinput option:contains("Last occurrence")').is(':selected')
+    $('#errors').render data.errors.sort(SortByLastOccurrence), directive
+  else if $('#sortinput option:contains("Users subscribed")').is(':selected')
+    $('#errors').render data.errors.sort(SortByUsersSubscribed), directive
 
 $('#solve').on 'click', (e)->
   e.preventDefault();
