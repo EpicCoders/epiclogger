@@ -3,8 +3,8 @@ class Api::V1::GroupedIssuesController < Api::V1::ApiController
 
   def index
     @page = params[:page] || 1
-    @grouped_issues = current_site.grouped_issues.page @page
-    @pages = @grouped_issues.total_pages
+    @groups = current_site.groups.page @page
+    @pages = @groups.total_pages
   end
 
   def show

@@ -1,7 +1,7 @@
 # important don't add $ -> here when using PubSub as the event will be assigned every time
 
 directive = {
-  grouped_issues:{
+  groups:{
     warning: {
       href: (params) ->
         Routes.grouped_issue_path(this.id)
@@ -45,7 +45,7 @@ request = (website_id, page) ->
 
 render = (data) ->
   $.obj = data
-  if data.grouped_issues.length > 0
+  if data.groups.length > 0
     $('#missing-errors').hide()
 
     # start the pagination
@@ -58,10 +58,10 @@ render = (data) ->
     $('#missing-errors').show()
   $('#grouped-issuescontainer').render data, directive
 
-SortByUsersSubscribed = (a, b) ->
-  aError = a.users_count
-  bError = b.users_count
-  if aError < bError then 1 else if aError > bError then -1 else 0
+# SortByUsersSubscribed = (a, b) ->
+#   aError = a.users_count
+#   bError = b.users_count
+#   if aError < bError then 1 else if aError > bError then -1 else 0
 
 SortByLastOccurrence = (a, b) ->
   aTime = a.last_occurrence
@@ -73,8 +73,8 @@ $('select#sortinput').change ->
   console.log theValue
   if theValue == "Last occurrence"
     $('#grouped-issues').render $.obj.grouped_issues.sort(SortByLastOccurrence), directive
-  else if theValue == "Users subscribed"
-    $('#grouped-issues').render $.obj.grouped_issues.sort(SortByUsersSubscribed), directive
+  # else if theValue == "Users subscribed"
+  #   $('#grouped-issues').render $.obj.grouped_issues.sort(SortByUsersSubscribed), directive
   return
 
 
