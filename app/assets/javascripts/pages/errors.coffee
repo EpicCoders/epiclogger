@@ -4,7 +4,7 @@ directive = {
   groups:{
     warning: {
       href: (params) ->
-        Routes.grouped_issue_path(this.id)
+        Routes.error_path(this.id)
     }
     # users_count:
     #   html: ()->
@@ -40,7 +40,7 @@ PubSub.subscribe('assigned.website', (ev, website)->
 )
 
 request = (website_id, page) ->
-  $.getJSON Routes.api_v1_grouped_issues_path(), { website_id: website_id, page: page }, (data) ->
+  $.getJSON Routes.api_v1_errors_path(), { website_id: website_id, page: page }, (data) ->
     render(data)
 
 render = (data) ->

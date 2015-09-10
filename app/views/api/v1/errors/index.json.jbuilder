@@ -1,7 +1,6 @@
-json.errors @errors do |error|
-  json.(error, :id, :description, :created_at, :website_id, :page_title)
-  json.last_occurrence error.updated_at
-  json.users_count error.subscribers.count
+json.groups @groups do |group|
+  json.(group, :id, :issue_logger, :created_at, :website_id, :level, :status, :message)
+  json.last_occurrence group.updated_at
 end
 
 json.page @page.to_i
