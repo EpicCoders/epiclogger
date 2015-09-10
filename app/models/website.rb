@@ -13,11 +13,11 @@ class Website < ActiveRecord::Base
   protected
   def generate_keys_for_website
     self.app_key = loop do
-      key = SecureRandom.urlsafe_base64
+      key = SecureRandom.hex(24)
       break key unless Website.exists?(app_key: key)
     end
     self.app_id = loop do
-      id = SecureRandom.urlsafe_base64(6, false)
+      id = SecureRandom.hex(6)
       break id unless Website.exists?(app_id: id)
     end
   end
