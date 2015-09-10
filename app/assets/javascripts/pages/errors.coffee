@@ -1,17 +1,14 @@
 # important don't add $ -> here when using PubSub as the event will be assigned every time
 
 directive = {
-  errors:{
+  grouped_issues:{
     warning: {
       href: (params) ->
-        Routes.error_path(this.id)
+        Routes.grouped_issue_path(this.id)
     }
-    occurrences:
-      html: () ->
-        "#{this.occurrences} occurrences"
-    users_count:
-      html: ()->
-        "#{this.users_count} users subscribed"
+    # users_count:
+    #   html: ()->
+    #     "#{this.users_count} users subscribed"
     last_occurrence:
       html: ()->
         moment(this.last_occurrence).calendar()
@@ -22,9 +19,9 @@ directive = {
   last_occurrence:
     html: ()->
       moment(this.last_occurrence).calendar()
-  subscribers_count:
-    html: ()->
-      "Send an update to #{this.subscribers_count} subscribers"
+  # subscribers_count:
+  #   html: ()->
+  #     "Send an update to #{this.subscribers_count} subscribers"
 }
 PubSub.subscribe('assigned.website', (ev, website)->
   switch gon.action
@@ -39,8 +36,27 @@ PubSub.subscribe('assigned.website', (ev, website)->
         request(website.id, page)
     when 'show'
       $.getJSON '/api/v1/errors/' + gon.error_id, { website_id: website.id }, (data) ->
-        $('#errordetails').render data, directive
+        $('#grouped-issuedetails').render data, directive
 )
+
+request = (website_id, page) ->
+  $.getJSON Routes.api_v1_grouped_issues_path(), { website_id: website_id, page: page }, (data) ->
+    render(data)
+
+render = (data) ->
+  $.obj = data
+  if data.grouped_issues.length > 0
+    $('#missing-errors').hide()
+
+    # start the pagination
+    $('.pagination-text').html(data.page + '/' + data.pages)
+    $('.next').addClass('disabled') if data.page == data.pages
+    $('.next').removeClass('disabled') if data.page != data.pages
+    $('.previous').removeClass('disabled') if data.page != 1
+    $('.previous').addClass('disabled') if data.page == 1
+  else
+    $('#missing-errors').show()
+  $('#grouped-issuescontainer').render data, directive
 
 SortByUsersSubscribed = (a, b) ->
   aError = a.users_count
@@ -52,28 +68,14 @@ SortByLastOccurrence = (a, b) ->
   bTime = b.last_occurrence
   if aTime < bTime then 1 else if aTime > bTime then -1 else 0
 
-request = (website_id, page) ->
-  $.getJSON Routes.api_v1_errors_path(), { website_id: website_id, page: page }, (data) ->
-    render(data)
-
-render = (data) ->
-  if data.errors.length > 0
-    $('#missing-errors').hide()
-
-    # start the pagination
-    $('.pagination-text').html(data.page + '/' + data.pages)
-    $('.next').addClass('disabled') if data.page == data.pages
-    $('.next').removeClass('disabled') if data.page != data.pages
-    $('.previous').removeClass('disabled') if data.page != 1
-    $('.previous').addClass('disabled') if data.page == 1
-  else
-    $('#missing-errors').show()
-  # $('#errorscontainer').render data, directive
-
-  if $('#sortinput option:contains("Last occurrence")').is(':selected')
-    $('#errors').render data.errors.sort(SortByLastOccurrence)
-  else if $('#sortinput option:contains("Users subscribed")').is(':selected')
-    $('#errors').render data.errors.sort(SortByUsersSubscribed)
+$('select#sortinput').change ->
+  theValue = $('option:selected').text()
+  console.log theValue
+  if theValue == "Last occurrence"
+    $('#grouped-issues').render $.obj.grouped_issues.sort(SortByLastOccurrence), directive
+  else if theValue == "Users subscribed"
+    $('#grouped-issues').render $.obj.grouped_issues.sort(SortByUsersSubscribed), directive
+  return
 
 
 $('#solve').on 'click', (e)->
