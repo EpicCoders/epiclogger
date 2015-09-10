@@ -25,9 +25,10 @@ class Api::V1::ErrorsController < Api::V1::ApiController
   end
 
   def add_error
-    subscriber = current_site.subscribers.create_with(name: "test").find_or_create_by!(email: error_params["user"]["email"])
-    @error = current_site.issues.create_with(description: 'dsdasdasdsa').find_or_create_by(page_title: error_params["page_title"])
-    # @error.increment!(:occurrences)
+    response = error_params
+    subscriber = current_site.subscribers.create_with(name: response["user"]["name"]).find_or_create_by!(email: response["user"]["email"])
+    @error = current_site.issues.create_with(description: response["message"]).find_or_create_by(page_title: response["extra"]["page_title"])
+    # @error.increment!(:occurrences)1
 
     SubscriberIssue.create_with(issue_id: @error.id).find_or_create_by(subscriber_id: subscriber.id)
     message = Message.create(content: error_params["message"], issue_id: @error.id)
@@ -41,5 +42,6 @@ class Api::V1::ErrorsController < Api::V1::ApiController
       else
         error_params ||= params.require(:error).permit(:description, :page_title, :message, :name, :status)
       end
+      error_params
     end
 end
