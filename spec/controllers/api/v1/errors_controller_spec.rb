@@ -4,60 +4,61 @@ describe Api::V1::ErrorsController, :type => :controller do
   let(:member) { create :member }
   let(:website) { create :website }
   let!(:website_member) { create :website_member, website: website, member: member }
-  let(:issue_error) { create :issue, website: website }
+  let(:group) {create :grouped_issue, website: website}
+  let(:issue_error) { create :issue, website: website, group: group }
   let(:subscriber) { create :subscriber, website: website }
   let!(:issue_subscriber) { create :subscriber_issue, issue: issue_error, subscriber: subscriber }
   let(:message) { 'asdada' }
   let(:default_params) { {website_id: website.id, format: :json} }
 
-  # describe 'POST #create' do
-  #   let(:params) { default_params.merge({error: { user: { email: 'email@example2.com' }, name: 'Name for subscriber', page_title: 'New title', message: 'new message'}}) }
+  describe 'POST #create' do
+    let(:params) { default_params.merge({error: { user: { name: 'Gogu', email: 'email@example2.com' }, name: 'Name for subscriber', extra: { page_title: 'New title' }, message: 'new message'}}) }
 
-    # context 'if logged in' do
-    #   before { auth_member(member) }
-      # it 'should create subscriber' do
-      #   expect {
-      #     post :add_error, params
-      #   }.to change(Subscriber, :count).by( 1 )
-      # end
+    context 'if logged in' do
+      before { auth_member(member) }
+      it 'should create subscriber' do
+        expect {
+          post :add_error, params
+        }.to change(Subscriber, :count).by( 1 )
+      end
 
-      # it 'should create issue' do
-      #   expect {
-      #     post :add_error, params
-      #   }.to change(Issue, :count).by( 1 )
-      # end
+      it 'should create issue' do
+        expect {
+          post :add_error, params
+        }.to change(Issue, :count).by( 1 )
+      end
 
-      # it 'should create subscriber_issue' do
-      #   expect {
-      #     post :add_error, params
-      #   }.to change(SubscriberIssue, :count).by( 1 )
-      # end
+      it 'should create subscriber_issue' do
+        expect {
+          post :add_error, params
+        }.to change(SubscriberIssue, :count).by( 1 )
+      end
 
-      # it 'should create message' do
-      #   expect {
-      #     post :add_error, params
-      #   }.to change(Message, :count).by( 1 )
-      # end
+      it 'should create message' do
+        expect {
+          post :add_error, params
+        }.to change(Message, :count).by( 1 )
+      end
 
-      # it 'should not create issue if issue exists' do
-      #   subscriber1 = create :subscriber, website: website, name: 'Name for subscriber', email: 'email@example2.com'
-      #   error1 = create :issue, website: website, page_title: 'New title'
-      #   create :subscriber_issue, issue: error1, subscriber: subscriber1
-      #   expect{
-      #     post :add_error, params
-      #   }.to change(Issue, :count).by(0)
-      # end
-    # end
-    # context 'not logged in' do
-    #   before { auth_member(member) }
-    #   it 'should get current site' do
-    #     request.env['HTTP_APP_ID'] = website.app_id
-    #     request.env['HTTP_APP_KEY'] = website.app_key
-    #     post :add_error, params
-    #     expect(assigns(:current_site)).to eq(website)
-    #   end
-    # end
-  # end
+      it 'should not create issue if issue exists' do
+        subscriber1 = create :subscriber, website: website, name: 'Name for subscriber', email: 'email@example2.com'
+        error1 = create :issue, website: website, page_title: 'New title'
+        create :subscriber_issue, issue: error1, subscriber: subscriber1
+        expect{
+          post :add_error, params
+        }.to change(Issue, :count).by(0)
+      end
+    end
+    context 'not logged in' do
+      before { auth_member(member) }
+      it 'should get current site' do
+        request.env['HTTP_APP_ID'] = website.app_id
+        request.env['HTTP_APP_KEY'] = website.app_key
+        post :add_error, params
+        expect(assigns(:current_site)).to eq(website)
+      end
+    end
+  end
 
   describe 'POST #notify_subscribers' do
     before { auth_member(member) }
@@ -101,7 +102,7 @@ describe Api::V1::ErrorsController, :type => :controller do
       it 'should assign current_site errors' do
         auth_member(member)
         get :index, params
-        expect(assigns(:errors)).to eq([issue_error])
+        expect(assigns(:groups)).to eq([group])
       end
     end
 

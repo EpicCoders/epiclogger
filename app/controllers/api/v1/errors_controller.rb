@@ -39,7 +39,7 @@ class Api::V1::ErrorsController < Api::V1::ApiController
       if params[:sentry_data].is_a?(String)
         error_params ||= JSON.parse(params[:sentry_data])
       else
-        error_params ||= params.require(:error).permit(:description, :page_title, :message, :name, :status)
+        error_params ||= params.require(:error).permit(:description, :message, :name, :status, :user => [:email, :name], :extra => [:page_title])
       end
     end
 end
