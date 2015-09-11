@@ -86,7 +86,7 @@
     overflow: hidden;
     overflow-y: auto;
     overflow-x: hidden;
-    &#errorscontainer {
+    &#grouped-issuescontainer {
       padding: 0;
     }
     .pagetitle {
@@ -152,7 +152,7 @@
       }
     }
   }
-  #errors {
+  #grouped-issues {
     &:before {
       content: " ";
       display: block;
@@ -201,8 +201,9 @@
         border-color: #f9f9f9;
       }
       .left {
-        width: 150px;
-        margin-left: 15px;
+        margin-top: 10px;
+        width: 200px;
+        margin-left: 25px;
         float: left;
       }
       .right {
@@ -212,7 +213,7 @@
         padding-top: 10px;
       }
       .main {
-        margin: 0 150px 0 170px;
+        margin: 20px 150px 0 170px;
       }
       span {
         display: block;
@@ -234,9 +235,15 @@
           margin-bottom: 17px;
           overflow: hidden;
         }
+        &.type {
+          font-size: 12px;
+          color: #555555;
+          font-style: italic;
+        }
         &.language {
           font-size: 12px;
           color: #555555;
+          font-style: italic;
         }
         &.last {
           font-size: 12px;
@@ -275,7 +282,7 @@
       }
     }
   }
-  #errordetails {
+  #grouped-issuedetails {
     button.btn-primary {
       margin-left: 10px;
     }
@@ -376,34 +383,34 @@
 }
 
 @media all and (max-width: 768px) {
-  #maincontainer #errors > div {
+  #maincontainer #grouped-issues > div {
     height: auto;
     min-height: 0;
   }
 }
 
 @media all and (max-width: 768px) {
-  #maincontainer #errors > div .left {
+  #maincontainer #grouped-issues > div .left {
     width: auto;
     float: none;
   }
 }
 
 @media all and (max-width: 768px) {
-  #maincontainer #errors > div .right {
+  #maincontainer #grouped-issues > div .right {
     display: none;
   }
 }
 
 @media all and (max-width: 768px) {
-  #maincontainer #errors > div .main {
+  #maincontainer #grouped-issues > div .main {
     margin: 0;
     padding-left: 30px;
   }
 }
 
 @media all and (max-width: 768px) {
-  #maincontainer #errors > div span {
+  #maincontainer #grouped-issues > div span {
     display: inline;
     padding: 0;
   }
