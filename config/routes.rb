@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   delete 'logout' => 'sessions#destroy', :as => :logout
 
   resources :errors, only: [:show, :index]
+  resources :grouped_issues, only: [:index, :show]
   resources :websites, only: [:index, :new, :show]
   resources :members, only: [:index]
   resources :invitations, only:[:new, :show]
@@ -30,6 +31,7 @@ Rails.application.routes.draw do
           get :add_error
         end
       end
+      resources :grouped_issues, only: [:index, :show]
       resources :invitations, only: [:create]
       resources :subscribers, only: [:index]
       resources :members, only: [:show, :create, :index, :destroy]

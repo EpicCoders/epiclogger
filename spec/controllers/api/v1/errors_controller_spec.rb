@@ -101,6 +101,7 @@ describe Api::V1::ErrorsController, :type => :controller do
 
       it 'should assign current_site errors' do
         auth_member(member)
+        binding.pry
         get :index, params
         expect(assigns(:groups)).to eq([group])
       end

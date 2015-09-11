@@ -1,0 +1,65 @@
+.row
+  #grouped-issuescontainer.col-lg-9.col-md-8.pagecontainer
+    #grouped-issues.errors
+      %a.warning{:href => errors_url()}
+        .left
+          %span.page_title Homepage
+          %span.users_count 7 users subscribed
+        .right
+          %span.last Last occurrence
+          %span.last_occurrence Today, 21:34
+        .main
+          %span.language Description
+          %span.error.description
+    #pagination
+      .row
+        .col-xs-4.side
+        .col-xs-5.buttons
+          %a.btn.btn-default.previous.disabled{:href => "#"}
+            %span.fa.fa-chevron-left
+          %span.pagination-text
+          %a.btn.btn-default.next{:href => "#"}
+            %span.fa.fa-chevron-right
+      %br/
+    #missing-errors
+      %h5 &nbsp &nbsp &nbsp There are no errors. They will appear here as soon as something happens to your website.
+  #filterpanel.col-lg-3.col-md-4.sidepanel
+    %h4 Order by
+    .panelbox
+      .form-group
+        %select#sortinput.form-control{:name => "sortinput"}
+          %option Last occurrence
+          %option Users subscribed
+          %option Page
+    %h4 Filter
+    #filterbox.panelbox
+      %form.panel.panel-default
+        %h5{"data-target" => "#collapse_page", "data-toggle" => "collapse"}
+          Page
+          %span.fa.fa-chevron-down
+        #collapse_page.collapse
+          .checkbox
+            %label
+              %input{:type => "checkbox", :value => ""}/
+              Homepage
+          .checkbox
+            %label
+              %input{:type => "checkbox", :value => ""}/
+              Dashboard
+          .checkbox
+            %label
+              %input{:type => "checkbox", :value => ""}/
+              Settings
+      %form.panel.panel-default
+        %h5{"data-target" => "#collapse_os", "data-toggle" => "collapse"}
+          Operating Systems
+          %span.open.fa.fa-chevron-down
+        #collapse_os.collapse
+          .checkbox
+            %label
+              %input{:type => "checkbox", :value => ""}/
+              Windows 8
+          .checkbox
+            %label
+              %input{:type => "checkbox", :value => ""}/
+              Windows 7
