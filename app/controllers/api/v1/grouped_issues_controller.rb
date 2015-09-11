@@ -9,7 +9,7 @@ class Api::V1::GroupedIssuesController < Api::V1::ApiController
 
   def show
     @page = params[:page] || 1
-    @errors = GroupedIssue.find(params[:id]).issues.page @page
-    @pages = @errors.total_pages
+    @group = GroupedIssue.find(params[:id]).issues.page @page
+    @pages = @group.total_pages
   end
 end

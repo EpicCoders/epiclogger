@@ -1,6 +1,13 @@
 # important don't add $ -> here when using PubSub as the event will be assigned every time
+
 directive = {
   groups:{
+    warning: {
+      href: (params) ->
+        Routes.grouped_issue_path(this.id)
+    }
+  },
+  group:{
     warning: {
       href: (params) ->
         Routes.error_path(this.id)
@@ -8,24 +15,6 @@ directive = {
     users_count:
       html: ()->
         "#{this.users_count} users subscribed"
-    last_occurrence:
-      html: ()->
-        moment(this.last_occurrence).calendar()
-  },
-  created_at:
-    html: ()->
-      moment(this.created_at).calendar()
-  last_occurrence:
-    html: ()->
-      moment(this.last_occurrence).calendar()
-}
-
-directives = {
-  groups:{
-    warning: {
-      href: (params) ->
-        Routes.grouped_issue_path(this.id)
-    }
     last_occurrence:
       html: ()->
         moment(this.last_occurrence).calendar()
@@ -54,7 +43,7 @@ PubSub.subscribe('assigned.website', (ev, website)->
     when 'show'
       $.getJSON '/api/v1/grouped_issues/' + gon.error_id, { website_id: website.id }, (data) ->
         $('#grouped-issuescontainer').render data, directive
-        $('#missing-errors').hide() if data.errors.length > 0
+        $('#missing-errors').hide() if data.group.length > 0
 )
 
 request = (website_id, page) ->
@@ -74,7 +63,7 @@ render = (data) ->
     $('.previous').addClass('disabled') if data.page == 1
   else
     $('#missing-errors').show()
-  $('#grouped-issuescontainer').render data, directives
+  $('#grouped-issuescontainer').render data, directive
 
 # SortByUsersSubscribed = (a, b) ->
 #   aError = a.users_count
