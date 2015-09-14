@@ -1,11 +1,22 @@
 # important don't add $ -> here when using PubSub as the event will be assigned every time
-
 directive = {
   groups:{
+    # warning: {
+    #   href: (params) ->
+    #     Routes.error_path(this.id)
+    # }
+    last_occurrence:
+      html: ()->
+        moment(this.last_occurrence).calendar()
+  },
+  group:{
     warning: {
       href: (params) ->
-        Routes.error_path(this.id)
+        Routes.grouped_issue_path(this.id)
     }
+    users_count:
+      html: ()->
+        "#{this.users_count} users subscribed"
     last_occurrence:
       html: ()->
         moment(this.last_occurrence).calendar()
@@ -22,10 +33,66 @@ directive = {
 }
 PubSub.subscribe('assigned.website', (ev, website)->
   switch gon.action
+    when "index"
+      page = 1
+      request(website.id, page)
+      $('.next').on 'click', () ->
+        page = page + 1
+        request(website.id, page)
+      $('.previous').on 'click', () ->
+        page = page - 1
+        request(website.id, page)
     when 'show'
       $.getJSON '/api/v1/errors/' + gon.error_id, { website_id: website.id }, (data) ->
-        $('#grouped-issuedetails').render data, directive
+        $('#grouped-issuescontainer').render data, directive
+        $('#missing-errors').hide() if data.group.length > 0
 )
+
+request = (website_id, page) ->
+  $.getJSON Routes.api_v1_errors_path(), { website_id: website_id, page: page }, (data) ->
+    render(data)
+
+render = (data) ->
+  $.obj = data
+  if data.groups.length > 0
+    $('#missing-errors').hide()
+
+    # start the pagination
+    $('.pagination-text').html(data.page + '/' + data.pages)
+    $('.next').addClass('disabled') if data.page == data.pages
+    $('.next').removeClass('disabled') if data.page != data.pages
+    $('.previous').removeClass('disabled') if data.page != 1
+    $('.previous').addClass('disabled') if data.page == 1
+  else
+    $('#missing-errors').show()
+  $('#get-issue-details').hide()
+  $('#grouped-issuescontainer').render data, directive
+
+  #change view so we can see the list of errors
+  $('.warning').on 'click', () ->
+    $('#grouped-issuescontainer').removeClass 'col-lg-9'
+    $('#grouped-issuescontainer').addClass 'col-lg-4'
+    $('#filterpanel').hide()
+    $('#get-issue-details').show()
+
+# SortByUsersSubscribed = (a, b) ->
+#   aError = a.users_count
+#   bError = b.users_count
+#   if aError < bError then 1 else if aError > bError then -1 else 0
+
+SortByLastOccurrence = (a, b) ->
+  aTime = a.last_occurrence
+  bTime = b.last_occurrence
+  if aTime < bTime then 1 else if aTime > bTime then -1 else 0
+
+$('select#sortinput').change ->
+  theValue = $('option:selected').text()
+  console.log theValue
+  if theValue == "Last occurrence"
+    $('#grouped-issues').render $.obj.grouped_issues.sort(SortByLastOccurrence), directive
+  # else if theValue == "Users subscribed"
+  #   $('#grouped-issues').render $.obj.grouped_issues.sort(SortByUsersSubscribed), directive
+  return
 
 $('#solve').on 'click', (e)->
   e.preventDefault();

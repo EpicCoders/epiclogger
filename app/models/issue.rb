@@ -5,6 +5,7 @@ class Issue < ActiveRecord::Base
   belongs_to :website
   belongs_to :group, class_name: 'GroupedIssue', foreign_key: 'group_id'
   accepts_nested_attributes_for :messages, :subscribers
+  enumerize :platform, in: {:javascript => 1, :php => 2}, default: :javascript
 
   validates :description, :presence => true, length: {minimum: 10}
 

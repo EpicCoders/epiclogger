@@ -8,7 +8,9 @@ class Api::V1::ErrorsController < Api::V1::ApiController
   end
 
   def show
-    @error = current_site.issues.where('issues.id = ?', params[:id]).first
+    @page = params[:page] || 1
+    @group = GroupedIssue.find(params[:id]).issues.page @page
+    @pages = @group.total_pages
   end
 
    def update

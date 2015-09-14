@@ -1,19 +1,22 @@
 .row
   #grouped-issuescontainer.col-lg-9.col-md-8.pagecontainer
     #grouped-issues.groups
-      %a.warning{:href => errors_url()}
+      %a.warning
         .left
           %span.message Homepage
-          %span.type Level
-          %span.level Bug
-          / %span.users_count 7 users subscribed
         .right
           %span.last Last occurrence
           %span.last_occurrence Today, 21:34
         .main
-          / %span.error.description
+          / %span.type Level
+          / %span.level Bug
           %span.language Language
           %span.issue_logger Javascript - app.js 149:12
+        .group-right
+          .issues
+            %span.page_title
+            %span.description
+            %span.users_count
     #pagination
       .row
         .col-xs-4.side
@@ -26,6 +29,38 @@
       %br/
     #missing-errors
       %h5 &nbsp &nbsp &nbsp There are no errors. They will appear here as soon as something happens to your website.
+
+  #get-issue-details.bs-callout.bs-callout-info
+    %ul.nav.nav-tabs.nav-justified
+      %li.active{:role => "presentation"}
+        %a{:href => "#"} Overview
+      %li{:role => "presentation"}
+        %a{:href => "#"} Backtrace
+    #issues.groups
+      %a.warning
+        .left
+          .issues
+            %span.page_title
+            %span.users_count
+        .main
+          .issues
+            %span.description
+        .right
+          .issues
+            %span.last_description
+    #pagination
+      .row
+        .col-xs-4.side
+        .col-xs-5.buttons
+          %a.btn.btn-default.previous.disabled{:href => "#"}
+            %span.fa.fa-chevron-left
+          %span.pagination-text
+          %a.btn.btn-default.next{:href => "#"}
+            %span.fa.fa-chevron-right
+      %br/
+    #missing-errors
+      %h5 &nbsp &nbsp &nbsp There are no errors. They will appear here as soon as something happens to your website.
+
   #filterpanel.col-lg-3.col-md-4.sidepanel
     %h4 Order by
     .panelbox
