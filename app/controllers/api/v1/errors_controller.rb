@@ -8,9 +8,7 @@ class Api::V1::ErrorsController < Api::V1::ApiController
   end
 
   def show
-    grouped_issue = GroupedIssue.find(params[:id])
-    @error = grouped_issue.issues.first
-    @status = grouped_issue.status
+    @grouped_issue = GroupedIssue.find(params[:id])
   end
 
    def update

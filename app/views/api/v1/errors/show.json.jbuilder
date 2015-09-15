@@ -1,5 +1,6 @@
-json.(@error, :id, :description, :page_title, :data, :created_at, :updated_at, :platform, :time_spent)
-json.subscribers_count @error.subscribers.count
-json.status @status
+json.(@grouped_issue, :id, :message, :view, :times_seen, :first_seen, :last_seen, :data, :score, :status)
+json.issues @grouped_issue.issues do |issue|
+  json.(issue, :id, :platform, :data)
+end
 
 
