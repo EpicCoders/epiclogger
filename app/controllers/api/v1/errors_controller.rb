@@ -8,19 +8,23 @@ class Api::V1::ErrorsController < Api::V1::ApiController
   end
 
   def show
-    @error = GroupedIssue.find(params[:id]).issues.first
+    grouped_issue = GroupedIssue.find(params[:id])
+    @error = grouped_issue.issues.first
+    @status = grouped_issue.status
   end
 
    def update
-    @error = Issue.find(params[:id])
-    @error.update_attributes(error_params)
+    @error = GroupedIssue.find(params[:id])
+    @error.update_attributes(status: error_params[:status], resolved_at: Time.now)
   end
 
   def notify_subscribers
-    @error = Issue.find(params[:id])
+    @error = GroupedIssue.find(params[:id])
     @message = params[:message]
-    @error.subscribers.each do |member|
-      UserMailer.notify_subscriber(@error, member, @message).deliver_now
+    @error.issues.each do |issue|
+      issue.subscribers.each do |member|
+        UserMailer.notify_subscriber(@error, member, @message).deliver_now
+      end
     end
   end
 

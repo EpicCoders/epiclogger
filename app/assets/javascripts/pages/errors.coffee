@@ -44,6 +44,7 @@ PubSub.subscribe('assigned.website', (ev, website)->
         request(website.id, $.page)
     when 'show'
       $.getJSON '/api/v1/errors/' + gon.error_id, { website_id: website.id }, (data) ->
+        ($('.status').removeClass('disabled') && $('#solve').attr('disabled', 'disabled')) if data.status == 'resolved'
         $('#grouped-issuedetails').render data, directive
         $('#missing-errors').hide() if data != null
 )
@@ -88,6 +89,8 @@ $('select#sortinput').change ->
 
 $('#solve').on 'click', (e)->
   e.preventDefault();
+  $('.status').removeClass('disabled')
+  $('#solve').attr('disabled', 'disabled')
   $.ajax
     data: {error: {status: 'resolved'}}
     url: Routes.api_v1_error_url(gon.error_id)
