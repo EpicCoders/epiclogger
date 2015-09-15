@@ -3,8 +3,8 @@ class Api::V1::ErrorsController < Api::V1::ApiController
 
   def index
     @page = params[:page] || 1
-    @groups = current_site.groups.page @page
-    @pages = @groups.total_pages
+    @groups = current_site.groups
+    @pages = @groups.in_groups_of(8, false).count
   end
 
   def show

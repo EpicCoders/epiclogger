@@ -10,10 +10,10 @@ directive = {
         moment(this.last_occurrence).calendar()
   },
   group:{
-    # warning: {
-    #   href: (params) ->
-    #     Routes.grouped_issue_path(this.id)
-    # }
+    warning: {
+      href: (params) ->
+        Routes.grouped_issue_path(this.id)
+    }
     users_count:
       html: ()->
         "#{this.users_count} users subscribed"
@@ -34,23 +34,23 @@ directive = {
 PubSub.subscribe('assigned.website', (ev, website)->
   switch gon.action
     when "index"
-      page = 1
-      request(website.id, page)
+      $.page = 1
+      request(website.id, $.page)
       $('.next').on 'click', () ->
-        page = page + 1
-        request(website.id, page)
+        $.page = $.page + 1
+        request(website.id, $.page)
       $('.previous').on 'click', () ->
-        page = page - 1
-        request(website.id, page)
+        $.page = $.page - 1
+        request(website.id, $.page)
     when 'show'
       $.getJSON '/api/v1/errors/' + gon.error_id, { website_id: website.id }, (data) ->
         $('#grouped-issuedetails').render data, directive
-        $('#missing-errors').hide() if data != 0
+        $('#missing-errors').hide() if data != null
 )
 
 request = (website_id, page) ->
-  $.getJSON Routes.api_v1_errors_path(), { website_id: website_id, page: page }, (data) ->
-    render(data)
+  $.getJSON Routes.api_v1_errors_path(), { website_id: website_id, page: $.page }, (data) ->
+    render({groups: data.groups.slice(($.page-1)*8, $.page*8), page: $.page, pages: data.pages})
 
 render = (data) ->
   $.obj = data
