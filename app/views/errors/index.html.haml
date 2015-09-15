@@ -12,11 +12,6 @@
           / %span.level Bug
           %span.language Language
           %span.issue_logger Javascript - app.js 149:12
-        .group-right
-          .issues
-            %span.page_title
-            %span.description
-            %span.users_count
     #pagination
       .row
         .col-xs-4.side
@@ -30,24 +25,18 @@
     #missing-errors
       %h5 &nbsp &nbsp &nbsp There are no errors. They will appear here as soon as something happens to your website.
 
-  #get-issue-details.bs-callout.bs-callout-info
+  #get-issue-details.bs-callout.bs-callout-info.col-lg-5.col-md-4.pagecontainer
     %ul.nav.nav-tabs.nav-justified
       %li.active{:role => "presentation"}
-        %a{:href => "#"} Overview
-      %li{:role => "presentation"}
-        %a{:href => "#"} Backtrace
+        %a{:href => "#"} Errors
     #issues.groups
       %a.warning
-        .left
-          .issues
+        .issues
+          .left
             %span.page_title
             %span.users_count
-        .main
-          .issues
+          .main
             %span.description
-        .right
-          .issues
-            %span.last_description
     #pagination
       .row
         .col-xs-4.side

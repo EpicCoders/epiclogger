@@ -51,6 +51,7 @@ PubSub.subscribe('assigned.website', (ev, website)->
 request = (website_id, page) ->
   $.getJSON Routes.api_v1_errors_path(), { website_id: website_id, page: page }, (data) ->
     render(data)
+    debugger;
 
 render = (data) ->
   $.obj = data
