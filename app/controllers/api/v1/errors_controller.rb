@@ -3,7 +3,7 @@ class Api::V1::ErrorsController < Api::V1::ApiController
 
   def index
     @page = params[:page] || 1
-    @errors = current_site.groups.page @page
+    @errors = current_site.grouped_issues.page @page
     @pages = @errors.total_pages
   end
 
