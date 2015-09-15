@@ -8,9 +8,7 @@ class Api::V1::ErrorsController < Api::V1::ApiController
   end
 
   def show
-    @page = params[:page] || 1
-    @group = GroupedIssue.find(params[:id]).issues.page @page
-    @pages = @group.total_pages
+    @error = GroupedIssue.find(params[:id]).issues.first
   end
 
    def update

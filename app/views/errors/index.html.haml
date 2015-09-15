@@ -1,7 +1,7 @@
 .row
   #grouped-issuescontainer.col-lg-9.col-md-8.pagecontainer
     #grouped-issues.groups
-      %a.warning
+      %a.warning{:href => errors_url()}
         .left
           %span.message Homepage
         .right
@@ -12,31 +12,11 @@
           / %span.level Bug
           %span.language Language
           %span.issue_logger Javascript - app.js 149:12
-    #pagination
-      .row
-        .col-xs-4.side
-        .col-xs-5.buttons
-          %a.btn.btn-default.previous.disabled{:href => "#"}
-            %span.fa.fa-chevron-left
-          %span.pagination-text
-          %a.btn.btn-default.next{:href => "#"}
-            %span.fa.fa-chevron-right
-      %br/
-    #missing-errors
-      %h5 &nbsp &nbsp &nbsp There are no errors. They will appear here as soon as something happens to your website.
-
-  #get-issue-details.bs-callout.bs-callout-info.col-lg-5.col-md-4.pagecontainer
-    %ul.nav.nav-tabs.nav-justified
-      %li.active{:role => "presentation"}
-        %a{:href => "#"} Errors
-    #issues.groups
-      %a.warning
-        .issues
-          .left
+        .group-right
+          .issues
             %span.page_title
-            %span.users_count
-          .main
             %span.description
+            %span.users_count
     #pagination
       .row
         .col-xs-4.side
