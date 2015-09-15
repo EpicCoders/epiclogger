@@ -28,7 +28,7 @@ class Api::V1::ErrorsController < Api::V1::ApiController
 
   def add_error
     subscriber = current_site.subscribers.create_with(name: error_params["user"]["name"]).find_or_create_by!(email: error_params["user"]["email"])
-    @error = current_site.issues.create_with(description: error_params["message"]).find_or_create_by(page_title: error_params["extra"]["page_title"])
+    @error = Issue.create_with(description: error_params["message"]).find_or_create_by(page_title: error_params["extra"]["page_title"])
     # @error.increment!(:occurrences)1
 
     SubscriberIssue.create_with(issue_id: @error.id).find_or_create_by(subscriber_id: subscriber.id)

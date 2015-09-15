@@ -62,12 +62,12 @@ describe Api::V1::ErrorsController, :type => :controller do
 
   describe 'POST #notify_subscribers' do
     before { auth_member(member) }
-    let(:params) { default_params.merge({ message: message, id: issue_error.id }) }
+    let(:params) { default_params.merge({ message: message, id: group.id }) }
 
     it 'should email subscribers' do
       mailer = double('UserMailer')
       expect(mailer).to receive(:deliver_now)
-      expect(UserMailer).to receive(:notify_subscriber).with(issue_error, subscriber, message).and_return(mailer).once
+      expect(UserMailer).to receive(:notify_subscriber).with(group, subscriber, message).and_return(mailer).once
 
       post :notify_subscribers, params
     end
@@ -77,7 +77,7 @@ describe Api::V1::ErrorsController, :type => :controller do
       subscriber_issue = create :subscriber_issue, issue: issue_error, subscriber: subscriber2
       mailer = double('UserMailer')
       expect(mailer).to receive(:deliver_now).twice
-      expect(UserMailer).to receive(:notify_subscriber).with(issue_error, an_instance_of(Subscriber), message).and_return(mailer).twice
+      expect(UserMailer).to receive(:notify_subscriber).with(group, an_instance_of(Subscriber), message).and_return(mailer).twice
       post :notify_subscribers, params
     end
 
@@ -88,7 +88,7 @@ describe Api::V1::ErrorsController, :type => :controller do
   end
 
   describe 'GET #index' do
-    let(:params) { default_params.merge({ website_id: website.id}) }
+    let(:params) { default_params.merge({website_id: website.id}) }
 
     context 'if logged in' do
       before { auth_member(member) }
@@ -102,7 +102,7 @@ describe Api::V1::ErrorsController, :type => :controller do
       it 'should assign current_site errors' do
         auth_member(member)
         get :index, params
-        expect(assigns(:groups)).to eq([group])
+        expect(assigns(:errors)).to eq([group])
       end
     end
 
@@ -114,14 +114,14 @@ describe Api::V1::ErrorsController, :type => :controller do
   end
 
   describe 'GET #show' do
-    let(:params) { default_params.merge({ id: issue_error.id, website_id: website.id}) }
+    let(:params) { default_params.merge({ status: 'resolved', id: group.id, website_id: website.id}) }
     render_views
     context 'if logged in' do
       before { auth_member(member) }
 
       it 'should assign error' do
         get :show, params
-        expect(assigns(:error)).to eq(issue_error)
+        expect(assigns(:grouped_issue)).to eq(group)
       end
 
       it 'should render json' do
@@ -134,14 +134,22 @@ describe Api::V1::ErrorsController, :type => :controller do
         get :show, params
         expect(response).to be_successful
         expect(response.body).to eq({
-          id: issue_error.id,
-          description: issue_error.description,
-          created_at: issue_error.created_at,
-          website_id: issue_error.website_id,
-          page_title: issue_error.page_title,
-          last_occurrence: issue_error.updated_at,
-          subscribers: issue_error.subscribers,
-          subscribers_count: issue_error.subscribers.count
+          id: group.id,
+          message: group.message,
+          view: group.view,
+          times_seen: group.times_seen,
+          first_seen: group.first_seen,
+          last_seen: group.last_seen,
+          data: group.data,
+          score: group.score,
+          status: group.status,
+          issues: [
+            {
+              id: issue_error.id,
+              platform: issue_error.platform,
+              data: issue_error.data
+            }
+          ]
         }.to_json)
       end
     end
@@ -153,29 +161,30 @@ describe Api::V1::ErrorsController, :type => :controller do
     end
   end
 
-  # describe 'PUT #update' do
-  #   before { auth_member(member) }
-  #   it 'should assign error' do
-  #     put :update, { id: issue_error.id, error: {status: issue_error.status }, format: :json }
-  #     expect(assigns(:error)).to eq(issue_error)
-  #   end
-  #   it 'should update error status' do
-  #     expect {
-  #       put :update, { id: issue_error.id,  error: { status: "resolved" }, website_id: website.id, format: :json}
-  #       issue_error.reload
-  #     }.to change(issue_error, :status).from('unresolved').to('resolved')
-  #   end
+  describe 'PUT #update' do
+    let(:params) { default_params.merge({ error: { status: 'resolved' }, id: group.id, website_id: website.id}) }
+    before { auth_member(member) }
+    it 'should assign error' do
+      put :update, params
+      expect(assigns(:error)).to eq(group)
+    end
+    it 'should update error status' do
+      expect {
+        put :update, params
+        group.reload
+      }.to change(group, :status).from('unresolved').to('resolved')
+    end
 
-  #   it 'should not allow update of other parameters other than status' do
-  #     expect{
-  #       put :update, { id: issue_error.id, error: { error: 'some' }, website: website.id, format: :json }
-  #     }.to_not change(issue_error, :status).from("unresolved")
-  #   end
+    it 'should not allow update of other parameters other than status' do
+      expect{
+        put :update, { id: group.id, error: { error: 'some' }, website: website.id, format: :json }
+      }.to_not change(group, :status).from("unresolved")
+    end
 
-  #   it 'should render json' do
-  #     put :update, { id: issue_error.id, error: { status: 'resolved' }, format: :json }
-  #     expect(response).to be_successful
-  #     expect(response.content_type).to eq('application/json')
-  #   end
-  # end
+    it 'should render json' do
+      put :update, params
+      expect(response).to be_successful
+      expect(response.content_type).to eq('application/json')
+    end
+  end
 end

@@ -5,7 +5,7 @@ FactoryGirl.define do
     platform 1
     level 4
     message "Message for grouped issue"
-    status 1
+    status 3
     data "text here"
   end
 end
