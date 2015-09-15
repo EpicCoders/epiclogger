@@ -32,10 +32,6 @@ describe Website do
     it "has many members" do
       expect(website).to have_many(:website_members)
     end
-
-    it "has many errors" do
-      expect(website).to have_many(:issues)
-     end
    end
 
    describe 'before create' do
