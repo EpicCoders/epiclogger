@@ -1,7 +1,6 @@
-#grouped-issuedetails.row.error
+#grouped-issuedetails.row.issues
   .col-lg-9.col-md-8.pagecontainer
-    .pagetitle
-      %h3 Error #24601
+    %h3.message Error #24601
     / %button.btn.btn-primary.pull-right
     /   %span.fa.fa-star
     /   Assign task
@@ -80,17 +79,17 @@
     .panelbox.propertybox
       %p
         %strong First occurrence:
-        .created_at 21/04 (two weeks ago)
+        %small.created_at 21/04 (two weeks ago)
       %p
         %strong Last occurrence:
-        .last_occurrence 11:18 (one hour ago)
-    / .panelbox.propertybox
-    /   %p
-    /     %strong Level:
-    /     Error
-    /   %p
-    /     %strong Logger:
-    /     Javascript
+        %small.last_occurrence 11:18 (one hour ago)
+    .panelbox.propertybox
+      %p
+        %strong Level:
+        %small.level Error
+      %p
+        %strong Logger:
+        %small.issue_logger Javascript
     / .panelbox.propertybox
     /   %p
     /     %strong Pages:
@@ -113,8 +112,8 @@
     .panelbox.propertybox.faces
       %p
         %strong Subscribed users:
-        %p.subscribers
-          %img{:src => "http://lorempixel.com/48/48/people/1"}/
+        %small.subscribers
+          / %img{:src => "http://lorempixel.com/48/48/people/1"}/
         / %span + 12 anonymous
     / .panelbox.propertybox.inputs
     /   %p
