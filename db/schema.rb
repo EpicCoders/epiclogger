@@ -39,10 +39,9 @@ ActiveRecord::Schema.define(version: 20150921073455) do
   end
 
   create_table "issues", force: :cascade do |t|
-    t.text     "description",   null: false
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
-    t.integer  "website_id"
+    t.text     "description", null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
     t.string   "page_title"
     t.integer  "group_id"
     t.string   "platform"
@@ -52,7 +51,6 @@ ActiveRecord::Schema.define(version: 20150921073455) do
   end
 
   add_index "issues", ["subscriber_id"], name: "index_issues_on_subscriber_id", using: :btree
-  add_index "issues", ["website_id"], name: "index_issues_on_website_id", using: :btree
 
   create_table "members", force: :cascade do |t|
     t.string   "email",                               null: false
@@ -123,5 +121,4 @@ ActiveRecord::Schema.define(version: 20150921073455) do
   end
 
   add_foreign_key "issues", "subscribers"
-  add_foreign_key "issues", "websites"
 end
