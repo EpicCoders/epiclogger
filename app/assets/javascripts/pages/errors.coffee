@@ -21,9 +21,6 @@ directive = {
   subscribers_count:
     html: ()->
       "Send an update to #{this.subscribers_count} subscribers"
-  subscribers:
-    html: ()->
-      "#{this.subscribers_count} subscribers"
 }
 PubSub.subscribe('assigned.website', (ev, website)->
   switch gon.action
@@ -39,10 +36,12 @@ PubSub.subscribe('assigned.website', (ev, website)->
     when 'show'
       $.getJSON '/api/v1/errors/' + gon.error_id, { website_id: website.id }, (data) ->
         manipulateShowElements(data)
+        getSubscribersOnShow(data)
         $('#grouped-issuedetails').render data, directive
 )
 
 manipulateShowElements = (data) ->
+  data.subscribers = getSubscribersOnShow(data)
   data.subscribers_count = countSubscribers(data)
   if data.status == 'resolved'
     $('#solve').hide()
@@ -50,6 +49,14 @@ manipulateShowElements = (data) ->
   else
     $('.resolved').hide()
     $('.resolved_at').hide()
+
+getSubscribersOnShow = (data) ->
+  $.sub = []
+  $.each data.issues, (index, data) ->
+    if data.subscribers.length > 0
+      $.each data.subscribers, (index, data) ->
+        $.sub.push(data)
+  return $.sub
 
 countSubscribers = (data) ->
   subscribers_count = 0
