@@ -30,6 +30,9 @@ directive = {
   subscribers_count:
     html: ()->
       "Send an update to #{this.subscribers_count} subscribers"
+  subscribers:
+    html: ()->
+      "#{this.subscribers_count} subscribers"
 }
 PubSub.subscribe('assigned.website', (ev, website)->
   switch gon.action
@@ -45,9 +48,16 @@ PubSub.subscribe('assigned.website', (ev, website)->
     when 'show'
       $.getJSON '/api/v1/errors/' + gon.error_id, { website_id: website.id }, (data) ->
         ($('.status').removeClass('disabled') && $('#solve').attr('disabled', 'disabled')) if data.status == 'resolved'
+        data.subscribers_count = countSubscribers(data)
         $('#grouped-issuedetails').render data, directive
         $('#missing-errors').hide() if data != null
 )
+
+countSubscribers = (data) ->
+  subscribers_count = 0
+  $.each data.issues, (index, issue) ->
+    subscribers_count += issue.subscribers
+  return subscribers_count
 
 request = (website_id, page) ->
   $.getJSON Routes.api_v1_errors_path(), { website_id: website_id, page: $.page }, (data) ->
@@ -96,6 +106,7 @@ $('#solve').on 'click', (e)->
     url: Routes.api_v1_error_url(gon.error_id)
     type: 'PUT'
     success: (result)->
+      $('.status').addClass('fa fa-check').text('resolved')
       alert 'Status updated'
   return
 
@@ -119,6 +130,6 @@ $('form#notify').submit ->
     type: 'POST'
     data: {message: dataString}
     success: (data) ->
-      # finish load
+      $('.messageTextarea').val('')
       return
   false
