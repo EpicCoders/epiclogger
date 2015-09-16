@@ -135,7 +135,16 @@ describe Api::V1::ErrorsController, :type => :controller do
           data: group.data,
           score: group.score,
           status: group.status,
-          issues: [{id: issue_error.id, platform: issue_error.platform, data: issue_error.data}]
+          level: group.level,
+          issue_logger: group.issue_logger,
+          issues: [
+            {
+              id: issue_error.id,
+              platform: issue_error.platform,
+              data: issue_error.data,
+              subscribers: issue_error.subscribers.count
+            }
+          ]
         }.to_json)
       end
     end

@@ -9,18 +9,6 @@ directive = {
       html: ()->
         moment(this.last_occurrence).calendar()
   },
-  group:{
-    warning: {
-      href: (params) ->
-        Routes.grouped_issue_path(this.id)
-    }
-    users_count:
-      html: ()->
-        "#{this.users_count} users subscribed"
-    last_occurrence:
-      html: ()->
-        moment(this.last_occurrence).calendar()
-  },
   created_at:
     html: ()->
       moment(this.created_at).calendar()
@@ -37,17 +25,17 @@ directive = {
 PubSub.subscribe('assigned.website', (ev, website)->
   switch gon.action
     when "index"
-      $.page = 1
-      request(website.id, $.page)
+      page = 1
+      request(website.id, page)
       $('.next').on 'click', () ->
-        $.page = $.page + 1
-        request(website.id, $.page)
+        page = page + 1
+        request(website.id, page)
       $('.previous').on 'click', () ->
-        $.page = $.page - 1
-        request(website.id, $.page)
+        page = page - 1
+        request(website.id, page)
     when 'show'
       $.getJSON '/api/v1/errors/' + gon.error_id, { website_id: website.id }, (data) ->
-        ($('.status').removeClass('disabled') && $('#solve').attr('disabled', 'disabled')) if data.status == 'resolved'
+        ($('.status').removeClass('disabled')&&$('#solve').attr('disabled', 'disabled')&&$('.notify').attr('disabled', 'disabled')) if data.status == 'resolved'
         data.subscribers_count = countSubscribers(data)
         $('#grouped-issuedetails').render data, directive
         $('#missing-errors').hide() if data != null
@@ -60,8 +48,8 @@ countSubscribers = (data) ->
   return subscribers_count
 
 request = (website_id, page) ->
-  $.getJSON Routes.api_v1_errors_path(), { website_id: website_id, page: $.page }, (data) ->
-    render({groups: data.groups.slice(($.page-1)*8, $.page*8), page: $.page, pages: data.pages})
+  $.getJSON Routes.api_v1_errors_path(), { website_id: website_id, page: page }, (data) ->
+    render(data)
 
 render = (data) ->
   $.obj = data
@@ -78,10 +66,10 @@ render = (data) ->
     $('#missing-errors').show()
   $('#grouped-issuescontainer').render data, directive
 
-# SortByUsersSubscribed = (a, b) ->
-#   aError = a.users_count
-#   bError = b.users_count
-#   if aError < bError then 1 else if aError > bError then -1 else 0
+SortByUsersSubscribed = (a, b) ->
+  aError = a.users_count
+  bError = b.users_count
+  if aError < bError then 1 else if aError > bError then -1 else 0
 
 SortByLastOccurrence = (a, b) ->
   aTime = a.last_occurrence
@@ -93,20 +81,20 @@ $('select#sortinput').change ->
   console.log theValue
   if theValue == "Last occurrence"
     $('#grouped-issues').render $.obj.grouped_issues.sort(SortByLastOccurrence), directive
-  # else if theValue == "Users subscribed"
-  #   $('#grouped-issues').render $.obj.grouped_issues.sort(SortByUsersSubscribed), directive
+  else if theValue == "Users subscribed"
+    $('#grouped-issues').render $.obj.grouped_issues.sort(SortByUsersSubscribed), directive
   return
 
 $('#solve').on 'click', (e)->
   e.preventDefault();
   $('.status').removeClass('disabled')
   $('#solve').attr('disabled', 'disabled')
+  $('.notify').attr('disabled', 'disabled')
   $.ajax
     data: {error: {status: 'resolved'}}
     url: Routes.api_v1_error_url(gon.error_id)
     type: 'PUT'
     success: (result)->
-      $('.status').addClass('fa fa-check').text('resolved')
       alert 'Status updated'
   return
 
