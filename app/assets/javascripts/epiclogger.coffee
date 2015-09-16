@@ -12,7 +12,7 @@ window.EpicLogger = (->
     $(window).trigger 'resize'
 
   sidebarToggle: ->
-    $('#sidebar .selectbox > p, .title').on 'click', (e) ->
+    $('#sidebar .selectbox > p').on 'click', (e) ->
       select = $('#sidebar .selectbox');
       if select.hasClass 'open'
         select.removeClass 'open'
@@ -51,6 +51,7 @@ window.EpicLogger = (->
       console.log 'assigned website'
       $('.picked-website').render pickedWebsite # render the current website
       $.cookie('pickedWebsite', pickedWebsite.id, { path: '/' }) # save the website id in the cookies
+      # debugger;
       console.log pickedWebsite
       PubSub.publishSync('assigned.website', pickedWebsite)
     return pickedWebsite

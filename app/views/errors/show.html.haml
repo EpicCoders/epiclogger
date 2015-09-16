@@ -34,7 +34,7 @@
         %form#notify
           .form-group
             %label.subscribers_count{:for => "subscriber_update"}
-            %textarea#subscriber_update.form-control.messageTextarea{:rows => "3"}
+            %textarea#subscriber_update.form-control.notify.messageTextarea{:rows => "3"}
           .row
             .col-md-9.col-xs-7
               .checkbox
@@ -42,7 +42,7 @@
                   %input{:type => "checkbox", :value => ""}/
                   Notify users by email
             .col-md-3.col-xs-5
-              %button.btn.btn-primary.pull-right#subscriber_update
+              %button.btn.btn-primary.pull-right.notify#subscriber_update
                 %span.fa.fa-paper-plane
                 Send
     .panel.panel-default
@@ -113,13 +113,13 @@
       %p
         %strong Subscribed users:
         %small.subscribers
-          / %img{:src => "http://lorempixel.com/48/48/people/1"}/
+        /   %img{:src => "http://lorempixel.com/48/48/people/1"}/
         / %span + 12 anonymous
-    / .panelbox.propertybox.inputs
-    /   %p
-    /     %strong Public URL:
-    /     %input#permalink.form-control.input-sm{:type => "text", :value => "http://epiclogger.io/error/24601"}/
-    /     %a.btn.btn-primary.btn-sm.btn-block{:href => "#"} Disable public access
+    .panelbox.propertybox.inputs
+      %p
+        %strong Public URL:
+        %input#permalink.form-control.input-sm{:disabled => " ", :type => "text", :value => "http://epiclogger.io/errors/#{params[:id]}"}/
+        %a.btn.btn-primary.btn-sm.btn-block{:href => "#"} Disable public access
 
 :javascript
   $('#permalink').on('focus', function() {
