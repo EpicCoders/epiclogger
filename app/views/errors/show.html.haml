@@ -1,33 +1,25 @@
 #grouped-issuedetails.row.issues
   .col-lg-9.col-md-8.pagecontainer
-    %h3.message Error #24601
+    %h3 Error #24601
     / %button.btn.btn-primary.pull-right
     /   %span.fa.fa-star
     /   Assign task
-    %button.btn.btn-primary.pull-right.resolved#solve
+    %button.btn.btn-primary.pull-right#solve
       %span.fa.fa-check
       Mark resolved
-    %button.btn.btn-success.disabled.pull-right.status
+    %button.btn.btn-success.pull-right.resolved
       %span.fa.fa-check
       Resolved
     .clearfix
     %br/
-    / .panel.panel-default.codeview
-    /   .panel-heading Exception
-    /   .panel-body
-    /     %p
-    /       %strong Expected ")"
-    /       in app.js 20:33
-    /     .codepanel
-    /       %span.line 16. function helloWorld() {
-    /       %span.line 17.     // Say hello world until the user starts questioning
-    /       %span.line 18.     // the meaningfulness of their existence.
-    /       %span.line 19.     for (var i = 42; --i &gt;= 0;) {
-    /       %span.line.error
-    /         20. alert('Hello ' + String(world)
-    /         %span.char ;
-    /       %span.line 21.     }
-    /       %span.line 22. }
+    .panel.panel-default.codeview
+      .panel-heading Exception
+      .panel-body
+        %p
+          %strong.message
+        .codepanel
+          %span.line.error
+            raven/raven-js/example/scratch.js  ? in HTMLButtonElement.broken at line 12:51
     .panel.panel-default
       .panel-heading Update
       .panel-body
@@ -74,15 +66,65 @@
           %span.activity
             Error occured on
             %strong Homepage
+    .panel.panel-default.codeview
+      .panel-heading Request
+      .panel-body
+        %strong URL:
+        .codepanel
+          %h6 http://localhost/raven/raven-js/example/
+          %br/
+        %strong User-Agent:
+        .codepanel
+          %h6 Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.85 Safari/537.36
+    .panel.panel-default.codeview
+      .panel-heading User
+      .panel-body
+        %strong Id: 1
+        %br/
+        %br/
+        %strong IP Adress:
+        .codepanel
+          %h6 10.156.45.154
+          %br/
+        %strong Email:
+        .codepanel
+          %h6 chocksy@gmail.com
+          %br/
+        %strong Data:
+        .codepanel
+          %h6 {}
+          %br/
+    / .panel.panel-default
+    /   .panel-heading Exception
+    /   .panel-body
+    /     %p
+    /       %strong Expected ")"
+    /       in app.js 20:33
+    /     .codepanel
+    /       %span.line 16. function helloWorld() {
+    /       %span.line 17.     // Say hello world until the user starts questioning
+    /       %span.line 18.     // the meaningfulness of their existence.
+    /       %span.line 19.     for (var i = 42; --i &gt;= 0;) {
+    /       %span.line.error
+    /         20. alert('Hello ' + String(world)
+    /         %span.char ;
+    /       %span.line 21.     }
+    /       %span.line 22. }
   .col-lg-3.col-md-4.sidepanel
     %h4 Details
     .panelbox.propertybox
+      %p
+        %strong Status:
+        %small.status unresolved
       %p
         %strong First occurrence:
         %small.created_at 21/04 (two weeks ago)
       %p
         %strong Last occurrence:
         %small.last_occurrence 11:18 (one hour ago)
+      %p.resolved
+        %strong Resolved at:
+        %small.resolved_at
     .panelbox.propertybox
       %p
         %strong Level:
@@ -90,6 +132,12 @@
       %p
         %strong Logger:
         %small.issue_logger Javascript
+      %p
+        %strong Url:
+        %small http://localhost/raven/raven-js/example/
+      %p
+        %strong OS:
+        %small Windows
     / .panelbox.propertybox
     /   %p
     /     %strong Pages:
@@ -109,10 +157,26 @@
     /     %br/
     /     Mozilla Firefox
     /     %span.badge 17
+    / %h4 Filter
+    / #filterbox.panelbox
+    /   %form.panel.panel-default
+    /     %h5{"data-target" => "#collapse_page", "data-toggle" => "collapse"}
+    /       Page
+    /       %span.fa.fa-chevron-down
+    /     #collapse_page.collapse
+    /       .checkbox
+    /         %label
+    /           %input{:type => "checkbox", :value => ""}/
+    /           Homepage
     .panelbox.propertybox.faces
       %p
         %strong Subscribed users:
         %small.subscribers
+        / %select#sortinput.form-control{:name => "sortinput"}
+        /   %option
+        /   .issues
+        /     .subscribers
+        /       .email
         /   %img{:src => "http://lorempixel.com/48/48/people/1"}/
         / %span + 12 anonymous
     .panelbox.propertybox.inputs

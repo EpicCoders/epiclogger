@@ -15,6 +15,9 @@ directive = {
   last_occurrence:
     html: ()->
       moment(this.last_occurrence).calendar()
+  resolved_at:
+    html: ()->
+      moment(this.resolved_at).calendar()
   subscribers_count:
     html: ()->
       "Send an update to #{this.subscribers_count} subscribers"
@@ -35,16 +38,23 @@ PubSub.subscribe('assigned.website', (ev, website)->
         request(website.id, page)
     when 'show'
       $.getJSON '/api/v1/errors/' + gon.error_id, { website_id: website.id }, (data) ->
-        ($('.status').removeClass('disabled')&&$('#solve').attr('disabled', 'disabled')&&$('.notify').attr('disabled', 'disabled')) if data.status == 'resolved'
-        data.subscribers_count = countSubscribers(data)
+        manipulateShowElements(data)
         $('#grouped-issuedetails').render data, directive
-        $('#missing-errors').hide() if data != null
 )
+
+manipulateShowElements = (data) ->
+  data.subscribers_count = countSubscribers(data)
+  if data.status == 'resolved'
+    $('#solve').hide()
+    $('.notify').attr('disabled', 'disabled')
+  else
+    $('.resolved').hide()
+    $('.resolved_at').hide()
 
 countSubscribers = (data) ->
   subscribers_count = 0
   $.each data.issues, (index, issue) ->
-    subscribers_count += issue.subscribers
+    subscribers_count += issue.subscribers_count
   return subscribers_count
 
 request = (website_id, page) ->
@@ -87,8 +97,8 @@ $('select#sortinput').change ->
 
 $('#solve').on 'click', (e)->
   e.preventDefault();
-  $('.status').removeClass('disabled')
-  $('#solve').attr('disabled', 'disabled')
+  $('#solve').hide()
+  $('.resolved').show()
   $('.notify').attr('disabled', 'disabled')
   $.ajax
     data: {error: {status: 'resolved'}}
