@@ -51,7 +51,6 @@ window.EpicLogger = (->
       console.log 'assigned website'
       $('.picked-website').render pickedWebsite # render the current website
       $.cookie('pickedWebsite', pickedWebsite.id, { path: '/' }) # save the website id in the cookies
-      # debugger;
       console.log pickedWebsite
       PubSub.publishSync('assigned.website', pickedWebsite)
     return pickedWebsite
