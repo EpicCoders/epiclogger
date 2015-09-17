@@ -1,4 +1,5 @@
 class Api::V1::ErrorsController < Api::V1::ApiController
+  require 'digest/md5'
   skip_before_action :authenticate_member!, except: [:index, :show, :update, :notify_subscribers]
 
   def index
@@ -8,7 +9,14 @@ class Api::V1::ErrorsController < Api::V1::ApiController
   end
 
   def show
+    @avatars = []
     @grouped_issue = GroupedIssue.find(params[:id])
+    @grouped_issue.issues.each do |issue|
+      issue.subscribers.each do |subscriber|
+        hash = Digest::MD5.hexdigest(subscriber.email)
+        @avatars.push({ image_url: "http://www.gravatar.com/avatar/#{hash}" })
+      end
+    end
   end
 
    def update

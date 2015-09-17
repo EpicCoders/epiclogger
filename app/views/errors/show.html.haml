@@ -171,13 +171,8 @@
     .panelbox.propertybox.faces
       %p
         %strong Subscribed users:
-        %select.subscribers
-          %option.email
-        / %small.subscribers
-        / %select#sortinput.form-control{:name => "sortinput"}
-        /   %option
-        /   %img{:src => "http://lorempixel.com/48/48/people/1"}/
-        / %span + 12 anonymous
+        %p.avatars
+          %img{:src => "http://lorempixel.com/48/48/people/1"}/
       / %p
       /   %strong Public URL:
       /   %input#permalink.form-control.input-sm{:disabled => " ", :type => "text", :value => "http://epiclogger.io/errors/#{params[:id]}"}/
