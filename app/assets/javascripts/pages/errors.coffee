@@ -40,8 +40,9 @@ PubSub.subscribe('assigned.website', (ev, website)->
 )
 
 manipulateShowElements = (data) ->
-  $.each data.avatars, (index, avatar) ->
-    $('img').attr('src', avatar.image_url)
+  $.each data.issues, (index, data) ->
+    $.each data.avatars, (index, avatar) ->
+      $('img').attr('src', avatar.image_url)
   data.subscribers_count = countSubscribers(data)
   if data.status == 'resolved'
     $('#solve').hide()

@@ -171,8 +171,10 @@
     .panelbox.propertybox.faces
       %p
         %strong Subscribed users:
-        %p.avatars
-          %img{:src => "http://lorempixel.com/48/48/people/1"}/
+        %br/
+        .issues
+          .avatars
+            %img{:src => "http://lorempixel.com/48/48/people/1"}
       / %p
       /   %strong Public URL:
       /   %input#permalink.form-control.input-sm{:disabled => " ", :type => "text", :value => "http://epiclogger.io/errors/#{params[:id]}"}/
