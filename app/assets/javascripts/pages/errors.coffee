@@ -39,17 +39,37 @@ PubSub.subscribe('assigned.website', (ev, website)->
         $('#grouped-issuedetails').render data, directive
 )
 
+
 manipulateShowElements = (data) ->
-  $.each data.issues, (index, data) ->
-    $.each data.avatars, (index, avatar) ->
-      $('img').attr('src', avatar.image_url)
-  data.subscribers_count = countSubscribers(data)
   if data.status == 'resolved'
     $('#solve').hide()
     $('.notify').attr('disabled', 'disabled')
   else
     $('.resolved').hide()
     $('.resolved_at').hide()
+  data.avatars = getAvatars(data).slice(0,7)
+  data.subscribers_count = countSubscribers(data)
+  if data.subscribers_count > 7
+    $('#truncate').show()
+  else
+    $('#truncate').hide()
+  $('#truncate').on 'click', (e) ->
+    if $('#truncate').text() == "...show more"
+      data.avatars = getAvatars(data)
+      $('#truncate').text("...show less")
+    else
+      $('#truncate').text("...show more")
+      data.avatars = getAvatars(data).slice(0,7)
+
+
+getAvatars = (data) ->
+  $.src = []
+  $.each data.issues, (index, data) ->
+    $.each data.avatars, (index, avatar) ->
+      $.src.push(avatar.image_url)
+  $.each $.src, (index, image_url) ->
+    $('img').attr('src', image_url)
+  return $.src
 
 countSubscribers = (data) ->
   subscribers_count = 0

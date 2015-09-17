@@ -168,13 +168,15 @@
     /         %label
     /           %input{:type => "checkbox", :value => ""}/
     /           Homepage
-    .panelbox.propertybox.faces
+    #truncated.panelbox.propertybox.faces
       %p
         %strong Subscribed users:
-        %br/
-        .issues
-          .avatars
-            %img{:src => "http://lorempixel.com/48/48/people/1"}
+        %p
+        .avatars
+          %img{:src => "http://lorempixel.com/48/48/people/1"}
+        %p#truncate
+          %a ...show more
+      %br/
       / %p
       /   %strong Public URL:
       /   %input#permalink.form-control.input-sm{:disabled => " ", :type => "text", :value => "http://epiclogger.io/errors/#{params[:id]}"}/
