@@ -1,6 +1,6 @@
 require 'rails_helper'
 
- 
+
 describe Member do
 
   let(:member) { build(:member) }
@@ -10,13 +10,13 @@ describe Member do
   end
 
   describe "ActiveModel validations" do
-    it "is invalid without a name" do 
+    it "is invalid without a name" do
       expect(member).to validate_presence_of :name
-    end 
+    end
 
-    it "is invalid without an email" do 
+    it "is invalid without an email" do
       expect(member).to validate_presence_of :email
-    end 
+    end
   end
 
    describe "ActiveRecord associations" do

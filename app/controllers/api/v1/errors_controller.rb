@@ -19,10 +19,8 @@ class Api::V1::ErrorsController < Api::V1::ApiController
   def notify_subscribers
     @error = GroupedIssue.find(params[:id])
     @message = params[:message]
-    @error.issues.each do |issue|
-      issue.subscribers.each do |member|
-        UserMailer.notify_subscriber(@error, member, @message).deliver_now
-      end
+    @error.subscribers.each do |member|
+      UserMailer.notify_subscriber(@error, member, @message).deliver_now
     end
   end
 

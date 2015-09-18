@@ -9,15 +9,15 @@ describe Issue do
   end
 
   describe "ActiveModel validations" do
-    it "is invalid without a description" do 
+    it "is invalid without a description" do
       expect(issue).to validate_presence_of :description
-    end 
+    end
 
   end
 
    describe "ActiveRecord associations" do
-     it "has and belongs to many subscribers" do
-      expect(issue).to have_and_belong_to_many(:subscribers)
+     it "belongs to subscriber" do
+      expect(issue).to belong_to(:subscriber)
      end
    end
 

@@ -36,7 +36,7 @@ describe Subscriber do
      end
 
     it "has many errors" do
-      expect(subscriber).to have_and_belong_to_many(:issues)
+      expect(subscriber).to have_many(:issues)
      end
 
    end
