@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150908155828) do
+ActiveRecord::Schema.define(version: 20150918083015) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -39,18 +39,18 @@ ActiveRecord::Schema.define(version: 20150908155828) do
   end
 
   create_table "issues", force: :cascade do |t|
-    t.text     "description", null: false
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
-    t.integer  "website_id"
+    t.text     "description",   null: false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
     t.string   "page_title"
     t.integer  "group_id"
     t.string   "platform"
     t.text     "data"
     t.integer  "time_spent"
+    t.integer  "subscriber_id"
   end
 
-  add_index "issues", ["website_id"], name: "index_issues_on_website_id", using: :btree
+  add_index "issues", ["subscriber_id"], name: "index_issues_on_subscriber_id", using: :btree
 
   create_table "members", force: :cascade do |t|
     t.string   "email",                               null: false
@@ -130,5 +130,5 @@ ActiveRecord::Schema.define(version: 20150908155828) do
     t.string   "app_key"
   end
 
-  add_foreign_key "issues", "websites"
+  add_foreign_key "issues", "subscribers"
 end
