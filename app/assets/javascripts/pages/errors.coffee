@@ -39,6 +39,42 @@ PubSub.subscribe('assigned.website', (ev, website)->
         $('#grouped-issuedetails').render data, directive
 )
 
+request = (website_id, page) ->
+  $.getJSON Routes.api_v1_errors_path(), { website_id: website_id, page: page }, (data) ->
+    manipulateIndexElements(data)
+
+getAvatars = (data) ->
+  $.src = []
+  $.each data.issues, (index, data) ->
+    $.each data.avatars, (index, avatar) ->
+      $.src.push(avatar.image_url)
+  $.each $.src, (index, image_url) ->
+    $('img').attr('src', image_url)
+  return $.src
+
+countSubscribers = (data) ->
+  subscribers_count = 0
+  $.each data.issues, (index, issue) ->
+    subscribers_count += issue.subscribers_count
+  return subscribers_count
+
+manipulateIndexElements = (data) ->
+  $.obj = data
+  if data.groups.length > 0
+    $('#missing-errors').hide()
+
+    # start the pagination
+    $('.pagination-text').html(data.page + '/' + data.pages)
+    $('.next').addClass('disabled') if data.page == data.pages
+    $('.next').removeClass('disabled') if data.page != data.pages
+    $('.previous').removeClass('disabled') if data.page != 1
+    $('.previous').addClass('disabled') if data.page == 1
+  else
+    $('.side').hide()
+    $('.buttons').hide()
+    $('#grouped-issues').hide()
+    $('#missing-errors').show()
+  $('#grouped-issuescontainer').render data, directive
 
 manipulateShowElements = (data) ->
   if data.status == 'resolved'
@@ -60,41 +96,6 @@ manipulateShowElements = (data) ->
     else
       $('#truncate').text("...show more")
       data.avatars = getAvatars(data).slice(0,7)
-
-
-getAvatars = (data) ->
-  $.src = []
-  $.each data.issues, (index, data) ->
-    $.each data.avatars, (index, avatar) ->
-      $.src.push(avatar.image_url)
-  $.each $.src, (index, image_url) ->
-    $('img').attr('src', image_url)
-  return $.src
-
-countSubscribers = (data) ->
-  subscribers_count = 0
-  $.each data.issues, (index, issue) ->
-    subscribers_count += issue.subscribers_count
-  return subscribers_count
-
-request = (website_id, page) ->
-  $.getJSON Routes.api_v1_errors_path(), { website_id: website_id, page: page }, (data) ->
-    render(data)
-
-render = (data) ->
-  $.obj = data
-  if data.groups.length > 0
-    $('#missing-errors').hide()
-
-    # start the pagination
-    $('.pagination-text').html(data.page + '/' + data.pages)
-    $('.next').addClass('disabled') if data.page == data.pages
-    $('.next').removeClass('disabled') if data.page != data.pages
-    $('.previous').removeClass('disabled') if data.page != 1
-    $('.previous').addClass('disabled') if data.page == 1
-  else
-    $('#missing-errors').show()
-  $('#grouped-issuescontainer').render data, directive
 
 SortByUsersSubscribed = (a, b) ->
   aError = a.users_count

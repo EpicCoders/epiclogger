@@ -15,7 +15,7 @@
         %span.closed.fa.fa-chevron-down
         %span.open.fa.fa-chevron-up
       %ul#websites-sidebar.options
-        = nav_link "Some website", '#', {:class=>'title', 'data-id'=>'', 'onclick'=>'EpicLogger.pickWebsite(this)'}
+        = nav_link "Some website", '#', {:class=>'title picked', 'data-id'=>'', 'onclick'=>'EpicLogger.pickWebsite(this)'}
       #add-new.nav.nav-pills.nav-stacked
         = link_to new_website_path(), class: 'title' do
           = icon('globe')
