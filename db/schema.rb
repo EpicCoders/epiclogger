@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150918083015) do
+ActiveRecord::Schema.define(version: 20150921073455) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -42,6 +42,7 @@ ActiveRecord::Schema.define(version: 20150918083015) do
     t.text     "description",   null: false
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
+    t.integer  "website_id"
     t.string   "page_title"
     t.integer  "group_id"
     t.string   "platform"
@@ -51,6 +52,7 @@ ActiveRecord::Schema.define(version: 20150918083015) do
   end
 
   add_index "issues", ["subscriber_id"], name: "index_issues_on_subscriber_id", using: :btree
+  add_index "issues", ["website_id"], name: "index_issues_on_website_id", using: :btree
 
   create_table "members", force: :cascade do |t|
     t.string   "email",                               null: false
@@ -90,16 +92,6 @@ ActiveRecord::Schema.define(version: 20150918083015) do
 
   add_index "messages", ["issue_id"], name: "index_messages_on_issue_id", using: :btree
 
-  create_table "subscriber_issues", force: :cascade do |t|
-    t.integer  "subscriber_id"
-    t.integer  "issue_id"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
-  end
-
-  add_index "subscriber_issues", ["issue_id"], name: "index_subscriber_issues_on_issue_id", using: :btree
-  add_index "subscriber_issues", ["subscriber_id"], name: "index_subscriber_issues_on_subscriber_id", using: :btree
-
   create_table "subscribers", force: :cascade do |t|
     t.string   "name",       null: false
     t.string   "email",      null: false
@@ -131,4 +123,5 @@ ActiveRecord::Schema.define(version: 20150918083015) do
   end
 
   add_foreign_key "issues", "subscribers"
+  add_foreign_key "issues", "websites"
 end
