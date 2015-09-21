@@ -6,8 +6,7 @@ describe Api::V1::ErrorsController, :type => :controller do
   let!(:website_member) { create :website_member, website: website, member: member }
   let(:group) {create :grouped_issue, website: website}
   let(:subscriber) { create :subscriber, website: website }
-  let(:issue_error) { create :issue, subscriber: subscriber, group: group }
-  # let!(:issue_subscriber) { create :subscriber_issue, issue: issue_error, subscriber: subscriber }
+  let!(:issue_error) { create :issue, subscriber: subscriber, group: group }
   let(:message) { 'asdada' }
   let(:default_params) { {website_id: website.id, format: :json} }
 
@@ -28,25 +27,18 @@ describe Api::V1::ErrorsController, :type => :controller do
         }.to change(Issue, :count).by( 1 )
       end
 
-      it 'should create subscriber_issue' do
-        expect {
-          post :add_error, params
-        }.to change(SubscriberIssue, :count).by( 1 )
-      end
-
       it 'should create message' do
         expect {
           post :add_error, params
         }.to change(Message, :count).by( 1 )
       end
 
-      it 'should not create issue if issue exists' do
+      it 'should not create subscriber if subscriber exists' do
         subscriber1 = create :subscriber, website: website, name: 'Name for subscriber', email: 'email@example2.com'
         error1 = create :issue, subscriber: subscriber, group: group, page_title: 'New title'
-        # create :subscriber_issue, issue: error1, subscriber: subscriber1
         expect{
           post :add_error, params
-        }.to change(Issue, :count).by(0)
+        }.to change(Subscriber, :count).by(0)
       end
     end
     context 'not logged in' do
@@ -64,22 +56,22 @@ describe Api::V1::ErrorsController, :type => :controller do
     before { auth_member(member) }
     let(:params) { default_params.merge({ message: message, id: group.id }) }
 
-    # it 'should email subscribers' do
-    #   mailer = double('UserMailer')
-    #   expect(mailer).to receive(:deliver_now)
-    #   expect(UserMailer).to receive(:notify_subscriber).with(group, subscriber, message).and_return(mailer).once
+    it 'should email subscribers' do
+      mailer = double('UserMailer')
+      expect(mailer).to receive(:deliver_now)
+      expect(UserMailer).to receive(:notify_subscriber).with(group, subscriber, message).and_return(mailer).once
 
-    #   post :notify_subscribers, params
-    # end
+      post :notify_subscribers, params
+    end
 
-    # it 'should email 2 subscribers' do
-    #   subscriber2 = create :subscriber, website: website
-    #   # subscriber_issue = create :subscriber_issue, issue: issue_error, subscriber: subscriber2
-    #   mailer = double('UserMailer')
-    #   expect(mailer).to receive(:deliver_now).twice
-    #   expect(UserMailer).to receive(:notify_subscriber).with(group, an_instance_of(Subscriber), message).and_return(mailer).twice
-    #   post :notify_subscribers, params
-    # end
+    it 'should email 2 subscribers' do
+      subscriber2 = create :subscriber, website: website
+      issue = create :issue, group: group, subscriber: subscriber2
+      mailer = double('UserMailer')
+      expect(mailer).to receive(:deliver_now).twice
+      expect(UserMailer).to receive(:notify_subscriber).with(group, an_instance_of(Subscriber), message).and_return(mailer).twice
+      post :notify_subscribers, params
+    end
 
     it 'should assign message' do
       post :notify_subscribers, params
@@ -143,7 +135,7 @@ describe Api::V1::ErrorsController, :type => :controller do
           data: group.data,
           score: group.score,
           status: group.status,
-          issues: []
+          issues: [{id: issue_error.id, platform: issue_error.platform, data: issue_error.data}]
         }.to_json)
       end
     end
