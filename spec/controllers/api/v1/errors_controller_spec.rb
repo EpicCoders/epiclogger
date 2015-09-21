@@ -137,12 +137,17 @@ describe Api::V1::ErrorsController, :type => :controller do
           status: group.status,
           level: group.level,
           issue_logger: group.issue_logger,
+          resolved_at: group.resolved_at,
           issues: [
             {
               id: issue_error.id,
               platform: issue_error.platform,
               data: issue_error.data,
-              subscribers: issue_error.subscribers.count
+              subscriber:{
+                id: subscriber.id,
+                email: subscriber.email,
+                avatar_url: "http://www.gravatar.com/avatar/#{Digest::MD5.hexdigest(subscriber.email)}"
+              }
             }
           ]
         }.to_json)
