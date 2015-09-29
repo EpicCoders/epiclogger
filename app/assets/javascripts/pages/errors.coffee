@@ -59,7 +59,7 @@ countSubscribers = (data) ->
 
 manipulateIndexElements = (data) ->
   $.obj = data
-  if data.issues.length > 0
+  if data.groups.length > 0
     $('#missing-errors').hide()
 
     # start the pagination
