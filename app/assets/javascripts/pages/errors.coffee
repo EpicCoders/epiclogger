@@ -46,10 +46,9 @@ request = (website_id, page) ->
 getAvatars = (data) ->
   $.src = []
   $.each data.issues, (index, data) ->
-    $.each data.avatars, (index, avatar) ->
-      $.src.push(avatar.image_url)
-  $.each $.src, (index, image_url) ->
-    $('img').attr('src', image_url)
+    $.src.push(data.subscriber.avatar_url)
+  $.each $.src, (index, avatar_url) ->
+    $('img').attr('src', avatar_url)
   return $.src
 
 countSubscribers = (data) ->
@@ -60,7 +59,7 @@ countSubscribers = (data) ->
 
 manipulateIndexElements = (data) ->
   $.obj = data
-  if data.groups.length > 0
+  if data.issues.length > 0
     $('#missing-errors').hide()
 
     # start the pagination
@@ -83,9 +82,9 @@ manipulateShowElements = (data) ->
   else
     $('.resolved').hide()
     $('.resolved_at').hide()
-  data.avatars = getAvatars(data).slice(0,7)
+  data.avatars = getAvatars(data).slice(0,2)
   data.subscribers_count = countSubscribers(data)
-  if data.subscribers_count > 7
+  if data.subscribers_count > 2
     $('#truncate').show()
   else
     $('#truncate').hide()

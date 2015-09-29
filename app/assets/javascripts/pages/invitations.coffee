@@ -7,6 +7,7 @@ PubSub.subscribe('assigned.website', (ev, website)->
       dataType: 'json'
       data: { member: { email: $('#addMember').find('#getEmail').val() }, website_id: website.id }
       success: (data) ->
+        alert 'Invitation sent'
         window.location = "/members"
     return
   return

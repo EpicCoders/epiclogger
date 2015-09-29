@@ -7,3 +7,4 @@ json.issues @grouped_issue.issues do |issue|
     json.avatar_url "http://www.gravatar.com/avatar/#{hash}"
   end
 end
+json.subscribers_count @grouped_issue.subscribers.count
