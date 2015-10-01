@@ -27,17 +27,21 @@ class Api::V1::ErrorsController < Api::V1::ApiController
 
   def add_error
     subscriber = current_site.subscribers.create_with(name: "Name for subscriber").find_or_create_by!(email: error_params["user"]["email"], website_id: current_site.id)
-    @group = GroupedIssue.create_with( data: Digest::MD5.hexdigest('error_params["request"]["headers"]["User-Agent"]'), website_id: current_site.id).find_or_create_by(
+
+    @group = GroupedIssue.create_with(
       issue_logger: error_params["logger"],
-      view: error_params["stacktrace"]["frames"].first["filename"],
-      status: 3
-    )
-    @error = Issue.create_with(data: Digest::MD5.hexdigest('error_params["request"]["headers"]["User-Agent"]'), subscriber_id: subscriber.id).find_or_create_by(
-      description: error_params["message"],
+      view: error_params["request"]["url"],
+      status: 3,platform: error_params["platform"],
+      message: error_params["message"]
+    ).find_or_create_by(data: Digest::MD5.hexdigest(error_params["request"]["headers"]["User-Agent"]), website_id: current_site.id)
+
+    @error = Issue.create_with(
+      description: error_params["request"]["headers"]["User-Agent"],
       page_title: error_params["extra"]["title"],
       platform: error_params["platform"],
       group_id: @group.id
-    )
+    ).find_or_create_by(data: Digest::MD5.hexdigest(error_params["request"]["headers"]["User-Agent"]), subscriber_id: subscriber.id)
+
     message = Message.create(content: error_params["message"], issue_id: @error.id)
   end
 

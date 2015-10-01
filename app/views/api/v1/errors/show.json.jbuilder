@@ -6,5 +6,5 @@ json.issues @grouped_issue.issues do |issue|
     hash = Digest::MD5.hexdigest(issue.subscriber.email)
     json.avatar_url "http://www.gravatar.com/avatar/#{hash}"
   end
+  json.subscribers_count @grouped_issue.subscribers.count
 end
-json.subscribers_count @grouped_issue.subscribers.count
