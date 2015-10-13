@@ -11,7 +11,25 @@ describe Api::V1::ErrorsController, :type => :controller do
   let(:default_params) { {website_id: website.id, format: :json} }
 
   describe 'POST #create' do
-    let(:params) { default_params.merge({error: { user: { name: 'Gogu', email: 'email@example2.com' }, name: 'Name for subscriber', extra: { page_title: 'New title' }, message: 'new message'}}) }
+    let(:params) { default_params.merge({error:{
+        user:{
+            name: 'Gogu',
+            email: 'email@example2.com'
+          },
+        logger: "javascript",
+        name: 'Name for subscriber',
+        extra:{
+          page_title: 'New title'
+      },
+        request:{
+          url: "http://www.example.com",
+          headers:{
+            "User-Agent" => "ReferenceError: fdas is not defined"
+            }
+          },
+        platform: "php",
+        message: 'new message'
+      }}) }
 
     context 'if logged in' do
       before { auth_member(member) }
@@ -147,7 +165,8 @@ describe Api::V1::ErrorsController, :type => :controller do
                 id: subscriber.id,
                 email: subscriber.email,
                 avatar_url: "http://www.gravatar.com/avatar/#{Digest::MD5.hexdigest(subscriber.email)}"
-              }
+              },
+            subscribers_count: group.subscribers.count
             }
           ]
         }.to_json)
