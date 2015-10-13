@@ -1,6 +1,7 @@
 json.(@grouped_issue, :id, :message, :view, :times_seen, :first_seen, :last_seen, :data, :score, :status, :level, :issue_logger, :resolved_at)
 json.issues @grouped_issue.issues do |issue|
-  json.(issue, :id, :platform, :data)
+  json.(issue, :id, :platform)
+  json.issue_data = JSON.parse(issue.data)
   json.subscriber do
     json.(issue.subscriber, :id, :email)
     hash = Digest::MD5.hexdigest(issue.subscriber.email)
