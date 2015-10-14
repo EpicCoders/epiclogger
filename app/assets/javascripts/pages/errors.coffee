@@ -21,6 +21,13 @@ directive = {
   subscribers_count:
     html: ()->
       "Send an update to #{this.subscribers_count} subscribers"
+  stacktrace:
+    html: ()->
+      error = this.issues[0].issue_data
+      "#{error[0].filename} ? in #{error[0].function} at line #{error[0].lineno}/#{error[0].colno} <br/><br/>#{error[1].filename} ? in #{error[1].function} at line #{error[1].lineno}/#{error[1].colno}"
+  issue_subscriber:
+    html: ()->
+      "Id: #{this.issues[0].subscriber.id}<br/><br/>IP Adress: 10.156.45.154.. <br/><br/>Email: #{this.issues[0].subscriber.email}<br/><br/>Data: ()"
 }
 PubSub.subscribe('assigned.website', (ev, website)->
   switch gon.action
@@ -94,7 +101,7 @@ manipulateShowElements = (data) ->
       $('#truncate').text("...show less")
     else
       $('#truncate').text("...show more")
-      data.avatars = getAvatars(data).slice(0,7)
+      data.avatars = getAvatars(data).slice(0,2)
 
 SortByUsersSubscribed = (a, b) ->
   aError = a.users_count

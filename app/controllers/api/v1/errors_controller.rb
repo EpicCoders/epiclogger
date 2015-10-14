@@ -40,8 +40,8 @@ class Api::V1::ErrorsController < Api::V1::ApiController
       page_title: error_params["extra"]["title"],
       platform: error_params["platform"],
       group_id: @group.id
-      error_params["stacktrace"]["frames"].to_s.gsub(/=>|\./, ":")
-    ).find_or_create_by(data: Digest::MD5.hexdigest(error_params["request"]["headers"]["User-Agent"]), subscriber_id: subscriber.id)
+      # error_params["stacktrace"]["frames"].to_s.gsub(/=>|\./, ":")
+    ).find_or_create_by(data: error_params["stacktrace"]["frames"].to_s.gsub(/=>|\./, ":"), subscriber_id: subscriber.id)
 
     message = Message.create(content: error_params["message"], issue_id: @error.id)
   end
