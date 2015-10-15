@@ -54,6 +54,7 @@ gem 'puma'
 gem 'kaminari'
 
 #gem for intercom integration
+gem 'intercom', "~> 3.2.0"
 gem "intercom-rails"
 
 group :development do

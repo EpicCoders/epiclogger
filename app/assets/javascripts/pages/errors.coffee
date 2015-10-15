@@ -89,9 +89,10 @@ manipulateShowElements = (data) ->
   else
     $('.resolved').hide()
     $('.resolved_at').hide()
-  data.avatars = getAvatars(data).slice(0,2)
+
+  data.avatars = getAvatars(data).slice(0,3)
   data.subscribers_count = countSubscribers(data)
-  if data.subscribers_count > 2
+  if data.subscribers_count > 3
     $('#truncate').show()
   else
     $('#truncate').hide()
@@ -101,7 +102,7 @@ manipulateShowElements = (data) ->
       $('#truncate').text("...show less")
     else
       $('#truncate').text("...show more")
-      data.avatars = getAvatars(data).slice(0,2)
+      data.avatars = getAvatars(data).slice(0,3)
 
 SortByUsersSubscribed = (a, b) ->
   aError = a.users_count
