@@ -9,51 +9,62 @@ directive = {
       html: ()->
         moment(this.last_occurrence).calendar()
   },
-  group:{
-    warning: {
-      href: (params) ->
-        Routes.grouped_issue_path(this.id)
-    }
-    users_count:
-      html: ()->
-        "#{this.users_count} users subscribed"
-    last_occurrence:
-      html: ()->
-        moment(this.last_occurrence).calendar()
-  },
   created_at:
     html: ()->
       moment(this.created_at).calendar()
   last_occurrence:
     html: ()->
       moment(this.last_occurrence).calendar()
+  resolved_at:
+    html: ()->
+      moment(this.resolved_at).calendar()
   subscribers_count:
     html: ()->
       "Send an update to #{this.subscribers_count} subscribers"
+  stacktrace:
+    html: ()->
+      error = this.issues[0].issue_data
+      "#{error[0].filename} ? in #{error[0].function} at line #{error[0].lineno}/#{error[0].colno} <br/><br/>#{error[1].filename} ? in #{error[1].function} at line #{error[1].lineno}/#{error[1].colno}"
+  issue_subscriber:
+    html: ()->
+      "Id: #{this.issues[0].subscriber.id}<br/><br/>IP Adress: 10.156.45.154.. <br/><br/>Email: #{this.issues[0].subscriber.email}<br/><br/>Data: ()"
 }
 PubSub.subscribe('assigned.website', (ev, website)->
   switch gon.action
     when "index"
-      $.page = 1
-      request(website.id, $.page)
+      page = 1
+      request(website.id, page)
       $('.next').on 'click', () ->
-        $.page = $.page + 1
-        request(website.id, $.page)
+        page = page + 1
+        request(website.id, page)
       $('.previous').on 'click', () ->
-        $.page = $.page - 1
-        request(website.id, $.page)
+        page = page - 1
+        request(website.id, page)
     when 'show'
       $.getJSON '/api/v1/errors/' + gon.error_id, { website_id: website.id }, (data) ->
-        ($('.status').removeClass('disabled') && $('#solve').attr('disabled', 'disabled')) if data.status == 'resolved'
+        manipulateShowElements(data)
         $('#grouped-issuedetails').render data, directive
-        $('#missing-errors').hide() if data != null
 )
 
 request = (website_id, page) ->
-  $.getJSON Routes.api_v1_errors_path(), { website_id: website_id, page: $.page }, (data) ->
-    render({groups: data.groups.slice(($.page-1)*8, $.page*8), page: $.page, pages: data.pages})
+  $.getJSON Routes.api_v1_errors_path(), { website_id: website_id, page: page }, (data) ->
+    manipulateIndexElements(data)
 
-render = (data) ->
+getAvatars = (data) ->
+  $.src = []
+  $.each data.issues, (index, data) ->
+    $.src.push(data.subscriber.avatar_url)
+  $.each $.src, (index, avatar_url) ->
+    $('img').attr('src', avatar_url)
+  return $.src
+
+countSubscribers = (data) ->
+  subscribers_count = 0
+  $.each data.issues, (index, issue) ->
+    subscribers_count += issue.subscribers_count
+  return subscribers_count
+
+manipulateIndexElements = (data) ->
   $.obj = data
   if data.groups.length > 0
     $('#missing-errors').hide()
@@ -65,13 +76,38 @@ render = (data) ->
     $('.previous').removeClass('disabled') if data.page != 1
     $('.previous').addClass('disabled') if data.page == 1
   else
+    $('.side').hide()
+    $('.buttons').hide()
+    $('#grouped-issues').hide()
     $('#missing-errors').show()
   $('#grouped-issuescontainer').render data, directive
 
-# SortByUsersSubscribed = (a, b) ->
-#   aError = a.users_count
-#   bError = b.users_count
-#   if aError < bError then 1 else if aError > bError then -1 else 0
+manipulateShowElements = (data) ->
+  if data.status == 'resolved'
+    $('#solve').hide()
+    $('.notify').attr('disabled', 'disabled')
+  else
+    $('.resolved').hide()
+    $('.resolved_at').hide()
+
+  data.avatars = getAvatars(data).slice(0,3)
+  data.subscribers_count = countSubscribers(data)
+  if data.subscribers_count > 3
+    $('#truncate').show()
+  else
+    $('#truncate').hide()
+  $('#truncate').on 'click', (e) ->
+    if $('#truncate').text() == "...show more"
+      data.avatars = getAvatars(data)
+      $('#truncate').text("...show less")
+    else
+      $('#truncate').text("...show more")
+      data.avatars = getAvatars(data).slice(0,3)
+
+SortByUsersSubscribed = (a, b) ->
+  aError = a.users_count
+  bError = b.users_count
+  if aError < bError then 1 else if aError > bError then -1 else 0
 
 SortByLastOccurrence = (a, b) ->
   aTime = a.last_occurrence
@@ -83,14 +119,15 @@ $('select#sortinput').change ->
   console.log theValue
   if theValue == "Last occurrence"
     $('#grouped-issues').render $.obj.grouped_issues.sort(SortByLastOccurrence), directive
-  # else if theValue == "Users subscribed"
-  #   $('#grouped-issues').render $.obj.grouped_issues.sort(SortByUsersSubscribed), directive
+  else if theValue == "Users subscribed"
+    $('#grouped-issues').render $.obj.grouped_issues.sort(SortByUsersSubscribed), directive
   return
 
 $('#solve').on 'click', (e)->
   e.preventDefault();
-  $('.status').removeClass('disabled')
-  $('#solve').attr('disabled', 'disabled')
+  $('#solve').hide()
+  $('.resolved').show()
+  $('.notify').attr('disabled', 'disabled')
   $.ajax
     data: {error: {status: 'resolved'}}
     url: Routes.api_v1_error_url(gon.error_id)
@@ -119,6 +156,6 @@ $('form#notify').submit ->
     type: 'POST'
     data: {message: dataString}
     success: (data) ->
-      # finish load
+      $('.messageTextarea').val('')
       return
   false

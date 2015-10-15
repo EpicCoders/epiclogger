@@ -1,41 +1,32 @@
-#grouped-issuedetails.row.error
+#grouped-issuedetails.row.issues
   .col-lg-9.col-md-8.pagecontainer
-    .pagetitle
-      %h3 Error #24601
+    %h3 Error #24601
     / %button.btn.btn-primary.pull-right
     /   %span.fa.fa-star
     /   Assign task
-    %button.btn.btn-primary.pull-right.resolved#solve
+    %button.btn.btn-primary.pull-right#solve
       %span.fa.fa-check
       Mark resolved
-    %button.btn.btn-success.disabled.pull-right.status
+    %button.btn.btn-success.pull-right.resolved
       %span.fa.fa-check
       Resolved
     .clearfix
     %br/
-    / .panel.panel-default.codeview
-    /   .panel-heading Exception
-    /   .panel-body
-    /     %p
-    /       %strong Expected ")"
-    /       in app.js 20:33
-    /     .codepanel
-    /       %span.line 16. function helloWorld() {
-    /       %span.line 17.     // Say hello world until the user starts questioning
-    /       %span.line 18.     // the meaningfulness of their existence.
-    /       %span.line 19.     for (var i = 42; --i &gt;= 0;) {
-    /       %span.line.error
-    /         20. alert('Hello ' + String(world)
-    /         %span.char ;
-    /       %span.line 21.     }
-    /       %span.line 22. }
+    .panel.panel-default.codeview
+      .panel-heading Exception
+      .panel-body
+        %p
+          %strong.message
+        .codepanel
+          %span.line.error
+            .stacktrace
     .panel.panel-default
       .panel-heading Update
       .panel-body
         %form#notify
           .form-group
             %label.subscribers_count{:for => "subscriber_update"}
-            %textarea#subscriber_update.form-control.messageTextarea{:rows => "3"}
+            %textarea#subscriber_update.form-control.notify.messageTextarea{:rows => "3"}
           .row
             .col-md-9.col-xs-7
               .checkbox
@@ -43,7 +34,7 @@
                   %input{:type => "checkbox", :value => ""}/
                   Notify users by email
             .col-md-3.col-xs-5
-              %button.btn.btn-primary.pull-right#subscriber_update
+              %button.btn.btn-primary.pull-right.notify#subscriber_update
                 %span.fa.fa-paper-plane
                 Send
     .panel.panel-default
@@ -75,22 +66,63 @@
           %span.activity
             Error occured on
             %strong Homepage
+    .panel.panel-default.codeview
+      .panel-heading Request
+      .panel-body
+        .codepanel
+          %strong.view
+          %br/
+        .codepanel
+          %strong.data
+    .panel.panel-default.codeview
+      .panel-heading User
+      .panel-body
+        .codepanel
+          %strong.issue_subscriber
+    / .panel.panel-default
+    /   .panel-heading Exception
+    /   .panel-body
+    /     %p
+    /       %strong Expected ")"
+    /       in app.js 20:33
+    /     .codepanel
+    /       %span.line 16. function helloWorld() {
+    /       %span.line 17.     // Say hello world until the user starts questioning
+    /       %span.line 18.     // the meaningfulness of their existence.
+    /       %span.line 19.     for (var i = 42; --i &gt;= 0;) {
+    /       %span.line.error
+    /         20. alert('Hello ' + String(world)
+    /         %span.char ;
+    /       %span.line 21.     }
+    /       %span.line 22. }
   .col-lg-3.col-md-4.sidepanel
     %h4 Details
     .panelbox.propertybox
       %p
+        %strong Status:
+        %small.status unresolved
+      %p
         %strong First occurrence:
-        .created_at 21/04 (two weeks ago)
+        %small.created_at 21/04 (two weeks ago)
       %p
         %strong Last occurrence:
-        .last_occurrence 11:18 (one hour ago)
-    / .panelbox.propertybox
-    /   %p
-    /     %strong Level:
-    /     Error
-    /   %p
-    /     %strong Logger:
-    /     Javascript
+        %small.last_occurrence 11:18 (one hour ago)
+      %p.resolved
+        %strong Resolved at:
+        %small.resolved_at
+    .panelbox.propertybox
+      %p
+        %strong Level:
+        %small.level Error
+      %p
+        %strong Logger:
+        %small.issue_logger Javascript
+      %p
+        %strong Url:
+        %small http://localhost/raven/raven-js/example/
+      %p
+        %strong OS:
+        %small Windows
     / .panelbox.propertybox
     /   %p
     /     %strong Pages:
@@ -110,17 +142,30 @@
     /     %br/
     /     Mozilla Firefox
     /     %span.badge 17
+    / %h4 Filter
+    / #filterbox.panelbox
+    /   %form.panel.panel-default
+    /     %h5{"data-target" => "#collapse_page", "data-toggle" => "collapse"}
+    /       Page
+    /       %span.fa.fa-chevron-down
+    /     #collapse_page.collapse
+    /       .checkbox
+    /         %label
+    /           %input{:type => "checkbox", :value => ""}/
+    /           Homepage
     .panelbox.propertybox.faces
       %p
         %strong Subscribed users:
-        %p.subscribers
-          %img{:src => "http://lorempixel.com/48/48/people/1"}/
-        / %span + 12 anonymous
-    / .panelbox.propertybox.inputs
-    /   %p
-    /     %strong Public URL:
-    /     %input#permalink.form-control.input-sm{:type => "text", :value => "http://epiclogger.io/error/24601"}/
-    /     %a.btn.btn-primary.btn-sm.btn-block{:href => "#"} Disable public access
+        %p
+        .avatars
+          %img{:src => "http://lorempixel.com/48/48/people/1"}
+        %p
+          #truncate ...show more
+      %br/
+      / %p
+      /   %strong Public URL:
+      /   %input#permalink.form-control.input-sm{:disabled => " ", :type => "text", :value => "http://epiclogger.io/errors/#{params[:id]}"}/
+      /   %a.btn.btn-primary.btn-sm.btn-block{:href => "#"} Disable public access
 
 :javascript
   $('#permalink').on('focus', function() {

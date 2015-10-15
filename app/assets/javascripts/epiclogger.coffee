@@ -12,11 +12,11 @@ window.EpicLogger = (->
     $(window).trigger 'resize'
 
   sidebarToggle: ->
-    $('#sidebar .selectbox > p, .title').on 'click', (e) ->
+    $('#sidebar .selectbox > p, #websites-sidebar').on 'click', (e) ->
       select = $('#sidebar .selectbox');
       if select.hasClass 'open'
         select.removeClass 'open'
-        select.addClass 'closed'
+        select.addClass 'closed '
         select.find('.options').slideUp 80
         select.find('#add-new').slideUp 80
       else
@@ -24,6 +24,7 @@ window.EpicLogger = (->
         select.addClass 'open'
         select.find('.options').slideDown 80
         select.find('#add-new').slideDown 80
+
 
   logout: ->
     $.removeCookie('pickedWebsite', {path: '/'})

@@ -137,6 +137,10 @@ GEM
       nokogiri (~> 1.6.0)
       ruby_parser (~> 3.5)
     i18n (0.7.0)
+    intercom (3.2.0)
+      json (~> 1.8)
+    intercom-rails (0.2.29)
+      activesupport (> 3.0)
     jbuilder (2.3.1)
       activesupport (>= 3.0.0, < 5)
       multi_json (~> 1.2)
@@ -333,6 +337,8 @@ DEPENDENCIES
   gon
   haml-rails
   heroku-deflater
+  intercom (~> 3.2.0)
+  intercom-rails
   jbuilder (~> 2.0)
   jquery-rails
   jquery-turbolinks
