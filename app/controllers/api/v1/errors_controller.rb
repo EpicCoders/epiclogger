@@ -9,7 +9,6 @@ class Api::V1::ErrorsController < Api::V1::ApiController
   end
 
   def show
-    binding.pry
     @grouped_issue = GroupedIssue.find(params[:id])
   end
 
