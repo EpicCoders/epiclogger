@@ -53,6 +53,9 @@ gem 'puma'
 # Add Kaminari for pagination.
 gem 'kaminari'
 
+#Gem for test coverage
+gem 'simplecov', :require => false, :group => :test
+
 group :development do
   gem "better_errors"
   gem "binding_of_caller"

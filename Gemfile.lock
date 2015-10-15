@@ -352,6 +352,7 @@ DEPENDENCIES
   sass-rails (~> 5.0.1)
   sdoc (~> 0.4.0)
   shoulda-matchers
+  simplecov
   spring
   spring-commands-rspec
   sprockets-rails
