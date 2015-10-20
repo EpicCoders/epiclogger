@@ -21,10 +21,6 @@ directive = {
   subscribers_count:
     html: ()->
       "Send an update to #{this.subscribers_count} subscribers"
-  stacktrace:
-    html: ()->
-      error = this.issues[0].issue_data
-      "#{error[0].filename} ? in #{error[0].function} at line #{error[0].lineno}/#{error[0].colno} <br/><br/>#{error[1].filename} ? in #{error[1].function} at line #{error[1].lineno}/#{error[1].colno}"
   issue_subscriber:
     html: ()->
       "Id: #{this.issues[0].subscriber.id}<br/><br/>IP Adress: 10.156.45.154.. <br/><br/>Email: #{this.issues[0].subscriber.email}<br/><br/>Data: ()"
@@ -82,7 +78,25 @@ manipulateIndexElements = (data) ->
     $('#missing-errors').show()
   $('#grouped-issuescontainer').render data, directive
 
+errorStacktrace = (data) ->
+  $('#expand_2').hide()
+  $('#div2').hide()
+  issue_error = data.issues[0].issue_data
+  if issue_error.length > 1
+    $('<p>' + issue_error[1].filename + ' ? in ' + issue_error[1].function + ' at line ' + issue_error[1].lineno + '/' + issue_error[1].colno + '</p>').prependTo '.stacktrace'
+    $('#div2').show()
+    $('#expand_2').show()
+    issue_url_2 = issue_error[1].filename
+    $.get issue_url_2, (data) ->
+      $('#expand_2').html data
+
+  $('<p>' + issue_error[0].filename + ' ? in ' + issue_error[0].function + ' at line ' + issue_error[0].lineno + '/' + issue_error[0].colno + '</p>').prependTo '.stacktrace'
+  issue_url_1 = issue_error[0].filename
+  $.get issue_url_1, (data) ->
+    $('#expand_1').html data
+
 manipulateShowElements = (data) ->
+  errorStacktrace(data)
   if data.status == 'resolved'
     $('#solve').hide()
     $('.notify').attr('disabled', 'disabled')

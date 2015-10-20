@@ -41,7 +41,7 @@ class Api::V1::ErrorsController < Api::V1::ApiController
       platform: error_params["platform"],
       group_id: @group.id
       # error_params["stacktrace"]["frames"].to_s.gsub(/=>|\./, ":")
-    ).find_or_create_by(data: error_params["stacktrace"]["frames"].to_s.gsub(/=>|\./, ":"), subscriber_id: subscriber.id)
+    ).find_or_create_by(data: error_params["stacktrace"]["frames"].to_s.gsub('=>', ':'), subscriber_id: subscriber.id)
 
     message = Message.create(content: error_params["message"], issue_id: @error.id)
   end
