@@ -18,7 +18,7 @@ directive = {
   resolved_at:
     html: ()->
       moment(this.resolved_at).calendar()
-  page_title:
+  error_title:
     html: ()->
       this.issues[0].page_title
   subscribers_count:
@@ -89,7 +89,8 @@ errorStacktrace = (data) ->
     $('<p>' + issue.filename + ' ? in ' + issue.function + ' at line ' + issue.lineno + '/' + issue.colno + '</p>' + button).prependTo '.stacktrace'
     $.each data.issues[0].data, (index, object) ->
       $.each object, (key, value) ->
-        $("#expand_"+nr).text value
+        $('.stacktrace').append("<div class=collapse id='expand_"+nr+"'></div>")
+        $('#expand_' + nr).text value
 
 manipulateShowElements = (data) ->
   errorStacktrace(data)
