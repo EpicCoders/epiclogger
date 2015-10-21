@@ -18,6 +18,9 @@ directive = {
   resolved_at:
     html: ()->
       moment(this.resolved_at).calendar()
+  page_title:
+    html: ()->
+      this.issues[0].page_title
   subscribers_count:
     html: ()->
       "Send an update to #{this.subscribers_count} subscribers"
