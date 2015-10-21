@@ -79,14 +79,14 @@ manipulateIndexElements = (data) ->
   $('#grouped-issuescontainer').render data, directive
 
 errorStacktrace = (data) ->
-  $('#expand_2').hide()
-  $('#div2').hide()
-  issue_error = data.issues[0].issue_data
-  if issue_error.length > 1
-    $('<p>' + issue_error[1].filename + ' ? in ' + issue_error[1].function + ' at line ' + issue_error[1].lineno + '/' + issue_error[1].colno + '</p>').prependTo '.stacktrace'
-    $('#div2').show()
-    $('#expand_2').show()
-  $('<p>' + issue_error[0].filename + ' ? in ' + issue_error[0].function + ' at line ' + issue_error[0].lineno + '/' + issue_error[0].colno + '</p>').prependTo '.stacktrace'
+  nr =0
+  $.each data.issues[0].description, (index, issue) ->
+    nr+=1
+    button = ' <button class="btn btn-warning btn-xs glyphicon glyphicon-plus" data-target="#expand_'+nr+'"+ data-toggle="collapse" title="Click to expand"> View source</button><div class="collapse" id="#expand_'+nr+'"></div>'
+    $('<p>' + issue.filename + ' ? in ' + issue.function + ' at line ' + issue.lineno + '/' + issue.colno + '</p>' + button).prependTo '.stacktrace'
+    $.each data.issues[0].data, (index, object) ->
+      $.each object, (key, value) ->
+        $("#expand_"+nr).text value
 
 manipulateShowElements = (data) ->
   errorStacktrace(data)
