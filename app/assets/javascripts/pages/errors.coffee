@@ -82,15 +82,17 @@ manipulateIndexElements = (data) ->
   $('#grouped-issuescontainer').render data, directive
 
 errorStacktrace = (data) ->
-  nr =0
+  issue_nr =0
   $.each data.issues[0].description, (index, issue) ->
-    nr+=1
-    button = ' <button class="btn btn-warning btn-xs glyphicon glyphicon-plus" data-target="#expand_'+nr+'"+ data-toggle="collapse" title="Click to expand"> View source</button><div class="collapse" id="#expand_'+nr+'"></div>'
+    issue_nr+=1
+    button = ' <button class="btn btn-warning btn-xs glyphicon glyphicon-plus" data-target="#expand_'+issue_nr+'"+ data-toggle="collapse" title="Click to expand"> View source</button>'
     $('<p>' + issue.filename + ' ? in ' + issue.function + ' at line ' + issue.lineno + '/' + issue.colno + '</p>' + button).prependTo '.stacktrace'
-    $.each data.issues[0].data, (index, object) ->
-      $.each object, (key, value) ->
-        $('.stacktrace').append("<div class=collapse id='expand_"+nr+"'></div>")
-        $('#expand_' + nr).text value
+  object_nr =0
+  $.each data.issues[0].data, (index, object) ->
+    object_nr+=1
+    $('.stacktrace').append("<div class=collapse id='expand_"+object_nr+"'></div>")
+    $.each object, (key, value) ->
+      $('#expand_' + object_nr).text value
 
 manipulateShowElements = (data) ->
   errorStacktrace(data)
