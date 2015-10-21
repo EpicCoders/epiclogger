@@ -86,14 +86,7 @@ errorStacktrace = (data) ->
     $('<p>' + issue_error[1].filename + ' ? in ' + issue_error[1].function + ' at line ' + issue_error[1].lineno + '/' + issue_error[1].colno + '</p>').prependTo '.stacktrace'
     $('#div2').show()
     $('#expand_2').show()
-    issue_url_2 = issue_error[1].filename
-    $.get issue_url_2, (data) ->
-      $('#expand_2').html data
-
   $('<p>' + issue_error[0].filename + ' ? in ' + issue_error[0].function + ' at line ' + issue_error[0].lineno + '/' + issue_error[0].colno + '</p>').prependTo '.stacktrace'
-  issue_url_1 = issue_error[0].filename
-  $.get issue_url_1, (data) ->
-    $('#expand_1').html data
 
 manipulateShowElements = (data) ->
   errorStacktrace(data)

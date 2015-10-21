@@ -28,12 +28,18 @@ class Api::V1::ErrorsController < Api::V1::ApiController
   def add_error
     subscriber = current_site.subscribers.create_with(name: "Name for subscriber").find_or_create_by!(email: error_params["user"]["email"], website_id: current_site.id)
 
+    if error_params["stacktrace"].blank?
+      md5 = Digest::MD5.hexdigest(error_params["platform"] + error_params["culprit"] + error_params["message"])
+    else
+      md5 = Digest::MD5.hexdigest(error_params["stacktrace"].to_s)
+    end
+
     @group = GroupedIssue.create_with(
       issue_logger: error_params["logger"],
       view: error_params["request"]["url"],
       status: 3,platform: error_params["platform"],
       message: error_params["message"]
-    ).find_or_create_by(data: Digest::MD5.hexdigest(error_params["request"]["headers"]["User-Agent"]), website_id: current_site.id)
+    ).find_or_create_by(data: md5, website_id: current_site.id)
 
     @error = Issue.create_with(
       description: error_params["request"]["headers"]["User-Agent"],
