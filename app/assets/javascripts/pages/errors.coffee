@@ -90,7 +90,7 @@ errorStacktrace = (data) ->
   object_nr =0
   $.each data.issues[0].data, (index, object) ->
     object_nr+=1
-    $('.stacktrace').append("<div class=collapse id='expand_"+object_nr+"'></div>")
+    $('.stacktrace_error').append("<div class=collapse id='expand_"+object_nr+"'></div>")
     $.each object, (key, value) ->
       $('#expand_' + object_nr).text value
 
