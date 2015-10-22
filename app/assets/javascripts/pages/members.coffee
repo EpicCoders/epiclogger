@@ -20,6 +20,7 @@ form_signup.submit((e)->
       dataType: 'json'
       data: { website_member: { token: gon.token, email: form_signup.find('#email').val() } }
       success: (data) ->
+        alert 'Confirm email first'
         window.location.href = '/websites'
   ).fail ((resp) ->
     EpicLogger.addAlert(resp.data.errors.full_messages)

@@ -14,7 +14,7 @@ form_login.submit((e)->
     ).fail ((resp) ->
       console.log "we failed"
       console.log resp
+      alert 'Email or password is invalid'
     )
-
 )
 
