@@ -16,16 +16,20 @@ describe Api::V1::ErrorsController, :type => :controller do
             name: 'Gogu',
             email: 'email@example2.com'
           },
+        culprit: "dasdas",
         logger: "javascript",
         name: 'Name for subscriber',
         extra:{
-          page_title: 'New title'
+          title: 'New title'
       },
         request:{
           url: "http://www.example.com",
           headers:{
             "User-Agent" => "ReferenceError: fdas is not defined"
             }
+          },
+        stacktrace:{
+          frames: [{filename: "http://www.example.com"}]
           },
         platform: "php",
         message: 'new message'
@@ -160,7 +164,9 @@ describe Api::V1::ErrorsController, :type => :controller do
             {
               id: issue_error.id,
               platform: issue_error.platform,
-              data: issue_error.data,
+              page_title: issue_error.page_title,
+              data: JSON.parse(issue_error.data),
+              description: JSON.parse(issue_error.description),
               subscriber:{
                 id: subscriber.id,
                 email: subscriber.email,

@@ -12,7 +12,7 @@ window.EpicLogger = (->
     $(window).trigger 'resize'
 
   sidebarToggle: ->
-    $('#sidebar .selectbox > p').on 'click', (e) ->
+    $('#sidebar .selectbox > p, #websites-sidebar').on 'click', (e) ->
       select = $('#sidebar .selectbox');
       if select.hasClass 'open'
         select.removeClass 'open'

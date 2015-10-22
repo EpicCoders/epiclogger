@@ -346,6 +346,14 @@
   }
 }
 
+#truncate {
+  color:blue;
+  cursor:pointer;
+}
+#truncate:hover {
+    color:black;
+}
+
 @media all and (max-width: 992px) {
   #maincontainer {
     margin: 0;

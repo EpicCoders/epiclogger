@@ -71,7 +71,7 @@ class Api::V1::ErrorsController < Api::V1::ApiController
       if params[:sentry_data].is_a?(String)
         error_params ||= JSON.parse(params[:sentry_data])
       else
-        error_params ||= params.require(:error).permit(:description, :message, :name, :status, :logger, :platform, :request => [:url, :headers => ["User-Agent"]], :user => [:email, :name], :extra => [:page_title])
+        error_params ||= params.require(:error).permit(:description, :message, :name, :status, :logger, :platform, :stacktrace => [:frames => ["filename"]] ,:request => [:url, :headers => ["User-Agent"]], :user => [:email, :name], :extra => [:title])
       end
     end
 end
