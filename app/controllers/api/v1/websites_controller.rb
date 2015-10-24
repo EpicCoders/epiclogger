@@ -12,6 +12,11 @@ class Api::V1::WebsitesController < Api::V1::ApiController
     @website = current_member.websites.find(params[:id])
   end
 
+  def update
+    @website = Website.find(website_params[:id])
+    @website.update_attributes(app_key: website_params[:app_key])
+  end
+
   def destroy
     @website = current_member.websites.find(params[:id])
     @website.destroy()
@@ -19,6 +24,6 @@ class Api::V1::WebsitesController < Api::V1::ApiController
 
   private
 		def website_params
-			params.require(:website).permit(:domain, :title, :id, :app_id, :app_key)
+			params.require(:website).permit(:domain, :website_id, :title, :id, :app_id, :app_key)
 		end
 end

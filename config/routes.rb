@@ -36,7 +36,7 @@ Rails.application.routes.draw do
       resources :invitations, only: [:create]
       resources :subscribers, only: [:index]
       resources :members, only: [:show, :create, :index, :destroy]
-      resources :websites, only: [:index, :create, :destroy, :show]
+      resources :websites, only: [:index, :show, :create, :update, :destroy]
     end
   end
 end

@@ -1,0 +1,1 @@
+json.website(@website, :id, :app_id, :app_key)
