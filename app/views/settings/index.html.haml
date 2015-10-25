@@ -7,6 +7,9 @@
       Save settings
     .clearfix
     %br/
+    %a.btn.btn-link{:href => "installations"}
+      %span.glyphicon.glyphicon-flag
+      Get help to install libraries
     .panel.panel-default
       .panel-heading
         API Keys
@@ -16,8 +19,11 @@
       .panel-body
         #current-website
           .codeview
-            %p.app_id
             .codepanel
+              .app_id
+              .members
+              .subscribers
+              .errors
               .col-lg-1
                 %h5 App Key:
               .col-lg-8
@@ -25,3 +31,4 @@
               .col-lg-3
                 %span.btn.btn-danger.pull-right.glyphicon.glyphicon-erase
                   Revoke
+

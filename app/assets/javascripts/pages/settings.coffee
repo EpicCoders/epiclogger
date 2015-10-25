@@ -1,7 +1,16 @@
 directive = {
   app_id:
     html: ()->
-      "App Id: #{this.app_id}"
+      "<h5>App Id: #{this.app_id}<h5>"
+  errors:
+    html: ()->
+      "<h5>Errors: #{this.errors}</h5>"
+  subscribers:
+    html: ()->
+      "<h5>Subscribers: #{this.subscribers}</h5>"
+  members:
+    html: ()->
+      "<h5>Members: #{this.members}</h5>"
 }
 PubSub.subscribe('assigned.website', (ev, website)->
   switch gon.action
