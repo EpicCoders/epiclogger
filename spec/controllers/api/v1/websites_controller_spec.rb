@@ -3,6 +3,8 @@ require 'rails_helper'
 describe Api::V1::WebsitesController, :type => :controller do
   let(:member) { create :member }
   let(:website) { create :website }
+  let(:group) {create :grouped_issue, website: website}
+  let(:subscriber) { create :subscriber, website: website }
   let!(:website_member) { create :website_member, website: website, member: member }
   let(:default_params) { {website_id: website.id, format: :json} }
 
@@ -34,7 +36,10 @@ describe Api::V1::WebsitesController, :type => :controller do
               title: website.title,
               domain: website.domain,
               app_id: website.app_id,
-              app_key: website.app_key
+              app_key: website.app_key,
+              errors: website.grouped_issues.count,
+              subscribers: website.subscribers.count,
+              members: website.members.count
             }
           ]
         }.to_json)
@@ -122,7 +127,10 @@ describe Api::V1::WebsitesController, :type => :controller do
           app_id: website.app_id,
           app_key: website.app_key,
           domain: website.domain,
-          title: website.title
+          title: website.title,
+          errors: website.grouped_issues.count,
+          subscribers: website.subscribers.count,
+          members: website.members.count
         }.to_json)
       end
     end
