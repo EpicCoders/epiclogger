@@ -25,6 +25,8 @@ The easiest way to install EpicLogger locally is by using the Vagrant image:
 
 If you can't use vagrant on your system then you need to follow the below Installation guide and install all the required libraries.
 
+If the app doesn't run you need to go and run ```vagrant ssh``` in your terminal on the same folder and then once you are in run ```sudo start epiclogger```.
+
 ### Instalation guide
 
 #### OSX
