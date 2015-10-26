@@ -1,9 +1,12 @@
-.row
+#current-website.row
   .col-md-12.pagecontainer
     .pagetitle
       %h3 Site Settings
     .clearfix
     %br/
+    %a.btn.btn-link{:href => "installations"}
+      %span.glyphicon.glyphicon-flag
+      Get help to install libraries
     .panel.panel-default
       .panel-heading
         API Keys
@@ -11,21 +14,32 @@
           %span.fa.fa-key
           Generate new key
       .panel-body
-        #current-website
-          .codeview
-            .codepanel
-              .app_id
-              .members
-              .subscribers
-              .errors
-              .col-lg-1
-                %h5 App Key:
-              .col-lg-8
-                %p.app_key
-              .col-lg-3
-                %span.btn.btn-danger.pull-right.glyphicon.glyphicon-erase
-                  Revoke
-    %a.btn.btn-link{:href => "installations"}
-      %span.glyphicon.glyphicon-flag
-      Get help to install libraries
-
+        .codeview
+          .codepanel
+            .col-lg-1
+              %h5 App Id:
+              %h5 App Key:
+            .col-lg-8
+              %h5.app_id
+              %h5.app_key
+            .col-lg-3
+              %br
+              %span.btn.btn-danger.pull-right#revoke
+                Revoke
+    .bs-example{"data-example-id" => "badges-in-pills"}
+      %ul.nav.nav-pills{:role => "tablist"}
+        %li.active{:role => "presentation"}
+          .label.label-success
+            %i.fa.fa-user
+            Members
+            .badge.members
+        %li.active{:role => "presentation"}
+          .label.label-success
+            %i.fa.fa-users
+            Subscribers
+            .badge.subscribers
+        %li.active{:role => "presentation"}
+          .label.label-danger
+            %i.fa.fa-wrench
+            Errors
+            .badge.errors

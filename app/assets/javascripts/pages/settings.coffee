@@ -1,29 +1,14 @@
-directive = {
-  app_id:
-    html: ()->
-      "<h5>App Id: #{this.app_id}<h5>"
-  errors:
-    html: ()->
-      "<h5>Errors: #{this.errors}</h5>"
-  subscribers:
-    html: ()->
-      "<h5>Subscribers: #{this.subscribers}</h5>"
-  members:
-    html: ()->
-      "<h5>Members: #{this.members}</h5>"
-}
 PubSub.subscribe('assigned.website', (ev, website)->
   switch gon.action
     when "index"
       $.getJSON Routes.api_v1_website_path(website.id), (data) ->
-        $('#current-website').render data, directive
+        $('#current-website').render data
         manipulateSettingsData(data)
 )
 
-
 manipulateSettingsData = (data) ->
   $.website_id = data.id
-  $('#generateAppKey').on 'click', (e)->
+  $('#generateAppKey, #revoke').on 'click', (e)->
     e.preventDefault();
     $.randomKey = randomString()
     while jQuery.inArray($.randomKey, gon.keys) >= 0
@@ -37,8 +22,6 @@ manipulateSettingsData = (data) ->
         window.location = "/settings"
         alert 'Key updated'
     return
-
-  # $('#saveAppKey').on 'click', (e)->
 
 randomString = () ->
   chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz'
