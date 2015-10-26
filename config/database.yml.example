@@ -1,7 +1,7 @@
 development:
     adapter: postgresql
     encoding: unicode
-    database: epiclogger_dev 
+    database: epiclogger_dev
     pool: 5
     username: yolo
     password:

@@ -13,7 +13,6 @@ form_signup.submit((e)->
     password_confirmation: form_signup.find('#passwod_confirm').val()
   ).then((resp) ->
     console.log "we have success"
-    console.log resp
     $.ajax
       url: Routes.api_v1_members_url()
       type: 'post'
@@ -25,7 +24,6 @@ form_signup.submit((e)->
   ).fail ((resp) ->
     EpicLogger.addAlert(resp.data.errors.full_messages)
     console.log "we failed"
-    console.log resp
   )
 )
 directive = {

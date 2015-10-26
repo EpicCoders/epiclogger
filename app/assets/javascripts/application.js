@@ -25,6 +25,7 @@
 //= require nprogress
 //= require nprogress-turbolinks
 // require jquery.analytics.track
+//= require_tree ./sweet-alert
 
 //= require epiclogger
 // require_tree ./pages

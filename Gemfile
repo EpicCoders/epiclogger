@@ -47,6 +47,9 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # Loading env vars
 gem "figaro"
 
+#awesome replacement for JavaScript's alert.
+gem 'sweet-alert'
+
 # Add server puma
 gem 'puma'
 
