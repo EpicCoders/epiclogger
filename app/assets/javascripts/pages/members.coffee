@@ -19,8 +19,11 @@ form_signup.submit((e)->
       dataType: 'json'
       data: { website_member: { token: gon.token, email: form_signup.find('#email').val() } }
       success: (data) ->
-        alert 'Confirm email first'
-        window.location.href = '/websites'
+        swal("Confirm email first!", "Wellcome", "success")
+        setTimeout (->
+          window.location.href = '/login'
+          return
+        ), 3000
   ).fail ((resp) ->
     EpicLogger.addAlert(resp.data.errors.full_messages)
     console.log "we failed"
