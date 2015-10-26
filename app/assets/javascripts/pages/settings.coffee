@@ -24,13 +24,11 @@ PubSub.subscribe('assigned.website', (ev, website)->
 manipulateSettingsData = (data) ->
   $.website_id = data.id
   $('#generateAppKey').on 'click', (e)->
+    e.preventDefault();
     $.randomKey = randomString()
     while jQuery.inArray($.randomKey, gon.keys) >= 0
       $.randomKey = randomString()
     $('.app_key').html $.randomKey
-
-  $('#saveAppKey').on 'click', (e)->
-    e.preventDefault();
     $.ajax
       data: {website: {id: $.website_id, app_key: $.randomKey}}
       url: Routes.api_v1_website_url($.website_id)
@@ -39,6 +37,8 @@ manipulateSettingsData = (data) ->
         window.location = "/settings"
         alert 'Key updated'
     return
+
+  # $('#saveAppKey').on 'click', (e)->
 
 randomString = () ->
   chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz'

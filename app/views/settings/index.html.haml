@@ -2,18 +2,12 @@
   .col-md-12.pagecontainer
     .pagetitle
       %h3 Site Settings
-    %button.btn.btn-primary.pull-right#saveAppKey
-      %span.fa.fa-save
-      Save settings
     .clearfix
     %br/
-    %a.btn.btn-link{:href => "installations"}
-      %span.glyphicon.glyphicon-flag
-      Get help to install libraries
     .panel.panel-default
       .panel-heading
         API Keys
-        %button.btn.btn-default.pull-right#generateAppKey
+        %button.btn.btn-primary.pull-right#generateAppKey
           %span.fa.fa-key
           Generate new key
       .panel-body
@@ -31,4 +25,7 @@
               .col-lg-3
                 %span.btn.btn-danger.pull-right.glyphicon.glyphicon-erase
                   Revoke
+    %a.btn.btn-link{:href => "installations"}
+      %span.glyphicon.glyphicon-flag
+      Get help to install libraries
 
