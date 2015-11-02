@@ -145,7 +145,7 @@ $('#solve').on 'click', (e)->
     url: Routes.api_v1_error_url(gon.error_id)
     type: 'PUT'
     success: (result)->
-      alert 'Status updated'
+      swal("Status updated", "Great job!", "success")
   return
 
 $('.messageTextarea').keydown((event) ->

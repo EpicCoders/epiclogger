@@ -19,7 +19,7 @@ form_signup.submit((e)->
       dataType: 'json'
       data: { website_member: { token: gon.token, email: form_signup.find('#email').val() } }
       success: (data) ->
-        swal("Confirm email first!", "Wellcome", "success")
+        swal("Confirm email first!", "Welcome", "success")
         setTimeout (->
           window.location.href = '/login'
           return

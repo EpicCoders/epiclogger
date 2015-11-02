@@ -14,7 +14,6 @@ form_login.submit((e)->
     ).fail ((resp) ->
       console.log "we failed"
       console.log resp
-      swal("Email or password is invalid")
       swal {
         title: 'Error'
         text: 'Email or password is invalid'

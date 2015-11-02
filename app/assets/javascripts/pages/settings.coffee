@@ -16,5 +16,5 @@ manipulateSettingsData = (data) ->
       type: 'PUT'
       success: (result)->
         window.location = "/settings"
-        alert 'Key updated'
+        swal('Key updated')
     return

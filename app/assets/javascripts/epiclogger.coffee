@@ -105,7 +105,7 @@ window.EpicLogger = (->
         html+= "<li>#{index.replace(/_/g,' ')}: #{elem[0]}</li>"
       html+="</ul>"
       msg = html
-    alert(msg)
+    swal(msg)
 
   authInitialization: ->
     $.auth.configure({

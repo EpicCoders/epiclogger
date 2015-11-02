@@ -13,7 +13,7 @@ class Api::V1::WebsitesController < Api::V1::ApiController
   end
 
   def update
-    @website = Website.find(website_params[:id])
+    @website = current_member.websites.find(website_params[:id])
     @website.update_attributes(website_params)
   end
 
