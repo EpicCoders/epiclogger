@@ -89,4 +89,3 @@ PubSub.subscribe('assigned.website', (ev, website)->
         $('#members-container').render data, directive
 
 )
-
