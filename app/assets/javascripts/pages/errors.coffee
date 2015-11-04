@@ -43,6 +43,7 @@ PubSub.subscribe('assigned.website', (ev, website)->
       $.getJSON '/api/v1/errors/' + gon.error_id, { website_id: website.id }, (data) ->
         manipulateShowElements(data)
         $('#grouped-issuedetails').render data, directive
+        populateSidebar(data)
 
       $('#solve').on 'click', (e)->
         e.preventDefault();
@@ -69,6 +70,7 @@ PubSub.subscribe('assigned.website', (ev, website)->
         false
 )
 
+
 request = (website_id, page) ->
   $.getJSON Routes.api_v1_errors_path(), { website_id: website_id, page: page }, (data) ->
     manipulateIndexElements(data)
@@ -77,8 +79,8 @@ getAvatars = (data) ->
   $.src = []
   $.each data.issues, (index, data) ->
     $.src.push(data.subscriber.avatar_url)
-  $.each $.src, (index, avatar_url) ->
-    $('img').attr('src', avatar_url)
+  # $.each $.src, (index, avatar_url) ->
+  #   $('img').attr('src', avatar_url)
   return $.src
 
 countSubscribers = (data) ->
@@ -104,6 +106,49 @@ manipulateIndexElements = (data) ->
     $('.buttons').hide()
     $('#grouped-issues').hide()
     $('#missing-errors').show()
+  $('#grouped-issuescontainer').render data, directive
+
+changeError = (el) ->
+  if $.current_issue != parseInt($(el).find("input").val())
+    $(el).addClass("current_issue")
+    $('input[value="' + $.current_issue + '"]').parent().removeClass('current_issue')
+    window.location.replace(window.location.origin + "/errors/" + $(el).find("input").val())
+
+populateSidebar = (data) ->
+  $('.sidebar_elements').empty();
+  $.each data.groups , (index, issue) ->
+    message = {}
+    message.type = issue.message.split(":")[0]
+    message.content = issue.message.split(":")[1]
+    container = "<div class='sidebar-container'>
+                  <input value='" + issue.id + "' type='hidden'>
+                  <div class='sidebar-container-header'>
+                    <i class='icon-" + issue.platform + " header-icon'></i>
+                    <span class='pull-right muted'> 11:18 (one hour ago) </span>
+                  </div>
+                  <div class='sidebar-container-content panelbox'>
+                    <p class='error-title'>" + "<b>" + message.type + "</b>" + ":" + message.content + "</p>
+                  </div>
+                </div>"
+    $('.sidebar_elements').append(container)
+    if issue.id == $.current_issue
+      $('.sidebar-container').last().addClass("current_issue")
+    $('.sidebar-container').click ->
+      changeError(this)
+
+errorStacktrace = (data) ->
+  issue_nr =0
+  $.each data.issues[0].description, (index, issue) ->
+    issue_nr+=1
+    button = ' <button class="btn btn-warning btn-xs glyphicon glyphicon-plus" data-target="#expand_'+issue_nr+'"+ data-toggle="collapse" title="Click to expand"> View source</button>'
+    $('<p>' + issue.filename + ' ? in ' + issue.function + ' at line ' + issue.lineno + '/' + issue.colno + '</p>' + button).prependTo '.stacktrace'
+  object_nr =0
+  $.each data.issues[0].data, (index, object) ->
+    object_nr+=1
+    $('.stacktrace_error').append("<div class=collapse id='expand_"+object_nr+"'></div>")
+    $.each object, (key, value) ->
+      $('#expand_' + object_nr).text value
+
 
 manipulateShowElements = (data) ->
   # errorStacktrace(data)
