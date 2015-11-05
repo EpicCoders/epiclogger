@@ -7,14 +7,14 @@ directive = {
     }
     last_occurrence:
       html: ()->
-        moment(this.last_occurrence).calendar()
+        moment(this.last_seen).calendar()
   },
   created_at:
     html: ()->
       moment(this.created_at).calendar()
   last_occurrence:
     html: ()->
-      moment(this.last_occurrence).calendar()
+      moment(this.last_seen).calendar()
   resolved_at:
     html: ()->
       moment(this.resolved_at).calendar()
@@ -29,9 +29,9 @@ directive = {
   #     "Id: #{this.issues[0].subscriber.id}<br/><br/>IP Adress: 10.156.45.154.. <br/><br/>Email: #{this.issues[0].subscriber.email}<br/><br/>Data: ()"
 }
 PubSub.subscribe('assigned.website', (ev, website)->
+  page = 1
   switch gon.action
     when "index"
-      page = 1
       request(website.id, page)
       $('.next').on 'click', () ->
         page = page + 1
@@ -41,6 +41,7 @@ PubSub.subscribe('assigned.website', (ev, website)->
         request(website.id, page)
     when 'show'
       $.getJSON '/api/v1/errors/' + gon.error_id, { website_id: website.id }, (data) ->
+        $.current_issue = data.id
         manipulateShowElements(data)
         $('#grouped-issuedetails').render data, directive
         populateSidebar(data)
@@ -68,12 +69,25 @@ PubSub.subscribe('assigned.website', (ev, website)->
             $('.messageTextarea').val('')
             return
         false
+
+      sidebar_request(website.id,page,13)
+      $('.next').on 'click', () ->
+        page = page + 1
+        sidebar_request(website.id, page, 13)
+      $('.previous').on 'click', () ->
+        page = page - 1
+        sidebar_request(website.id, page, 13)
+
 )
 
 
 request = (website_id, page) ->
   $.getJSON Routes.api_v1_errors_path(), { website_id: website_id, page: page }, (data) ->
     manipulateIndexElements(data)
+
+sidebar_request = (website_id, page, error_count) ->
+  $.getJSON Routes.api_v1_errors_path(), { website_id: website_id, page: page, error_count: error_count }, (data) ->
+    populateSidebar(data)
 
 getAvatars = (data) ->
   $.src = []
@@ -108,14 +122,24 @@ manipulateIndexElements = (data) ->
     $('#missing-errors').show()
   $('#grouped-issuescontainer').render data, directive
 
+
 changeError = (el) ->
   if $.current_issue != parseInt($(el).find("input").val())
     $(el).addClass("current_issue")
     $('input[value="' + $.current_issue + '"]').parent().removeClass('current_issue')
     window.location.replace(window.location.origin + "/errors/" + $(el).find("input").val())
 
+$('#errors_back').click ->
+  window.location.replace(window.location.origin + "/errors")
+
 populateSidebar = (data) ->
+  $("#maincontainer").css("margin-left","450px")
   $('.sidebar_elements').empty();
+  $('.sidebar_pagination_text').html(data.page + '/' + data.pages)
+  $('.next').addClass('disabled') if data.page == data.pages
+  $('.next').removeClass('disabled') if data.page != data.pages
+  $('.previous').removeClass('disabled') if data.page != 1
+  $('.previous').addClass('disabled') if data.page == 1
   $.each data.groups , (index, issue) ->
     message = {}
     message.type = issue.message.split(":")[0]
@@ -184,7 +208,6 @@ SortByLastOccurrence = (a, b) ->
 
 $('select#sortinput').change ->
   theValue = $('option:selected').text()
-  console.log theValue
   if theValue == "Last occurrence"
     $('#grouped-issues').render $.obj.grouped_issues.sort(SortByLastOccurrence), directive
   else if theValue == "Users subscribed"

@@ -1,9 +1,6 @@
 #grouped-issuedetails.row.issues
-  .col-lg-9.col-md-8.pagecontainer
+  .col-lg-9.pagecontainer
     %h3.error_title Error #24601
-    / %button.btn.btn-primary.pull-right
-    /   %span.fa.fa-star
-    /   Assign task
     %button.btn.btn-primary.pull-right#solve
       %span.fa.fa-check
       Mark resolved
@@ -22,89 +19,6 @@
             .stacktrace
           %span.line
             .stacktrace_error
-    .container-fluid.multiplepanel
-      .container-fluid.col-lg-7
-        .panel.panel-default
-          .panel-heading Stream
-          #activitystream
-            %p.resolved
-              %span.time 14:12
-              %span.activity
-                Error marked resolved by
-                %strong woubuc
-            %p.user
-              %span.time 12:52
-              %span.activity Anonymous user subscribed to this error
-            %p.error
-              %span.time 12:52
-              %span.activity
-                Error occured on
-                %strong Homepage
-            %p.error
-              %span.time 12:37
-              %span.activity
-                Error occured on
-                %strong Homepage
-            %p.user
-              %span.time 11:15
-              %span.activity User woubuc subscribed to this error
-            %p.error
-              %span.time 11:14
-              %span.activity
-                Error occured on
-                %strong Homepage
-        .panel.panel-default.codeview
-          .panel-heading Request
-          .panel-body
-            .codepanel
-              %strong.view
-              %br/
-            .codepanel
-              %strong.data
-        .panel.panel-default.codeview
-          .panel-heading User
-          .panel-body
-            .codepanel
-              %strong.issue_subscriber
-      .container-fluid.col-lg-4.pull-right
-        .panel.panel-default.codeview
-          .panel-heading Details
-          .panel-body
-            .panelbox.propertybox
-              %p
-                %strong Status:
-                %small.status unresolved
-              %p
-                %strong First occurrence:
-                %small.created_at 21/04 (two weeks ago)
-              %p
-                %strong Last occurrence:
-                %small.last_occurrence 11:18 (one hour ago)
-              %p.resolved
-                %strong Resolved at:
-                %small.resolved_at
-            .panelbox.propertybox
-              %p
-                %strong Level:
-                %small.level Error
-              %p
-                %strong Logger:
-                %small.issue_logger Javascript
-              %p
-                %strong Url:
-                %small http://localhost/raven/raven-js/example/
-              %p
-                %strong OS:
-                %small Windows
-            .panelbox.propertybox.faces
-              %p
-                %strong Subscribed users:
-                %p
-                .avatars
-                  %img{:src => "http://lorempixel.com/48/48/people/1"}
-                %p
-                  #truncate ...show more
-              %br/
     .panel.panel-default
       .panel-heading Update
       .panel-body
@@ -122,24 +36,85 @@
               %button.btn.btn-primary.pull-right.notify#subscriber_update
                 %span.fa.fa-paper-plane
                 Send
-    / .panel.panel-default
-    /   .panel-heading Exception
-    /   .panel-body
-    /     %p
-    /       %strong Expected ")"
-    /       in app.js 20:33
-    /     .codepanel
-    /       %span.line 16. function helloWorld() {
-    /       %span.line 17.     // Say hello world until the user starts questioning
-    /       %span.line 18.     // the meaningfulness of their existence.
-    /       %span.line 19.     for (var i = 42; --i &gt;= 0;) {
-    /       %span.line.error
-    /         20. alert('Hello ' + String(world)
-    /         %span.char ;
-    /       %span.line 21.     }
-    /       %span.line 22. }
-  .col-lg-3.col-md-4.sidepanel.error_list
-    .sidebar_elements
+    .panel.panel-default
+      .panel-heading Stream
+      #activitystream
+        %p.resolved
+          %span.time 14:12
+          %span.activity
+            Error marked resolved by
+            %strong woubuc
+        %p.user
+          %span.time 12:52
+          %span.activity Anonymous user subscribed to this error
+        %p.error
+          %span.time 12:52
+          %span.activity
+            Error occured on
+            %strong Homepage
+        %p.error
+          %span.time 12:37
+          %span.activity
+            Error occured on
+            %strong Homepage
+        %p.user
+          %span.time 11:15
+          %span.activity User woubuc subscribed to this error
+        %p.error
+          %span.time 11:14
+          %span.activity
+            Error occured on
+            %strong Homepage
+    .panel.panel-default.codeview
+      .panel-heading Request
+      .panel-body
+        .codepanel
+          %strong.view
+          %br/
+        .codepanel
+          %strong.data
+    .panel.panel-default.codeview
+      .panel-heading User
+      .panel-body
+        .codepanel
+          %strong.issue_subscriber
+  .col-lg-2.sidepanel
+    %h4 Details
+    .panelbox.propertybox
+      %p
+        %strong Status:
+        %small.status unresolved
+      %p
+        %strong First occurrence:
+        %small.created_at 21/04 (two weeks ago)
+      %p
+        %strong Last occurrence:
+        %small.last_occurrence 11:18 (one hour ago)
+      %p.resolved
+        %strong Resolved at:
+        %small.resolved_at
+    .panelbox.propertybox
+      %p
+        %strong Level:
+        %small.level Error
+      %p
+        %strong Logger:
+        %small.issue_logger Javascript
+      %p
+        %strong Url:
+        %small http://localhost/raven/raven-js/example/
+      %p
+        %strong OS:
+        %small Windows
+    .panelbox.propertybox.faces
+      %p
+        %strong Subscribed users:
+        %p
+        .avatars
+          %img{:src => "http://lorempixel.com/48/48/people/1"}
+        %p
+          #truncate ...show more
+      %br/
 
 :javascript
   $('#permalink').on('focus', function() {

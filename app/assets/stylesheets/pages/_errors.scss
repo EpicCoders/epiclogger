@@ -2,6 +2,88 @@
   color:#bdbdbd;
 }
 
+#error_sidebar{
+  width: 450px;
+  float: left;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-box-shadow: 1px 0px 1px 1px rgba(189,189,189,0.5);
+  -moz-box-shadow: 1px 0px 1px 1px rgba(189,189,189,0.5);
+  box-shadow: 1px 0px 1px 1px rgba(189,189,189,0.5);
+
+  .sidebar_header{
+    text-align:left;
+    box-shadow: 0px 3px 2px -3px #bdbdbd;
+    height:60px;
+
+    #errors_back{
+      margin-top:15px;
+      margin-left:10px;
+      padding:10px;
+    }
+
+    .change_page{
+      float:right;
+      margin-top:15px;
+      margin-right:20px;
+      button{
+        padding:9px;
+        margin-left:10px;
+        margin-right:10px;
+      }
+    }
+  }
+
+  .sidebar_elements{
+
+    .current_issue{
+      background-color: #f7fbfe;
+      border-right:4px solid #3c98fc;
+    }
+
+    .sidebar-container{
+      box-shadow: 0px 4px 2px -4px #bdbdbd;
+
+      .sidebar-container-header{
+        height:30%;
+
+        i:before{
+          font-size:28px;
+          padding:5px;
+          margin-left:20px;
+        }
+
+        span{
+          margin-right:10px;
+          margin-top:10px;
+          font-size:12px;
+          font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+          font-weight:bold;
+        }
+
+      }
+
+      .sidebar-container-content{
+        height:100%;
+        color:#777777;
+        margin-top:5px;
+        padding-left:10px;
+
+        p{
+          margin:0px;
+          margin-bottom:3px;
+          padding:0px;
+          color:#0086cf;
+          font-size:14px;
+          font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+        }
+
+      }
+    }
+  }
+}
+
 #maincontainer {
   margin-left: 220px;
   height: 100%;
@@ -9,6 +91,8 @@
   > .row {
     height: 100%;
   }
+
+
   .sidepanel {
     background: white;
     border-left: 1px solid #dddddd;
@@ -16,49 +100,6 @@
     padding: 0;
     color: #333333;
 
-    .sidebar_elements{
-
-      .current_issue{
-        background-color: #f7fbfe;
-        border-left:3px solid #3c98fc;
-      }
-
-      .sidebar-container{
-        border-bottom:1px solid #d3d3d3;
-
-        .sidebar-container-header{
-          height:30%;
-
-          i:before{
-            font-size:28px;
-            padding:5px;
-            margin-left:20px;
-          }
-
-          span{
-            margin-top:10px;
-            font-size:12px;
-            font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
-            font-weight:bold;
-          }
-        }
-
-        .sidebar-container-content{
-          height:100%;
-          color:#777777;
-          margin-top:0px;
-
-          p{
-            margin:0px;
-            margin-bottom:3px;
-            padding:0px;
-            color:#0086cf;
-            font-size:14px;
-            font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
-          }
-        }
-      }
-    }
 
     h4 {
       padding: 20px 20px 0 20px;

@@ -15,11 +15,11 @@
   %body{:id=>"#{controller.controller_name}-#{controller.action_name}"}
     = include_gon
     .loading.j-cloak
-    = render partial: 'layouts/menu'
-    - unless params[:controller] == 'websites' && params[:action] == 'new'
-      #maincontainer.container-fluid
-        = yield
-    - else
+    -if controller.controller_name == "errors" && controller.action_name == "show"
+      = render partial: 'layouts/error_sidebar'
+    -else
+      = render partial: 'layouts/menu'
+    #maincontainer.container-fluid
       = yield
     - if Rails.application.assets.find_asset("pages/#{controller.controller_name}")
       = javascript_include_tag "pages/#{controller.controller_name}"
