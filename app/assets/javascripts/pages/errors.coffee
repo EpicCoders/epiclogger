@@ -45,6 +45,7 @@ PubSub.subscribe('assigned.website', (ev, website)->
         manipulateShowElements(data)
         $('#grouped-issuedetails').render data, directive
         populateSidebar(data)
+        sidebar_request(website.id,page,$.current_issue,13)
 
       $('#solve').on 'click', (e)->
         e.preventDefault();
@@ -70,7 +71,6 @@ PubSub.subscribe('assigned.website', (ev, website)->
             return
         false
 
-      sidebar_request(website.id,page,13)
       $('.next').on 'click', () ->
         page = page + 1
         sidebar_request(website.id, page, 13)
@@ -85,8 +85,8 @@ request = (website_id, page) ->
   $.getJSON Routes.api_v1_errors_path(), { website_id: website_id, page: page }, (data) ->
     manipulateIndexElements(data)
 
-sidebar_request = (website_id, page, error_count) ->
-  $.getJSON Routes.api_v1_errors_path(), { website_id: website_id, page: page, error_count: error_count }, (data) ->
+sidebar_request = (website_id, page, current_issue, error_count) ->
+  $.getJSON Routes.api_v1_errors_path(), { website_id: website_id, page: page, current_issue: current_issue, error_count: error_count }, (data) ->
     populateSidebar(data)
 
 getAvatars = (data) ->

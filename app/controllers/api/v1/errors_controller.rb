@@ -6,9 +6,13 @@ class Api::V1::ErrorsController < Api::V1::ApiController
   skip_before_action :authenticate_member!, except: [:index, :show, :update, :notify_subscribers]
 
   def index
-    @page = params[:page] || 1
     errors_per_page = params[:error_count] || 10
-    @errors = current_site.grouped_issues.page(@page).per(errors_per_page)
+    if params[:current_issue]
+      @page = current_issue_page(13,params[:current_issue])
+    else
+      @page = params[:page] || 1
+    end
+    @errors = current_site.grouped_issues.order('updated_at DESC').page(@page).per(errors_per_page)
     @pages = @errors.total_pages
   end
 
@@ -73,5 +77,10 @@ class Api::V1::ErrorsController < Api::V1::ApiController
     else
       error_params ||= params.require(:error).permit(:description, :message, :name, :status, :logger, :platform, :stacktrace => [:frames => ["filename"]] ,:request => [:url, :headers => ["User-Agent"]], :user => [:email, :name], :extra => [:title])
     end
+  end
+
+  def current_issue_page(per_page, order)
+    position = current_site.grouped_issues.order('updated_at DESC').where("id <= #{order}").count
+    (position.to_f/per_page).ceil
   end
 end
