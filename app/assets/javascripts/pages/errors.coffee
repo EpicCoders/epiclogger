@@ -28,10 +28,12 @@ directive = {
   #   html: ()->
   #     "Id: #{this.issues[0].subscriber.id}<br/><br/>IP Adress: 10.156.45.154.. <br/><br/>Email: #{this.issues[0].subscriber.email}<br/><br/>Data: ()"
 }
+page = 0
+
 PubSub.subscribe('assigned.website', (ev, website)->
-  page = 1
   switch gon.action
     when "index"
+      page = 1
       request(website.id, page)
       $('.next').on 'click', () ->
         page = page + 1
@@ -42,6 +44,7 @@ PubSub.subscribe('assigned.website', (ev, website)->
     when 'show'
       $.getJSON '/api/v1/errors/' + gon.error_id, { website_id: website.id }, (data) ->
         $.current_issue = data.id
+        sidebar_request(website.id,page,13,$.current_issue)
         manipulateShowElements(data)
         $('#grouped-issuedetails').render data, directive
         populateSidebar(data)
@@ -85,8 +88,8 @@ request = (website_id, page) ->
   $.getJSON Routes.api_v1_errors_path(), { website_id: website_id, page: page }, (data) ->
     manipulateIndexElements(data)
 
-sidebar_request = (website_id, page, current_issue, error_count) ->
-  $.getJSON Routes.api_v1_errors_path(), { website_id: website_id, page: page, current_issue: current_issue, error_count: error_count }, (data) ->
+sidebar_request = (website_id, page, error_count, current_issue) ->
+  $.getJSON Routes.api_v1_errors_path(), { website_id: website_id, page: page, error_count: error_count, current_issue: current_issue }, (data) ->
     populateSidebar(data)
 
 getAvatars = (data) ->
@@ -134,7 +137,8 @@ $('#errors_back').click ->
 
 populateSidebar = (data) ->
   $("#maincontainer").css("margin-left","450px")
-  $('.sidebar_elements').empty();
+  $('.sidebar_elements').empty()
+  page = data.page
   $('.sidebar_pagination_text').html(data.page + '/' + data.pages)
   $('.next').addClass('disabled') if data.page == data.pages
   $('.next').removeClass('disabled') if data.page != data.pages
@@ -148,7 +152,7 @@ populateSidebar = (data) ->
                   <input value='" + issue.id + "' type='hidden'>
                   <div class='sidebar-container-header'>
                     <i class='icon-" + issue.platform + " header-icon'></i>
-                    <span class='pull-right muted'> 11:18 (one hour ago) </span>
+                    <span class='pull-right muted'>" + moment(issue.last_seen,"YYYY-MM-DDTHH:mm:ssZ").format("HH:mm MMM D YYYY") + " </span>
                   </div>
                   <div class='sidebar-container-content panelbox'>
                     <p class='error-title'>" + "<b>" + message.type + "</b>" + ":" + message.content + "</p>
