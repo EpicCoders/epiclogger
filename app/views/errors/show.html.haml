@@ -1,6 +1,9 @@
 #grouped-issuedetails.row.issues
-  .col-lg-9.pagecontainer
+  .col-lg-12.col-md-12.pagecontainer
     %h3.error_title Error #24601
+    / %button.btn.btn-primary.pull-right
+    /   %span.fa.fa-star
+    /   Assign task
     %button.btn.btn-primary.pull-right#solve
       %span.fa.fa-check
       Mark resolved
@@ -19,102 +22,89 @@
             .stacktrace
           %span.line
             .stacktrace_error
-    .panel.panel-default
-      .panel-heading Update
-      .panel-body
-        %form#notify
-          .form-group
-            %label.subscribers_count{:for => "subscriber_update"}
-            %textarea#subscriber_update.form-control.notify.messageTextarea{:rows => "3"}
-          .row
-            .col-md-9.col-xs-7
-              .checkbox
-                %label
-                  %input{:type => "checkbox", :value => ""}/
-                  Notify users by email
-            .col-md-3.col-xs-5
-              %button.btn.btn-primary.pull-right.notify#subscriber_update
-                %span.fa.fa-paper-plane
-                Send
-    .panel.panel-default
-      .panel-heading Stream
-      #activitystream
-        %p.resolved
-          %span.time 14:12
-          %span.activity
-            Error marked resolved by
-            %strong woubuc
-        %p.user
-          %span.time 12:52
-          %span.activity Anonymous user subscribed to this error
-        %p.error
-          %span.time 12:52
-          %span.activity
-            Error occured on
-            %strong Homepage
-        %p.error
-          %span.time 12:37
-          %span.activity
-            Error occured on
-            %strong Homepage
-        %p.user
-          %span.time 11:15
-          %span.activity User woubuc subscribed to this error
-        %p.error
-          %span.time 11:14
-          %span.activity
-            Error occured on
-            %strong Homepage
-    .panel.panel-default.codeview
-      .panel-heading Request
-      .panel-body
-        .codepanel
-          %strong.view
-          %br/
-        .codepanel
-          %strong.data
-    .panel.panel-default.codeview
-      .panel-heading User
-      .panel-body
-        .codepanel
-          %strong.issue_subscriber
-  .col-lg-2.sidepanel
-    %h4 Details
-    .panelbox.propertybox
-      %p
-        %strong Status:
-        %small.status unresolved
-      %p
-        %strong First occurrence:
-        %small.created_at 21/04 (two weeks ago)
-      %p
-        %strong Last occurrence:
-        %small.last_occurrence 11:18 (one hour ago)
-      %p.resolved
-        %strong Resolved at:
-        %small.resolved_at
-    .panelbox.propertybox
-      %p
-        %strong Level:
-        %small.level Error
-      %p
-        %strong Logger:
-        %small.issue_logger Javascript
-      %p
-        %strong Url:
-        %small http://localhost/raven/raven-js/example/
-      %p
-        %strong OS:
-        %small Windows
-    .panelbox.propertybox.faces
-      %p
-        %strong Subscribed users:
-        %p
-        .avatars
-          %img{:src => "http://lorempixel.com/48/48/people/1"}
-        %p
-          #truncate ...show more
-      %br/
+    .container-fluid.multiplepanel
+      .container-fluid.col-lg-8
+        .panel.panel-default
+          .panel-heading Stream
+          #activitystream
+            %p.resolved
+              %span.time 14:12
+              %span.activity
+                Error marked resolved by
+                %strong woubuc
+            %p.user
+              %span.time 12:52
+              %span.activity Anonymous user subscribed to this error
+            %p.error
+              %span.time 12:52
+              %span.activity
+                Error occured on
+                %strong Homepage
+            %p.error
+              %span.time 12:37
+              %span.activity
+                Error occured on
+                %strong Homepage
+            %p.user
+              %span.time 11:15
+              %span.activity User woubuc subscribed to this error
+            %p.error
+              %span.time 11:14
+              %span.activity
+                Error occured on
+                %strong Homepage
+        .panel.panel-default.codeview
+          .panel-heading Request
+          .panel-body
+            .codepanel
+              %strong.view
+              %br/
+            .codepanel
+              %strong.data
+        .panel.panel-default.codeview
+          .panel-heading User
+          .panel-body
+            .codepanel
+              %strong.issue_subscriber
+      .container-fluid.col-lg-3.pull-right
+        .panel.panel-default.codeview
+          .panel-heading Details
+          .panel-body
+            .panelbox.propertybox
+              %p
+                %strong Status:
+                %small.status unresolved
+              %p
+                %strong First occurrence:
+                %small.created_at 21/04 (two weeks ago)
+              %p
+                %strong Last occurrence:
+                %small.last_occurrence 11:18 (one hour ago)
+              %p.resolved
+                %strong Resolved at:
+                %small.resolved_at
+            .panelbox.propertybox
+              %p
+                %strong Level:
+                %small.level Error
+              %p
+                %strong Logger:
+                %small.issue_logger Javascript
+              %p
+                %strong Url:
+                %small http://localhost/raven/raven-js/example/
+              %p
+                %strong OS:
+                %small Windows
+            .panelbox.propertybox.faces
+              %p
+                %strong Subscribed users:
+                %p
+                .avatars
+                  %img{:src => "http://lorempixel.com/48/48/people/1"}
+                %p
+                  #truncate ...show more
+              %br/
 
 :javascript
   $('#permalink').on('focus', function() {

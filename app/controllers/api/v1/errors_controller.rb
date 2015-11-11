@@ -13,7 +13,7 @@ class Api::V1::ErrorsController < Api::V1::ApiController
     else
       @page = params[:page] || 1
     end
-    @errors = current_site.grouped_issues.order('id ASC').page(@page).per(errors_per_page)
+    @errors = current_site.grouped_issues.order('last_seen DESC').page(@page).per(errors_per_page)
     @pages = @errors.total_pages
   end
 
@@ -40,6 +40,24 @@ class Api::V1::ErrorsController < Api::V1::ApiController
     else
       checksum = Digest::MD5.hexdigest(error_params['stacktrace'].to_s)
     end
+    groupedissue = GroupedIssue.find_by_data_and_website_id(checksum,current_site.id)
+    if groupedissue.nil?
+      @group = GroupedIssue.create_with(
+        issue_logger: error_params["logger"],
+        view: error_params["request"].to_s.gsub('=>', ':'),
+        status: 3,platform: error_params["platform"],
+        message: error_params["message"],
+        times_seen: 1,
+        first_seen: Time.now,
+        last_seen: Time.now
+      )
+    else
+      groupedissue.update_attributes(
+        :times_seen => groupedissue.times_seen + 1,
+        :last_seen => Time.now
+      )
+    end
+
     @group = GroupedIssue.create_with(
       issue_logger: error_params['logger'],
       view: error_params['request'].to_s.gsub('=>', ':'),
@@ -81,7 +99,12 @@ class Api::V1::ErrorsController < Api::V1::ApiController
   end
 
   def current_issue_page(per_page, order)
-    position = current_site.grouped_issues.order('id ASC').where("id <= #{order}").count
+    position = 0
+    current_site.grouped_issues.each do |grouped_issue|
+      if Time.parse(grouped_issue.last_seen.to_s) > Time.parse(order)
+        position += 1
+      end
+    end
     (position.to_f/per_page).ceil
   end
 end

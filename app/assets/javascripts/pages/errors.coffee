@@ -29,6 +29,7 @@ directive = {
   #     "Id: #{this.issues[0].subscriber.id}<br/><br/>IP Adress: 10.156.45.154.. <br/><br/>Email: #{this.issues[0].subscriber.email}<br/><br/>Data: ()"
 }
 page = 0
+errors_per_page = 13
 
 PubSub.subscribe('assigned.website', (ev, website)->
   switch gon.action
@@ -44,7 +45,7 @@ PubSub.subscribe('assigned.website', (ev, website)->
     when 'show'
       $.getJSON '/api/v1/errors/' + gon.error_id, { website_id: website.id }, (data) ->
         $.current_issue = data.id
-        sidebar_request(website.id,page,13,$.current_issue)
+        sidebar_request(website.id,page,errors_per_page,data.last_seen)
         manipulateShowElements(data)
         $('#grouped-issuedetails').render data, directive
         populateSidebar(data)
@@ -76,11 +77,10 @@ PubSub.subscribe('assigned.website', (ev, website)->
 
       $('.next').on 'click', () ->
         page = page + 1
-        sidebar_request(website.id, page, 13)
+        sidebar_request(website.id, page, errors_per_page)
       $('.previous').on 'click', () ->
         page = page - 1
-        sidebar_request(website.id, page, 13)
-
+        sidebar_request(website.id, page, errors_per_page)
 )
 
 
