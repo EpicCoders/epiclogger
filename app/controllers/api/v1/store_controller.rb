@@ -65,7 +65,7 @@ class Api::V1::StoreController < Api::V1::ApiController
       # check here if we have a post or a get.
       if request.get?
         # this means that tha request is sent by a client call (js client)
-        error_params ||= JSON.parse(params[:sentry_data])    
+        error_params ||= JSON.parse(params[:sentry_data])
       elsif request.post?
         # this means that the request is sent by a server call
         data = Zlib::Inflate.inflate(Base64.decode64(request.body.read))
