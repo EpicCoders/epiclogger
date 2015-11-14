@@ -47,5 +47,26 @@ PubSub.subscribe('assigned.website', (ev, website)->
     when "index"
       $.getJSON Routes.api_v1_members_url(), { website_id: website.id }, (data) ->
         $('#members-container').render data, directive
+
+  $.getJSON Routes.api_v1_notification_path(gon.notification_id), { member_id: $.auth.user.id }, (data) ->
+    $('input[name=daily_reports]').attr('checked', true) if data.daily_reports
+    $('input[name=realtime_error]').attr('checked', true) if data.realtime_error
+    $('input[name=when_event]').attr('checked', true) if data.when_event
+
+    $('#save').on 'click', (e) ->
+      e.preventDefault()
+      $.ajax
+        url: Routes.api_v1_notification_path(gon.notification_id)
+        type: 'put'
+        dataType: 'json'
+        data: {
+          notification: {
+            daily_reports: $('input[name=daily_reports]').is(':checked'),
+            realtime_error: $('input[name=realtime_error]').is(':checked'),
+            when_event: $('input[name=when_event]').is(':checked')
+          }
+        }
+        success: (data) ->
+          swal("Success!", "You will recieve notifications soon.", "success")
 )
 

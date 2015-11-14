@@ -6,6 +6,7 @@ class MembersController < ApplicationController
   end
 
   def edit
+    gon.notification_id = Member.find(params[:id]).notification.id
   end
 
   def new

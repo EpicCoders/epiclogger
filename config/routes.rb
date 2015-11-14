@@ -32,6 +32,7 @@ Rails.application.routes.draw do
         end
       end
       resources :grouped_issues, only: [:index, :show]
+      resources :notifications, only: [:update, :show]
       resources :invitations, only: [:create]
       resources :subscribers, only: [:index]
       resources :members, only: [:show, :create, :index, :destroy]
