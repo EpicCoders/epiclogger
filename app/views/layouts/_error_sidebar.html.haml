@@ -1,6 +1,10 @@
-.error_sidebar
+#error_sidebar
   .sidebar_header
-    %button{:class=>"fa fa-arrow-left btn previous"}
-    %span{:class=>"sidebar_pagination_text"}
-    %button{:class=>"fa fa-arrow-right btn next"}
+    %button{:class=>"btn btn-primary", :id=>"errors_back"}
+      %i.fa.fa-arrow-left
+      Errors
+    .change_page
+      %button{:class=>"fa fa-arrow-left btn btn-success previous"}
+      %span{:class=>"sidebar_pagination_text"}
+      %button{:class=>"fa fa-arrow-right btn btn-success next"}
   .sidebar_elements

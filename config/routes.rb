@@ -23,15 +23,12 @@ Rails.application.routes.draw do
   }
   namespace :api, defaults: { format: :json } do
     scope module: 'v1' do
-      get '/:id/store' => 'errors#add_error', as: :store
+      match '/:id/store' => 'store#create', as: :store, via: [:get, :post]
     end
     namespace :v1 do
       resources :errors, only: [:create, :index, :show, :update] do
         member do
           post :notify_subscribers
-        end
-        collection do
-          get :add_error
         end
       end
       resources :website_members, only: [:index, :destroy]
