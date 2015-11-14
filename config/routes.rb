@@ -8,7 +8,7 @@ Rails.application.routes.draw do
   resources :errors, only: [:show, :index]
   resources :grouped_issues, only: [:index, :show]
   resources :websites, only: [:index, :new, :show]
-  resources :members, only: [:index]
+  resources :members, only: [:index, :edit]
   resources :invitations, only:[:new, :show]
   resources :subscribers, only: [:index]
   resources :accounts, only: [:show]

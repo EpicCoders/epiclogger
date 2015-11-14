@@ -1,0 +1,22 @@
+.row
+  .col-md-12.pagecontainer
+    .pagetitle
+      %h3 User Settings
+    .panel.panel-info
+      .panel-heading
+        Notifications
+      .panel-body
+        .col-lg-9
+          %p
+            %input{:name => "notify", :type => "checkbox", :value => "daily_reports"}
+              Recieve daily reports
+          %p
+            %input{:name => "notify", :type => "checkbox", :value => "realtime_error"}
+              Receive realtime error emails
+          %p
+            %input{:name => "notify", :type => "checkbox", :value => "when_event"}
+              Receive emails when a new event happens
+        .col-lg-3
+          %button.btn.btn-primary.pull-right#save
+            %span.fa.fa-save
+            Save settings
