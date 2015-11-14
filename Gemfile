@@ -71,7 +71,7 @@ end
 group :development, :test do
   gem 'faker'
   gem 'pry'
-  gem 'rspec-rails', '~> 3.3.3'
+  gem 'rspec-rails', '~> 3.4.0'
   gem 'factory_girl_rails'
 
   gem 'brakeman', :require => false
