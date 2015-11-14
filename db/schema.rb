@@ -145,11 +145,10 @@ ActiveRecord::Schema.define(version: 20160120100325) do
   add_index "website_members", ["website_id"], name: "index_website_members_on_website_id", using: :btree
 
   create_table "websites", force: :cascade do |t|
-    t.string   "title",                          null: false
-    t.string   "domain",                         null: false
-    t.datetime "created_at",                     null: false
-    t.datetime "updated_at",                     null: false
-    t.string   "app_id"
+    t.string   "title",      null: false
+    t.string   "domain",     null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string   "app_key"
     t.boolean  "new_event",      default: true
     t.boolean  "frequent_event", default: false
