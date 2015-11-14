@@ -155,6 +155,7 @@ ActiveRecord::Schema.define(version: 20160120100325) do
     t.boolean  "frequent_event", default: false
     t.boolean  "daily",          default: false
     t.boolean  "realtime",       default: false
+    t.string   "app_secret"
   end
 
   add_foreign_key "issues", "subscribers"
