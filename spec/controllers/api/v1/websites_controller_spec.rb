@@ -35,7 +35,7 @@ describe Api::V1::WebsitesController, :type => :controller do
               id: website.id,
               title: website.title,
               domain: website.domain,
-              app_id: website.app_id,
+              app_secret: website.app_secret,
               app_key: website.app_key,
               errors: website.grouped_issues.count,
               subscribers: website.subscribers.count,
@@ -136,8 +136,8 @@ describe Api::V1::WebsitesController, :type => :controller do
         expect(response.body).to eq(
           {
             id: website.id,
-            app_id: website.app_id,
             app_key: website.app_key,
+            app_secret: website.app_secret,
             domain: website.domain,
             title: website.title,
             new_event: website.new_event,
