@@ -5,7 +5,7 @@ class Api::V1::StoreController < Api::V1::ApiController
   skip_before_action :authenticate_member!
 
   def create
-    binding.pry
+    # binding.pry
     subscriber = current_site.subscribers.create_with(name: "Name for subscriber").find_or_create_by!(email: error_params["user"]["email"], website_id: current_site.id)
     if error_params["stacktrace"].blank?
       checksum = Digest::MD5.hexdigest(error_params["platform"] + error_params["culprit"] + error_params["message"])
@@ -39,15 +39,19 @@ class Api::V1::StoreController < Api::V1::ApiController
       status: 3,platform: error_params["platform"],
       message: error_params["message"]
     ).find_or_create_by(data: checksum, website_id: current_site.id)
-
-    source_code = open_url_content(error_params["stacktrace"])
+    if error_params.has_key?("stacktrace")
+      stacktrace = error_params["stacktrace"]
+    elsif error_params.has_key?("exception")
+      stacktrace = error_params["exception"]["values"].first["stacktrace"]
+    end
+    source_code = open_url_content(stacktrace)
 
     @error = Issue.create_with(
-      description: error_params["stacktrace"]["frames"].to_s.gsub('=>', ':'),
+      description: stacktracke["frames"].to_s.gsub('=>', ':'),
       page_title: error_params["extra"]["title"],
       platform: error_params["platform"],
       group_id: @group.id
-      # error_params["stacktrace"]["frames"].to_s.gsub(/=>|\./, ":")
+      # stacktracke["frames"].to_s.gsub(/=>|\./, ":")
     ).find_or_create_by(data: source_code, subscriber_id: subscriber.id)
 
     message = Message.create(content: error_params["message"], issue_id: @error.id)
