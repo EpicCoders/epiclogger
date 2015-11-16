@@ -11,7 +11,7 @@ class Issue < ActiveRecord::Base
   after_create :issue_created
 
   def issue_created
-    MemberMailer.error_occurred(self.group.website_id, 'issue').deliver
+    MemberMailer.error_occurred(self.group.website_id).deliver
   end
 
 end

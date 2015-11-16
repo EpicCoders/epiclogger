@@ -9,7 +9,7 @@ class GroupedIssue < ActiveRecord::Base
   after_create :group_created
 
   def group_created
-    MemberMailer.error_occurred(self.website_id, 'group').deliver
+    MemberMailer.event_occurred(self.website_id).deliver
   end
 
 end
