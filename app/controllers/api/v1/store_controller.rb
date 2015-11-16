@@ -5,13 +5,17 @@ class Api::V1::StoreController < Api::V1::ApiController
   skip_before_action :authenticate_member!
 
   def create
+    binding.pry
     subscriber = current_site.subscribers.create_with(name: "Name for subscriber").find_or_create_by!(email: error_params["user"]["email"], website_id: current_site.id)
     if error_params["stacktrace"].blank?
       checksum = Digest::MD5.hexdigest(error_params["platform"] + error_params["culprit"] + error_params["message"])
+    elsif !error_params["exception"].blank?
+      checksum = Digest::MD5.hexdigest(error_params["exception"].to_s)
     else
       checksum = Digest::MD5.hexdigest(error_params["stacktrace"].to_s)
     end
-    groupedissue = GroupedIssue.find_by_data_and_website_id(checksum,current_site.id) 
+
+    groupedissue = GroupedIssue.find_by_data_and_website_id(checksum,current_site.id)
     if groupedissue.nil?
       @group = GroupedIssue.create_with(
         issue_logger: error_params["logger"],
@@ -42,7 +46,7 @@ class Api::V1::StoreController < Api::V1::ApiController
       description: error_params["stacktrace"]["frames"].to_s.gsub('=>', ':'),
       page_title: error_params["extra"]["title"],
       platform: error_params["platform"],
-      group_id: @group.id  
+      group_id: @group.id
       # error_params["stacktrace"]["frames"].to_s.gsub(/=>|\./, ":")
     ).find_or_create_by(data: source_code, subscriber_id: subscriber.id)
 
