@@ -23,7 +23,6 @@ class ErrorStore
 
   private
   def process
-    
   end
 
 end
