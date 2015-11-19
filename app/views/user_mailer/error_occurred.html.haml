@@ -1,1 +1,19 @@
-%p Error occurred.
+.col-lg-6
+  %hr
+  %h4 #{@message.content}
+  %hr
+  %p An error has just occurred.
+  %strong Error message:
+  %p #{@message.content}
+  %strong Where:
+  %p
+    - JSON.parse(@message.issue.description).each do |file|
+      #{file["filename"]}, line no: #{file["lineno"]}, colno: #{file["colno"]} 
+      %br
+  %strong Backtrace Summary:
+  %p
+    - JSON.parse(@message.issue.data).each do |backtrace|
+      - backtrace.each do |type, content|
+        #{content}
+        %br
+        %br

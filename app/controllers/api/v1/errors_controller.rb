@@ -52,7 +52,7 @@ class Api::V1::ErrorsController < Api::V1::ApiController
       # error_params["stacktrace"]["frames"].to_s.gsub(/=>|\./, ":")
     ).find_or_create_by(data: source_code, subscriber_id: subscriber.id)
 
-    message = Message.create(content: error_params["message"], issue_id: @error.id)
+    Message.create(content: error_params["message"], issue_id: @error.id)
   end
 
   def open_url_content(stacktrace)

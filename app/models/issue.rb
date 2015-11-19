@@ -8,10 +8,5 @@ class Issue < ActiveRecord::Base
   enumerize :platform, in: {:javascript => 1, :php => 2}, default: :javascript
 
   validates :description, :presence => true, length: {minimum: 10}
-  after_create :issue_created
-
-  def issue_created
-    UserMailer.error_occurred(self.group.website_id).deliver
-  end
 
 end

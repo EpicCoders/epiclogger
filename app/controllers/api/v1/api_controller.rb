@@ -27,7 +27,7 @@ class Api::V1::ApiController < ActionController::Base
     if params[:website_id] && current_member
       @current_site ||= current_member.websites.where("websites.id = ?", params[:website_id]).try(:first)
     else
-      @current_site ||= Website.find_by_app_id_and_app_key(params[:id], params[:sentry_key])
+      @current_site ||= Website.find_by_app_secret_and_app_key(params[:id], params[:sentry_key])
       # @current_site ||= Website.find_by_app_id_and_app_key(params["app_id"],params["app_key"])
     end
   end
