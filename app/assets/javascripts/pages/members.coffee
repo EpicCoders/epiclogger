@@ -53,6 +53,10 @@ PubSub.subscribe('assigned.website', (ev, website)->
     $('input[name=realtime_error]').attr('checked', true) if data.realtime_error
     $('input[name=when_event]').attr('checked', true) if data.when_event
     $('input[name=more_than_10]').attr('checked',true) if data.more_than_10
+    $('#save').prop('disabled', true)
+
+    $('input').change ->
+      $('#save').prop('disabled', false)
 
     $('#save').on 'click', (e) ->
       e.preventDefault()
@@ -69,6 +73,7 @@ PubSub.subscribe('assigned.website', (ev, website)->
           }
         }
         success: (data) ->
+          $('#save').prop('disabled', true)
           swal("Success!", "You will recieve notifications soon.", "success")
 )
 
