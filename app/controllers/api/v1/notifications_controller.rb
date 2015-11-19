@@ -12,6 +12,6 @@ class Api::V1::NotificationsController < Api::V1::ApiController
 
   private
   def notification_params
-    params.require(:notification).permit(:id, :member_id, :daily_reports, :realtime_error, :when_event)
+    params.require(:notification).permit(:id, :member_id, :daily_reports, :realtime_error, :when_event, :more_than_10)
   end
 end

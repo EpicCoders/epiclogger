@@ -17,7 +17,20 @@ class UserMailer < ApplicationMailer
   end
 
   def error_occurred(website_id)
-    mail(subject: "EpicLogger Realtime Error",bcc: mail_to(website_id))
+    counter = 0
+    @website = Website.find(website_id)
+    @website.grouped_issues.each do |group|
+      counter += Issue.where('group_id = ? AND created_at > ?', group.id, Time.now - 1.hour).count
+    end
+    if counter >= 10
+      more_than_10_errors(website_id)
+    else
+      mail(subject: "EpicLogger Realtime Error",bcc: mail_to(website_id))
+    end
+  end
+
+  def more_than_10_errors(website_id)
+    mail(subject: "EpicLogger Constant Error",bcc: mail_to(website_id))
   end
 
   def event_occurred(website_id)

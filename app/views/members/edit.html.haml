@@ -16,6 +16,9 @@
           %p
             %input{:name => "when_event", :type => "checkbox", :value => "when_event"}
               Receive emails when a new event happens
+          %p
+            %input{:name => "more_than_10", :type => "checkbox", :value => "more_than_10"}
+              Recieve another email if an event/error happens more than 10 times in a certain time interval.
         .col-lg-3
           %button.btn.btn-primary.pull-right#save
             %span.fa.fa-save

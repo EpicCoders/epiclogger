@@ -52,6 +52,7 @@ PubSub.subscribe('assigned.website', (ev, website)->
     $('input[name=daily_reports]').attr('checked', true) if data.daily_reports
     $('input[name=realtime_error]').attr('checked', true) if data.realtime_error
     $('input[name=when_event]').attr('checked', true) if data.when_event
+    $('input[name=more_than_10]').attr('checked',true) if data.more_than_10
 
     $('#save').on 'click', (e) ->
       e.preventDefault()
@@ -63,7 +64,8 @@ PubSub.subscribe('assigned.website', (ev, website)->
           notification: {
             daily_reports: $('input[name=daily_reports]').is(':checked'),
             realtime_error: $('input[name=realtime_error]').is(':checked'),
-            when_event: $('input[name=when_event]').is(':checked')
+            when_event: $('input[name=when_event]').is(':checked'),
+            more_than_10: $('input[name=more_than_10]').is(':checked')
           }
         }
         success: (data) ->
