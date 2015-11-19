@@ -1,1 +1,10 @@
-%p New event occurred
+.col-lg-6
+  %hr
+  %h4 #{@group.message}
+  %hr
+  %p A event has just occurred.
+  %strong Error message:
+  %p #{@group.message}
+  %strong Request:
+  %p Browser: #{JSON.parse(@group.view)["headers"]["User-Agent"]}
+  %p Url: #{JSON.parse(@group.view)["url"]}
