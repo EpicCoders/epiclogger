@@ -1,4 +1,5 @@
 class UserMailer < ApplicationMailer
+  default from: "Epic Logger <admin@epiclogger.com>"
 
   def notify_subscriber(issue, subscriber, message)
     @issue = issue
