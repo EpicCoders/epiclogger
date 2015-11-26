@@ -4,9 +4,9 @@ class UserMailer < ApplicationMailer
   def notify_subscriber(issue, subscriber, message)
     @issue = issue
     @message = message
-    @website = Website.find(@issue.website_id)
+    @website = @issue.group.website
     @member = subscriber
-    mail(to: @member.email, subject: 'Subscriber notification')
+    mail(to: @member.email, subject: 'Epic Logger Subscriber notification')
   end
 
   def member_invitation(website_id, email, website_member_id, inviter_id)
@@ -14,7 +14,7 @@ class UserMailer < ApplicationMailer
     @website = Website.find(website_id)
     @token = WebsiteMember.find(website_member_id).invitation_token
     @email = email
-    mail(to: @email, subject: 'Invite Members')
+    mail(to: @email, subject: 'Epic Logger Invite Members')
   end
 
   def error_occurred(website_id, message_id)
@@ -27,7 +27,7 @@ class UserMailer < ApplicationMailer
     if counter >= 10
       more_than_10_errors(website_id, message_id)
     else
-      mail(subject: "EpicLogger Realtime Error",bcc: mail_to(website_id))
+      mail(subject: "Epic Logger Realtime Error",bcc: mail_to(website_id))
     end
   end
 
@@ -38,11 +38,11 @@ class UserMailer < ApplicationMailer
 
   def event_occurred(website_id, group_id)
     @group = GroupedIssue.find(group_id)
-    mail(subject: "EpicLogger Event Occurred",bcc: mail_to(website_id))
+    mail(subject: "Epic Logger Event Occurred",bcc: mail_to(website_id))
   end
 
   def notify_daily(website_id)
-    mail(subject: "EpicLogger Daily Reports",bcc: mail_to(website_id))
+    mail(subject: "Epic Logger Daily Reports",bcc: mail_to(website_id))
   end
 
   def mail_to(website_id)
