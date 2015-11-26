@@ -1,7 +1,11 @@
 require 'rails_helper'
 
 describe Message do
-  let(:message) { build(:message) }
+  let(:member) { create(:member) }
+  let(:website) { create(:website, members: [member]) }
+  let(:grouped_issue) { build(:grouped_issue, website: website) }
+  let!(:issue) { create(:issue, group: grouped_issue) }
+  let(:message) { build(:message, issue: issue) }
 
   it "has a valid factory" do
     expect(build(:message)).to be_valid

@@ -47,7 +47,7 @@ class UserMailer < ApplicationMailer
 
   def mail_to(website_id)
     @website = Website.find(website_id)
-    return @website.subscribers.map { |m| "<#{m.email}>"  }
+    return @website.members.map { |m| "<#{m.email}>"  }
   end
 
 end

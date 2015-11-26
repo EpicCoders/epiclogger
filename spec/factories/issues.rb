@@ -4,6 +4,5 @@ FactoryGirl.define do
     description '[{"descr":"<title>Scratch Disk</title>\n"}]'
     data '[{"data":"<!doctype html>\n<html>\n<head>\n"}]'
     association :subscriber
-    association :group, factory: :grouped_issue
   end
 end
