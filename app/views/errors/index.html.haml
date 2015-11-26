@@ -73,3 +73,30 @@
             %label
               %input{:type => "checkbox", :value => ""}/
               Windows 7
+
+  .modal.fade#myModal{:role => "dialog", :tabindex => "-1"}
+    .modal-dialog
+      .modal-content
+        .modal-header
+          %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
+            %span{"aria-hidden" => "true"} &times;
+          %h4.modal-title.text-center Add new website
+        %form#addWebsite{:action => "", :method => "post"}
+          .modal-body
+            .row
+              .panel.panel-default
+                .panel-heading.text-center Enter the website details below
+                .panel-body
+                  %form
+                    .form-group
+                      %label.control-label Name
+                      %input#title.form-control{:placeholder => "Website name", :required => "required", :type => "text", :name => 'title'}/
+                    .form-group
+                      %label.control-label Domain
+                      %input#domain.form-control{:placeholder => "http://www.domain.com", :required => "required", :type => "url", :name => 'website'}/
+                    .well.wel-sm
+                      %p After adding the website domain we are going to offer you a javascript code to add to your error pages so the users will get recorded when they receive errors.
+                      %p You will be able to get in contact with your users after the errors are received and send them messages to let them know the issues are resolved.
+                    .form-group
+                      %button.btn.btn-default{:style => "display:inline; width: 275px;", "data-dismiss" => "modal", :type => "button"} Close
+                      %button.btn.btn-primary.pull-right{:style => "width: 275px; display:inline", :type => "submit"} Save changes

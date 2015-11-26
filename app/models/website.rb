@@ -28,12 +28,9 @@ class Website < ActiveRecord::Base
       key = SecureRandom.hex(24)
       break key unless Website.exists?(app_key: key)
     end
-  end
-
-  def generate_app_id
-    self.app_id = loop do
-      id = SecureRandom.hex(6)
-      break id unless Website.exists?(app_id: id)
+    self.app_secret = loop do
+      secret = SecureRandom.hex(6)
+      break secret unless Website.exists?(app_secret: secret)
     end
   end
 
