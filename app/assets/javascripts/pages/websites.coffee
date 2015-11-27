@@ -9,6 +9,9 @@ directive = {
   }
 }
 
+reset_platforms = () ->
+  $('#javascript, #node_js, #rails, #ruby, #python, #ios, #php, #java, #django').hide()
+
 PubSub.subscribe('assigned.website', (ev, website)->
   console.log gon.action
   switch gon.action

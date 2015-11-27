@@ -59,7 +59,6 @@ window.EpicLogger = (->
   setMemberDetails: (picked_id)->
     $.getJSON('/api/v1/websites', (data)->
       memberWebsites = data.websites
-      $('#myModal').modal('show') if memberWebsites.length == 0
       if picked_id != undefined
         EpicLogger.pickWebsite(undefined, picked_id)
       else

@@ -4,20 +4,199 @@
       %h3 Add new website
     %br/
     .row
-      .col-md-6
-        .panel.panel-default
-          .pane.panel-heading Enther website details below
+      .col-md-9
+        .panel.panel-primary
+          .panel-heading.text-center
+            %h4 Create New Project
           .panel-body
-            %form#formWebsite{:action => "", :method => "post"}
-              .form-group
-                %label.control-label Name
-                %input#title.form-control{:placeholder => "Website name", :required => "required", :type => "text", :name => 'title'}/
-              .form-group
-                %label.control-label Domain
-                %input#domain.form-control{:placeholder => "http://www.domain.com", :required => "required", :type => "url", :name => 'website'}/
-              .form-group
-                %button.btn.btn-success.m-t-n-xs{:type => "submit"} Save
-      .col-md-6
-        .well.wel-sm
-          %p After adding the website domain we are going to offer you a javascript code to add to your error pages so the users will get recorded when they receive errors.
-          %p You will be able to get in contact with your users after the errors are received and send them messages to let them know the issues are resolved.
+            .row
+              .stepwizard
+                .stepwizard-row
+                  .stepwizard-step
+                    %a.btn.btn-primary.btn-circle.active-step{"data-toggle" => "tab", :href => "#step-1", :onclick => "stepnext(1)"} 1
+                    %p Add Website
+                  .stepwizard-step
+                    %a.btn.btn-default.btn-circle{"data-toggle" => "tab", :disabled => "disabled", :href => "#step-2"} 2
+                    %p Chose Platform
+                  .stepwizard-step
+                    %a.btn.btn-default.btn-circle{"data-toggle" => "tab", :disabled => "disabled", :href => "#step-3"} 3
+                    %p Configuration
+          .container
+            .rate-updates
+              .tab-content.margintop0{:style => "border:none !important;"}
+                #step-1.tab-pane.fade.active.in.padding20
+                  %form#addWebsite{:action => "", :method => "post"}
+                    .form-group
+                      %label.control-label Name
+                      %input#title.form-control{:placeholder => "Website name", :required => "required", :type => "text", :name => 'title'}/
+                    .form-group
+                      %label.control-label Domain
+                      %input#domain.form-control{:placeholder => "http://www.domain.com", :required => "required", :type => "url", :name => 'website'}/
+                  %br
+                  %button.btn.btn-success.pull-left{:style => "width: 150px;",:name => 2, :type => "button"}
+                    %i.icon-next
+                    Next
+                  %br
+                  %br
+                  %br
+                    .progress
+                      .progress-bar.progress-bar-info.progress-bar-striped.active{"aria-valuemax" => "100", "aria-valuemin" => "0", "aria-valuenow" => "33", :role => "progressbar", :style => "width: 1%"}
+                #step-2.tab-pane.fade.padding20
+                  .col-md-12.pagecontainer
+                    .pagetitle.text-center
+                      %h3 Installation and configuration
+                    .panel.panel-default.codeview
+                      .panel-heading Client Configuration
+                      .panel-body
+                        %p To start sending events, configure your client with the following DSN value:
+                        .codepanel
+                          %span.line https://451cf228845b497b919281b158209a59:157cbe7bf9d34b67b906dea4d3e849d0@app.feedbacker.com/12798
+                        %br/
+                        %p If this is a client that only needs public access (like raven-js), you can use the following public DSN:
+                        .codepanel
+                          %span.line https://3291842f716643f2968b11e3c86113f9@app.feedbacker.com/12798
+                    .panel.panel-default.tileview
+                      .panel-heading Chose Platform
+                      .panel-body#platform
+                        %a.tile.text-center{:name => "javascript"}
+                          %img{:src => image_path("icon_javascript.png")}/
+                          %span Javascript
+                        %a.tile.text-center{:name => "node_js"}
+                          %img{:src => image_path("icon_nodejs.png")}/
+                          %span Node Js
+                        %a.tile.text-center{:name => "rails"}
+                          %img{:src => image_path("icon_rails.png")}/
+                          %span Rails
+                        %a.tile.text-center{:name => "ruby"}
+                          %img{:src => image_path("icon_ruby.png")}/
+                          %span Ruby
+                        %a.tile.text-center{:name => "python"}
+                          %img{:src => image_path("icon_python.png")}/
+                          %span Python
+                        %a.tile.text-center{:name => "ios"}
+                          %img{:src => image_path("icon_ios.png")}/
+                          %span IOS
+                        %a.tile.text-center{:name => "php"}
+                          %img{:src => image_path("icon_php.png")}/
+                          %span PHP
+                        %a.tile.text-center{:name => "java"}
+                          %img{:src => image_path("icon_java.png")}/
+                          %span Java
+                        %a.tile.text-center{:name => "django"}
+                          %img{:src => image_path("icon_django.png")}/
+                          %span Django
+                    %button.btn.btn-primary.pull-left{:style => "width: 150px;", :name => 1, :type => "button"}
+                      %i.icon-next
+                      Previous
+                    / %button.btn.btn-success.pull-right{:style => "width: 150px;", :name => 3, :type => "button"}
+                    /   %i.icon-next
+                    /   Next
+                    %p
+                    %p
+                    %p
+                    .progress
+                      .progress-bar.progress-bar-info.progress-bar-striped.active{"aria-valuemax" => "100", "aria-valuemin" => "0", "aria-valuenow" => "33", :role => "progressbar", :style => "width: 34%"}
+                #step-3.tab-pane.fade.padding20
+                  .col-md-12.pagecontainer#javascript
+                    .pagetitle.text-center
+                      %h3 Installation and configuration for Javascript
+                    .panel.panel-default.codeview
+                      .panel-heading Current site information
+                      .panel-body
+                        %table.table#current-website
+                          %thead
+                            %tr
+                              %th Website Title
+                              %th Website Domain
+                              %th App Key
+                              %th App Id
+                          %tbody.websites
+                            %tr
+                              %td.title
+                              %td.domain
+                              %td.app_key
+                              %td.app_id
+                    .panel.panel-default.codeview
+                      .panel-heading Website Configuration
+                      %p Engage developers with users to solve errors. This is the js library that sends errors to our server. Use the iframe functionality to show the form,autofill the email address, removed unused css code.
+                      .panel-body
+                        .codepanel
+                          %p
+                            var _lopts = _lopts || [];
+                          %p
+                            _lopts.widget_domain    = "//localhost:8000/contact.html"; //the domain for where to send the data
+                          %p
+                            _lopts.widget_url       = "1213";  //the id of the user in their application
+                          %p
+                            _lopts.email = "rabotse@gmail.com";
+                          %p
+                            \// _lopts.theme            = "light";
+                          %p
+                            _lopts.modal_width      = "41%";
+                          %p
+                            _lopts.modal_height     = 532;
+                          %p
+                            \//_lopts.widget_container = "#iframe_widget";
+                          %p
+                            _lopts.custom_widget    = true;
+                          %p
+                            _lopts.side_btn         = true;
+                          %p
+                            _lopts.iframe_widget    = true;
+                          %p
+                            \//var local_script = "localhost:8000/loader.min.js";
+                          %p
+                            (function() {
+                          %p
+                            var loader = document.createElement('script'); loader.type = 'text/javascript'; loader.async = true;
+                          %p
+                            \//loader.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + local_script;
+                          %p
+                            loader.src = '../src/loader.min.js';
+                          %p
+                            var s = document.getElementsByTagName('script')[0];
+                          %p
+                            s.parentNode.insertBefore(loader, s);
+                          %p
+                            })();
+                  .col-md-12.pagecontainer#node_js
+                    .pagetitle.text-center
+                      %h3 Installation and configuration for Node.js
+                  .col-md-12.pagecontainer#rails
+                    .pagetitle.text-center
+                      %h3 Installation and configuration for Rails
+                  .col-md-12.pagecontainer#ruby
+                    .pagetitle.text-center
+                      %h3 Installation and configuration for Ruby
+                  .col-md-12.pagecontainer#python
+                    .pagetitle.text-center
+                      %h3 Installation and configuration for Python
+                  .col-md-12.pagecontainer#ios
+                    .pagetitle.text-center
+                      %h3 Installation and configuration for IOS
+                  .col-md-12.pagecontainer#php
+                    .pagetitle.text-center
+                      %h3 Installation and configuration for Php
+                  .col-md-12.pagecontainer#java
+                    .pagetitle.text-center
+                      %h3 Installation and configuration for Java
+                  .col-md-12.pagecontainer#django
+                    .pagetitle.text-center
+                      %h3 Installation and configuration for Django
+                  %button.btn.btn-primary{:style => "width: 150px;",:name => 2, :type => "button"}
+                    %i.icon-next
+                    Previous
+                  %button.btn.btn-success.pull-right{:style => "width: 150px;",:name => 0, :type => "button"}
+                    %i.icon-next
+                    Finish
+                  %p
+                  .progress
+                    .progress-bar.progress-bar-info.progress-bar-striped.active{"aria-valuemax" => "100", "aria-valuemin" => "0", "aria-valuenow" => "33", :role => "progressbar", :style => "width: 67%"}
+          /     %br
+          /       %br
+          / .progress
+          /   .progress-bar.progress-bar-info.progress-bar-striped.active{"aria-valuemax" => "100", "aria-valuemin" => "0", "aria-valuenow" => "33", :role => "progressbar", :style => "width: 20%"}
+      / .col-md-6
+      /   .well.wel-sm
+      /     %p After adding the website domain we are going to offer you a javascript code to add to your error pages so the users will get recorded when they receive errors.
+      /     %p You will be able to get in contact with your users after the errors are received and send them messages to let them know the issues are resolved.
