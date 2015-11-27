@@ -9,8 +9,50 @@ directive = {
   }
 }
 
+
+$('#platform').on 'click', (platform) ->
+  manipulateWizard(3)
+  switch platform.target.parentElement.name
+    when 'javascript'
+      reset_platforms()
+      $('#javascript').show()
+    when 'nod_js'
+      reset_platforms()
+      $('#nod_js').show()
+    when 'rails'
+      reset_platforms()
+      $('#rails').show()
+    when 'ruby'
+      reset_platforms()
+      $('#ruby').show()
+    when 'python'
+      reset_platforms()
+      $('#python').show()
+    when 'ios'
+      reset_platforms()
+      $('#ios').show()
+    when 'php'
+      reset_platforms()
+      $('#php').show()
+    when 'java'
+      reset_platforms()
+      $('#java').show()
+    when 'django'
+      reset_platforms()
+      $('#django').show()
+
 reset_platforms = () ->
   $('#javascript, #node_js, #rails, #ruby, #python, #ios, #php, #java, #django').hide()
+
+manipulateWizard = (n) ->
+  if n != 0
+    $('.stepwizard-row a').removeClass('btn-primary')
+    $('.stepwizard-row a').addClass('btn-default')
+    $('.stepwizard a[href="#step-' + n + '"]').tab 'show'
+    $('.stepwizard-row a[href="#step-' + n + '"]').removeClass 'btn-default'
+    $('.stepwizard-row a[href="#step-' + n + '"]').addClass 'btn-primary'
+  return
+
 
 PubSub.subscribe('assigned.website', (ev, website)->
   console.log gon.action
@@ -22,7 +64,6 @@ PubSub.subscribe('assigned.website', (ev, website)->
         $('#websites-container').render data, directive
         $('#myModal').modal('show') if data.websites.length == 0
         console.log 'data loaded'
-
       $.getJSON Routes.api_v1_website_path(website.id), (data) ->
         $('#current-website').render data
 
