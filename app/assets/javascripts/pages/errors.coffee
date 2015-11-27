@@ -1,4 +1,7 @@
 # important don't add $ -> here when using PubSub as the event will be assigned every time
+$.getJSON('/api/v1/websites', (data)->
+    location.href = '/websites/new' if data.websites.length > 0
+  )
 directive = {
   groups:{
     warning: {
