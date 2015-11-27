@@ -13,13 +13,13 @@
               .stepwizard
                 .stepwizard-row
                   .stepwizard-step
-                    %a.btn.btn-primary.btn-circle.active-step{"data-toggle" => "tab", :href => "#step-1", :onclick => "stepnext(1)"} 1
+                    %a.btn.btn-primary.btn-circle.active-step.tab1{"data-toggle" => "tab", :href => "#step-1"} 1
                     %p Add Website
                   .stepwizard-step
-                    %a.btn.btn-default.btn-circle{"data-toggle" => "tab", :disabled => "disabled", :href => "#step-2"} 2
+                    %a.btn.btn-default.btn-circle.tab2{"data-toggle" => "tab", :disabled => "disabled", :href => "#step-2"} 2
                     %p Chose Platform
                   .stepwizard-step
-                    %a.btn.btn-default.btn-circle{"data-toggle" => "tab", :disabled => "disabled", :href => "#step-3"} 3
+                    %a.btn.btn-default.btn-circle.tab3{"data-toggle" => "tab", :disabled => "disabled", :href => "#step-3"} 3
                     %p Configuration
           .container
             .rate-updates
@@ -32,10 +32,11 @@
                     .form-group
                       %label.control-label Domain
                       %input#domain.form-control{:placeholder => "http://www.domain.com", :required => "required", :type => "url", :name => 'website'}/
-                  %br
-                  %button.btn.btn-success.pull-left{:style => "width: 150px;",:name => 2, :type => "button"}
-                    %i.icon-next
-                    Next
+                    %br
+                    %br
+                    %button.btn.btn-success.pull-left#valid_website{:style => "width: 150px;",:name => 2, :type => "submit"}
+                      %i.icon-next
+                      Next
                   %br
                   %br
                   %br
@@ -85,13 +86,9 @@
                         %a.tile.text-center{:name => "django"}
                           %img{:src => image_path("icon_django.png")}/
                           %span Django
-                    %button.btn.btn-primary.pull-left{:style => "width: 150px;", :name => 1, :type => "button"}
-                      %i.icon-next
-                      Previous
-                    / %button.btn.btn-success.pull-right{:style => "width: 150px;", :name => 3, :type => "button"}
+                    / %button.btn.btn-primary.pull-left{:style => "width: 150px;", :name => 1, :type => "button"}
                     /   %i.icon-next
-                    /   Next
-                    %p
+                    /   Previous
                     %p
                     %p
                     .progress
@@ -183,9 +180,9 @@
                   .col-md-12.pagecontainer#django
                     .pagetitle.text-center
                       %h3 Installation and configuration for Django
-                  %button.btn.btn-primary{:style => "width: 150px;",:name => 2, :type => "button"}
+                  %button.btn.btn-primary#retry{:style => "width: 150px;",:name => 2, :type => "button"}
                     %i.icon-next
-                    Previous
+                    Go Back
                   %button.btn.btn-success.pull-right{:style => "width: 150px;",:name => 0, :type => "button"}
                     %i.icon-next
                     Finish
