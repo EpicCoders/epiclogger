@@ -9,6 +9,56 @@ directive = {
   }
 }
 
+PubSub.subscribe('assigned.website', (ev, website)->
+  console.log gon.action
+  switch gon.action
+    when "new"
+      addNewWebsite('#formWebsite', 'new')
+    when "index"
+      $.getJSON Routes.api_v1_websites_url(), {member_id: $.auth.user.id}, (data) ->
+        $('#websites-container').render data, directive
+        $('#myModal').modal('show') if data.websites.length > 0
+        console.log 'data loaded'
+
+      $.getJSON Routes.api_v1_website_path(website.id), (data) ->
+        $('#current-website').render data
+
+      reset_platforms()
+      $('.tab2, .tab3').addClass('disabled')
+      addNewWebsite('#modalWebsite', 'index')
+
+)
+addNewWebsite = (form, action) ->
+  $(form).submit (e) ->
+      e.preventDefault()
+      $.ajax
+        url: Routes.api_v1_websites_url()
+        type: 'post'
+        dataType: 'json'
+        data: { website: { domain: $(form).find('#domain').val(), title: $(form).find('#title').val() } }
+        success: (data) ->
+          EpicLogger.setMemberDetails(data.id)
+          if action == 'index'
+            manipulateWizard(2)
+            $('.tab1').addClass('disabled')
+            $('.tab2').removeClass('disabled')
+          else
+            alert 'Website added!'
+            location.href = '/installations'
+        error: (error) ->
+          alert "Website exists!" if error.status == 401
+      return
+    return
+
+reset_platforms = () ->
+  $('#javascript, #node_js, #rails, #ruby, #python, #ios, #php, #java, #django').hide()
+
+$('#retry').on 'click', () ->
+  manipulateWizard(2)
+  reset_platforms()
+
+$('#finish').on 'click', () ->
+  location.href = '/errors'
 
 $('#platform').on 'click', (platform) ->
   manipulateWizard(3)
@@ -33,9 +83,6 @@ $('#platform').on 'click', (platform) ->
     when 'django'
       $('#django').show()
 
-reset_platforms = () ->
-  $('#javascript, #node_js, #rails, #ruby, #python, #ios, #php, #java, #django').hide()
-
 manipulateWizard = (n) ->
   if n != 0
     $('.stepwizard-row a').removeClass('btn-primary')
@@ -44,60 +91,4 @@ manipulateWizard = (n) ->
     $('.stepwizard-row a[href="#step-' + n + '"]').removeClass 'btn-default'
     $('.stepwizard-row a[href="#step-' + n + '"]').addClass 'btn-primary'
   return
-
-
-PubSub.subscribe('assigned.website', (ev, website)->
-  console.log gon.action
-  switch gon.action
-    when "index"
-      $.getJSON Routes.api_v1_websites_url(), {member_id: $.auth.user.id}, (data) ->
-        $('#websites-container').render data, directive
-        $('#myModal').modal('show') if data.websites.length == 0
-        console.log 'data loaded'
-
-      reset_platforms()
-      $('#retry').on 'click', () ->
-        manipulateWizard(2)
-        reset_platforms()
-      $('#finish').on 'click', () ->
-        location.href = '/errors'
-
-      $.getJSON Routes.api_v1_website_path(website.id), (data) ->
-        $('#current-website').render data
-
-      $('.tab2, .tab3').addClass('disabled')
-      $('#addWebsite').submit (e) ->
-        e.preventDefault()
-        $.ajax
-          url: Routes.api_v1_websites_url()
-          type: 'post'
-          dataType: 'json'
-          data: { website: { domain: $('#addWebsite').find('#domain').val(), title: $('#addWebsite').find('#title').val() } }
-          success: (data) ->
-            manipulateWizard(2)
-            $('.tab1').addClass('disabled')
-            $('.tab2').removeClass('disabled')
-            EpicLogger.setMemberDetails(data.id)
-          error: (error) ->
-            alert "Website exists!" if error.status == 401
-        return
-    when "new"
-      console.log "errors here"
-      $('#newWebsite').submit (e) ->
-        e.preventDefault()
-        $.ajax
-          url: Routes.api_v1_websites_url()
-          type: 'post'
-          dataType: 'json'
-          data: { website: { domain: $('#newWebsite').find('#domain').val(), title: $('#newWebsite').find('#title').val() } }
-          success: (data) ->
-            alert 'Website added!'
-            EpicLogger.setMemberDetails(data.id)
-            location.href = '/installations'
-          error: (error) ->
-            alert "Website exists!" if error.status == 401
-        return
-      return
-
-)
 
