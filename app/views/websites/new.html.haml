@@ -21,7 +21,6 @@
                   .stepwizard-step
                     %a.btn.btn-default.btn-circle.tab3{"data-toggle" => "tab", :disabled => "disabled", :href => "#step-3"} 3
                     %p Configuration
-          .container
             .rate-updates
               .tab-content.margintop0{:style => "border:none !important;"}
                 #step-1.tab-pane.fade.active.in.padding20
@@ -183,7 +182,7 @@
                   %button.btn.btn-primary#retry{:style => "width: 150px;",:name => 2, :type => "button"}
                     %i.icon-next
                     Go Back
-                  %button.btn.btn-success.pull-right{:style => "width: 150px;",:name => 0, :type => "button"}
+                  %button.btn.btn-success.pull-right#finish{:style => "width: 150px;",:name => 0, :type => "button"}
                     %i.icon-next
                     Finish
                   %p
