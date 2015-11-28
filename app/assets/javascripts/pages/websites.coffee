@@ -12,33 +12,25 @@ directive = {
 
 $('#platform').on 'click', (platform) ->
   manipulateWizard(3)
+  reset_platforms()
   switch platform.target.parentElement.name
     when 'javascript'
-      reset_platforms()
       $('#javascript').show()
     when 'nod_js'
-      reset_platforms()
       $('#nod_js').show()
     when 'rails'
-      reset_platforms()
       $('#rails').show()
     when 'ruby'
-      reset_platforms()
       $('#ruby').show()
     when 'python'
-      reset_platforms()
       $('#python').show()
     when 'ios'
-      reset_platforms()
       $('#ios').show()
     when 'php'
-      reset_platforms()
       $('#php').show()
     when 'java'
-      reset_platforms()
       $('#java').show()
     when 'django'
-      reset_platforms()
       $('#django').show()
 
 reset_platforms = () ->
