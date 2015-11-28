@@ -60,12 +60,18 @@ PubSub.subscribe('assigned.website', (ev, website)->
     when "index"
       $.getJSON Routes.api_v1_websites_url(), {member_id: $.auth.user.id}, (data) ->
         $('#websites-container').render data, directive
+        $('#myModal').modal('show') if data.websites.length == 0
         console.log 'data loaded'
-    when "new"
+
       reset_platforms()
       $('#retry').on 'click', () ->
         manipulateWizard(2)
         reset_platforms()
+      $('#finish').on 'click', () ->
+        location.href = '/errors'
+
+      $.getJSON Routes.api_v1_website_path(website.id), (data) ->
+        $('#current-website').render data
 
       $('.tab2, .tab3').addClass('disabled')
       $('#addWebsite').submit (e) ->
@@ -83,19 +89,19 @@ PubSub.subscribe('assigned.website', (ev, website)->
           error: (error) ->
             alert "Website exists!" if error.status == 401
         return
+    when "new"
+      console.log "errors here"
+      $('#newWebsite').submit (e) ->
+        e.preventDefault()
+        $.ajax
+          url: Routes.api_v1_websites_url()
+          type: 'post'
+          dataType: 'json'
+          data: { website: { domain: $('#addWebsite').find('#domain').val(), title: $('#addWebsite').find('#title').val() } }
+          success: (data) ->
+            EpicLogger.setMemberDetails(data.id)
+        return
+      return
 
 )
 
-
-# console.log "errors here"
-# $('#addWebsite').submit (e) ->
-#   e.preventDefault()
-#   $.ajax
-#     url: Routes.api_v1_websites_url()
-#     type: 'post'
-#     dataType: 'json'
-#     data: { website: { domain: $('#addWebsite').find('#domain').val(), title: $('#addWebsite').find('#title').val() } }
-#     success: (data) ->
-#       EpicLogger.setMemberDetails(data.id)
-#   return
-# return

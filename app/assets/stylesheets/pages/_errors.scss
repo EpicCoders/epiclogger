@@ -482,6 +482,7 @@
   line-height: 1.428571429;
   border-radius: 15px;
 }
+
 .stepwizard-content{
  border:none !important;
  float: left !important;
@@ -489,4 +490,14 @@
  padding: 15px !important;
  width: 100% !important;
 
+}
+
+.modal-content {
+  margin-top: 150px;
+  margin-left: -200px;
+  width: 1000px;
+}
+
+.modal-backdrop{
+  opacity: 0.95 !important;
 }
