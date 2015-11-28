@@ -61,13 +61,12 @@ $('#finish').on 'click', () ->
   location.href = '/errors'
 
 $('#platform').on 'click', (platform) ->
-  manipulateWizard(3)
   reset_platforms()
   switch platform.target.parentElement.name
     when 'javascript'
       $('#javascript').show()
-    when 'nod_js'
-      $('#nod_js').show()
+    when 'node_js'
+      $('#node_js').show()
     when 'rails'
       $('#rails').show()
     when 'ruby'
@@ -82,6 +81,7 @@ $('#platform').on 'click', (platform) ->
       $('#java').show()
     when 'django'
       $('#django').show()
+  manipulateWizard(3)
 
 manipulateWizard = (n) ->
   if n != 0
