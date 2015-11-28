@@ -97,9 +97,13 @@ PubSub.subscribe('assigned.website', (ev, website)->
           url: Routes.api_v1_websites_url()
           type: 'post'
           dataType: 'json'
-          data: { website: { domain: $('#addWebsite').find('#domain').val(), title: $('#addWebsite').find('#title').val() } }
+          data: { website: { domain: $('#newWebsite').find('#domain').val(), title: $('#newWebsite').find('#title').val() } }
           success: (data) ->
+            alert 'Website added!'
             EpicLogger.setMemberDetails(data.id)
+            location.href = '/installations'
+          error: (error) ->
+            alert "Website exists!" if error.status == 401
         return
       return
 
