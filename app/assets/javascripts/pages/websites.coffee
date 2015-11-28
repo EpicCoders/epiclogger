@@ -64,17 +64,6 @@ PubSub.subscribe('assigned.website', (ev, website)->
         $('#websites-container').render data, directive
         $('#myModal').modal('show') if data.websites.length == 0
         console.log 'data loaded'
-<<<<<<< 2f47e401d95badce71494e6726eef303ceff69a2
-=======
-
-      reset_platforms()
-      $('#retry').on 'click', () ->
-        manipulateWizard(2)
-        reset_platforms()
-      $('#finish').on 'click', () ->
-        location.href = '/errors'
-
->>>>>>> 860f73c8584cda69cb65077a17709e5c21a286a5
       $.getJSON Routes.api_v1_website_path(website.id), (data) ->
         $('#current-website').render data
 
