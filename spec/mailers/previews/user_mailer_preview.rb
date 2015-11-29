@@ -2,8 +2,9 @@
 class UserMailerPreview < ActionMailer::Preview
 
   def notify_subscriber
-    message = Message.last
-    UserMailer.notify_subscriber(message.issue, message.subscriber, message.content)
+    message = 'Custom message sent to members'
+    group = GroupedIssue.first
+    UserMailer.notify_subscriber(group, group.website.members.first, message)
   end
 
   def member_invitation

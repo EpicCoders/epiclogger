@@ -1,11 +1,11 @@
 class UserMailer < ApplicationMailer
   default from: "Epic Logger <admin@epiclogger.com>"
 
-  def notify_subscriber(issue, subscriber, message)
-    @issue = issue
+  def notify_subscriber(group, member, message)
+    @group = group
     @message = message
-    @website = @issue.group.website
-    @member = subscriber
+    @website = @group.website
+    @member = member
     mail(to: @member.email, subject: 'Epic Logger Subscriber notification')
   end
 

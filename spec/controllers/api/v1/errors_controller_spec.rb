@@ -81,17 +81,17 @@ describe Api::V1::ErrorsController, :type => :controller do
     it 'should email subscribers' do
       mailer = double('UserMailer')
       expect(mailer).to receive(:deliver_now)
-      expect(UserMailer).to receive(:notify_subscriber).with(group, subscriber, message).and_return(mailer).once
+      expect(UserMailer).to receive(:notify_subscriber).with(group, member, message).and_return(mailer).once
 
       post :notify_subscribers, params
     end
 
     it 'should email 2 subscribers' do
-      subscriber2 = create :subscriber, website: website
-      issue = create :issue, group: group, subscriber: subscriber2
+      member2 = create :member
+      website_member = create :website_member, website: website, member: member2
       mailer = double('UserMailer')
       expect(mailer).to receive(:deliver_now).twice
-      expect(UserMailer).to receive(:notify_subscriber).with(group, an_instance_of(Subscriber), message).and_return(mailer).twice
+      expect(UserMailer).to receive(:notify_subscriber).with(group, an_instance_of(Member), message).and_return(mailer).twice
       post :notify_subscribers, params
     end
 
