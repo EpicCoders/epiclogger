@@ -6,7 +6,6 @@ class Api::V1::MembersController < Api::V1::ApiController
   end
 
   def create
-    binding.pry
     if !website_member[:token].blank?
       WebsiteMember.find_by_invitation_token(website_member[:token]).update_attributes(:member_id => Member.find_by_email(website_member[:email]).id)
     else
