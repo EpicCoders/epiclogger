@@ -17,7 +17,7 @@ PubSub.subscribe('assigned.website', (ev, website)->
     when "index"
       $.getJSON Routes.api_v1_websites_url(), {member_id: $.auth.user.id}, (data) ->
         $('#websites-container').render data, directive
-        $('#myModal').modal('show') if data.websites.length > 0
+        $('#myModal').modal('show') if data.websites.length == 0
         console.log 'data loaded'
 
       $.getJSON Routes.api_v1_website_path(website.id), (data) ->
