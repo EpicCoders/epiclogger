@@ -39,7 +39,51 @@ class ErrorStore
 
   # 3. read the body or url error data and validate it
   def validate_data
+    # 1. TODO add blacklist ip option !!
+    # 2. TODO add rate limit for the api option
+    data = get_data
+
+    data['project']  = _context.website.id
+    data['errors']   = []
+    data['message']  = '<no message>' unless data.has_key?('message')
+    data['event_id'] = SecureRandom.hex() unless data.has_key?('event_id')
+
+    if data['event_id'].length > 32
+      data['errors'] << { 'type' => 'value_too_long', 'name' => 'event_id', 'value' => data['event_id'] }
+      data['event_id'] = SecureRandom.hex()
+    end
+
+    if data.include?('timestamp')
+      begin
+        process_timestamp(data)
+      rescue ErrorStore::InvalidTimestamp => e
+        data['errors'] << { type: 'invalid_data', 'name' => 'timestamp', 'value' => data['timestamp'] }
+      end
+    end
+
+    if data.include?('fingerprint')
+      begin
+        process_fingerprint(data)
+      rescue ErrorStore::InvalidFingerprint => e
+        data['errors'] << { type: 'invalid_data', 'name' => 'fingerprint', 'value' => data['fingerprint'] }
+      end
+    end
+
+    data['platform'] = 'other' if !data.include?('platform') || !VALID_PLATFORMS.include?(data['platform'])
+
+    if data['modules'] && !data['modules'].is_a?(Array)
+      data['errors'] << { 'type' => 'invalid_data', 'name': 'modules', 'value': data['modules'] }
+      data.delete('modules')
+    end
+
+    if !data['extra'].blank? and !data['extra'].is_a?(Array)
+      data['errors'] << { 'type' => 'invalid_data', 'name': 'extra', 'value': data['extra'] }
+      data.delete('extra')
+    end
     
+    data.keys.each do |key|
+      if 
+    end
   end
 
   # 4. store the error after validating the error data
@@ -47,24 +91,51 @@ class ErrorStore
     
   end
 
-  def get
-    data = _request.query_parameters
-    # decode get request data
-  end
-
-  def post
-    # decode post request data
-    data = _request.body.read
-    # response_or_event_id = process
-
-    # if isinstance(response_or_event_id, HttpResponse):
-    #   return response_or_event_id
-    # return HttpResponse(json.dumps({
-    #     'id': response_or_event_id,
-    # }), content_type='application/json')
-  end
-
   private
+  CLIENT_RESERVED_ATTRS = [
+    'project',
+    'errors',
+    'event_id',
+    'message',
+    'checksum',
+    'culprit',
+    'fingerprint',
+    'level',
+    'time_spent',
+    'logger',
+    'server_name',
+    'site',
+    'timestamp',
+    'extra',
+    'modules',
+    'tags',
+    'platform',
+    'release',
+    'environment'
+  ]
+  VALID_PLATFORMS = [
+    'as3',
+    'c',
+    'cfml',
+    'csharp',
+    'go',
+    'java',
+    'javascript',
+    'node',
+    'objc',
+    'other',
+    'perl',
+    'php',
+    'python',
+    'ruby',
+  ]
+  Auth = Struct.new(:client, :version, :app_secret, :app_key, :is_public) do
+    def is_public?
+      self.is_public || false
+    end
+  end
+  Context = Struct.new(:agent, :version, :website_id, :website, :ip_address)
+
   def _request
     @request
   end
@@ -81,12 +152,101 @@ class ErrorStore
     @context
   end
 
-  Auth = Struct.new(:client, :version, :app_secret, :app_key, :is_public) do
-    def is_public?
-      self.is_public || false
+  # get the data sent via the request
+  def get_data
+    if _request.get?
+      data = _request.query_parameters['sentry_data']
+    elsif _request.post?
+      data = _request.body.read
     end
+    # let's check and see if we have the content encoding defined in headers
+    content_encoding = _request.headers['HTTP_CONTENT_ENCODING']
+
+    if content_encoding == 'gzip'
+      data = decompress_gzip(data)
+    elsif content_encoding == 'deflate'
+      data = decompress_deflate(data)
+    elsif !data.start_with?('{')
+      data = decode_and_decompress(data)
+    end
+    data = safely_load_json_string(data)
+
+    return data
   end
-  Context = Struct.new(:agent, :version, :website_id, :website, :ip_address)
+
+  def process_fingerprint(data)
+    fingerprint = data['fingerprint']
+    raise ErrorStore::InvalidFingerprint.new(self), 'Could not process fingerprint' unless fingerprint.is_a? Array
+
+    result = []
+    fingerprint.each do |section|
+      if !is_numeric?(section) || !section.is_a?(String)
+        raise ErrorStore::InvalidFingerprint.new(self), 'Could not process fingerprint !(string, float, int)'
+      end
+      result << section
+    end
+    return result
+  end
+
+  def process_timestamp(data)
+    timestamp = data['timestamp']
+    if !timestamp
+      data.delete('timestamp')
+      return data
+    elsif is_numeric? timestamp
+      timestamp = Time.at(timestamp.to_i).to_datetime
+    elsif !timestamp.is_a?(DateTime)
+      timestamp = timestamp.chomp('Z') if timestamp.end_with?('Z')
+      timestamp = DateTime.strptime(value, '%Y-%m-%dT%H:%M:%S')
+    end
+
+    today = DateTime.now()
+    if timestamp > today + 1.minute
+      raise ErrorStore::InvalidTimestamp.new(self), 'We could not process timestamp is in the future'
+    end
+
+    if timestamp < today - 30.days
+      raise ErrorStore::InvalidTimestamp.new(self), 'We could not process timestamp is too old'
+    end
+
+    data['timestamp'] = timestamp.strftime('%s').to_i
+    return data
+  rescue Exception => e
+    raise ErrorStore::InvalidTimestamp.new(self), 'We could not process timestamp'
+  end
+
+  def is_numeric?(nr_string)
+     nr_string.to_s.match(/\A[+-]?\d+?(\.\d+)?\Z/) == nil ? false : true
+  end
+
+  def decode_json(data)
+    data.to_json
+  rescue Exception => e
+    raise ErrorStore::BadData.new(self), 'We could not decompress your request'
+  end
+
+  def decode_and_decompress(data)
+    begin
+      Zlib::Inflate.inflate(data)
+    rescue Zlib::Error
+      Base64.decode64(data)
+    end
+  rescue Exception => e
+    raise ErrorStore::BadData.new(self), 'We could not decompress your request'
+  end
+
+  def decompress_deflate(data)
+    Zlib::Inflate.inflate(data)
+  rescue Exception => e
+    raise ErrorStore::BadData.new(self), 'We could not decompress your request'
+  end
+
+  def decompress_gzip(data)
+    gz = Zlib::GzipReader.new(StringIO.new(data))
+    gz.read
+  rescue Exception => e
+    raise ErrorStore::BadData.new(self), 'We could not decompress your request'
+  end
 
   # 1. get website_id from header or params if it's a get
   def get_website_authorization
@@ -143,4 +303,9 @@ class ErrorStore
   class MissingCredentials < StoreError; end
   # an exception raised if the website is missing
   class WebsiteMissing < StoreError; end
+  # an exception raised of the request data is bogus
+  class BadData < StoreError; end
+  # an exception raised when the timestamp is not valid
+  class InvalidTimestamp < StoreError; end
+  class InvalidFingerprint < StoreError; end
 end
