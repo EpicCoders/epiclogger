@@ -10,20 +10,11 @@ class Website < ActiveRecord::Base
 
   attr_accessor :generate
 
-  before_create :custom_call
-  before_update :custom_call
-
-  def custom_call
-    if generate
-      generate_app_key()
-    else
-      generate_app_key()
-      generate_app_id()
-    end
-  end
+  before_create :generate_api_keys
+  before_update :generate_api_keys, if: -> { self.generate }
 
   protected
-  def generate_app_key
+  def generate_api_keys
     self.app_key = loop do
       key = SecureRandom.hex(24)
       break key unless Website.exists?(app_key: key)
