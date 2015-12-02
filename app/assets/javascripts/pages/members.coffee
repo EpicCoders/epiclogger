@@ -13,24 +13,13 @@ form_signup.submit((e)->
     password_confirmation: form_signup.find('#passwod_confirm').val()
   ).then((resp) ->
     console.log "we have success"
-    if gon.token != null
-      $.ajax
-        url: Routes.api_v1_members_url()
-        type: 'post'
-        dataType: 'json'
-        data: { website_member: { token: gon.token, email: form_signup.find('#email').val() } }
-        success: (data) ->
-          swal("Confirm email first!", "Welcome", "success")
-          setTimeout (->
-            window.location.href = '/login'
-            return
-          ), 3000
-    else
-      swal 'Account created', 'Confirm email and login!', 'success'
-      setTimeout (->
-            window.location.href = '/login'
-            return
-          ), 3000
+    $.ajax
+      url: Routes.api_v1_members_url()
+      type: 'post'
+      dataType: 'json'
+      data: { website_member: { token: gon.token, email: form_signup.find('#email').val() } }
+      success: (data) ->
+        location.href = '/errors'
   ).fail ((resp) ->
     EpicLogger.addAlert(resp.data.errors.full_messages)
     console.log "we failed"
