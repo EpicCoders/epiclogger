@@ -64,7 +64,7 @@ window.EpicLogger = (->
       else
         if $.cookie('pickedWebsite')!=undefined
           EpicLogger.pickWebsite(undefined, $.cookie('pickedWebsite'))
-        else
+        else if data.websites.length > 0
           EpicLogger.pickWebsite(undefined, data.websites[0].id)
       PubSub.publish('details.websites', data );
 

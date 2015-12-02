@@ -6,13 +6,11 @@ class Api::V1::MembersController < Api::V1::ApiController
   end
 
   def create
-    if !website_member[:token].blank?
-      WebsiteMember.find_by_invitation_token(website_member[:token]).update_attributes(:member_id => Member.find_by_email(website_member[:email]).id)
-    else
-      _not_allowed!('Token not found, retry!')
+    member = Member.find_by_email(website_member[:email])
+    if params[:website_member]['token'].present?
+      WebsiteMember.find_by_invitation_token(website_member[:token]).update_attributes(:member_id => member.id)
     end
-  rescue Exception => e
-    _not_allowed! e.message
+    Notification.create(:member_id => member.id)
   end
 
   def show

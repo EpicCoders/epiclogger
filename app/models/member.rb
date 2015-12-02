@@ -12,4 +12,6 @@ class Member < ActiveRecord::Base
   validates :email, presence: true, uniqueness: true
 
   attr_accessor :confirm_success_url
+
+  before_create :skip_confirmation!
 end
