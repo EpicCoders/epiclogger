@@ -14,4 +14,9 @@ class Member < ActiveRecord::Base
   attr_accessor :confirm_success_url
 
   before_create :skip_confirmation!
+  after_create :send_confirmation_email
+
+  def send_confirmation_email
+    self.send_confirmation_instructions
+  end
 end
