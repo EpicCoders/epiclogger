@@ -99,7 +99,7 @@ class Api::V1::ErrorsController < Api::V1::ApiController
   end
 
   def current_issue_page(per_page, order)
-    position = 0
+    position = 1
     current_site.grouped_issues.each do |grouped_issue|
       if Time.parse(grouped_issue.last_seen.to_s) > Time.parse(order)
         position += 1

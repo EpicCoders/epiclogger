@@ -28,13 +28,13 @@ directive = {
   #   html: ()->
   #     "Id: #{this.issues[0].subscriber.id}<br/><br/>IP Adress: 10.156.45.154.. <br/><br/>Email: #{this.issues[0].subscriber.email}<br/><br/>Data: ()"
 }
-page = 0
+
+page = 1
 errors_per_page = 13
 
 PubSub.subscribe('assigned.website', (ev, website)->
   switch gon.action
     when "index"
-      page = 1
       request(website.id, page)
       $('.next').on 'click', () ->
         page = page + 1
@@ -43,6 +43,9 @@ PubSub.subscribe('assigned.website', (ev, website)->
         page = page - 1
         request(website.id, page)
     when 'show'
+      individualErrorSidebar()
+      $(".sidebar").addClass("minimised-sidebar")
+      $(".sidebar").removeClass("regular-sidebar")
       $.getJSON '/api/v1/errors/' + gon.error_id, { website_id: website.id }, (data) ->
         $.current_issue = data.id
         sidebar_request(website.id,page,errors_per_page,data.last_seen)
@@ -90,6 +93,7 @@ request = (website_id, page) ->
 
 sidebar_request = (website_id, page, error_count, current_issue) ->
   $.getJSON Routes.api_v1_errors_path(), { website_id: website_id, page: page, error_count: error_count, current_issue: current_issue }, (data) ->
+    page = data.page
     populateSidebar(data)
 
 getAvatars = (data) ->
@@ -105,6 +109,7 @@ countSubscribers = (data) ->
   $.each data.issues, (index, issue) ->
     subscribers_count += issue.subscribers_count
   return subscribers_count
+
 
 manipulateIndexElements = (data) ->
   $.obj = data
@@ -132,18 +137,49 @@ changeError = (el) ->
     $('input[value="' + $.current_issue + '"]').parent().removeClass('current_issue')
     window.location.replace(window.location.origin + "/errors/" + $(el).find("input").val())
 
-$('#errors_back').click ->
-  window.location.replace(window.location.origin + "/errors")
+adjustContainerMargin  = (width) ->
+  if gon.action == 'show' #resize face trigger cand schimbi tabul...din ce am vazut e bug
+    if width >= 1170
+      $("#maincontainer").css("margin-left","510px")
+    else if width < 1170 && width > 992
+      $("#maincontainer").css("margin-left","60px")
+    else if width <= 992
+      $("#maincontainer").css("margin-left","0px")
+
+$('.toggle-list').on 'click', (event) ->
+  $('.toggle-list').toggleClass 'active'
+  $('.website-list').toggleClass 'list-is-not-visible'
+
+$('.toggle-errors').on 'click', (event) ->
+  $('.toggle-errors').toggleClass 'active'
+  $('.error_sidebar').toggleClass 'display-sidebar'
+
+$('.toggle-sidebar-mobile').on 'click', (event) ->
+  $('.minimised-sidebar').toggleClass('hidesidebars')
+  $('.error_sidebar').toggleClass('hidesidebars')
+
+individualErrorSidebar = () ->
+  $(window).on 'resize', (e) ->
+    adjustContainerMargin($(window).width())
+    if $(window).width() > 768 && $(window).width() < 1170
+      true
+  $(document).ready ->
+    adjustContainerMargin($(window).width())
+
+errorSidebarPagination = (data) ->
+  $('.sidebar_pagination_text').html(data.page + '/' + data.pages)
+  if data.page == data.pages
+    $('.next').addClass('disabled').prop("disabled",true)
+  else
+    $('.next').removeClass('disabled').prop("disabled",false)
+  if data.page == 1
+    $('.previous').addClass('disabled').prop("disabled",true)
+  else
+    $('.previous').removeClass('disabled').prop("disabled",false)
 
 populateSidebar = (data) ->
-  $("#maincontainer").css("margin-left","450px")
   $('.sidebar_elements').empty()
-  page = data.page
-  $('.sidebar_pagination_text').html(data.page + '/' + data.pages)
-  $('.next').addClass('disabled') if data.page == data.pages
-  $('.next').removeClass('disabled') if data.page != data.pages
-  $('.previous').removeClass('disabled') if data.page != 1
-  $('.previous').addClass('disabled') if data.page == 1
+  errorSidebarPagination(data);
   $.each data.groups , (index, issue) ->
     message = {}
     message.type = issue.message.split(":")[0]

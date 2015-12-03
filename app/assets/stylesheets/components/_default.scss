@@ -48,7 +48,6 @@ p {
   }
 }
 
-
 strong, label, .table > tbody > tr > th {
   font-weight: 500;
 }
@@ -111,7 +110,7 @@ img.profileimg {
 
 
 
-#sidebar {
+.sidebar {
   width: 220px;
   float: left;
   height: 100%;
@@ -240,7 +239,7 @@ img.profileimg {
 }
 
 @media all and (max-width: 992px) {
-  #sidebar {
+  .regular-sidebar {
     height: auto;
     float: none;
     width: auto;
@@ -250,7 +249,7 @@ img.profileimg {
 }
 
 @media all and (max-width: 992px) {
-  #sidebar #profile {
+  .regular-sidebar #profile {
     padding: 10px;
     height: 50px;
     border: none;
@@ -258,20 +257,20 @@ img.profileimg {
 }
 
 @media all and (max-width: 992px) {
-  #sidebar #profile img.profileimg {
+  .regular-sidebar #profile img.profileimg {
     margin: 0;
   }
 }
 
 @media all and (max-width: 992px) {
-  #sidebar #profile p {
+  .regular-sidebar #profile p {
     float: left;
     padding: 5px 0 0 15px;
   }
 }
 
 @media all and (max-width: 992px) {
-  #sidebar .selectbox {
+  .regular-sidebar .selectbox {
     margin-bottom: 20px;
     margin-top: 20px;
     border-top: 1px solid #1c1f35;
@@ -279,7 +278,7 @@ img.profileimg {
 }
 
 @media all and (max-width: 992px) {
-  #sidebar ul {
+  .regular-sidebar ul {
     margin-bottom: 20px;
   }
 }
