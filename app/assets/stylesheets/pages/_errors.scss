@@ -127,7 +127,7 @@
   .website-list{
     position:absolute;
     left:60px;
-    top:142px;
+    top:78px;
     z-index:3;
 
     .selectbox{
@@ -145,6 +145,7 @@
     img{
       width:30px;
       height:30px;
+      float:none;
     }
   }
 
@@ -207,17 +208,13 @@
     height:100%;
     float:left;
     z-index:2;
-
-    .website-list{
-      top:132px;
-    }
   }
 
   .error_sidebar{
     display:none;
     position:absolute;
     float:left;
-    width:100%;
+    width:calc(100% - 60px);
     z-index:2;
   }
 
