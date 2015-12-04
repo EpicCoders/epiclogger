@@ -15,24 +15,98 @@
       %br
     .col-lg-12#client-configuration
       %ul.nav.nav-tabs#platforms-tabs
-        %li.active{:role => "presentation"}
+        %li.active{:name => 'all platforms',:role => "presentation"}
           %a{:href => "#"} All Platforms
-        %li{:role => "presentation"}
+        %li{:name => 'javascript',:role => "presentation"}
           %a{:href => "#"} Javascript
-        %li{:role => "presentation"}
+        %li{:name => 'python',:role => "presentation"}
           %a{:href => "#"} Python
-        %li{:role => "presentation"}
-          %a{:href => "#"} Php
-        %li{:role => "presentation"}
+        %li{:name => 'php',:role => "presentation"}
+          %a{:href => "#"} PHP
+        %li{:name => 'ruby',:role => "presentation"}
           %a{:href => "#"} Ruby
-        %li{:role => "presentation"}
+        %li{:name => 'node.js',:role => "presentation"}
           %a{:href => "#"} Node.js
-        %li{:role => "presentation"}
+        %li{:name => 'java',:role => "presentation"}
           %a{:href => "#"} Java
-        %li{:role => "presentation"}
+        %li{:name => 'ios',:role => "presentation"}
           %a{:href => "#"} IOS
       %br
-      .panel.panel-default.codeview
+      .col-md-12.pagecontainer#current-site
+        .pagetitle
+          %h3 Installation and configuration
+        .panel.panel-default.codeview
+          .panel-heading Current site information
+          .panel-body
+            %table.table#current-website
+              %thead
+                %tr
+                  %th Website Title
+                  %th Website Domain
+                  %th App Key
+                  %th App Secret
+              %tbody.websites
+                %tr
+                  %td.title
+                  %td.domain
+                  %td.app_key
+                  %td.app_id
+        .panel.panel-default.codeview
+          .panel-heading Website Configuration
+          %p Engage developers with users to solve errors. This is the js library that sends errors to our server. Use the iframe functionality to show the form,autofill the email address, removed unused css code.
+          .panel-body#javascript
+            .codepanel
+              %p
+                var _lopts = _lopts || [];
+              %p
+                _lopts.widget_domain    = "//localhost:8000/contact.html"; //the domain for where to send the data
+              %p
+                _lopts.widget_url       = "1213";  //the id of the user in their application
+              %p
+                _lopts.email = "rabotse@gmail.com";
+              %p
+                \// _lopts.theme            = "light";
+              %p
+                _lopts.modal_width      = "41%";
+              %p
+                _lopts.modal_height     = 532;
+              %p
+                \//_lopts.widget_container = "#iframe_widget";
+              %p
+                _lopts.custom_widget    = true;
+              %p
+                _lopts.side_btn         = true;
+              %p
+                _lopts.iframe_widget    = true;
+              %p
+                \//var local_script = "localhost:8000/loader.min.js";
+              %p
+                (function() {
+              %p
+                var loader = document.createElement('script'); loader.type = 'text/javascript'; loader.async = true;
+              %p
+                \//loader.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + local_script;
+              %p
+                loader.src = '../src/loader.min.js';
+              %p
+                var s = document.getElementsByTagName('script')[0];
+              %p
+                s.parentNode.insertBefore(loader, s);
+              %p
+                })();
+          .panel-body#python
+            %p Python here
+          .panel-body#php
+            %p PHP here
+          .panel-body#ruby
+            %p Ruby here
+          .panel-body#java
+            %p Java here
+          .panel-body#node-js
+            %p Node.js here
+          .panel-body#ios
+            %p IOS here
+      .panel.panel-default.codeview#client-information
         .panel-heading Client Configuration
         .panel-body
           %p To start sending events, configure your client with the following DSN value:
@@ -42,40 +116,40 @@
           %p If this is a client that only needs public access (like raven-js), you can use the following public DSN:
           .codepanel
             %span.line https://3291842f716643f2968b11e3c86113f9@app.feedbacker.com/12798
-      .panel.panel-default.tileview
+      .panel.panel-default.tileview#client-platforms
         .panel-heading Platforms
-        .panel-body
-          %a.tile.text-center{:href => "#"}
+        .panel-body#img-platforms
+          %a.tile.text-center{:name => 'python',:href => "#"}
             %img{:src => image_path("icon_python.png")}/
             %span Python
-          %a.tile.text-center{:href => "#"}
+          %a.tile.text-center{:name => 'php',:href => "#"}
             %img{:src => image_path("icon_php.png")}/
             %span PHP
-          %a.tile.text-center{:href => "#"}
+          %a.tile.text-center{:name => 'ruby',:href => "#"}
             %img{:src => image_path("icon_ruby.png")}/
             %span Ruby
-          %a.tile.text-center{:href => "installations/show"}
+          %a.tile.text-center{:name => 'javascript',:href => "#"}
             %img{:src => image_path("icon_javascript.png")}/
             %span Javascript
-          %a.tile.text-center{:href => "#"}
+          %a.tile.text-center{:name => 'java',:href => "#"}
             %img{:src => image_path("icon_java.png")}/
             %span Java
-          %a.tile.text-center{:href => "#"}
+          %a.tile.text-center{:name => 'node.js',:href => "#"}
             %img{:src => image_path("icon_nodejs.png")}/
             %span Node.js
-          %a.tile.text-center{:href => "#"}
+          %a.tile.text-center{:name => 'ios',:href => "#"}
             %img{:src => image_path("icon_ios.png")}/
             %span IOS
 
-      .panel.panel-default.tileview
+      .panel.panel-default.tileview#client-frameworks
         .panel-heading Frameworks
         .panel-body
-          %a.tile.text-center{:href => "#"}
+          %a.tile.text-center{:href => "installations/show#rails-3"}
             %img{:src => image_path("icon_rails.png")}/
             %span Rails 3
-          %a.tile.text-center{:href => "#"}
+          %a.tile.text-center{:href => "installations/show#rails-4"}
             %img{:src => image_path("icon_rails.png")}/
             %span Rails 4
-          %a.tile.text-center{:href => "#"}
+          %a.tile.text-center{:href => "installations/show#django"}
             %img{:src => image_path("icon_django.png")}/
             %span Django
