@@ -48,7 +48,7 @@ PubSub.subscribe('assigned.website', (ev, website)->
       $(".sidebar").removeClass("regular-sidebar")
       $.getJSON '/api/v1/errors/' + gon.error_id, { website_id: website.id }, (data) ->
         $.current_issue = data.id
-        sidebar_request(website.id,page,errors_per_page,data.last_seen)
+        firsttime_sidebar_request(website.id,page,errors_per_page,data.last_seen)
         manipulateShowElements(data)
         $('#grouped-issuedetails').render data, directive
         populateSidebar(data)
@@ -86,14 +86,22 @@ PubSub.subscribe('assigned.website', (ev, website)->
         sidebar_request(website.id, page, errors_per_page)
 )
 
-
 request = (website_id, page) ->
   $.getJSON Routes.api_v1_errors_path(), { website_id: website_id, page: page }, (data) ->
     manipulateIndexElements(data)
 
+#workaround
+firsttime_sidebar_request = (website_id, page, error_count, current_issue) ->
+  $.getJSON Routes.api_v1_errors_path(), { website_id: website_id, page: page, error_count: error_count, current_issue: current_issue }, (data) ->
+    page = data.page
+    initializeSidebarButtons(data.page,website_id)
+    errorSidebarPagination(data)
+    populateSidebar(data)
+
 sidebar_request = (website_id, page, error_count, current_issue) ->
   $.getJSON Routes.api_v1_errors_path(), { website_id: website_id, page: page, error_count: error_count, current_issue: current_issue }, (data) ->
     page = data.page
+    errorSidebarPagination(data)
     populateSidebar(data)
 
 getAvatars = (data) ->
@@ -157,6 +165,7 @@ $('.toggle-errors').on 'click', (event) ->
 $('.toggle-sidebar-mobile').on 'click', (event) ->
   $('.minimised-sidebar').toggleClass('hidesidebars')
   $('.error_sidebar').toggleClass('hidesidebars')
+  $('#maincontainer').toggleClass('hidecontent')
 
 individualErrorSidebar = () ->
   $(window).on 'resize', (e) ->
@@ -166,20 +175,32 @@ individualErrorSidebar = () ->
   $(document).ready ->
     adjustContainerMargin($(window).width())
 
+initializeSidebarButtons = (page,website) ->
+  $('.next').on 'click', () ->
+    page = page + 1
+    sidebar_request(website, page, errors_per_page)
+  $('.previous').on 'click', () ->
+    page = page - 1
+    sidebar_request(website, page, errors_per_page)
+
 errorSidebarPagination = (data) ->
-  $('.sidebar_pagination_text').html(data.page + '/' + data.pages)
-  if data.page == data.pages
+  if data.groups.length > 0
+    $('.sidebar_pagination_text').html(data.page + '/' + data.pages)
+    if data.page == data.pages
+      $('.next').addClass('disabled').prop("disabled",true)
+    else
+      $('.next').removeClass('disabled').prop("disabled",false)
+    if data.page == 1
+      $('.previous').addClass('disabled').prop("disabled",true)
+    else
+      $('.previous').removeClass('disabled').prop("disabled",false)
+  else
+    $('.sidebar_pagination_text').html('0/0')
     $('.next').addClass('disabled').prop("disabled",true)
-  else
-    $('.next').removeClass('disabled').prop("disabled",false)
-  if data.page == 1
     $('.previous').addClass('disabled').prop("disabled",true)
-  else
-    $('.previous').removeClass('disabled').prop("disabled",false)
 
 populateSidebar = (data) ->
   $('.sidebar_elements').empty()
-  errorSidebarPagination(data);
   $.each data.groups , (index, issue) ->
     message = {}
     message.type = issue.message.split(":")[0]
@@ -202,16 +223,17 @@ populateSidebar = (data) ->
 
 errorStacktrace = (data) ->
   issue_nr =0
-  $.each data.issues[0].description, (index, issue) ->
-    issue_nr+=1
-    button = ' <button class="btn btn-warning btn-xs glyphicon glyphicon-plus" data-target="#expand_'+issue_nr+'"+ data-toggle="collapse" title="Click to expand"> View source</button>'
-    $('<p>' + issue.filename + ' ? in ' + issue.function + ' at line ' + issue.lineno + '/' + issue.colno + '</p>' + button).prependTo '.stacktrace'
-  object_nr =0
-  $.each data.issues[0].data, (index, object) ->
-    object_nr+=1
-    $('.stacktrace_error').append("<div class=collapse id='expand_"+object_nr+"'></div>")
-    $.each object, (key, value) ->
-      $('#expand_' + object_nr).text value
+  if data.issues.length > 0
+    $.each data.issues[0].description, (index, issue) ->
+      issue_nr+=1
+      button = ' <button class="btn btn-warning btn-xs glyphicon glyphicon-plus" data-target="#expand_'+issue_nr+'"+ data-toggle="collapse" title="Click to expand"> View source</button>'
+      $('<p>' + issue.filename + ' ? in ' + issue.function + ' at line ' + issue.lineno + '/' + issue.colno + '</p>' + button).prependTo '.stacktrace'
+    object_nr =0
+    $.each data.issues[0].data, (index, object) ->
+      object_nr+=1
+      $('.stacktrace_error').append("<div class=collapse id='expand_"+object_nr+"'></div>")
+      $.each object, (key, value) ->
+        $('#expand_' + object_nr).text value
 
 
 manipulateShowElements = (data) ->
