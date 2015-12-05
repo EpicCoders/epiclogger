@@ -13,6 +13,63 @@
           %a{:href => "#"}
             %h4 Integrations
       %br
+    .col-lg-9#client-details
+      %ul.nav.nav-tabs#details-tabs
+        %li.active{:name => 'settings',:role => "presentation"}
+          %a{:href => "#"} Settings
+        %li{:name => 'Notifications',:role => "presentation"}
+          %a{:href => "#"} Notifications
+        %li{:name => 'rate limits',:role => "presentation"}
+          %a{:href => "#"} Rate Limits
+        %li{:name => 'tags',:role => "presentation"}
+          %a{:href => "#"} Tags
+        %li{:name => 'api keys',:role => "presentation"}
+          %a{:href => "#"} Api Keys
+      %br
+      #details-settings
+        .col-lg-6
+          .panel.panel-default
+            .panel-heading Project Details
+            .panel-body
+              %form#formWebsite{:action => "", :method => "post"}
+                .form-group
+                  %label.control-label Project Name*
+                  %input#title.form-control{:placeholder => "Name here", :required => "required", :type => "text", :name => 'name'}/
+                %hr
+                .form-group
+                  %label.control-label Platforms*
+                  %br
+                  %select
+                    %option Javascript
+                    %option Python
+                    %option PHP
+                    %option Ruby
+                    %option Java
+                    %option Node.js
+                    %option IOS
+                %hr
+                .form-group
+                  %label.control-label Owner*
+                  %br
+                  %select
+                    %option Member
+                %hr
+                .form-group
+                  %label.control-label Slug*
+                  %input.form-control{:required => "required", :type => "text", :name => "Slug"}
+          .panel.panel-default.codeview
+            .panel-heading Event Settings
+            .panel-body
+              %h4 Here we need to set the interval button
+              %small Treat an event as resolved if it hasn't been seen for this amount of time.
+        .col-lg-6
+          .panel.panel-default.codeview
+            .panel-heading Project Details
+            .panel-body
+              %p Configure origin URLs which Sentry should accept events from. This is used for communication with clients like raven-js.
+              %p This will restrict requirements based on the Origin and Referrer headers.
+              %textarea{:cols => "61", :name => "origins", :placeholder => "e.g. example.com or https://example.com", :rows => "20"}
+
     .col-lg-12#client-configuration
       %ul.nav.nav-tabs#platforms-tabs
         %li.active{:name => 'all platforms',:role => "presentation"}

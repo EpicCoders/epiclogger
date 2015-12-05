@@ -2,6 +2,7 @@ PubSub.subscribe('assigned.website', (ev, website)->
   switch gon.action
     when "index"
       hideIndexHtml()
+      $('#client-details').hide()
       $('#client-information, #client-platforms, #client-frameworks').show()
       $.getJSON Routes.api_v1_website_path(website.id), (data) ->
         $('#current-website').render data
@@ -12,11 +13,14 @@ PubSub.subscribe('assigned.website', (ev, website)->
         $('#configuration-tabs li').removeClass('active')
 
         if target.attr('name') == 'details'
+          $('#client-details').show()
           $('#client-configuration').hide()
         else if target.attr('name') == 'integrations'
+          $('#client-details').hide()
           $('#client-configuration').hide()
         else if target.attr('name') == 'client configuration'
           $('#client-configuration').show()
+          $('#client-details').hide()
         target.addClass('active')
 
       $('#platforms-tabs').on 'click', (e) ->
