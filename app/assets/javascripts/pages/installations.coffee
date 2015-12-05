@@ -1,7 +1,5 @@
 PubSub.subscribe('assigned.website', (ev, website)->
-  $.getJSON Routes.api_v1_website_path(website.id), (data) ->
-    $('#current-website').render data
-    apiKeyTab(data)
+  apiKeyTab(data)
 
   $.getJSON Routes.api_v1_notification_path(gon.notification_id), { member_id: $.auth.user.id }, (data) ->
     $('input[name=daily_reports]').attr('checked', true) if data.daily_reports
@@ -45,44 +43,48 @@ apiKeyTab = (data) ->
         swal('Key updated')
     return
 
+switchIndexTabs = () ->
+  $('#configuration-tabs').on 'click', (e) ->
+    target = $(e.target.closest("li"))
+    e.preventDefault()
+    $('#configuration-tabs li').removeClass('active')
+
+    if target.attr('name') == 'details'
+      $('#details-settings, #client-details').show()
+      $('#client-configuration').hide()
+    else if target.attr('name') == 'integrations'
+      $('#client-details, #client-configuration').hide()
+    else if target.attr('name') == 'client configuration'
+      $('#client-configuration, #client-information, #client-platforms, #client-frameworks').show()
+      $('#client-details').hide()
+    target.addClass('active')
+
+  $('#platforms-tabs, #details-tabs').on 'click', (e) ->
+    target = $(e.target.closest("li"))
+    $('#platforms-tabs li').removeClass('active')
+    $('#details-tabs li').removeClass('active')
+    target.addClass('active')
+    manipulateInstallationsIndex(target)
+
+  $('#img-platforms').on 'click', (e) ->
+    manipulateInstallationsIndex($(e.target).parent())
+    $('#platforms-tabs li').removeClass('active')
+
 PubSub.subscribe('assigned.website', (ev, website)->
   switch gon.action
     when "index"
-      hideIndexHtml()
+      hideListedTabs()
+      switchIndexTabs()
       $('#client-details').hide()
+      $('#integrations-details').hide()
       $('#client-information, #client-platforms, #client-frameworks').show()
+
       $.getJSON Routes.api_v1_website_path(website.id), (data) ->
         $('#current-website').render data
 
-      $('#configuration-tabs').on 'click', (e) ->
-        target = $(e.target.closest("li"))
-        e.preventDefault()
-        $('#configuration-tabs li').removeClass('active')
-
-        if target.attr('name') == 'details'
-          $('#client-details').show()
-          $('#details-settings').show()
-          $('#client-configuration').hide()
-        else if target.attr('name') == 'integrations'
-          $('#client-details').hide()
-          $('#client-configuration').hide()
-        else if target.attr('name') == 'client configuration'
-          $('#client-configuration').show()
-          $('#client-details').hide()
-        target.addClass('active')
-
-      $('#platforms-tabs, #details-tabs').on 'click', (e) ->
-        target = $(e.target.closest("li"))
-        $('#platforms-tabs, #details-tabs li').removeClass('active')
-        target.addClass('active')
-        manipulateInstallationsIndex(target)
-
-      $('#img-platforms').on 'click', (e) ->
-        manipulateInstallationsIndex($(e.target).parent())
-        $('#platforms-tabs li').removeClass('active')
 
 
-hideIndexHtml = () ->
+hideListedTabs = () ->
   $('#details-settings,
     #details-notifications,
     #current-site, #details-rate-limits,
@@ -100,7 +102,7 @@ hideIndexHtml = () ->
   ).hide()
 
 manipulateInstallationsIndex = (target) ->
-  hideIndexHtml()
+  hideListedTabs()
   if target.attr('name') == 'javascript'
     $('#current-site').show()
     $('#javascript').show()
