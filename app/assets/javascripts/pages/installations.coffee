@@ -1,5 +1,4 @@
 PubSub.subscribe('assigned.website', (ev, website)->
-  apiKeyTab(data)
 
   $.getJSON Routes.api_v1_notification_path(gon.notification_id), { member_id: $.auth.user.id }, (data) ->
     $('input[name=daily_reports]').attr('checked', true) if data.daily_reports
@@ -81,6 +80,8 @@ PubSub.subscribe('assigned.website', (ev, website)->
 
       $.getJSON Routes.api_v1_website_path(website.id), (data) ->
         $('#current-website').render data
+        $('#current-site').render data
+        apiKeyTab(data)
 
 
 
