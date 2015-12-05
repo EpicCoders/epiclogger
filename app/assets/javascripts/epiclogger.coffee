@@ -85,7 +85,6 @@ window.EpicLogger = (->
       }
     }
     $helpfulLink = $('.helpful-link')
-    $('i.fa.fa-user').parent().attr('href').replace('1', $.auth.user.id)
     $helpfulLink.attr('data-helpful-email', $.auth.user.email)
     $helpfulLink.attr('data-helpful-name', $.auth.user.name)
     $('.user-sidebar').render $.auth.user, userDirectives
