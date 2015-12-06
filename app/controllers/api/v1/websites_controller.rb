@@ -7,7 +7,8 @@ class Api::V1::WebsitesController < Api::V1::ApiController
     website_exists = WebsiteMember.where("member_id = ?", current_member.id).joins(:website).where("domain = ?", website_params["domain"])
     if website_exists.blank?
       @website = Website.create( domain: website_params[:domain], title: website_params[:title] )
-      @website.website_members.create( member_id: current_member.id, role: WebsiteMember.role.find_value(:owner).value )
+      @notification = Notification.create(:website_member_id => @website_member.id)
+      @website.website_members.create( notification_id: @notification.id, member_id: current_member.id, role: WebsiteMember.role.find_value(:owner).value )
     else
       _not_allowed!
     end

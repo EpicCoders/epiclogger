@@ -1,5 +1,6 @@
 class Website < ActiveRecord::Base
   belongs_to :member
+  has_one :notification, through: :website_members, dependent: :destroy
   has_many :subscribers, dependent: :destroy
   has_many :grouped_issues, dependent: :destroy
   has_many :website_members, -> { uniq }, dependent: :destroy, autosave: true
