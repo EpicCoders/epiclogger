@@ -3,6 +3,7 @@ PubSub.subscribe('assigned.website', (ev, website)->
   range = $('.input-range')
   value = $('.range-value')
   value.html range.attr('value')
+  value.html 'disabled' if range.attr('value') == '0'
   range.on 'input', ->
     value.html @value
     return
