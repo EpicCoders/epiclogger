@@ -20,13 +20,6 @@
 /         = link_to new_website_path(), class: 'title' do
 /           = icon('globe')
 /           Add new website
-/     %ul.nav.nav-pills.nav-stacked
-/       = nav_link "Errors", errors_url(), {}, 'exclamation-triangle'
-/     %ul.nav.nav-pills.nav-stacked
-/       = nav_link "Installation", installations_url(), {}, 'code'
-/       = nav_link "Website Settings", settings_url(), {}, 'cog'
-/       = nav_link "Members", members_url(), {}, 'users'
-/       = nav_link "User Settings", edit_member_url(1), {}, 'user'
 /     %ul.nav.nav-pills.nav-stacked.hidden-md.hidden-lg
 /       %li#menu_account
 /         %a{:href => "#"}
@@ -39,8 +32,9 @@
 /     %ul.nav.nav-pills.nav-stacked
 /       = nav_link "Help", 'mailto:info@epiclogger.com', {'data-helpful'=>'epiclogger','data-helpful-modal'=>"on", :class=>'helpful-link'}, 'question'
 -if controller.controller_name == "errors" && controller.action_name == "show"
-  %nav.cbp-spmenu.cbp-spmenu-vertical.cbp-spmenu-left.error_nav
+  %nav.error-menu.error-menu-vertical
     .icon_sidebar
+      = render partial: 'layouts/icon_sidebar'
     .error_sidebar
       .sidebar_header
         %button{:class=>"fa fa-arrow-left btn previous"}
@@ -48,6 +42,9 @@
         %button{:class=>"fa fa-arrow-right btn next"}
       .sidebar_elements
 -else
-  %nav.cbp-spmenu.cbp-spmenu-vertical.cbp-spmenu-left
+  %nav.cbp-spmenu.cbp-spmenu-vertical.cbp-spmenu-left.regular_sidebar
+    .icon_sidebar
+      = render partial: 'layouts/icon_sidebar'
 %nav.cbp-spmenu.cbp-spmenu-horizontal.cbp-spmenu-top
-  %button.toggle-left-sidebar Toggle
+  = image_tag("logo_transparent.png", class: "toggle-left-sidebar")
+  .horizontal-sidebar-content

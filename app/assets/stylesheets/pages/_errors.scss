@@ -3,7 +3,7 @@
 }
 
 .error_sidebar{
-  width:350px;
+  margin-top:15px;
   height: 100%;
   background-color:white;
   overflow-y: auto;
@@ -95,60 +95,87 @@
   }
 }
 
-.error_content, .error_nav {
+.error-menu {
   -webkit-transition: all 0.2s ease-in;
   -moz-transition: all 0.2s ease-in;
   -o-transition: all 0.2s ease-in;
   transition: all 0.2s ease-in;
 }
 
-.error_content{
-  position:relative;
+.icon_sidebar, .error_sidebar {
+  -webkit-transition: all 0.2s ease-in;
+  -moz-transition: all 0.2s ease-in;
+  -o-transition: all 0.2s ease-in;
+  transition: all 0.2s ease-in;
 }
 
-.cbp-spmenu-sidebar-hide-left-with-error{
+.error-menu {
+  background: #47a3da;
+  position: fixed;
+}
+
+.error-menu-vertical {
+  height: 100%;
+  top: 45px;
+  z-index: 1000;
+
+  .icon_sidebar{
+    float:left;
+    width:60px;
+  }
+
+  .error_sidebar{
+    width:350px;
+  }
+}
+.error-menu-partial{
+  left:-60px;
+}
+
+.error-menu-hidden{
+  left:-410px;
+}
+
+.error-menu-visible{
   left:0px;
 }
 
-@media (min-width:1170px){
-
-  .error_content_desktop{
-    left:350px;
-  }
-
+.content-partial{
+  left:350px;
 }
 
-@media (max-width:1170px){
-  .cbp-spmenu-sidebar-hide-left-with-error{
-    left:-410px;
-  }
-
-  .error_content_mobile{
-    left:0px;
-  }
-
-  .error_content_desktop{
-    left:410px;
-  }
-
-  .cbp-spcontent {
-      overflow-x: hidden;
-      position: relative;
-      left: 0px;
-  }
+.content-fullwidth{
+  left:410px;
 }
 
-@media (max-width:410px){
-  .error_sidebar{
-    width:250px;
-  }
+.content-mobile{
+  left:0px;
+}
 
-  .cbp-spmenu-sidebar-hide-left-with-error{
-    left:-310px;
-  }
+.error-menu-vertical {
+  background-color:#2c3144;
 
-  .error_content_desktop{
-    left:310px;
+  .icon-list{
+    padding:0px;
+    margin-top:30px;
+
+    li{
+      box-sizing:border-box;
+      width:100%;
+      height:60px;
+
+      a{
+        text-align:center;
+        line-height:60px;
+        vertical-align:middle;
+        display:block;
+        box-sizing:border-box;
+        height:100%;
+        width:100%;
+        font-size:26px;
+        color:#495171;
+      }
+    }
   }
 }
 

@@ -3,17 +3,28 @@ window.EpicLogger = (->
   memberWebsites = undefined
 
   setSidebar: ->
-    if gon.controller == "errors" and gon.action == "show"
-      $('.cbp-spmenu-vertical').toggleClass('cbp-spmenu-sidebar-hide-left')
-      $('.main-container').toggleClass('cbp-spcontent-mobile')
-    else
-      $('.main-container').toggleClass('cbp-spcontent-regular-page')
-    $('.toggle-left-sidebar').hide() unless $('.main-container').hasClass('cbp-spcontent-mobile')
-    
-    $('.toggle-left-sidebar').on 'click', () ->
-      $('.cbp-spmenu-vertical').toggleClass('cbp-spmenu-sidebar-hide-left')
-      $('.main-container').toggleClass('cbp-spcontent-mobile')
+    if gon.controller != "errors" and gon.action != "show"
+      $('.toggle-left-sidebar').unbind('click').on 'click', () ->
+        if $(window).width()
+          $('.main-container').toggleClass('cbp-spcontent-pushed-right')
+          $('.cbp-spmenu-vertical').toggleClass('cbp-spmenu-vertical-pushed-right')
+      EpicLogger.bindResize()
 
+  setUpSidebar: (width) ->
+    if width >= 1170
+      $('.main-container').addClass('cbp-spcontent-pushed-right')
+      $('.cbp-spmenu-vertical').addClass('cbp-spmenu-vertical-pushed-right')
+      $('.main-container').removeClass('cbp-spcontent-full-width')
+      $('.cbp-spmenu-vertical').removeClass('cbp-spmenu-vertical-hidden')
+    else
+      $('.main-container').removeClass('cbp-spcontent-pushed-right')
+      $('.cbp-spmenu-vertical').removeClass('cbp-spmenu-vertical-pushed-right')
+      $('.main-container').addClass('cbp-spcontent-full-width')
+      $('.cbp-spmenu-vertical').addClass('cbp-spmenu-vertical-hidden')
+
+  bindResize: ->
+    $(window).on 'load resize', (e) ->
+      EpicLogger.setUpSidebar($(window).width())
 
   logout: ->
     $.removeCookie('pickedWebsite', {path: '/'})

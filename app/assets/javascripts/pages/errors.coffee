@@ -44,8 +44,7 @@ PubSub.subscribe('assigned.website', (ev, website)->
         request(website.id, page)
     when 'show'
       individualErrorSidebar()
-      $(".sidebar").addClass("minimised-sidebar")
-      $(".sidebar").removeClass("regular-sidebar")
+      setUpErrorSidebar($(window).width())
       $.getJSON '/api/v1/errors/' + gon.error_id, { website_id: website.id }, (data) ->
         $.current_issue = data.id
         firsttime_sidebar_request(website.id,page,errors_per_page,data.last_seen)
@@ -147,24 +146,27 @@ changeError = (el) ->
 
 setUpErrorSidebar = (width) ->
   if width >= 1170
-    $('.error_content').addClass('error_content_desktop')
-    $('.cbp-spmenu-vertical').removeClass('cbp-spmenu-sidebar-hide-left-with-error')
-    $('.error_content').removeClass('error_content_mobile')
+    $('.error-menu').removeClass('error-menu-hidden')
+    $('.error-menu').removeClass('error-menu-visible')
+    $('.cbp-spcontent').removeClass('content-mobile')
+    $('.cbp-spcontent').removeClass('content-fullwidth')
+    $('.error-menu').addClass('error-menu-partial')
+    $('.cbp-spcontent').addClass('content-partial')
   else
-    $('.error_content').removeClass('error_content_desktop')
-    $('.cbp-spmenu-vertical').addClass('cbp-spmenu-sidebar-hide-left-with-error')
-    $('.error_content').addClass('error_content_mobile')
-    $('.toggle-left-sidebar').on 'click', () ->
-      $('.error_content').toggleClass('error_content_desktop')
-      $('.cbp-spmenu-vertical').toggleClass('cbp-spmenu-sidebar-hide-left-with-error')
-    true
+    $('.error-menu').removeClass('error-menu-partial')
+    $('.cbp-spcontent').removeClass('content-partial')
+    $('.error-menu').addClass('error-menu-hidden')
+    $('.cbp-spcontent').addClass('content-mobile')
 
 
 individualErrorSidebar = () ->
-  $(window).on 'resize', (e) ->
+  $(window).on 'load resize', (e) ->
     setUpErrorSidebar($(window).width())
-  $(document).ready ->
-    setUpErrorSidebar($(window).width())
+  $('.toggle-left-sidebar').unbind('click').on 'click', () ->
+    $('.error-menu').toggleClass('error-menu-visible')
+    $('.cbp-spcontent').toggleClass('content-fullwidth')
+    if $(window).width() < 1170
+      $('.cbp-spcontent').toggleClass('content-mobile')
 
 initializeSidebarButtons = (page,website) ->
   $('.next').on 'click', () ->
