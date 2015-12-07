@@ -1,5 +1,24 @@
 PubSub.subscribe('assigned.website', (ev, website)->
 
+  $('#add-website').on 'click', (e) ->
+    e.preventDefault()
+    $.ajax
+      url: Routes.api_v1_websites_url()
+      type: 'post'
+      dataType: 'json'
+      data: { role: $('#member-role').val(), website: { domain: $('#formWebsite').find('#domain').val(), title: $('#formWebsite').find('#title').val() } }
+      success: (data) ->
+        EpicLogger.setMemberDetails(data.id)
+        swal("Good job!", "Website added!", "success")
+        setTimeout (->
+          location.href = '/installations'
+          return
+        ), 2000
+      error: (error) ->
+        sweetAlert("Error", "Website exists", "error") if error.status == 401
+    return
+  return
+
   $.getJSON Routes.api_v1_notifications_path(), { website_id: website.id }, (data) ->
     $('input[name=daily]').attr('checked', true) if data.daily
     $('input[name=realtime]').attr('checked', true) if data.realtime

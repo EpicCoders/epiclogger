@@ -29,25 +29,25 @@ PubSub.subscribe('assigned.website', (ev, website)->
 )
 addNewWebsite = (form, action) ->
   $(form).submit (e) ->
-      e.preventDefault()
-      $.ajax
-        url: Routes.api_v1_websites_url()
-        type: 'post'
-        dataType: 'json'
-        data: { website: { domain: $(form).find('#domain').val(), title: $(form).find('#title').val() } }
-        success: (data) ->
-          EpicLogger.setMemberDetails(data.id)
-          if action == 'index'
-            manipulateWizard(2)
-            $('.tab1').addClass('disabled')
-            $('.tab2').removeClass('disabled')
-          else
-            alert 'Website added!'
-            location.href = '/installations'
-        error: (error) ->
-          alert "Website exists!" if error.status == 401
-      return
+    e.preventDefault()
+    $.ajax
+      url: Routes.api_v1_websites_url()
+      type: 'post'
+      dataType: 'json'
+      data: { website: { domain: $(form).find('#domain').val(), title: $(form).find('#title').val() } }
+      success: (data) ->
+        EpicLogger.setMemberDetails(data.id)
+        if action == 'index'
+          manipulateWizard(2)
+          $('.tab1').addClass('disabled')
+          $('.tab2').removeClass('disabled')
+        else
+          alert 'Website added!'
+          location.href = '/installations'
+      error: (error) ->
+        alert "Website exists!" if error.status == 401
     return
+  return
 
 reset_platforms = () ->
   $('#javascript, #node_js, #rails, #ruby, #python, #ios, #php, #java, #django').hide()

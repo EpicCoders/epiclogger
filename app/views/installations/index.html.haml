@@ -33,8 +33,11 @@
             .panel-body
               %form#formWebsite{:action => "", :method => "post"}
                 .form-group
-                  %label.control-label Project Name*
-                  %input#title.form-control{:placeholder => "Name here", :required => "required", :type => "text", :name => 'name'}/
+                  %label.control-label Name
+                  %input#title.form-control{:placeholder => "Website name", :required => "required", :type => "text", :name => 'title'}/
+                .form-group
+                  %label.control-label Domain
+                  %input#domain.form-control{:placeholder => "http://www.domain.com", :required => "required", :type => "url", :name => 'website'}/
                 / %hr
                 / .form-group
                 /   %label.control-label Platforms*
@@ -49,10 +52,11 @@
                 /     %option IOS
                 %hr
                 .form-group
-                  %label.control-label Owner*
+                  %label.control-label Role*
                   %br
-                  %select
-                    %option Member
+                  %select#member-role
+                    %option{:value => 'owner'} Owner
+                    %option{:value => 'user'} User
                 / %hr
                 / .form-group
                 /   %label.control-label Slug*
@@ -60,21 +64,24 @@
           .panel.panel-default.codeview
             .panel-heading Event Settings
             .panel-body
-              %h4 Here we need to set the interval button
+              %h4 Here we need to show a slider bar
               %small Treat an event as resolved if it hasn't been seen for this amount of time.
+          .form-group
+            %button.btn.btn-success#add-website Save Changes
+            %button.btn.btn-warning Remove Project
         .col-lg-6
           .panel.panel-default.codeview
             .panel-heading Project Details
             .panel-body
+              .well.wel-sm
+                %p After adding the website domain we are going to offer you a javascript code to add to your error pages so the users will get recorded when they receive errors.
+                %p You will be able to get in contact with your users after the errors are received and send them messages to let them know the issues are resolved.
               %p Configure origin URLs which Sentry should accept events from. This is used for communication with clients like raven-js.
               %p This will restrict requirements based on the Origin and Referrer headers.
               .form-group
                 %label{:for => "comment"} Allowed Domains:
                 %textarea#comment.form-control{:placeholder => "e.g. example.com or https://example.com", :rows => "7"}
               %small Separate multiple entries with a newline.
-        .form-group
-          %button.btn.btn-success.pull-right Save Changes
-          %button.btn.btn-warning.pull-right Remove Project
 
       #details-notifications
         .col-lg-12
