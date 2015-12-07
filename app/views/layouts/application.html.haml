@@ -12,14 +12,10 @@
     = javascript_include_tag 'application', 'data-turbolinks-eval' => false
 
     = csrf_meta_tags
-  %body{:id=>"#{controller.controller_name}-#{controller.action_name}"}
+  %body{:id=>"#{controller.controller_name}-#{controller.action_name}", :class => "cbp-spmenu-push"}
     = include_gon
-    .loading.j-cloak
-    -if controller.controller_name == "errors" && controller.action_name == "show"
-      = render partial: 'layouts/error_sidebar'
-    -else
-      = render partial: 'layouts/menu'
-    #maincontainer.container-fluid
+    = render partial: 'layouts/menu'
+    .main-container.container-fluid.cbp-spcontent
       = yield
     - if Rails.application.assets.find_asset("pages/#{controller.controller_name}")
       = javascript_include_tag "pages/#{controller.controller_name}"

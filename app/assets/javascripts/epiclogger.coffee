@@ -2,29 +2,18 @@ window.EpicLogger = (->
   pickedWebsite = undefined
   memberWebsites = undefined
 
-  menuResize: ->
-    $(window).on 'resize', ->
-    if $(window).width() <= 992
-      $('#collapse_menu').removeClass 'in'
+  setSidebar: ->
+    if gon.controller == "errors" and gon.action == "show"
+      $('.cbp-spmenu-vertical').toggleClass('cbp-spmenu-sidebar-hide-left')
+      $('.main-container').toggleClass('cbp-spcontent-mobile')
     else
-      $('#collapse_menu').addClass 'in'
+      $('.main-container').toggleClass('cbp-spcontent-regular-page')
+    $('.toggle-left-sidebar').hide() unless $('.main-container').hasClass('cbp-spcontent-mobile')
+    
+    $('.toggle-left-sidebar').on 'click', () ->
+      $('.cbp-spmenu-vertical').toggleClass('cbp-spmenu-sidebar-hide-left')
+      $('.main-container').toggleClass('cbp-spcontent-mobile')
 
-    $(window).trigger 'resize'
-
-  sidebarToggle: ->
-    $('.sidebar').addClass('regular-sidebar')
-    $('.sidebar .selectbox > p, #websites-sidebar').on 'click', (e) ->
-      select = $('.sidebar .selectbox');
-      if select.hasClass 'open'
-        select.removeClass 'open'
-        select.addClass 'closed'
-        select.find('.options').slideUp 80
-        select.find('#add-new').slideUp 80
-      else
-        select.removeClass 'closed'
-        select.addClass 'open'
-        select.find('.options').slideDown 80
-        select.find('#add-new').slideDown 80
 
   logout: ->
     $.removeCookie('pickedWebsite', {path: '/'})
@@ -144,8 +133,7 @@ window.EpicLogger = (->
       PubSub.clearAllSubscriptions()
     )
     $(document).ready ->
-      EpicLogger.menuResize()
-      EpicLogger.sidebarToggle()
+      EpicLogger.setSidebar()
       EpicLogger.authInitialization()
 
       return

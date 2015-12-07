@@ -1,39 +1,39 @@
-.sidebar
-  #profile.user-sidebar
-    %img.profileimg{:src => "http://0.gravatar.com/avatar/59b762ebf3d116bf806bcfa3fa12e65f"}/
-  .collapse.in
-    .navigation-icons
-      %ul.nav.nav-pills.nav-stacked
-        %li.toggle-list
-          %a{:href => "#"}
-            %i.fa.fa-plus
-        %li.toggle-errors
-          %a{:href => "#"}
-            %i.fa.fa-list
-        %li.toggle-sidebar-mobile
-          %a{:href => "#"}
-            %i.fa.fa-list
+/ .sidebar
+/   #profile.user-sidebar
+/     %img.profileimg{:src => "http://0.gravatar.com/avatar/59b762ebf3d116bf806bcfa3fa12e65f"}/
+/   .collapse.in
+/     .navigation-icons
+/       %ul.nav.nav-pills.nav-stacked
+/         %li.toggle-list
+/           %a{:href => "#"}
+/             %i.fa.fa-plus
+/         %li.toggle-errors
+/           %a{:href => "#"}
+/             %i.fa.fa-list
+/         %li.toggle-sidebar-mobile
+/           %a{:href => "#"}
+/             %i.fa.fa-list
 
-      %ul.nav.nav-pills.nav-stacked
-        = nav_link "", errors_url(), {}, 'exclamation-triangle'
-      %ul.nav.nav-pills.nav-stacked
-        = nav_link "", installations_url(), {}, 'code'
-        = nav_link "", settings_url(), {}, 'cog'
-        = nav_link "", members_url(), {}, 'users'
-      %ul.nav.nav-pills.nav-stacked
-        = nav_link "", 'mailto:info@epiclogger.com', {'data-helpful'=>'epiclogger','data-helpful-modal'=>"on", :class=>'helpful-link'}, 'question'
-    .website-list.list-is-not-visible
-      .selectbox.closed
-        %p.picked-website
-          %strong.title Current Site Name
-          %span.closed.fa.fa-chevron-down
-          %span.open.fa.fa-chevron-up
-        %ul#websites-sidebar.options
-          = nav_link "Some website", '#', {:class=>'title picked', 'data-id'=>'', 'onclick'=>'EpicLogger.pickWebsite(this)'}
-        #add-new.nav.nav-pills.nav-stacked
-          = link_to new_website_path(), class: 'title' do
-            = icon('globe')
-            Add new website
+/       %ul.nav.nav-pills.nav-stacked
+/         = nav_link "", errors_url(), {}, 'exclamation-triangle'
+/       %ul.nav.nav-pills.nav-stacked
+/         = nav_link "", installations_url(), {}, 'code'
+/         = nav_link "", settings_url(), {}, 'cog'
+/         = nav_link "", members_url(), {}, 'users'
+/       %ul.nav.nav-pills.nav-stacked
+/         = nav_link "", 'mailto:info@epiclogger.com', {'data-helpful'=>'epiclogger','data-helpful-modal'=>"on", :class=>'helpful-link'}, 'question'
+/     .website-list.list-is-not-visible
+/       .selectbox.closed
+/         %p.picked-website
+/           %strong.title Current Site Name
+/           %span.closed.fa.fa-chevron-down
+/           %span.open.fa.fa-chevron-up
+/         %ul#websites-sidebar.options
+/           = nav_link "Some website", '#', {:class=>'title picked', 'data-id'=>'', 'onclick'=>'EpicLogger.pickWebsite(this)'}
+/         #add-new.nav.nav-pills.nav-stacked
+/           = link_to new_website_path(), class: 'title' do
+/             = icon('globe')
+/             Add new website
 .error_sidebar
   .sidebar_header
     %button{:class=>"fa fa-arrow-left btn previous"}

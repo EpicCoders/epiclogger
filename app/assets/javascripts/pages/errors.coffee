@@ -145,35 +145,26 @@ changeError = (el) ->
     $('input[value="' + $.current_issue + '"]').parent().removeClass('current_issue')
     window.location.replace(window.location.origin + "/errors/" + $(el).find("input").val())
 
-adjustContainerMargin  = (width) ->
-  if gon.action == 'show' #resize face trigger cand schimbi tabul...din ce am vazut e bug
-    if width >= 1170
-      $("#maincontainer").css("margin-left","510px")
-    else if width < 1170 && width > 992
-      $("#maincontainer").css("margin-left","60px")
-    else if width <= 992
-      $("#maincontainer").css("margin-left","0px")
+setUpErrorSidebar = (width) ->
+  if width >= 1170
+    $('.error_content').addClass('error_content_desktop')
+    $('.cbp-spmenu-vertical').removeClass('cbp-spmenu-sidebar-hide-left-with-error')
+    $('.error_content').removeClass('error_content_mobile')
+  else
+    $('.error_content').removeClass('error_content_desktop')
+    $('.cbp-spmenu-vertical').addClass('cbp-spmenu-sidebar-hide-left-with-error')
+    $('.error_content').addClass('error_content_mobile')
+    $('.toggle-left-sidebar').on 'click', () ->
+      $('.error_content').toggleClass('error_content_desktop')
+      $('.cbp-spmenu-vertical').toggleClass('cbp-spmenu-sidebar-hide-left-with-error')
+    true
 
-$('.toggle-list').on 'click', (event) ->
-  $('.toggle-list').toggleClass 'active'
-  $('.website-list').toggleClass 'list-is-not-visible'
-
-$('.toggle-errors').on 'click', (event) ->
-  $('.toggle-errors').toggleClass 'active'
-  $('.error_sidebar').toggleClass 'display-sidebar'
-
-$('.toggle-sidebar-mobile').on 'click', (event) ->
-  $('.minimised-sidebar').toggleClass('hidesidebars')
-  $('.error_sidebar').toggleClass('hidesidebars')
-  $('#maincontainer').toggleClass('hidecontent')
 
 individualErrorSidebar = () ->
   $(window).on 'resize', (e) ->
-    adjustContainerMargin($(window).width())
-    if $(window).width() > 768 && $(window).width() < 1170
-      true
+    setUpErrorSidebar($(window).width())
   $(document).ready ->
-    adjustContainerMargin($(window).width())
+    setUpErrorSidebar($(window).width())
 
 initializeSidebarButtons = (page,website) ->
   $('.next').on 'click', () ->

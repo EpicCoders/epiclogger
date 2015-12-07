@@ -27,7 +27,90 @@ p {
 //   font-weight: 500;
 // }
 
+/* +++++++++++ Responsive menu ++++++++++ */
 
+/* General styles for all menus */
+.cbp-spmenu {
+  background: #47a3da;
+  position: fixed;
+}
+
+/* Orientation-dependent styles for the content of the menu */
+
+.cbp-spmenu-vertical {
+  height: 100%;
+  top: 40px;
+  z-index: 1000;
+}
+
+.cbp-spmenu-vertical .icon_sidebar{
+  width:60px;
+  height:100%;
+  float:left;
+}
+
+.cbp-spmenu-vertical a {
+  border-bottom: 1px solid #258ecd;
+  padding: 1em;
+}
+
+.cbp-spmenu-horizontal {
+  width: 100%;
+  height: 40px;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  overflow: hidden;
+}
+
+.cbp-spmenu-push {
+  overflow-x: hidden;
+  position: relative;
+  left: 0;
+}
+
+.cbp-spmenu,
+.cbp-spmenu-push,
+.main-container {
+  -webkit-transition: all 0.2s ease-in;
+  -moz-transition: all 0.2s ease-in;
+  -o-transition: all 0.2s ease-in;
+  transition: all 0.2s ease-in;
+}
+
+/* other types of menus */
+
+.cbp-spcontent{
+  overflow-x: hidden;
+  position: relative;
+  left: 60px;
+  top:30px;
+}
+
+.cbp-spcontent-regular-page{
+  top:60px;
+  left:60px;
+}
+
+.cbp-spmenu-sidebar-hide-left{
+  left:-60px;
+}
+
+.cbp-spcontent-mobile{
+  left:0px;
+}
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+
+
+/* ++++++++++  Menu Styling ++++++++++++++++++++++ */
+
+.cbp-spmenu-horizontal{
+  background-color:#4a5374;
+}
+
+
+/* +++++++++++++++++++++++++++++++++++++++++++++++ */
 
 [j\:cloak], [j-cloak], [data-j-cloak], [x-j-cloak], .j-cloak, .x-j-cloak {
   background: white;
@@ -54,7 +137,7 @@ strong, label, .table > tbody > tr > th {
 
 .badge {
   font-size: 11px;
-  font-weight: 500;
+  font-weigh6t: 500;
   border-radius: 4px;
 }
 
@@ -105,279 +188,4 @@ img.profileimg {
     height: 32px;
     width: 32px;
   }
-}
-
-
-
-
-.sidebar {
-  width: 220px;
-  float: left;
-  height: 100%;
-  overflow-y: auto;
-  overflow-x: hidden;
-  background: #31334a;
-  color: #8488a0;
-  border-right: 1px solid #1c1f35;
-  .btn {
-    padding: 9px 12px;
-    margin: 0;
-  }
-  #profile {
-    padding: 20px 0 8px 0;
-    text-align: center;
-    border-bottom: 1px solid #1c1f35;
-    img.profileimg {
-      margin: 10px;
-    }
-    p {
-      font-size: 16px;
-      font-weight: 500;
-    }
-    .links {
-      font-size: 11px;
-      font-weight: 400;
-      padding: 20px 0 5px 0;
-      text-align: center;
-      a {
-        color: #4ec287;
-        text-decoration: none;
-        transition: all 40ms ease-in-out;
-        &:hover {
-          color: white;
-        }
-      }
-    }
-  }
-  .selectbox {
-    background: #26293f;
-    color: white;
-    border-bottom: 1px solid #1c1f35;
-    margin-bottom: 40px;
-    cursor: pointer;
-    ul{
-      list-style: none;
-      margin-bottom: 10px;
-      padding-left: 15px;
-      li a{
-        background: transparent;
-        border: none;
-        display: block;
-        color: #fff;
-        padding: 10px 0 0 0;
-        &:hover{
-          background: transparent;
-          border: none;
-          text-decoration: none;
-        }
-      }
-    }
-    #add-new a{
-      color: #fff;
-      padding-bottom: 10px;
-      display: block;
-      border-top: 1px solid #1c1f35;
-    }
-    #add-new a:hover, a:hover {
-      color: #4ec287;
-      text-decoration: none;
-    }
-    a.title, p {
-      margin: 0;
-      padding: 10px;
-      transition: all 50ms ease-in-out;
-      span {
-        float: right;
-        margin: 2px;
-      }
-    }
-    .options, #add-new {
-      display: none;
-    }
-    &.closed p span {
-      &.closed {
-        display: inline;
-      }
-      &.open {
-        display: none;
-      }
-    }
-    &.open p span {
-      &.closed {
-        display: none;
-      }
-      &.open {
-        display: inline;
-      }
-    }
-  }
-  ul {
-    margin-bottom: 40px;
-    li {
-      a {
-        border-radius: 0;
-        color: #8488a0;
-        background: #31334a;
-        transition: all 50ms ease-in-out;
-        border-top: 1px solid #31334a;
-        border-bottom: 1px solid #31334a;
-        i {
-          font-size: 18px;
-          width: 20px;
-          margin-right: 10px;
-          text-align: center;
-          float: left;
-        }
-      }
-      &.active a, &:hover a {
-        background: #26293f;
-        color: white;
-        border-color: #1c1f35;
-      }
-    }
-  }
-}
-
-@media all and (max-width: 992px) {
-  .regular-sidebar {
-    height: auto;
-    float: none;
-    width: auto;
-    border-bottom: 1px solid #1c1f35;
-    border-right: none;
-  }
-}
-
-@media all and (max-width: 992px) {
-  .regular-sidebar #profile {
-    padding: 10px;
-    height: 50px;
-    border: none;
-  }
-}
-
-@media all and (max-width: 992px) {
-  .regular-sidebar #profile img.profileimg {
-    margin: 0;
-  }
-}
-
-@media all and (max-width: 992px) {
-  .regular-sidebar #profile p {
-    float: left;
-    padding: 5px 0 0 15px;
-  }
-}
-
-@media all and (max-width: 992px) {
-  .regular-sidebar .selectbox {
-    margin-bottom: 20px;
-    margin-top: 20px;
-    border-top: 1px solid #1c1f35;
-  }
-}
-
-@media all and (max-width: 992px) {
-  .regular-sidebar ul {
-    margin-bottom: 20px;
-  }
-}
-
-
-//code for slider bar
-
-* {
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-}
-
-.range-slider {
-
-  // Slider
-  .input-range {
-    -webkit-appearance: none;
-    width: 300px;
-    height: 10px;
-    border-radius: 5px;
-    background: #ccc;
-    outline: none;
-
-    // Slider Handle
-    &::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      background: #353535;
-      cursor: pointer;
-      -webkit-transition: background .15s ease-in-out;
-      transition: background .15s ease-in-out;
-
-      &:hover {
-        background: #e06161;
-      }
-    }
-
-    &:active::-webkit-slider-thumb {
-      background: #e06161;
-    }
-
-    &::-moz-range-thumb {
-      width:20px;
-      height: 20px;
-      border: 0;
-      border-radius: 50%;
-      background: #353535;
-      cursor: pointer;
-      -webkit-transition: background .15s ease-in-out;
-      transition: background .15s ease-in-out;
-
-      &:hover {
-        background: #e06161;
-      }
-    }
-
-    &:active::-moz-range-thumb {
-      background: #e06161;
-    }
-  }
-
-  // Tooltip Tag
-  .range-value {
-    display: inline-block;
-    position: absolute;
-    width: 78px;
-    color: #fff;
-    font-size: 16px;
-    line-height: 20px;
-    text-align: center;
-    border-radius: 3px;
-    background: #353535;
-    padding: 5px 10px;
-    margin-left: 315px;
-    margin-top: -14px;
-
-    &:after {
-      position: absolute;
-      top: 3px;
-      left: -7px;
-      width: 0;
-      height: 0;
-      border-top: 7px solid transparent;
-      border-right: 7px solid #353535;
-      border-bottom: 7px solid transparent;
-      content: '';
-    }
-  }
-}
-
-// Firefox Overrides
-::-moz-range-track {
-    background: #ccc;
-    border: 0;
-}
-
-input::-moz-focus-inner {
-  border: 0;
 }
