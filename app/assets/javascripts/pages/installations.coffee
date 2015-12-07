@@ -1,30 +1,15 @@
-PubSub.subscribe('assigned.website', (ev, website)->
 
-  $('#add-website').on 'click', (e) ->
-    e.preventDefault()
-    $.ajax
-      url: Routes.api_v1_websites_url()
-      type: 'post'
-      dataType: 'json'
-      data: { role: $('#member-role').val(), website: { domain: $('#formWebsite').find('#domain').val(), title: $('#formWebsite').find('#title').val() } }
-      success: (data) ->
-        EpicLogger.setMemberDetails(data.id)
-        swal("Good job!", "Website added!", "success")
-        setTimeout (->
-          location.href = '/installations'
-          return
-        ), 2000
-      error: (error) ->
-        sweetAlert("Error", "Website exists", "error") if error.status == 401
-    return
-  return
+PubSub.subscribe('assigned.website', (ev, website)->
 
   $.getJSON Routes.api_v1_notifications_path(), { website_id: website.id }, (data) ->
     $('input[name=daily]').attr('checked', true) if data.daily
     $('input[name=realtime]').attr('checked', true) if data.realtime
     $('input[name=new_event]').attr('checked', true) if data.new_event
     $('input[name=frequent_event]').attr('checked',true) if data.frequent_event
-    $('#save').prop('disabled', true)
+    $('#save, #add-website').prop('disabled', true)
+
+    $('#title, #domain').change ->
+      $('#add-website').prop('disabled', false)
 
     $('input').change ->
       $('#save').prop('disabled', false)
@@ -62,6 +47,33 @@ apiKeyTab = (data) ->
     return
 
 switchIndexTabs = () ->
+  $('#add-website').on 'click', (e) ->
+    e.preventDefault()
+    domain_url = $('#formWebsite').find('#domain').val()
+    url_title = $('#formWebsite').find('#title').val()
+    if (domain_url.replace(/\s+/g, '') || url_title.replace(/\s+/g, '')) == null || (domain_url.replace(/\s+/g, '') || url_title.replace(/\s+/g, '')) == ""
+      swal("A valid website is is needed.")
+      setTimeout (->
+          location.href = '/installations'
+          return
+        ), 2000
+    else
+      $.ajax
+        url: Routes.api_v1_websites_url()
+        type: 'post'
+        dataType: 'json'
+        data: { role: $('#member-role').val(), website: { domain: domain_url, title: url_title } }
+        success: (data) ->
+          EpicLogger.setMemberDetails(data.id)
+          swal("Good job!", "Website added!", "success")
+          $('#add-website').prop('disabled', true)
+          setTimeout (->
+            location.href = '/installations'
+            return
+          ), 2000
+        error: (error) ->
+          sweetAlert("Error", "Website exists", "error") if error.status == 401
+
   $('#configuration-tabs').on 'click', (e) ->
     target = $(e.target.closest("li"))
     e.preventDefault()

@@ -76,7 +76,7 @@
               .well.wel-sm
                 %p After adding the website domain we are going to offer you a javascript code to add to your error pages so the users will get recorded when they receive errors.
                 %p You will be able to get in contact with your users after the errors are received and send them messages to let them know the issues are resolved.
-              %p Configure origin URLs which Sentry should accept events from. This is used for communication with clients like raven-js.
+              %p Configure origin URLs which Epiclogger should accept events from. This is used for communication with clients like raven-js.
               %p This will restrict requirements based on the Origin and Referrer headers.
               .form-group
                 %label{:for => "comment"} Allowed Domains:
@@ -89,6 +89,9 @@
             .panel-heading Notifications
             .panel-body
               .col-lg-9
+                %label Events
+                .alert.alert-info
+                  Epiclogger will automatically notify you whenever an event is first seen, or its state changes from resolved to unresolved.
                 %p
                   %input{:name => "daily", :type => "checkbox", :value => "daily"}
                     Recieve daily reports
@@ -111,10 +114,10 @@
       /     .panel.panel-default
       /       .panel-heading Rate Limits
       /       .panel-body
-      /         %p With the nature of Sentry, sometimes the amount of data collected can be overwhelming. You can set rate limits per-project to ensure that a single flood of<br>errors won't affect any other projects utilizing Sentry.
+      /         %p With the nature of Epiclogger, sometimes the amount of data collected can be overwhelming. You can set rate limits per-project to ensure that a single flood of<br>errors won't affect any other projects utilizing Epiclogger.
 
       /         %p Rate limits apply on a per-minute basis, which means that they rollover at the start of a new minute. When you attempt to send an event and the project is over<br> its quota, the client will receive an HTTP 429 (Too Many Requests) response.
-      /         %strong Note: The Sentry application is not configured to manage rate limits.
+      /         %strong Note: The Epiclogger application is not configured to manage rate limits.
 
       /         %p
       /         %form#formWebsite{:action => "", :method => "post"}
