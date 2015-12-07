@@ -13,7 +13,7 @@ Rails.application.routes.draw do
   resources :subscribers, only: [:index]
   resources :accounts, only: [:show]
   resources :installations, only: [:show, :index]
-  resources :settings, only: [:index]
+  # resources :settings, only: [:index]
 
   mount_devise_token_auth_for "Member", at: 'api/v1/auth', controllers: {
     omniauth_callbacks: 'overrides/omniauth_callbacks'

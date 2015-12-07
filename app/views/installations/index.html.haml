@@ -19,10 +19,10 @@
           %a{:href => "#"} Settings
         %li{:name => 'notifications',:role => "presentation"}
           %a{:href => "#"} Notifications
-        %li{:name => 'rate limits',:role => "presentation"}
-          %a{:href => "#"} Rate Limits
-        %li{:name => 'tags',:role => "presentation"}
-          %a{:href => "#"} Tags
+        / %li{:name => 'rate limits',:role => "presentation"}
+        /   %a{:href => "#"} Rate Limits
+        / %li{:name => 'tags',:role => "presentation"}
+        /   %a{:href => "#"} Tags
         %li{:name => 'api keys',:role => "presentation"}
           %a{:href => "#"} Api Keys
       %br
@@ -35,28 +35,28 @@
                 .form-group
                   %label.control-label Project Name*
                   %input#title.form-control{:placeholder => "Name here", :required => "required", :type => "text", :name => 'name'}/
-                %hr
-                .form-group
-                  %label.control-label Platforms*
-                  %br
-                  %select
-                    %option Javascript
-                    %option Python
-                    %option PHP
-                    %option Ruby
-                    %option Java
-                    %option Node.js
-                    %option IOS
+                / %hr
+                / .form-group
+                /   %label.control-label Platforms*
+                /   %br
+                /   %select
+                /     %option Javascript
+                /     %option Python
+                /     %option PHP
+                /     %option Ruby
+                /     %option Java
+                /     %option Node.js
+                /     %option IOS
                 %hr
                 .form-group
                   %label.control-label Owner*
                   %br
                   %select
                     %option Member
-                %hr
-                .form-group
-                  %label.control-label Slug*
-                  %input.form-control{:required => "required", :type => "text", :name => "Slug"}
+                / %hr
+                / .form-group
+                /   %label.control-label Slug*
+                /   %input.form-control{:required => "required", :type => "text", :name => "Slug"}
           .panel.panel-default.codeview
             .panel-heading Event Settings
             .panel-body
@@ -68,13 +68,13 @@
             .panel-body
               %p Configure origin URLs which Sentry should accept events from. This is used for communication with clients like raven-js.
               %p This will restrict requirements based on the Origin and Referrer headers.
-              %small
-                %strong Allowed Domains
-              %textarea{:cols => "86", :name => "origins", :placeholder => "e.g. example.com or https://example.com", :rows => "18"}
+              .form-group
+                %label{:for => "comment"} Allowed Domains:
+                %textarea#comment.form-control{:placeholder => "e.g. example.com or https://example.com", :rows => "7"}
               %small Separate multiple entries with a newline.
         .form-group
-          %button.btn.btn-primary.pull-right Save Changes
-          %button.btn.btn-danger.pull-right Remove Project
+          %button.btn.btn-success.pull-right Save Changes
+          %button.btn.btn-warning.pull-right Remove Project
 
       #details-notifications
         .col-lg-12
@@ -99,34 +99,34 @@
                   %span.fa.fa-save
                   Save settings
 
-      #details-rate-limits
-        .col-lg-9
-          .panel.panel-default
-            .panel-heading Rate Limits
-            .panel-body
-              %p With the nature of Sentry, sometimes the amount of data collected can be overwhelming. You can set rate limits per-project to ensure that a single flood of<br>errors won't affect any other projects utilizing Sentry.
+      / #details-rate-limits
+      /   .col-lg-9
+      /     .panel.panel-default
+      /       .panel-heading Rate Limits
+      /       .panel-body
+      /         %p With the nature of Sentry, sometimes the amount of data collected can be overwhelming. You can set rate limits per-project to ensure that a single flood of<br>errors won't affect any other projects utilizing Sentry.
 
-              %p Rate limits apply on a per-minute basis, which means that they rollover at the start of a new minute. When you attempt to send an event and the project is over<br> its quota, the client will receive an HTTP 429 (Too Many Requests) response.
-              %strong Note: The Sentry application is not configured to manage rate limits.
+      /         %p Rate limits apply on a per-minute basis, which means that they rollover at the start of a new minute. When you attempt to send an event and the project is over<br> its quota, the client will receive an HTTP 429 (Too Many Requests) response.
+      /         %strong Note: The Sentry application is not configured to manage rate limits.
 
-              %p
-              %form#formWebsite{:action => "", :method => "post"}
-                .form-group
-                  .col-lg-4
-                    %label.control-label Maximum events per minute
-                    %input#title.form-control{:placeholder => "90%", :required => "required", :type => "text", :name => 'name'}/
-              %br
-              %br
-              %br
-              %small This cannot be higher than the team (or system) allotted maximum. The value can be either a fixed number, or a percentage that is relative to the team's overall quota.
-              %hr
-              %button.btn.btn-primary Save Changes
-      #details-tags
-        .col-lg-9
-          .panel.panel-default
-            .panel-heading Manage Tags
-            .panel-default
-              %p We have not yet recorded any tags for this project.
+      /         %p
+      /         %form#formWebsite{:action => "", :method => "post"}
+      /           .form-group
+      /             .col-lg-4
+      /               %label.control-label Maximum events per minute
+      /               %input#title.form-control{:placeholder => "90%", :required => "required", :type => "text", :name => 'name'}/
+      /         %br
+      /         %br
+      /         %br
+      /         %small This cannot be higher than the team (or system) allotted maximum. The value can be either a fixed number, or a percentage that is relative to the team's overall quota.
+      /         %hr
+      /         %button.btn.btn-primary Save Changes
+      / #details-tags
+      /   .col-lg-9
+      /     .panel.panel-default
+      /       .panel-heading Manage Tags
+      /       .panel-default
+      /         %p We have not yet recorded any tags for this project.
       #details-api-keys
         .col-lg-12
           .panel.panel-default
