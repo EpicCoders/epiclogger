@@ -1,1 +1,1 @@
-json.(@notification, :id, :member_id, :daily_reports, :realtime_error, :when_event)
+json.(@notification, :id, :website_id, :daily, :realtime, :new_event, :frequent_event)

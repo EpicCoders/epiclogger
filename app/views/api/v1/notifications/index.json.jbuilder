@@ -1,0 +1,1 @@
+json.(@notification, :id, :daily, :realtime, :new_event, :frequent_event)

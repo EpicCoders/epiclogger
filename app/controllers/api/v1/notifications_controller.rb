@@ -1,8 +1,8 @@
 class Api::V1::NotificationsController < Api::V1::ApiController
   skip_before_action :authenticate_member!, only: [:create]
 
-  def show
-    @notification = current_member.notification
+  def index
+    @notification = Website.find(params[:website_id]).notification
   end
 
   def update
@@ -12,6 +12,6 @@ class Api::V1::NotificationsController < Api::V1::ApiController
 
   private
   def notification_params
-    params.require(:notification).permit(:id, :member_id, :daily_reports, :realtime_error, :when_event, :more_than_10)
+    params.require(:notification).permit(:id, :member_id, :daily, :realtime, :new_event, :frequent_event)
   end
 end

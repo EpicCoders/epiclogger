@@ -1,10 +1,10 @@
 PubSub.subscribe('assigned.website', (ev, website)->
 
-  $.getJSON Routes.api_v1_notification_path(gon.notification_id), { member_id: $.auth.user.id }, (data) ->
-    $('input[name=daily_reports]').attr('checked', true) if data.daily_reports
-    $('input[name=realtime_error]').attr('checked', true) if data.realtime_error
-    $('input[name=when_event]').attr('checked', true) if data.when_event
-    $('input[name=more_than_10]').attr('checked',true) if data.more_than_10
+  $.getJSON Routes.api_v1_notifications_path(), { website_id: website.id }, (data) ->
+    $('input[name=daily]').attr('checked', true) if data.daily
+    $('input[name=realtime]').attr('checked', true) if data.realtime
+    $('input[name=new_event]').attr('checked', true) if data.new_event
+    $('input[name=frequent_event]').attr('checked',true) if data.frequent_event
     $('#save').prop('disabled', true)
 
     $('input').change ->
@@ -13,15 +13,15 @@ PubSub.subscribe('assigned.website', (ev, website)->
     $('#save').on 'click', (e) ->
       e.preventDefault()
       $.ajax
-        url: Routes.api_v1_notification_path(gon.notification_id)
+        url: Routes.api_v1_notification_path(data.id)
         type: 'put'
         dataType: 'json'
         data: {
           notification: {
-            daily_reports: $('input[name=daily_reports]').is(':checked'),
-            realtime_error: $('input[name=realtime_error]').is(':checked'),
-            when_event: $('input[name=when_event]').is(':checked'),
-            more_than_10: $('input[name=more_than_10]').is(':checked')
+            daily: $('input[name=daily]').is(':checked'),
+            realtime: $('input[name=realtime]').is(':checked'),
+            new_event: $('input[name=new_event]').is(':checked'),
+            frequent_event: $('input[name=frequent_event]').is(':checked')
           }
         }
         success: (data) ->

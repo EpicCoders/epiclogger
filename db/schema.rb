@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151206093326) do
+ActiveRecord::Schema.define(version: 20151207074617) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -92,13 +92,16 @@ ActiveRecord::Schema.define(version: 20151206093326) do
   add_index "messages", ["issue_id"], name: "index_messages_on_issue_id", using: :btree
 
   create_table "notifications", force: :cascade do |t|
-    t.boolean  "daily_reports",  default: false
-    t.boolean  "realtime_error", default: false
-    t.boolean  "when_event",     default: false
+    t.boolean  "daily",          default: false
+    t.boolean  "realtime",       default: false
+    t.boolean  "new_event",      default: false
     t.datetime "created_at",                     null: false
     t.datetime "updated_at",                     null: false
-    t.boolean  "more_than_10",   default: false
+    t.boolean  "frequent_event", default: false
+    t.integer  "website_id"
   end
+
+  add_index "notifications", ["website_id"], name: "index_notifications_on_website_id", using: :btree
 
   create_table "subscribers", force: :cascade do |t|
     t.string   "name",       null: false
@@ -116,11 +119,9 @@ ActiveRecord::Schema.define(version: 20151206093326) do
     t.integer "role",               default: 2
     t.string  "invitation_token"
     t.string  "invitation_sent_at"
-    t.integer "notification_id"
   end
 
   add_index "website_members", ["member_id"], name: "index_website_members_on_member_id", using: :btree
-  add_index "website_members", ["notification_id"], name: "index_website_members_on_notification_id", using: :btree
   add_index "website_members", ["website_id"], name: "index_website_members_on_website_id", using: :btree
 
   create_table "websites", force: :cascade do |t|
@@ -133,5 +134,5 @@ ActiveRecord::Schema.define(version: 20151206093326) do
   end
 
   add_foreign_key "issues", "subscribers"
-  add_foreign_key "website_members", "notifications"
+  add_foreign_key "notifications", "websites"
 end
