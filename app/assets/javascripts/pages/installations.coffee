@@ -1,5 +1,11 @@
-
 PubSub.subscribe('assigned.website', (ev, website)->
+
+  range = $('.input-range')
+  value = $('.range-value')
+  value.html range.attr('value')
+  range.on 'input', ->
+    value.html @value
+    return
 
   $.getJSON Routes.api_v1_notifications_path(), { website_id: website.id }, (data) ->
     $('input[name=daily]').attr('checked', true) if data.daily

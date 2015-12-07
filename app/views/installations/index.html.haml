@@ -64,6 +64,10 @@
           .panel.panel-default.codeview
             .panel-heading Event Settings
             .panel-body
+              / #example2
+              .range-slider
+                %input.input-range{:max => "30", :min => "0", :type => "range", :value => "0"}
+                  %span.range-value
               %h4 Here we need to show a slider bar
               %small Treat an event as resolved if it hasn't been seen for this amount of time.
           .form-group
