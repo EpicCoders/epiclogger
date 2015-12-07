@@ -3,7 +3,6 @@
 }
 
 .error_sidebar{
-  margin-top:15px;
   height: 100%;
   background-color:white;
   overflow-y: auto;
@@ -121,19 +120,19 @@
 
   .icon_sidebar{
     float:left;
-    width:60px;
+    width:50px;
   }
 
   .error_sidebar{
-    width:350px;
+    width:300px;
   }
 }
 .error-menu-partial{
-  left:-60px;
+  left:-50px;
 }
 
 .error-menu-hidden{
-  left:-410px;
+  left:-350px;
 }
 
 .error-menu-visible{
@@ -141,11 +140,11 @@
 }
 
 .content-partial{
-  left:350px;
+  left:300px;
 }
 
 .content-fullwidth{
-  left:410px;
+  left:350px;
 }
 
 .content-mobile{
@@ -162,23 +161,80 @@
     li{
       box-sizing:border-box;
       width:100%;
-      height:60px;
+      height:50px;
 
       a{
         text-align:center;
-        line-height:60px;
+        line-height:50px;
         vertical-align:middle;
         display:block;
         box-sizing:border-box;
         height:100%;
         width:100%;
-        font-size:26px;
+        font-size:22px;
         color:#495171;
+      }
+    }
+    li:hover{
+      background: rgba(0,0,0,0.2);
+      box-shadow: inset 0 -1px rgba(0,0,0,0);
+    }
+  }
+}
+
+@media (max-width: 350px){
+  .error-menu-vertical {
+    top:35px;
+
+    .icon_sidebar{
+      float:left;
+      width:40px;
+    }
+
+    .error_sidebar{
+      width:270px;
+    }
+  }
+  .error-menu-partial{
+    left:-40px;
+  }
+
+  .error-menu-hidden{
+    left:-310px;
+  }
+
+  .error-menu-visible{
+    left:0px;
+  }
+
+  .content-partial{
+    left:270px;
+  }
+
+  .content-fullwidth{
+    left:310px;
+  }
+
+  .content-mobile{
+    left:0px;
+  }
+
+  .error-menu-vertical {
+    .icon-list{
+      li{
+        height:40px;
+        a{
+          line-height:40px;
+          font-size:18px;
+        }
       }
     }
   }
 }
 
+.active{
+  background-color:#232635;
+}
 
 .container-fluid {
   height: 100%;

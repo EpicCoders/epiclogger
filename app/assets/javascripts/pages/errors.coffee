@@ -161,7 +161,11 @@ setUpErrorSidebar = (width) ->
 
 individualErrorSidebar = () ->
   $(window).on 'load resize', (e) ->
-    setUpErrorSidebar($(window).width())
+    if gon.action == "show" and gon.controller == "errors"
+      setUpErrorSidebar($(window).width())
+  window.onload = ->
+    if gon.action == "show" and gon.controller == "errors"
+      setUpErrorSidebar($(window).width())
   $('.toggle-left-sidebar').unbind('click').on 'click', () ->
     $('.error-menu').toggleClass('error-menu-visible')
     $('.cbp-spcontent').toggleClass('content-fullwidth')

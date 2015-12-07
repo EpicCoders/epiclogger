@@ -3,9 +3,9 @@ window.EpicLogger = (->
   memberWebsites = undefined
 
   setSidebar: ->
-    if gon.controller != "errors" and gon.action != "show"
+    if (gon.controller != "errors" and gon.action != "show") or (gon.controller == "errors" and gon.action == "index")
       $('.toggle-left-sidebar').unbind('click').on 'click', () ->
-        if $(window).width()
+        if $(window).width() < 1170
           $('.main-container').toggleClass('cbp-spcontent-pushed-right')
           $('.cbp-spmenu-vertical').toggleClass('cbp-spmenu-vertical-pushed-right')
       EpicLogger.bindResize()
@@ -24,6 +24,8 @@ window.EpicLogger = (->
 
   bindResize: ->
     $(window).on 'load resize', (e) ->
+      EpicLogger.setUpSidebar($(window).width())
+    window.onload = ->
       EpicLogger.setUpSidebar($(window).width())
 
   logout: ->

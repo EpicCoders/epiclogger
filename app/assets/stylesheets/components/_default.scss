@@ -41,12 +41,12 @@ p {
   height: 100%;
   top: 45px;
   z-index: 1000;
-  width:60px;
+  width:50px;
 }
 
 .cbp-spmenu-horizontal {
   width: 100%;
-  height: 60px;
+  height: 50px;
   top: 0;
   left: 0;
   z-index: 1000;
@@ -67,12 +67,12 @@ p {
 .cbp-spcontent{
   overflow-x: hidden;
   position: relative;
-  top:60px;
-  left:60px;
+  top:50px;
+  left:50px;
 }
 
 .cbp-spcontent-pushed-right{
-  left:60px !important;
+  left:50px !important;
 }
 
 .cbp-spcontent-full-width{
@@ -84,7 +84,7 @@ p {
 }
 
 .cbp-spmenu-vertical-hidden{
-  left:-60px;
+  left:-50px;
 }
 
 
@@ -97,8 +97,13 @@ p {
   background-color:#4a5374;
   .toggle-left-sidebar{
     background-color:#3d4359;
-    width:60px;
-    height:60px;
+    width:50px;
+    height:50px;
+  }
+
+  img:hover{
+    background: rgba(0,0,0,0.2);
+    box-shadow: inset 0 -1px rgba(0,0,0,0);
   }
 }
 
@@ -112,23 +117,80 @@ p {
     li{
       box-sizing:border-box;
       width:100%;
-      height:60px;
+      height:50px;
 
       a{
         text-align:center;
-        line-height:60px;
+        line-height:50px;
         vertical-align:middle;
         display:block;
         box-sizing:border-box;
         height:100%;
         width:100%;
-        font-size:26px;
+        font-size:22px;
         color:#495171;
       }
     }
   }
 }
 
+
+@media (max-width: 350px){
+  .cbp-spmenu-vertical {
+    width:40px;
+  }
+
+  .cbp-spmenu-horizontal {
+    height: 40px;
+  }
+
+  .cbp-spcontent{
+    top:50px;
+    left:40px;
+  }
+
+  .cbp-spcontent-pushed-right{
+    left:40px !important;
+  }
+
+  .cbp-spcontent-full-width{
+    left:0px;
+  }
+
+  .cbp-spmenu-vertical-pushed-right{
+    left:0px !important;
+  }
+
+  .cbp-spmenu-vertical-hidden{
+    left:-40px;
+  }
+
+  .cbp-spmenu-horizontal{
+    .toggle-left-sidebar{
+      width:40px;
+      height:40px;
+    }
+  }
+
+  .cbp-spmenu-vertical {
+    .icon-list{
+      li{
+        height:40px;
+
+        a{
+          line-height:40px;
+          font-size:18px;
+          color:#495171;
+        }
+      }
+    }
+  }
+
+  .cbp-spmenu-vertical {
+    top: 35px;
+  }
+
+}
 
 /* +++++++++++++++++++++++++++++++++++++++++++++++ */
 
