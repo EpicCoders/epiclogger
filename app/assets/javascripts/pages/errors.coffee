@@ -28,8 +28,10 @@ directive = {
   #   html: ()->
   #     "Id: #{this.issues[0].subscriber.id}<br/><br/>IP Adress: 10.156.45.154.. <br/><br/>Email: #{this.issues[0].subscriber.email}<br/><br/>Data: ()"
 }
-
+#default starting page
 page = 1
+
+#the number of errors displayed in one sidebar page
 errors_per_page = 13
 
 PubSub.subscribe('assigned.website', (ev, website)->
@@ -122,8 +124,7 @@ manipulateIndexElements = (data) ->
   $.obj = data
   if data.groups.length > 0
     $('#missing-errors').hide()
-    $('#grouped-issuescontainer').render data, directive
-
+    $('#grouped-issues').show()
     # start the pagination
     $('.pagination-text').html(data.page + '/' + data.pages)
     $('.next').addClass('disabled') if data.page == data.pages
@@ -146,6 +147,7 @@ changeError = (el) ->
 
 setUpErrorSidebar = (width) ->
   if width >= 1170
+    $('body').css('max-width','calc(100% - 300px)')
     $('.error-menu').removeClass('error-menu-hidden')
     $('.error-menu').removeClass('error-menu-visible')
     $('.cbp-spcontent').removeClass('content-mobile')
@@ -153,6 +155,7 @@ setUpErrorSidebar = (width) ->
     $('.error-menu').addClass('error-menu-partial')
     $('.cbp-spcontent').addClass('content-partial')
   else
+    $('body').css('max-width','none')
     $('.error-menu').removeClass('error-menu-partial')
     $('.cbp-spcontent').removeClass('content-partial')
     $('.error-menu').addClass('error-menu-hidden')
@@ -160,7 +163,7 @@ setUpErrorSidebar = (width) ->
 
 
 individualErrorSidebar = () ->
-  $(window).on 'load resize', (e) ->
+  $(window).unbind().on 'load resize', (e) ->
     if gon.action == "show" and gon.controller == "errors"
       setUpErrorSidebar($(window).width())
   window.onload = ->
@@ -202,6 +205,7 @@ populateSidebar = (data) ->
     message = {}
     message.type = issue.message.split(":")[0]
     message.content = issue.message.split(":")[1]
+    website_domain = issue.website_domain.split("http://")[1]
     container = "<div class='sidebar-container'>
                   <input value='" + issue.id + "' type='hidden'>
                   <div class='sidebar-container-header'>
@@ -209,7 +213,7 @@ populateSidebar = (data) ->
                     <span class='pull-right muted'>" + moment(issue.last_seen,"YYYY-MM-DDTHH:mm:ssZ").format("HH:mm MMM D YYYY") + " </span>
                   </div>
                   <div class='sidebar-container-content panelbox'>
-                    <p class='error-title'>" + "<b>" + message.type + "</b>" + ":" + message.content + "</p>
+                    <p class='error-title'>" + "<b>" + message.type + "</b>" + "<span class='website-content pull-right'>  (" + website_domain + ")</span>" + "</p>
                   </div>
                 </div>"
     $('.sidebar_elements').append(container)

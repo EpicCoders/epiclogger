@@ -14,4 +14,23 @@
       = render partial: 'layouts/icon_sidebar'
 %nav.cbp-spmenu.cbp-spmenu-horizontal.cbp-spmenu-top
   = image_tag("logo_transparent.png", class: "toggle-left-sidebar")
-  .horizontal-sidebar-content
+  .menu-wrap
+    %nav.menu
+      %ul.clearfix
+        %li#pick_website
+          %a.picked-website{:href => "#"}
+          %ul#websites-sidebar.sub-menu
+            = nav_link "Some website", '#', {:class=>'title picked', 'data-id'=>'', 'onclick'=>'EpicLogger.pickWebsite(this)'}
+        %li#user_options.pull-right
+          %a.name
+            %img.profileimg.pull-left{:src => "http://0.gravatar.com/avatar/59b762ebf3d116bf806bcfa3fa12e65f"}/
+          %ul.sub-menu
+            %li
+              %a{:href => "#"} 
+                Account
+                %i.fa.fa-user.pull-left
+            %li
+              %a{:href => "#", :onclick => 'EpicLogger.logout()'} 
+                Log out
+                %i.fa.fa-sign-out.pull-left
+

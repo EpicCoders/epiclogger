@@ -9,6 +9,20 @@ window.EpicLogger = (->
           $('.main-container').toggleClass('cbp-spcontent-pushed-right')
           $('.cbp-spmenu-vertical').toggleClass('cbp-spmenu-vertical-pushed-right')
       EpicLogger.bindResize()
+    $('#pick_website').hover (->
+      $('#pick_website .sub-menu').addClass 'open-menu'
+      $('#pick_website .fa-angle-right').addClass('fa-angle-down').removeClass('fa-angle-right')
+      return
+    ), ->
+      $('#pick_website .sub-menu').removeClass 'open-menu'
+      $('#pick_website .fa-angle-down').removeClass('fa-angle-down').addClass('fa-angle-right')
+      return
+    $('#user_options').hover (->
+      $('#user_options .sub-menu').addClass 'open-menu'
+      return
+    ), ->
+      $('#user_options .sub-menu').removeClass 'open-menu'
+      return
 
   setUpSidebar: (width) ->
     if width >= 1170
@@ -23,7 +37,7 @@ window.EpicLogger = (->
       $('.cbp-spmenu-vertical').addClass('cbp-spmenu-vertical-hidden')
 
   bindResize: ->
-    $(window).on 'load resize', (e) ->
+    $(window).unbind().on 'load resize', (e) ->
       EpicLogger.setUpSidebar($(window).width())
     window.onload = ->
       EpicLogger.setUpSidebar($(window).width())
@@ -51,10 +65,8 @@ window.EpicLogger = (->
           pickedWebsite = website
 
       pickedWebsite = memberWebsites[0] if pickedWebsite == undefined
-      console.log 'assigned website'
-      $('.picked-website').render pickedWebsite # render the current website
+      $('.picked-website').text(pickedWebsite.title).append("&nbsp&nbsp&nbsp<i class='fa fa-angle-right'>") # render the current website
       $.cookie('pickedWebsite', pickedWebsite.id, { path: '/' }) # save the website id in the cookies
-      console.log pickedWebsite
       PubSub.publishSync('assigned.website', pickedWebsite)
     return pickedWebsite
     false
@@ -89,13 +101,13 @@ window.EpicLogger = (->
     userDirectives = {
       name: {
         html: ->
-          "Hello, #{this.name}"
+          "#{this.name}"
       }
     }
     $helpfulLink = $('.helpful-link')
     $helpfulLink.attr('data-helpful-email', $.auth.user.email)
     $helpfulLink.attr('data-helpful-name', $.auth.user.name)
-    $('.user-sidebar').render $.auth.user, userDirectives
+    $('#user_options').render $.auth.user, userDirectives
 
   isPage: (page)->
     current_path = window.location.pathname
