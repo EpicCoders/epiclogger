@@ -5,10 +5,7 @@ class Api::V1::StoreController < Api::V1::ApiController
   skip_before_action :authenticate_member!
 
   def create
-    error_store = ErrorStore.new(request)
-    error_store.get_website
-    error_store.validate_data
-    error_store.store_error
+    error_store = ErrorStore::Error.new(request).create!
   rescue ErrorStore::MissingCredentials => e
     _not_allowed! e.message
   end

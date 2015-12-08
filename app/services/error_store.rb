@@ -80,9 +80,19 @@ class ErrorStore
       data['errors'] << { 'type' => 'invalid_data', 'name': 'extra', 'value': data['extra'] }
       data.delete('extra')
     end
-    
+    # TODO go ahead from https://github.com/getsentry/sentry/blob/master/src/sentry/coreapi.py#L489
     data.keys.each do |key|
-      if 
+      next if CLIENT_RESERVED_ATTRS.include?(key)
+
+      value = data.delete(key)
+
+      next if value.blank?
+
+      begin
+        interface = get_interface(key)
+      rescue ErrorStore::InvalidAttribute => e
+        data['errors'] << { type: 'invalid_attribute', 'name': key }
+      end
     end
   end
 
@@ -92,43 +102,7 @@ class ErrorStore
   end
 
   private
-  CLIENT_RESERVED_ATTRS = [
-    'project',
-    'errors',
-    'event_id',
-    'message',
-    'checksum',
-    'culprit',
-    'fingerprint',
-    'level',
-    'time_spent',
-    'logger',
-    'server_name',
-    'site',
-    'timestamp',
-    'extra',
-    'modules',
-    'tags',
-    'platform',
-    'release',
-    'environment'
-  ]
-  VALID_PLATFORMS = [
-    'as3',
-    'c',
-    'cfml',
-    'csharp',
-    'go',
-    'java',
-    'javascript',
-    'node',
-    'objc',
-    'other',
-    'perl',
-    'php',
-    'python',
-    'ruby',
-  ]
+  
   Auth = Struct.new(:client, :version, :app_secret, :app_key, :is_public) do
     def is_public?
       self.is_public || false
@@ -150,6 +124,15 @@ class ErrorStore
 
   def _context
     @context
+  end
+
+  def get_interface(name)
+    unless 
+
+      raise ErrorStore::InvalidAttribute.new(self), "Invalid interface name: #{name}"
+    end
+
+
   end
 
   # get the data sent via the request
@@ -288,24 +271,4 @@ class ErrorStore
   #   # TODO return the error data after it was decoded and validated
   # end
 
-  class StoreError < StandardError
-    attr_reader :website_id
-    def initialize(error_store = nil)
-      # @website_id = error_store.website_id
-    end
-
-    def message
-      to_s
-    end
-  end
-
-  # an exception raised if the user does not send the right credentials
-  class MissingCredentials < StoreError; end
-  # an exception raised if the website is missing
-  class WebsiteMissing < StoreError; end
-  # an exception raised of the request data is bogus
-  class BadData < StoreError; end
-  # an exception raised when the timestamp is not valid
-  class InvalidTimestamp < StoreError; end
-  class InvalidFingerprint < StoreError; end
 end
