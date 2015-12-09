@@ -2,9 +2,17 @@ window.EpicLogger = (->
   pickedWebsite = undefined
   memberWebsites = undefined
 
+  doLoad: ->
+    $('.loading').addClass('j-cloak')
+
+  doneLoad: ->
+    $('.loading').removeClass('j-cloak')
+    $('.main-wrapper').css('display','inline')
+  
   setSidebar: ->
     if (gon.controller != "errors" and gon.action != "show") or (gon.controller == "errors" and gon.action == "index")
       $('.toggle-left-sidebar').unbind('click').on 'click', () ->
+        $('.toggle-left-sidebar').toggleClass('toggle-left-sidebar-open')
         if $(window).width() < 1170
           $('.main-container').toggleClass('cbp-spcontent-pushed-right')
           $('.cbp-spmenu-vertical').toggleClass('cbp-spmenu-vertical-pushed-right')
@@ -26,31 +34,29 @@ window.EpicLogger = (->
 
   setUpSidebar: (width) ->
     if width >= 1170
+      $('.cbp-spcontent').css('max-width','calc(100% - 50px)')
       $('.main-container').addClass('cbp-spcontent-pushed-right')
       $('.cbp-spmenu-vertical').addClass('cbp-spmenu-vertical-pushed-right')
       $('.main-container').removeClass('cbp-spcontent-full-width')
       $('.cbp-spmenu-vertical').removeClass('cbp-spmenu-vertical-hidden')
     else
+      $('.cbp-spcontent').css('max-width','none')
       $('.main-container').removeClass('cbp-spcontent-pushed-right')
       $('.cbp-spmenu-vertical').removeClass('cbp-spmenu-vertical-pushed-right')
       $('.main-container').addClass('cbp-spcontent-full-width')
       $('.cbp-spmenu-vertical').addClass('cbp-spmenu-vertical-hidden')
 
   bindResize: ->
-    $(window).unbind().on 'load resize', (e) ->
+    $(window).unbind().on 'resize', (e) ->
       EpicLogger.setUpSidebar($(window).width())
-    window.onload = ->
-      EpicLogger.setUpSidebar($(window).width())
+    $(document).ready ->
+      if (gon.controller != "errors" and gon.action != "show") or (gon.controller == "errors" and gon.action == "index")
+        EpicLogger.setUpSidebar($(window).width())
 
   logout: ->
     $.removeCookie('pickedWebsite', {path: '/'})
     $.auth.signOut()
 
-  doLoad: ->
-    $('.loading').addClass('j-cloak')
-
-  doneLoad: ->
-    $('.loading').removeClass('j-cloak')
 
   pickWebsite: (el, website_id)->
     # we check to see if we are calling this from a link call
@@ -135,9 +141,9 @@ window.EpicLogger = (->
     )
     PubSub.subscribe('auth', (ev, msg)->
       if ev == 'auth.validation.success'
-        EpicLogger.doneLoad()
         EpicLogger.setMemberDetails()
         EpicLogger.renderMember()
+        EpicLogger.doneLoad()
       else if ev == 'auth.validation.error'
         current_path = window.location.pathname
         console.log current_path
@@ -160,7 +166,6 @@ window.EpicLogger = (->
     $(document).ready ->
       EpicLogger.setSidebar()
       EpicLogger.authInitialization()
-
       return
     return
 

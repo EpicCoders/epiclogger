@@ -32,7 +32,7 @@ directive = {
 page = 1
 
 #the number of errors displayed in one sidebar page
-errors_per_page = 13
+errors_per_page = 14
 
 PubSub.subscribe('assigned.website', (ev, website)->
   switch gon.action
@@ -147,7 +147,7 @@ changeError = (el) ->
 
 setUpErrorSidebar = (width) ->
   if width >= 1170
-    $('body').css('max-width','calc(100% - 300px)')
+    $('.cbp-spcontent').css('max-width','calc(100% - 300px)')
     $('.error-menu').removeClass('error-menu-hidden')
     $('.error-menu').removeClass('error-menu-visible')
     $('.cbp-spcontent').removeClass('content-mobile')
@@ -155,7 +155,7 @@ setUpErrorSidebar = (width) ->
     $('.error-menu').addClass('error-menu-partial')
     $('.cbp-spcontent').addClass('content-partial')
   else
-    $('body').css('max-width','none')
+    $('.cbp-spcontent').css('max-width','none')
     $('.error-menu').removeClass('error-menu-partial')
     $('.cbp-spcontent').removeClass('content-partial')
     $('.error-menu').addClass('error-menu-hidden')
@@ -163,13 +163,14 @@ setUpErrorSidebar = (width) ->
 
 
 individualErrorSidebar = () ->
-  $(window).unbind().on 'load resize', (e) ->
+  $(window).unbind().on 'resize', (e) ->
     if gon.action == "show" and gon.controller == "errors"
       setUpErrorSidebar($(window).width())
-  window.onload = ->
+  $(document).ready ->
     if gon.action == "show" and gon.controller == "errors"
       setUpErrorSidebar($(window).width())
   $('.toggle-left-sidebar').unbind('click').on 'click', () ->
+    $('.toggle-left-sidebar').toggleClass('toggle-left-sidebar-open')
     $('.error-menu').toggleClass('error-menu-visible')
     $('.cbp-spcontent').toggleClass('content-fullwidth')
     if $(window).width() < 1170

@@ -14,8 +14,10 @@
     = csrf_meta_tags
   %body{:id=>"#{controller.controller_name}-#{controller.action_name}"}
     = include_gon
-    = render partial: 'layouts/menu'
-    .main-container.container-fluid.cbp-spcontent
-      = yield
-    - if Rails.application.assets.find_asset("pages/#{controller.controller_name}")
-      = javascript_include_tag "pages/#{controller.controller_name}"
+    .loading.j-cloak
+    .main-wrapper
+      = render partial: 'layouts/menu'
+      .main-container.container-fluid.cbp-spcontent
+        = yield
+      - if Rails.application.assets.find_asset("pages/#{controller.controller_name}")
+        = javascript_include_tag "pages/#{controller.controller_name}"

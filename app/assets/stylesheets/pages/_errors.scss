@@ -4,6 +4,7 @@
 
 .error_sidebar{
   height: 100%;
+  padding-bottom:50px;
   overflow-y: auto;
   overflow-x: hidden;
   background-color:#f8f9fb;
@@ -260,6 +261,7 @@
 }
 
 .container-fluid {
+  margin:0px;
   height: 100%;
   background: white;
   > .row {
