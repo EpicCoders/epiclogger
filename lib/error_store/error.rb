@@ -1,11 +1,11 @@
 module ErrorStore
   class Error
-    attr_accessor :request #, :context
+    attr_accessor :request, :context
     def initialize(request)
       @request = request
 
       # let's set the context that we are working on right now.
-      @context = Context.new(agent: request.headers['HTTP_USER_AGENT'], website_id: _params['id'], ip_address: request.headers['REMOTE_ADDR'])
+      @context = Context.new(self)
     end
 
     def create!
@@ -34,7 +34,7 @@ module ErrorStore
 
       begin
         # let's get the website now by app_key
-        @context.website = Website.find_by(app_key: _auth.app_key)
+        context.website = Website.find_by(app_key: _auth.app_key)
       rescue ActiveRecord::RecordNotFound
         raise ErrorStore::WebsiteMissing.new(self), 'The website for this api key does not exist or api key wrong.'
       end
@@ -51,7 +51,7 @@ module ErrorStore
       # 2. TODO add rate limit for the api option
       data = get_data
 
-      data['project']  = _context.website.id
+      data['project']  = context.website.id
       data['errors']   = []
       data['message']  = '<no message>' unless data.has_key?('message')
       data['event_id'] = SecureRandom.hex() unless data.has_key?('event_id')
@@ -128,23 +128,24 @@ module ErrorStore
     # get the data sent via the request
     def get_data
       if request.get?
-        data = request.query_parameters['sentry_data']
+        raw_data = request.query_parameters['sentry_data']
       elsif request.post?
-        data = request.body.read
+        raw_data = request.body.read
       end
       # let's check and see if we have the content encoding defined in headers
       content_encoding = request.headers['HTTP_CONTENT_ENCODING']
 
       if content_encoding == 'gzip'
-        data = decompress_gzip(data)
+        data = decompress_gzip(raw_data)
       elsif content_encoding == 'deflate'
-        data = decompress_deflate(data)
-      elsif !data.start_with?('{')
-        data = decode_and_decompress(data)
+        data = decompress_deflate(raw_data)
+      elsif !raw_data.start_with?('{')
+        data = decode_and_decompress(raw_data)
+      else
+        data = raw_data
       end
-      data = decode_json(data)
 
-      return data
+      return decode_json(data)
     end
 
     def process_fingerprint(data)
@@ -200,7 +201,7 @@ module ErrorStore
 
     def decode_and_decompress(data)
       begin
-        Zlib::Inflate.inflate(data)
+        Zlib::Inflate.inflate(Base64.decode64(data))
       rescue Zlib::Error
         Base64.decode64(data)
       end
