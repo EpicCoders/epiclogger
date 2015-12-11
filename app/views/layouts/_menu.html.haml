@@ -1,7 +1,17 @@
 -if controller.controller_name == "errors" && controller.action_name == "show"
   %nav.error-menu.error-menu-vertical
     .icon_sidebar
-      = render partial: 'layouts/icon_sidebar'
+      %ul.icon-list
+        = nav_link  "", new_website_path(), {'title' => 'Add new website'}, 'plus'
+      %ul.icon-list
+        = nav_link "", errors_url(), {'title' => 'Errors'}, 'exclamation-triangle'
+      %ul.icon-list
+        = nav_link "", installations_url(), {'title' => 'Installation'}, 'code'
+        = nav_link "", settings_url(), {'title' => 'Settings'}, 'cog'
+        = nav_link "", members_url(), {'title' => 'Users'}, 'users'
+        = nav_link "", edit_member_url(1), {'title' => 'Users'}, 'user'
+      %ul.icon-list
+        = nav_link "", 'mailto:info@epiclogger.com', {'data-helpful'=>'epiclogger','data-helpful-modal'=>"on", :class=>'helpful-link', 'title' => 'Help'}, 'question'
     .error_sidebar
       .sidebar_header
         %button{:class=>"fa fa-arrow-left btn previous"}
@@ -9,11 +19,29 @@
         %button{:class=>"fa fa-arrow-right btn next"}
       .sidebar_elements
 -else
-  %nav.cbp-spmenu.cbp-spmenu-vertical.cbp-spmenu-left
-    .icon_sidebar
-      = render partial: 'layouts/icon_sidebar'
+  %nav.cbp-spmenu.cbp-spmenu-vertical.cbp-spmenu-left.regular-menu-vertical
+    .sidebar-header
+      .website-container
+        = image_tag("logo_transparent_light.png")
+        .pick_wrapper
+          %a.picked-website{:href => "#"}
+          %ul#websites-sidebar
+            = nav_link "Some website", '#', {:class=>'title picked', 'data-id'=>'', 'onclick'=>'EpicLogger.pickWebsite(this)'}
+    .sidebar-content
+      %ul.icon-list
+        = nav_link  "Add new website", new_website_path(), {'title' => 'Add new website'}, 'plus'
+      %ul.icon-list
+        = nav_link "Errors", errors_url(), {'title' => 'Errors'}, 'exclamation-triangle'
+      %ul.icon-list
+        = nav_link "Installation", installations_url(), {'title' => 'Installation'}, 'code'
+        = nav_link "Settings", settings_url(), {'title' => 'Settings'}, 'cog'
+        = nav_link "Users", members_url(), {'title' => 'Users'}, 'users'
+        = nav_link "User", edit_member_url(1), {'title' => 'Users'}, 'user'
+      %ul.icon-list
+        = nav_link "Help", 'mailto:info@epiclogger.com', {'data-helpful'=>'epiclogger','data-helpful-modal'=>"on", :class=>'helpful-link', 'title' => 'Help'}, 'question'
+      
 %nav.cbp-spmenu.cbp-spmenu-horizontal.cbp-spmenu-top
-  = image_tag("logo_transparent.png", class: "toggle-left-sidebar")
+  %i.fa.fa-bars.toggle-left-sidebar
   .menu-wrap
     %nav.menu
       %ul.clearfix

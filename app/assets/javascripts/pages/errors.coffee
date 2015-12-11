@@ -150,17 +150,20 @@ setUpErrorSidebar = (width) ->
     $('.cbp-spcontent').css('max-width','calc(100% - 300px)')
     $('.error-menu').removeClass('error-menu-hidden')
     $('.error-menu').removeClass('error-menu-visible')
+
     $('.cbp-spcontent').removeClass('content-mobile')
     $('.cbp-spcontent').removeClass('content-fullwidth')
+
     $('.error-menu').addClass('error-menu-partial')
     $('.cbp-spcontent').addClass('content-partial')
   else
-    $('.cbp-spcontent').css('max-width','none')
-    $('.error-menu').removeClass('error-menu-partial')
-    $('.cbp-spcontent').removeClass('content-partial')
-    $('.error-menu').addClass('error-menu-hidden')
-    $('.cbp-spcontent').addClass('content-mobile')
+    if(!$('.error-menu').hasClass('error-menu-visible'))
+      $('.cbp-spcontent').css('max-width','none')
+      $('.error-menu').removeClass('error-menu-partial')
+      $('.cbp-spcontent').removeClass('content-partial')
 
+      $('.error-menu').addClass('error-menu-hidden')
+      $('.cbp-spcontent').addClass('content-mobile')
 
 individualErrorSidebar = () ->
   $(window).unbind().on 'resize', (e) ->
@@ -169,6 +172,10 @@ individualErrorSidebar = () ->
   $(document).ready ->
     if gon.action == "show" and gon.controller == "errors"
       setUpErrorSidebar($(window).width())
+  $('#pick_website').hover (->
+    $('#pick_website .sub-menu').addClass 'open-menu'
+  ), ->
+    $('#pick_website .sub-menu').removeClass 'open-menu'
   $('.toggle-left-sidebar').unbind('click').on 'click', () ->
     $('.toggle-left-sidebar').toggleClass('toggle-left-sidebar-open')
     $('.error-menu').toggleClass('error-menu-visible')

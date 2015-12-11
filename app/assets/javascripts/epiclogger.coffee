@@ -8,7 +8,7 @@ window.EpicLogger = (->
   doneLoad: ->
     $('.loading').removeClass('j-cloak')
     $('.main-wrapper').css('display','inline')
-  
+
   setSidebar: ->
     if (gon.controller != "errors" and gon.action != "show") or (gon.controller == "errors" and gon.action == "index")
       $('.toggle-left-sidebar').unbind('click').on 'click', () ->
@@ -16,15 +16,11 @@ window.EpicLogger = (->
         if $(window).width() < 1170
           $('.main-container').toggleClass('cbp-spcontent-pushed-right')
           $('.cbp-spmenu-vertical').toggleClass('cbp-spmenu-vertical-pushed-right')
+          $('.cbp-spmenu-horizontal').toggleClass('cbp-spmenu-horizontal-pushed-right')
       EpicLogger.bindResize()
-    $('#pick_website').hover (->
-      $('#pick_website .sub-menu').addClass 'open-menu'
-      $('#pick_website .fa-angle-right').addClass('fa-angle-down').removeClass('fa-angle-right')
-      return
-    ), ->
-      $('#pick_website .sub-menu').removeClass 'open-menu'
-      $('#pick_website .fa-angle-down').removeClass('fa-angle-down').addClass('fa-angle-right')
-      return
+      $('#pick_website').hide()
+      $('.picked-website').on 'click', ->
+        $('#websites-sidebar').toggleClass('show-websites')
     $('#user_options').hover (->
       $('#user_options .sub-menu').addClass 'open-menu'
       return
@@ -34,17 +30,41 @@ window.EpicLogger = (->
 
   setUpSidebar: (width) ->
     if width >= 1170
-      $('.cbp-spcontent').css('max-width','calc(100% - 50px)')
+      #decrease content max-width with the sidebars width since its being pushed to the right
+      $('.cbp-spcontent').css('max-width','calc(100% - 180px)')
+
+      #push content to the right
       $('.main-container').addClass('cbp-spcontent-pushed-right')
       $('.cbp-spmenu-vertical').addClass('cbp-spmenu-vertical-pushed-right')
+
+      #remove mobile classes when its being resized to a higher width
       $('.main-container').removeClass('cbp-spcontent-full-width')
       $('.cbp-spmenu-vertical').removeClass('cbp-spmenu-vertical-hidden')
+
+      #push horizontal menu to the right
+      $('.cbp-spmenu-horizontal').removeClass('cbp-spmenu-horizontal-extend')
+      $('.cbp-spmenu-horizontal').addClass('cbp-spmenu-horizontal-pushed-right')
+      $('.cbp-spmenu-horizontal').css('max-width','calc(100% - 180px)')
+
+      $('.toggle-left-sidebar').hide()
     else
+      #content no longer pushed to the right as a default
       $('.cbp-spcontent').css('max-width','none')
+
+      #remove classes if its being resized to a lower width
       $('.main-container').removeClass('cbp-spcontent-pushed-right')
       $('.cbp-spmenu-vertical').removeClass('cbp-spmenu-vertical-pushed-right')
+
+      #add classes for mobile version
       $('.main-container').addClass('cbp-spcontent-full-width')
       $('.cbp-spmenu-vertical').addClass('cbp-spmenu-vertical-hidden')
+
+      #set up horizontal menu
+      $('.cbp-spmenu-horizontal').removeClass('cbp-spmenu-horizontal-pushed-right')
+      $('.cbp-spmenu-horizontal').addClass('cbp-spmenu-horizontal-extend')
+      $('.cbp-spmenu-horizontal').css('max-width','none')
+
+      $('.toggle-left-sidebar').show()
 
   bindResize: ->
     $(window).unbind().on 'resize', (e) ->
@@ -71,7 +91,7 @@ window.EpicLogger = (->
           pickedWebsite = website
 
       pickedWebsite = memberWebsites[0] if pickedWebsite == undefined
-      $('.picked-website').text(pickedWebsite.title).append("&nbsp&nbsp&nbsp<i class='fa fa-angle-right'>") # render the current website
+      $('.picked-website').text(pickedWebsite.title).append("&nbsp&nbsp&nbsp<i class='fa fa-angle-down'>") # render the current website
       $.cookie('pickedWebsite', pickedWebsite.id, { path: '/' }) # save the website id in the cookies
       PubSub.publishSync('assigned.website', pickedWebsite)
     return pickedWebsite
