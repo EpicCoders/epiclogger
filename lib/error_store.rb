@@ -1,22 +1,22 @@
 module ErrorStore
-  SENTRY_INTERFACES = {
-    'exception': 'sentry.interfaces.exception.Exception',
-    'logentry': 'sentry.interfaces.message.Message',
-    'request': 'sentry.interfaces.http.Http',
-    'stacktrace': 'sentry.interfaces.stacktrace.Stacktrace',
-    'template': 'sentry.interfaces.template.Template',
-    'query': 'sentry.interfaces.query.Query',
-    'user': 'sentry.interfaces.user.User',
-    'csp': 'sentry.interfaces.csp.Csp',
+  INTERFACES = {
+    'exception': 'Exception',
+    'logentry': 'Message',
+    'request': 'Http',
+    'stacktrace': 'Stacktrace',
+    'template': 'Template',
+    'query': 'Query',
+    'user': 'User',
+    'csp': 'Csp',
 
-    'sentry.interfaces.Exception': 'sentry.interfaces.exception.Exception',
-    'sentry.interfaces.Message': 'sentry.interfaces.message.Message',
-    'sentry.interfaces.Stacktrace': 'sentry.interfaces.stacktrace.Stacktrace',
-    'sentry.interfaces.Template': 'sentry.interfaces.template.Template',
-    'sentry.interfaces.Query': 'sentry.interfaces.query.Query',
-    'sentry.interfaces.Http': 'sentry.interfaces.http.Http',
-    'sentry.interfaces.User': 'sentry.interfaces.user.User',
-    'sentry.interfaces.Csp': 'sentry.interfaces.csp.Csp',
+    'sentry.interfaces.Exception': 'Exception',
+    'sentry.interfaces.Message': 'Message',
+    'sentry.interfaces.Stacktrace': 'Stacktrace',
+    'sentry.interfaces.Template': 'Template',
+    'sentry.interfaces.Query': 'Query',
+    'sentry.interfaces.Http': 'Http',
+    'sentry.interfaces.User': 'User',
+    'sentry.interfaces.Csp': 'Csp',
   }
 
   CLIENT_RESERVED_ATTRS = [
@@ -57,6 +57,14 @@ module ErrorStore
     'ruby',
   ]
 
+  MAX_STACKTRACE_FRAMES = 50
+  MAX_HTTP_BODY_SIZE    = 4096 * 4  # 16kb
+  MAX_EXCEPTIONS        = 25
+  MAX_HASH_ITEMS        = 50
+  MAX_STACKTRACE_FRAMES = 50
+  MAX_VARIABLE_SIZE     = 512
+  HTTP_METHODS          = ['GET', 'POST', 'PUT', 'OPTIONS', 'HEAD', 'DELETE', 'TRACE', 'CONNECT', 'PATCH']
+
   class StoreError < StandardError
     attr_reader :website_id
     def initialize(error_store = nil)
@@ -78,4 +86,6 @@ module ErrorStore
   class InvalidTimestamp < StoreError; end
   class InvalidFingerprint < StoreError; end
   class InvalidAttribute < StoreError; end
+  class InvalidInterface < StoreError; end
+  class ValidationError < StoreError; end
 end
