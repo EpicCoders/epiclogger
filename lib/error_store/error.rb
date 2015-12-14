@@ -1,16 +1,15 @@
 module ErrorStore
   class Error
-    attr_accessor :request, :context
+    attr_accessor :request, :context, :data
     def initialize(request)
       @request = request
-
       # let's set the context that we are working on right now.
       @context = Context.new(self)
     end
 
     def create!
       get_website
-      validate_data
+      @data = validate_data
       store_error
     end
 
@@ -65,7 +64,7 @@ module ErrorStore
         begin
           process_timestamp(data)
         rescue ErrorStore::InvalidTimestamp => e
-          data['errors'] << { type: 'invalid_data', 'name' => 'timestamp', 'value' => data['timestamp'] }
+          data['errors'] << { 'type' => 'invalid_data', 'name' => 'timestamp', 'value' => data['timestamp'] }
         end
       end
 
@@ -73,22 +72,22 @@ module ErrorStore
         begin
           process_fingerprint(data)
         rescue ErrorStore::InvalidFingerprint => e
-          data['errors'] << { type: 'invalid_data', 'name' => 'fingerprint', 'value' => data['fingerprint'] }
+          data['errors'] << { 'type' => 'invalid_data', 'name' => 'fingerprint', 'value' => data['fingerprint'] }
         end
       end
 
       data['platform'] = 'other' if !data.include?('platform') || !VALID_PLATFORMS.include?(data['platform'])
 
-      if data['modules'] && !data['modules'].is_a?(Array)
-        data['errors'] << { 'type' => 'invalid_data', 'name': 'modules', 'value': data['modules'] }
+      if data['modules'] && !data['modules'].is_a?(Hash)
+        data['errors'] << { 'type' => 'invalid_data', 'name' => 'modules', 'value' => data['modules'] }
         data.delete('modules')
       end
 
-      if !data['extra'].blank? and !data['extra'].is_a?(Array)
-        data['errors'] << { 'type' => 'invalid_data', 'name': 'extra', 'value': data['extra'] }
+      if !data['extra'].blank? and !data['extra'].is_a?(Hash)
+        data['errors'] << { 'type' => 'invalid_data', 'name' => 'extra', 'value' => data['extra'] }
         data.delete('extra')
       end
-      # TODO go ahead from https://github.com/getsentry/sentry/blob/master/src/sentry/coreapi.py#L489
+
       data.keys.each do |key|
         next if CLIENT_RESERVED_ATTRS.include?(key)
 
@@ -99,13 +98,52 @@ module ErrorStore
         begin
           interface = get_interface(key)
         rescue ErrorStore::InvalidAttribute => e
-          data['errors'] << { type: 'invalid_attribute', 'name': key }
+          data['errors'] << { 'type' => 'invalid_attribute', 'name' => key }
+        end
+
+        if !value.is_a?(Hash)
+          if value.is_a?(Array)
+            value = {'values' => value}
+          else
+            data['errors'] << { 'type' => 'invalid_data', 'name' => key, 'value' => value }
+            next
+          end
+        end
+
+        begin
+          interface.sanitize_data(value)
+          data[interface.type()] = interface.to_json()
+        rescue Exception => e
+          data['errors'] << { 'type' => 'invalid_data', 'name' => key, 'value' => value }
         end
       end
+
+      level = data['level'] || DEFAULT_LOG_LEVEL
+      if level.is_a?(String) && !is_numeric?(level)
+        begin
+          data['level'] = LOG_LEVEL_REVERSE_MAP[level]
+        rescue Exception => e
+          data['errors'] << { 'type' => 'invalid_data', 'name' => 'level', 'value' => level }
+          data['level'] = LOG_LEVEL_REVERSE_MAP[DEFAULT_LOG_LEVEL] || DEFAULT_LOG_LEVEL
+        end
+      end
+
+      if data['release']
+        data['release'] = data['release'].encode('utf-8')
+        if data['release'].length > 64
+          data['errors'] << { 'type' => 'value_too_long', 'name' => 'release', 'value' => data['release'] }
+          data.delete('release')
+        end
+      end
+
+      return data
     end
+
+    # TODO please recheck the validate_data method and ensure we get the right data from stacktrace and exception
 
     # 4. store the error after validating the error data
     def store_error
+      
     end
 
     def _params
@@ -116,13 +154,15 @@ module ErrorStore
       @auth
     end
 
+    def _website
+      @context.website
+    end
+
     def get_interface(name)
-      # unless 
-
-      #   raise ErrorStore::InvalidAttribute.new(self), "Invalid interface name: #{name}"
-      # end
-
-
+      interface_name = INTERFACES[name.to_sym].to_s.classify
+      raise ErrorStore::InvalidInterface.new(self), 'Invalid interface name' if interface_name.blank?
+      interface_class = "ErrorStore::Interfaces::#{interface_name}".constantize
+      interface_class.new(self)
     end
 
     # get the data sent via the request
