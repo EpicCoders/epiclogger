@@ -1,10 +1,10 @@
 module ErrorStore
   class BaseInterface
-    attr_accessor :data
+    attr_accessor :_data
 
     def initialize(error)
       @error = error
-      @data  = {}
+      @_data  = {}
     end
 
     def name
@@ -17,7 +17,7 @@ module ErrorStore
 
     def to_json
       # keep only values of zero and not blank
-      return @data.delete_if { |k, v| v == 0 || v.blank? }
+      return _data.delete_if { |k, v| v == 0 || v.blank? }
     end
 
     def trim(value, max_size: ErrorStore::MAX_VARIABLE_SIZE, max_depth: 3, _depth: 0, _size: 0, &block)
@@ -108,4 +108,3 @@ module ErrorStore
     end
   end
 end
- 

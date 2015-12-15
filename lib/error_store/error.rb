@@ -1,6 +1,6 @@
 module ErrorStore
   class Error
-    attr_accessor :request, :context, :data
+    attr_accessor :request, :context, :data, :auth
     def initialize(request)
       @request = request
       # let's set the context that we are working on right now.
@@ -50,42 +50,42 @@ module ErrorStore
       # 2. TODO add rate limit for the api option
       data = get_data
 
-      data['project']  = context.website.id
-      data['errors']   = []
-      data['message']  = '<no message>' unless data.has_key?('message')
-      data['event_id'] = SecureRandom.hex() unless data.has_key?('event_id')
+      data[:project]  = context.website.id
+      data[:errors]   = []
+      data[:message]  = '<no message>' unless data.has_key?(:message)
+      data[:event_id] = SecureRandom.hex() unless data.has_key?(:event_id)
 
-      if data['event_id'].length > 32
-        data['errors'] << { 'type' => 'value_too_long', 'name' => 'event_id', 'value' => data['event_id'] }
-        data['event_id'] = SecureRandom.hex()
+      if data[:event_id].length > 32
+        data[:errors] << { type: 'value_too_long', name: 'event_id', value: data[:event_id] }
+        data[:event_id] = SecureRandom.hex()
       end
 
-      if data.include?('timestamp')
+      if data.include?(:timestamp)
         begin
           process_timestamp(data)
         rescue ErrorStore::InvalidTimestamp => e
-          data['errors'] << { 'type' => 'invalid_data', 'name' => 'timestamp', 'value' => data['timestamp'] }
+          data[:errors] << { type: 'invalid_data', name: 'timestamp', value: data[:timestamp] }
         end
       end
 
-      if data.include?('fingerprint')
+      if data.include?(:fingerprint)
         begin
           process_fingerprint(data)
         rescue ErrorStore::InvalidFingerprint => e
-          data['errors'] << { 'type' => 'invalid_data', 'name' => 'fingerprint', 'value' => data['fingerprint'] }
+          data[:errors] << { type: 'invalid_data', name: 'fingerprint', value: data[:fingerprint] }
         end
       end
 
-      data['platform'] = 'other' if !data.include?('platform') || !VALID_PLATFORMS.include?(data['platform'])
+      data[:platform] = 'other' if !data.include?(:platform) || !VALID_PLATFORMS.include?(data[:platform])
 
-      if data['modules'] && !data['modules'].is_a?(Hash)
-        data['errors'] << { 'type' => 'invalid_data', 'name' => 'modules', 'value' => data['modules'] }
-        data.delete('modules')
+      if data[:modules] && !data[:modules].is_a?(Hash)
+        data[:errors] << { type: 'invalid_data', name: 'modules', value: data[:modules] }
+        data.delete(:modules)
       end
 
-      if !data['extra'].blank? and !data['extra'].is_a?(Hash)
-        data['errors'] << { 'type' => 'invalid_data', 'name' => 'extra', 'value' => data['extra'] }
-        data.delete('extra')
+      if !data[:extra].blank? and !data[:extra].is_a?(Hash)
+        data[:errors] << { type: 'invalid_data', name: 'extra', value: data[:extra] }
+        data.delete(:extra)
       end
 
       data.keys.each do |key|
@@ -98,14 +98,14 @@ module ErrorStore
         begin
           interface = get_interface(key)
         rescue ErrorStore::InvalidAttribute => e
-          data['errors'] << { 'type' => 'invalid_attribute', 'name' => key }
+          data[:errors] << { type: 'invalid_attribute', name: key }
         end
 
         if !value.is_a?(Hash)
           if value.is_a?(Array)
-            value = {'values' => value}
+            value = {values: value}
           else
-            data['errors'] << { 'type' => 'invalid_data', 'name' => key, 'value' => value }
+            data[:errors] << { type: 'invalid_data', name: key, value: value }
             next
           end
         end
@@ -114,25 +114,25 @@ module ErrorStore
           interface.sanitize_data(value)
           data[interface.type()] = interface.to_json()
         rescue Exception => e
-          data['errors'] << { 'type' => 'invalid_data', 'name' => key, 'value' => value }
+          data[:errors] << { type: 'invalid_data', name: key, value: value }
         end
       end
 
-      level = data['level'] || DEFAULT_LOG_LEVEL
-      if level.is_a?(String) && !is_numeric?(level)
+      level = data[:level] || DEFAULT_LOG_LEVEL
+      if is_numeric?(level)
         begin
-          data['level'] = LOG_LEVEL_REVERSE_MAP[level]
+          data[:level] = LOG_LEVELS[level]
         rescue Exception => e
-          data['errors'] << { 'type' => 'invalid_data', 'name' => 'level', 'value' => level }
-          data['level'] = LOG_LEVEL_REVERSE_MAP[DEFAULT_LOG_LEVEL] || DEFAULT_LOG_LEVEL
+          data[:errors] << { type: 'invalid_data', name: 'level', value: level }
+          data[:level] = DEFAULT_LOG_LEVEL
         end
       end
 
-      if data['release']
-        data['release'] = data['release'].encode('utf-8')
-        if data['release'].length > 64
-          data['errors'] << { 'type' => 'value_too_long', 'name' => 'release', 'value' => data['release'] }
-          data.delete('release')
+      if data[:release]
+        data[:release] = data[:release].encode('utf-8')
+        if data[:release].length > 64
+          data[:errors] << { type: 'value_too_long', name: 'release', value: data[:release] }
+          data.delete(:release)
         end
       end
 
@@ -159,7 +159,7 @@ module ErrorStore
     end
 
     def get_interface(name)
-      interface_name = INTERFACES[name.to_sym].to_s.classify
+      interface_name = INTERFACES[name].to_s.classify
       raise ErrorStore::InvalidInterface.new(self), 'Invalid interface name' if interface_name.blank?
       interface_class = "ErrorStore::Interfaces::#{interface_name}".constantize
       interface_class.new(self)
@@ -189,7 +189,7 @@ module ErrorStore
     end
 
     def process_fingerprint(data)
-      fingerprint = data['fingerprint']
+      fingerprint = data[:fingerprint]
       raise ErrorStore::InvalidFingerprint.new(self), 'Could not process fingerprint' unless fingerprint.is_a? Array
 
       result = []
@@ -203,9 +203,9 @@ module ErrorStore
     end
 
     def process_timestamp(data)
-      timestamp = data['timestamp']
+      timestamp = data[:timestamp]
       if !timestamp
-        data.delete('timestamp')
+        data.delete(:timestamp)
         return data
       elsif is_numeric? timestamp
         timestamp = Time.at(timestamp.to_i).to_datetime
@@ -223,7 +223,7 @@ module ErrorStore
         raise ErrorStore::InvalidTimestamp.new(self), 'We could not process timestamp is too old'
       end
 
-      data['timestamp'] = timestamp.strftime('%s').to_i
+      data[:timestamp] = timestamp.strftime('%s').to_i
       return data
     rescue Exception => e
       raise ErrorStore::InvalidTimestamp.new(self), 'We could not process timestamp'
@@ -234,7 +234,7 @@ module ErrorStore
     end
 
     def decode_json(data)
-      JSON.parse(data)
+      JSON.parse(data, symbolize_names: true)
     rescue Exception => e
       raise ErrorStore::BadData.new(self), 'We could not decompress your request'
     end
