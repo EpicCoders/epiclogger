@@ -19,7 +19,7 @@ form_signup.submit((e)->
       dataType: 'json'
       data: { website_member: { token: gon.token, email: form_signup.find('#email').val() } }
       success: (data) ->
-        location.href = '/errors'
+        location.href = '/websites/new'
   ).fail ((resp) ->
     EpicLogger.addAlert(resp.data.errors.full_messages)
     console.log "we failed"
