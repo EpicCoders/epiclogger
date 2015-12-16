@@ -24,6 +24,8 @@
 //= require moment
 //= require nprogress
 //= require nprogress-turbolinks
+//= require jquery.validate
+//= require jquery.validate.additional-methods
 // require jquery.analytics.track
 //= require_tree ./sweet-alert
 

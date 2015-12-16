@@ -58,9 +58,19 @@
     form {
       text-align: center;
       padding: 20px;
+      label.error{
+        position:absolute;
+        width:100%;
+        bottom:-30px;
+        left:0px;
+        margin-bottom:10px;
+      }
+      .signup_footer{
+        margin-top:20px;
+      }
       .input-group {
         &.username {
-          margin-bottom: 20px;
+          margin-bottom: 30px;
         }
         &.password {
           margin-bottom: 5px;
