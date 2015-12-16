@@ -25,10 +25,12 @@ gem 'coffee-rails', '~> 4.1.0'
 gem 'haml-rails'
 
 gem 'devise_token_auth'
+gem 'devise'
 gem 'omniauth-github'
 
 # jquery form validation plugin
 gem 'jquery-validation-rails'
+gem 'activeadmin', '~> 1.0.0.pre2'
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'

@@ -7,6 +7,7 @@
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
 member = Member.create(name: 'Test Member', email: 'chocksy@gmail.com', password: 'password', password_confirmation: 'password', uid: SecureRandom.hex(10), provider: :email, confirmed_at: Time.now)
+AdminUser.create!(email: 'admin@example.com', password: 'password', password_confirmation: 'password')
 if member.errors.blank?
   website_1 = Website.create(title: 'EpicLogger', domain: 'www.epiclogger.com')
   website_2 = Website.create(title: 'EpicCoders', domain: 'www.epiccoders.com')
