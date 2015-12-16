@@ -46,7 +46,7 @@ form_signup = $('#signup')
 
 $('#signup').submit((e)->
   e.preventDefault()
-  if $('#signup').valid
+  if $('#signup').valid()
     $.auth.emailSignUp(
       name: form_signup.find('#name').val()
       email: form_signup.find('#email').val()
@@ -65,8 +65,6 @@ $('#signup').submit((e)->
       EpicLogger.addAlert(resp.data.errors.full_messages)
       console.log "we failed"
     )
-  else
-    swal("Invalid form")
 )
 
 directive = {
