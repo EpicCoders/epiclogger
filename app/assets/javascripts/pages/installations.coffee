@@ -88,12 +88,13 @@ switchIndexTabs = () ->
 
     if target.attr('name') == 'details'
       $('#details-settings, #client-details').show()
-      $('#client-configuration').hide()
+      $('#client-configuration, #client-integrations').hide()
     else if target.attr('name') == 'integrations'
+      $('#client-integrations').show()
       $('#client-details, #client-configuration').hide()
     else if target.attr('name') == 'client configuration'
       $('#client-configuration, #client-information, #client-platforms, #client-frameworks').show()
-      $('#client-details').hide()
+      $('#client-details, #client-integrations').hide()
     target.addClass('active')
 
   $('#platforms-tabs, #details-tabs').on 'click', (e) ->
@@ -112,8 +113,6 @@ PubSub.subscribe('assigned.website', (ev, website)->
     when "index"
       hideListedTabs()
       switchIndexTabs()
-      $('#client-details').hide()
-      $('#integrations-details').hide()
       $('#client-information, #client-platforms, #client-frameworks').show()
 
       $.getJSON Routes.api_v1_website_path(website.id), (data) ->
@@ -125,6 +124,8 @@ PubSub.subscribe('assigned.website', (ev, website)->
 
 hideListedTabs = () ->
   $('#details-settings,
+    #client-details,
+    #client-integrations,
     #details-notifications,
     #current-site, #details-rate-limits,
     #details-tags, #details-api-keys,

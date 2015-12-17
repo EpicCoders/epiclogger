@@ -13,6 +13,72 @@
           %a{:href => "#"}
             %h4 Integrations
       %br
+      #client-integrations
+        %br
+        %br
+        .col-lg-12
+          .panel.panel-default
+            .panel-heading Manage Integrations
+            .panel-body
+              %table.table.table-striped
+                %thead
+                  %tr
+                    %th{:style=> "width:1200px;"} Integration
+                    %th Version
+                    %th.text-center Enabled
+                %tbody
+                  %tr
+                    %td
+                      Auto Tag: Browsers
+                      %br
+                      %small
+                        By
+                        %a{:href => ""} Epiclogger Team
+                    %td 6.4.4
+                    %td.text-center
+                      %input{:type => "checkbox"}
+                  %tr
+                    %td
+                      Auto Tag: Interface Types
+                      %br
+                      %small
+                        By
+                        %a{:href => ""} Epiclogger Team
+                    %td 6.4.4
+                    %td.text-center
+                      %input{:type => "checkbox"}
+                  %tr
+                    %td
+                      Auto Tag: Operating Systems
+                      %br
+                      %small
+                        By
+                        %a{:href => ""} Epiclogger Team
+                    %td 6.4.4
+                    %td.text-center
+                      %input{:type => "checkbox"}
+                  %tr
+                    %td
+                      Auto Tag: URLs
+                      %br
+                      %small
+                        By
+                        %a{:href => ""} Epiclogger Team
+                    %td 6.4.4
+                    %td.text-center
+                      %input{:type => "checkbox"}
+                  %tr
+                    %td
+                      Mail
+                      %br
+                      %small
+                        By
+                        %a{:href => ""} Epiclogger TeamMail
+                    %td 6.4.4
+                    %td.text-center
+                      %input{:type => "checkbox"}
+
+
     .col-lg-12#client-details
       %ul.nav.nav-tabs#details-tabs
         %li.active{:name => 'settings',:role => "presentation"}
@@ -80,12 +146,12 @@
               .well.wel-sm
                 %p After adding the website domain we are going to offer you a javascript code to add to your error pages so the users will get recorded when they receive errors.
                 %p You will be able to get in contact with your users after the errors are received and send them messages to let them know the issues are resolved.
-              %p Configure origin URLs which Epiclogger should accept events from. This is used for communication with clients like raven-js.
-              %p This will restrict requirements based on the Origin and Referrer headers.
-              .form-group
-                %label{:for => "comment"} Allowed Domains:
-                %textarea#comment.form-control{:placeholder => "e.g. example.com or https://example.com", :rows => "7"}
-              %small Separate multiple entries with a newline.
+              / %p Configure origin URLs which Epiclogger should accept events from. This is used for communication with clients like raven-js.
+              / %p This will restrict requirements based on the Origin and Referrer headers.
+              / .form-group
+              /   %label{:for => "comment"} Allowed Domains:
+              /   %textarea#comment.form-control{:placeholder => "e.g. example.com or https://example.com", :rows => "7"}
+              / %small Separate multiple entries with a newline.
 
       #details-notifications
         .col-lg-12
