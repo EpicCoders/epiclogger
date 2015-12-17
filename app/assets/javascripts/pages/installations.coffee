@@ -113,6 +113,7 @@ PubSub.subscribe('assigned.website', (ev, website)->
     when "index"
       hideListedTabs()
       switchIndexTabs()
+      $('#client-details, #details-notifications')
       $('#client-information, #client-platforms, #client-frameworks').show()
 
       $.getJSON Routes.api_v1_website_path(website.id), (data) ->
@@ -124,9 +125,7 @@ PubSub.subscribe('assigned.website', (ev, website)->
 
 hideListedTabs = () ->
   $('#details-settings,
-    #client-details,
     #client-integrations,
-    #details-notifications,
     #current-site, #details-rate-limits,
     #details-tags, #details-api-keys,
     #client-information,
