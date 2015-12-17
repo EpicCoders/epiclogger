@@ -31,15 +31,4 @@ class Api::V1::ApiController < ActionController::Base
       # @current_site ||= Website.find_by_app_id_and_app_key(params["app_id"],params["app_key"])
     end
   end
-
-  # protected
-
-  # def configure_permitted_parameters
-  #   # devise_parameter_sanitizer.for(:sign_up) { |u| u.permit(:name, :confirm_success_url) }
-
-  #   devise_parameter_sanitizer.for(:sign_up) << :name
-  #   devise_parameter_sanitizer.for(:sign_up) << :confirm_success_url
-  #   # devise_parameter_sanitizer.for(:account_update) << :operating_thetan
-  #   # devise_parameter_sanitizer.for(:account_update) << :favorite_color
-  # end
 end
