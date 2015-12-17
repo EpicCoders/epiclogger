@@ -118,6 +118,8 @@ window.EpicLogger = (->
         EpicLogger.doneLoad()
         EpicLogger.setMemberDetails()
         EpicLogger.renderMember()
+        $.getJSON Routes.api_v1_websites_url(), {member_id: $.auth.user.id}, (data) ->
+          $('#myModal').modal('show') if data.websites.length == 0
       else if ev == 'auth.validation.error'
         current_path = window.location.pathname
         console.log current_path

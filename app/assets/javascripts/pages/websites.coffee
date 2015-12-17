@@ -17,14 +17,7 @@ PubSub.subscribe('assigned.website', (ev, website)->
     when "index"
       $.getJSON Routes.api_v1_websites_url(), {member_id: $.auth.user.id}, (data) ->
         $('#websites-container').render data, directive
-        $('#myModal').modal('show') if data.websites.length == 0
         console.log 'data loaded'
-      $.getJSON Routes.api_v1_website_path(website.id), (data) ->
-        $('#current-website').render data
-
-      reset_platforms()
-      $('.tab2, .tab3').addClass('disabled')
-      addNewWebsite('#modalWebsite', 'index')
 
 )
 addNewWebsite = (form, action) ->
@@ -49,44 +42,3 @@ addNewWebsite = (form, action) ->
     return
   return
 
-reset_platforms = () ->
-  $('#javascript, #node_js, #rails, #ruby, #python, #ios, #php, #java, #django').hide()
-
-$('#retry').on 'click', () ->
-  manipulateWizard(2)
-  reset_platforms()
-
-$('#finish').on 'click', () ->
-  location.href = '/errors'
-
-$('#platform').on 'click', (platform) ->
-  reset_platforms()
-  switch platform.target.parentElement.name
-    when 'javascript'
-      $('#javascript').show()
-    when 'node_js'
-      $('#node_js').show()
-    when 'rails'
-      $('#rails').show()
-    when 'ruby'
-      $('#ruby').show()
-    when 'python'
-      $('#python').show()
-    when 'ios'
-      $('#ios').show()
-    when 'php'
-      $('#php').show()
-    when 'java'
-      $('#java').show()
-    when 'django'
-      $('#django').show()
-  manipulateWizard(3)
-
-manipulateWizard = (n) ->
-  if n != 0
-    $('.stepwizard-row a').removeClass('btn-primary')
-    $('.stepwizard-row a').addClass('btn-default')
-    $('.stepwizard a[href="#step-' + n + '"]').tab 'show'
-    $('.stepwizard-row a[href="#step-' + n + '"]').removeClass 'btn-default'
-    $('.stepwizard-row a[href="#step-' + n + '"]').addClass 'btn-primary'
-  return
