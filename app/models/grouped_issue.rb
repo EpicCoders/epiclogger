@@ -13,7 +13,7 @@ class GroupedIssue < ActiveRecord::Base
   end
 
   def error
-    ErrorStore::Error.find(self)
+    ErrorStore.find(self)
   end
 
 end
