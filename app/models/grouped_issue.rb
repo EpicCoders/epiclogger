@@ -12,4 +12,8 @@ class GroupedIssue < ActiveRecord::Base
     UserMailer.event_occurred(self.website_id, self.id).deliver_now
   end
 
+  def error
+    ErrorStore::Error.find(self)
+  end
+
 end
