@@ -58,6 +58,8 @@ gem 'sweet-alert'
 gem 'kaminari'
 
 gem 'cancancan', '~> 1.10'
+# Add sidekiq for background jobs
+gem 'sidekiq'
 
 group :development do
   gem 'better_errors'
