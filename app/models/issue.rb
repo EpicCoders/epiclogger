@@ -7,6 +7,6 @@ class Issue < ActiveRecord::Base
   accepts_nested_attributes_for :messages
   enumerize :platform, in: {:javascript => 1, :php => 2}, default: :javascript
 
-  validates :description, :presence => true, length: {minimum: 10}
+  validates :message, :presence => true, length: {minimum: 10}
 
 end

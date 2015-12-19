@@ -6,8 +6,7 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
-member_1 = Member.create(name: 'Test Member', email: 'chocksy@gmail.com', password: 'password', password_confirmation: 'password', uid: SecureRandom.hex(10), provider: :email, confirmed_at: Time.now)
-member_2 = Member.create(name: 'Panioglo Sergiu', email: 'panioglo.srj@gmail.com', password: 'parola123', password_confirmation: 'parola123', uid: SecureRandom.hex(10), provider: :email, confirmed_at: Time.now)
+member = Member.create(name: 'Test Member', email: 'spiridon.alin@gmail.com', password: 'password', password_confirmation: 'password', uid: SecureRandom.hex(10), provider: :email, confirmed_at: Time.now)
 AdminUser.create!(email: 'admin@example.com', password: 'password', password_confirmation: 'password')
 if member_1.errors.blank?
   website_1 = Website.create(title: 'EpicLogger', domain: 'www.epiclogger.com')
@@ -26,12 +25,23 @@ if member_1.errors.blank?
   user_2_3 = Subscriber.create(name: 'Gogu6', email: 'gogu6@gmail.com', website_id: website_2.id)
   user_2_4 = Subscriber.create(name: 'Gogu7', email: 'gogu7@gmail.com', website_id: website_2.id)
 
-  issue_1 = Issue.create(description: 'jQuery is undefined', subscriber_id: user_1_1.id)
-  issue_2 = Issue.create(description: 'Object doesn\'t support property or method "AddEventListener"', subscriber_id: user_1_2.id)
-  issue_3 = Issue.create(description: 'undefined method "first" for nil:NillClass', subscriber_id: user_2_1.id)
+  issue_1 = GroupedIssue.create(message: 'jQuery is undefined', website_id: website_1.id)
+  issue_2 = GroupedIssue.create(message: 'Object doesn\'t support property or method "AddEventListener"', website_id: website_1.id)
+  issue_3 = GroupedIssue.create(message: 'undefined method "first" for nil:NillClass', website_id: website_2.id)
+
+  Issue.create(subscriber_id: user_1_1.id, group_id: issue_1.id)
+  Issue.create(subscriber_id: user_1_2.id, group_id: issue_2.id)
+  Issue.create(subscriber_id: user_1_3.id, group_id: issue_2.id)
+  Issue.create(subscriber_id: user_1_4.id, group_id: issue_1.id)
+
+  Issue.create(subscriber_id: user_2_1.id, group_id: issue_3.id)
+  Issue.create(subscriber_id: user_2_2.id, group_id: issue_3.id)
+  Issue.create(subscriber_id: user_2_3.id, group_id: issue_3.id)
+  Issue.create(subscriber_id: user_2_4.id, group_id: issue_3.id)
+  Issue.create(subscriber_id: user_2_1.id, group_id: issue_3.id)
 
   WebsiteMember.create(member_id: member_1.id, website_id: website_1.id, role: 1)
   WebsiteMember.create(member_id: member_2.id, website_id: website_2.id, role: 1)
 else
-  puts "Error on user #{member_1.errors.full_messages}"
+  puts "Error on user #{member.errors.full_messages}"
 end

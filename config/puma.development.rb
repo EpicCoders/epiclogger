@@ -1,4 +1,4 @@
-# Ansible managed: /Users/razvanciocanel/Development/epiclogger/railsbox/ansible/roles/puma/templates/puma.rb.j2 modified on 2015-10-26 07:09:50 by razvanciocanel on iMac.local
+# Ansible managed: /ansible/roles/puma/templates/puma.rb.j2 modified on 2015-12-19 14:52:35 by vagrant on localhost
 
 # Feel free to experiment with this, 0/16 is a good starting point.
 threads_count = Integer(ENV['MAX_THREADS'] || 5)
