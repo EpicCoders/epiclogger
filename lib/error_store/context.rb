@@ -2,7 +2,7 @@ module ErrorStore
   class Context
     attr_accessor :agent, :website_id, :ip_address, :version, :website
     def initialize(error)
-      @error = error
+      @error        = error
       @agent        = @error.request.headers['HTTP_USER_AGENT']
       # @version      = version
       @website_id   = @error._params['id']
