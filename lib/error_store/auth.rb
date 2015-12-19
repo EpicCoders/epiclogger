@@ -28,7 +28,7 @@ module ErrorStore
       auth_req['sentry_client'] = _error.request.headers['HTTP_USER_AGENT'] unless auth_req['sentry_client']
 
       @client     = auth_req["sentry_client"]
-      @version    = auth_req["sentry_version"]
+      @version    = auth_req["sentry_version"] || ErrorStore::CURRENT_VERSION
       @app_secret = auth_req["sentry_secret"]
       @app_key    = auth_req["sentry_key"]
     end
