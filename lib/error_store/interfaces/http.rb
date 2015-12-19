@@ -1,6 +1,6 @@
 module ErrorStore::Interfaces
   class Http < ErrorStore::BaseInterface
-    def display_name
+    def self.display_name
       'HTTP'
     end
 

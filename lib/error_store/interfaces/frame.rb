@@ -2,7 +2,7 @@ module ErrorStore::Interfaces
   class Frame < ErrorStore::BaseInterface
     # attr_accessor :abs_path, :filename, :errmodule, :function, :in_app, :context_line, :pre_context, :post_context, :vars, :data, :errors, :lineno, :colno
 
-    def display_name
+    def self.display_name
       'Frame'
     end
 
@@ -79,7 +79,7 @@ module ErrorStore::Interfaces
       self._data = {
         abs_path:      trim(abs_path, max_size: 256),
         filename:      trim(filename, max_size: 256),
-        errmodule:     trim(errmodule, max_size: 256),
+        module:        trim(errmodule, max_size: 256),
         function:      trim(function, max_size: 256),
         in_app:        in_app,
         context_line:  context_line,
@@ -104,6 +104,12 @@ module ErrorStore::Interfaces
         self._data[:colno] = nil
       end
       return self._data
+    end
+
+    def get_culprit_string
+      fileloc = self._data[:module] || self._data[:filename]
+      return '' if fileloc.blank?
+      return "#{fileloc} in #{self._data[:function] || '?'}"
     end
   end
 end

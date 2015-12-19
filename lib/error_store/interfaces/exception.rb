@@ -1,6 +1,6 @@
 module ErrorStore::Interfaces
   class Exception < ErrorStore::BaseInterface
-    def display_name
+    def self.display_name
       'Exception'
     end
 

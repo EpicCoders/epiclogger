@@ -1,6 +1,6 @@
 module ErrorStore::Interfaces
   class SingleException < ErrorStore::BaseInterface
-    def display_name
+    def self.display_name
       'Single Exception'
     end
 
