@@ -55,8 +55,8 @@ ActiveRecord::Schema.define(version: 20160120100325) do
     t.integer  "level"
     t.text     "message"
     t.string   "view"
-    t.integer  "status"
-    t.integer  "times_seen"
+    t.integer  "status",           default: 3
+    t.integer  "times_seen",       default: 1
     t.datetime "first_seen"
     t.datetime "last_seen"
     t.text     "data"
@@ -66,8 +66,10 @@ ActiveRecord::Schema.define(version: 20160120100325) do
     t.datetime "resolved_at"
     t.datetime "active_at"
     t.string   "platform"
-    t.datetime "created_at",       null: false
-    t.datetime "updated_at",       null: false
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
+    t.string   "culprit"
+    t.string   "checksum"
   end
 
   create_table "issues", force: :cascade do |t|
@@ -166,4 +168,5 @@ ActiveRecord::Schema.define(version: 20160120100325) do
 
   add_foreign_key "issues", "subscribers"
   add_foreign_key "issues", "websites"
+  add_foreign_key "notifications", "websites"
 end
