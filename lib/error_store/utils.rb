@@ -104,13 +104,12 @@ module ErrorStore
       end
     end
 
-    def is_url(filename)
+    def is_url?(filename)
       return filename.start_with?('file:', 'http:', 'https:')
     end
 
     def handle_nan(value)
       puts "doing handle #{value}"
-      binding.pry
       # "Remove nan values that can't be json encoded"
       if value.is_a?(Float)
         return '<inf>' if value == Float::INFINITY
@@ -118,6 +117,30 @@ module ErrorStore
         return '<nan>' if value == Float::NAN
       end
       return value
+    end
+
+    #####
+    # Remove filename build numbers. They can be version numbers or sha/md5/sha1
+    #####
+    def remove_filename_outliers(filename)
+      _filename_version_re = /(?:
+        v?(?:\d+\.)*\d+|   # version numbers, v1, 1.0.0
+        [a-f0-9]{7,8}|     # short sha
+        [a-f0-9]{32}|      # md5
+        [a-f0-9]{40}       # sha1
+      )/ix
+      return filename.gsub(_filename_version_re, '<version>')
+    end
+
+    #####
+    # Remove function outliners
+    # - Remove ruby random integers from erb files.
+    # - Remove metadata that we don't need
+    #####
+    def remove_function_outliers(function)
+      _ruby_anon_func = /_\d{2,}/i
+      return 'block' if function.start_with?('block ')
+      return _ruby_anon_func.gsub('_<anon>', function)
     end
   end
 end
