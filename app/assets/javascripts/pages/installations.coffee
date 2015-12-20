@@ -89,31 +89,33 @@ switchIndexTabs = () ->
     if target.attr('name') == 'details'
       $('#details-settings, #client-details').show()
       $('#client-configuration, #client-integrations').hide()
+      getLastClicked('#details-tabs')
     else if target.attr('name') == 'integrations'
       $('#client-integrations').show()
       $('#client-details, #client-configuration').hide()
     else if target.attr('name') == 'client configuration'
       $('#client-configuration, #client-information, #client-platforms, #client-frameworks').show()
       $('#client-details, #client-integrations').hide()
+      getLastClicked('#platforms-tabs')
     target.addClass('active')
+
 
   $('#platforms-tabs, #details-tabs').on 'click', (e) ->
     target = $(e.target.closest("li"))
-    $('#platforms-tabs li').removeClass('active')
-    $('#details-tabs li').removeClass('active')
+    removeActiveClass()
     target.addClass('active')
     manipulateInstallationsIndex(target)
 
   $('#img-platforms').on 'click', (e) ->
     manipulateInstallationsIndex($(e.target).parent())
-    $('#platforms-tabs li').removeClass('active')
+    removeActiveClass()
 
 PubSub.subscribe('assigned.website', (ev, website)->
   switch gon.action
     when "index"
       hideListedTabs()
       switchIndexTabs()
-      $('#client-details, #details-notifications')
+      $('#client-details, #details-notifications').hide()
       $('#client-information, #client-platforms, #client-frameworks').show()
 
       $.getJSON Routes.api_v1_website_path(website.id), (data) ->
@@ -121,10 +123,26 @@ PubSub.subscribe('assigned.website', (ev, website)->
         $('#current-site').render data
         apiKeyTab(data)
 
+getLastClicked = (id) ->
+  hideListedTabs()
+  removeActiveClass()
+  if id == '#details-tabs'
+    position = $.cookie('detail-tab') || 1
+    tabs = ['#details-settings', '#details-notifications', '#details-api-keys']
+    $(id + ' li:nth-child('+position+')').addClass('active')
+    $(tabs[position-1]).show()
+  else
+    $('#platforms-tabs li:first').addClass('active')
+    $('#client-information, #client-platforms, #client-frameworks').show()
 
+
+removeActiveClass = () ->
+  $('#platforms-tabs li').removeClass('active')
+  $('#details-tabs li').removeClass('active')
 
 hideListedTabs = () ->
   $('#details-settings,
+    #details-notifications,
     #client-integrations,
     #current-site, #details-rate-limits,
     #details-tags, #details-api-keys,
@@ -145,36 +163,47 @@ manipulateInstallationsIndex = (target) ->
   if target.attr('name') == 'javascript'
     $('#current-site').show()
     $('#javascript').show()
+    $.cookie('configuration-tab', 2)
   else if target.attr('name') == 'python'
     $('#current-site').show()
     $('#python').show()
+    $.cookie('configuration-tab', 3)
   else if target.attr('name') == 'php'
     $('#current-site').show()
     $('#php').show()
+    $.cookie('configuration-tab', 4)
   else if target.attr('name') == 'ruby'
     $('#current-site').show()
     $('#ruby').show()
-  else if target.attr('name') == 'java'
-    $('#current-site').show()
-    $('#java').show()
+    $.cookie('configuration-tab', 5)
   else if target.attr('name') == 'node.js'
     $('#current-site').show()
     $('#node-js').show()
+    $.cookie('configuration-tab', 6)
+  else if target.attr('name') == 'java'
+    $('#current-site').show()
+    $('#java').show()
+    $.cookie('configuration-tab', 7)
   else if target.attr('name') == 'ios'
     $('#current-site').show()
     $('#ios').show()
+    $.cookie('configuration-tab', 8)
   else if target.attr('name') == 'all platforms'
     $('#current-site').hide()
+    $.cookie('configuration-tab', 1)
     $('#client-information, #client-platforms, #client-frameworks').show()
 
   else if target.attr('name') == 'settings'
     $('#details-settings').show()
+    $.cookie('detail-tab', 1)
   else if target.attr('name') == 'notifications'
     $('#details-notifications').show()
+    $.cookie('detail-tab', 2)
   else if target.attr('name') == 'rate limits'
     $('#details-rate-limits').show()
   else if target.attr('name') == 'tags'
     $('#details-tags').show()
   else if target.attr('name') == 'api keys'
     $('#details-api-keys').show()
+    $.cookie('detail-tab', 3)
 )
