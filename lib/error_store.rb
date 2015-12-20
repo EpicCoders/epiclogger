@@ -21,7 +21,7 @@ module ErrorStore
           })
         end
       rescue
-        logger.error("Could not load class #{base}")
+        Rails.logger.error("Could not load class #{base}")
       end
     end
   end
@@ -59,6 +59,7 @@ module ErrorStore
     'query': :query,
     'user': :user,
     'csp': :csp,
+    'http': :http,
 
     'sentry.interfaces.Exception': :exception,
     'sentry.interfaces.Message': :message,
@@ -116,6 +117,24 @@ module ErrorStore
       40 => 'error',
       50 => 'fatal',
   }
+
+  # The following values control the sampling rates
+  SENTRY_SAMPLE_RATES = [
+      # up until N events, store 1 in M
+      [50, 1],
+      [1000, 2],
+      [10000, 10],
+      [100000, 50],
+      [1000000, 300],
+      [10000000, 2000],
+  ]
+  SENTRY_MAX_SAMPLE_RATE = 10000
+  SENTRY_SAMPLE_TIMES = [
+      [3600, 1],
+      [360, 10],
+      [60, 60],
+  ]
+  SENTRY_MAX_SAMPLE_TIME = 10000
 
   CURRENT_VERSION       = '5'
   DEFAULT_LOG_LEVEL     = 'error'
