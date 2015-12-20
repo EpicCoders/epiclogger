@@ -19,8 +19,7 @@ module ErrorStore
           auth_req = parse_auth_header(_error.request.headers['HTTP_AUTHORIZATION'])
         end
       elsif _error.request.get?
-        # implement the get method for getting app_key
-        # auth_req =
+        # TODO make get request parsing
       end
 
       raise ErrorStore::MissingCredentials.new(self), 'Missing authentication information' unless auth_req
