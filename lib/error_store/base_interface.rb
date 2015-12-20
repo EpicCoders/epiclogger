@@ -25,6 +25,16 @@ module ErrorStore
       # keep only values of zero and not blank
       return _data.delete_if { |k, v| v == 0 || v.blank? }
     end
+
+    def get_hash
+      return []
+    end
+
+    def compute_hashes(platform)
+      result = self.get_hash()
+      return [] unless result
+      return [result]
+    end
   end
 end
 
