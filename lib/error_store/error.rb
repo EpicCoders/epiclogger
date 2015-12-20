@@ -1,17 +1,19 @@
 module ErrorStore
   class Error
     include ErrorStore::Utils
-    attr_accessor :request, :context, :data, :auth
+    attr_accessor :request, :context, :data, :auth, :issue
 
     def initialize(request: nil, issue: nil)
       @request = request
       @issue   = issue
     end
 
-    def self.find
+    def find
       # TODO here we would set up the error with all the details so we can call specific methods
       # @data = normalize(error[:data]) || {}
       # @interface = get_interface()
+      @data = decode_json(@issue.data)
+      self
     end
 
     def create!
@@ -28,6 +30,9 @@ module ErrorStore
       # TODO filter sensitive data like passwords. Eventually add the option to manually define these.
       # TODO filter data to not have the ip defined by user
       # STEP 2:
+      # default_cache.set(cache_key, data, timeout=3600)
+      # preprocess_event.delay(cache_key=cache_key, start_time=time())
+
       # Rails.cache.write(cache_key, @data)
       # ErrorWorker.perform_async(cache_key)
       ErrorStore::Error.store_error(@data)
@@ -69,9 +74,6 @@ module ErrorStore
     def validate_data
       # parse the data from the request and get it
       data = get_data
-
-      # let's do a cleanup of the keys that are not reserved to client attributes
-      data.keys.each { |key|  }
 
       # initialize some of the data attributes that are needed before we save it
       data[:website]      = _website.id
@@ -275,7 +277,7 @@ module ErrorStore
       issue = Issue.new({
           website: website,
           event_id: event_id,
-          data: data,
+          data: data.to_json,
           time_spent: time_spent,
           datetime: date,
           message: message,
@@ -285,8 +287,52 @@ module ErrorStore
       issue_user = self._get_subscriber(website, data)
 
       data[:fingerprint] = fingerprint || ['{{ default }}']
-      binding.pry
+      hash = md5_from_hash(get_hash_for_issue(issue))
 
+      group_params = {
+          message: message,
+          platform: platform,
+          culprit: culprit,
+          issue_logger: logger_name,
+          level: level,
+          last_seen: date,
+          first_seen: date,
+          time_spent_total: time_spent || 0,
+          time_spent_count: time_spent && 1 || 0,
+      }
+
+
+      group, is_new, is_regression, is_sample = self._save_aggregate(issue: issue, hash: hash, release: release, **group_params)
+
+      issue.group = group
+      issue.group_id = group.id
+
+      # save the issue unless its been sampled
+      # binding.pry
+      # unless is_sample
+        retried = false
+        begin
+          Issue.transaction(isolation: :serializable) do
+            issue.save()
+          end
+        rescue PG::TRSerializationFailure => exception
+          if !retried
+            retried = true
+            retry
+          else
+            Rails.logger.info("Exception in Error._get_subscriber")
+            Rails.logger.info("Message: #{exception.message}")
+            Rails.logger.info("Class: #{exception.class}")
+            raise exception
+          end
+        rescue => exception
+          Rails.logger.info("Exception in Error._store_error")
+          Rails.logger.info("Message: #{exception.message}")
+          Rails.logger.info("Class: #{exception.class}")
+          raise exception
+        end
+      # end
+      return issue
     end
 
 
@@ -325,6 +371,149 @@ module ErrorStore
       @context.website
     end
 
+    def _get_interfaces
+      result = []
+      data[:interfaces].map do |key, data|
+        begin
+          interface = ErrorStore.get_interface(key).new(self)
+        rescue ErrorStore::InvalidInterface => e
+          Rails.logger.error("Invalid interface #{e.message}")
+          next
+        end
+
+        value = interface.sanitize_data(data)
+        next unless value
+
+        result << value
+      end
+      # todo return interfaces sorted by score
+      return result
+    end
+
+    def self.get_hash_for_issue(issue)
+      return get_hash_for_issue_with_reason(issue)[1]
+    end
+
+    def self.get_hash_for_issue_with_reason(issue)
+      interfaces = issue.get_interfaces()
+      interfaces.each do |interface|
+        result = interface.compute_hashes(issue.platform)
+        next unless result
+        return [ interface.type, result ]
+      end
+      return [ :message, [issue.message] ]
+    end
+
+    def self.md5_from_hash(hash_chunks)
+      result = Digest::MD5.new
+      hash_chunks.each do |chunk|
+        result.update(chunk.to_s)
+      end
+      return result.hexdigest()
+    end
+
+    def self._handle_regression(group, issue, release)
+      return unless group.is_resolved?
+      # we now think its a regression, rely on the database to validate that
+      # no one beat us to this
+      date = [issue.datetime, group.last_seen].max
+      is_regression = GroupedIssue.where(id: group.id, status: [GroupedIssue.status.find_value(:resolved).value, GroupedIssue.status.find_value(:unresolved).value]).
+                            update_attributes( active_at: date, last_seen: date, status: :unresolved)
+
+      group.active_at = date
+      group.status = :unresolved
+
+      return is_regression
+    end
+
+    def self.count_limit(count)
+      # TODO: could we do something like num_to_store = max(math.sqrt(100*count)+59, 200) ?
+      # ~ 150 * ((log(n) - 1.5) ^ 2 - 0.25)
+      ErrorStore::SENTRY_SAMPLE_RATES.map do |amount, sample_rate|
+        return sample_rate if count <= amount
+      end
+      return ErrorStore::SENTRY_MAX_SAMPLE_RATE
+    end
+
+    def self.time_limit(silence)  # ~ 3600 per hour
+      ErrorStore::SENTRY_SAMPLE_TIMES.map do |amount, sample_rate|
+        return sample_rate if silence >= amount
+      end
+      return ErrorStore::SENTRY_MAX_SAMPLE_TIME
+    end
+
+    def self.should_sample(current_datetime, last_seen, times_seen)
+      silence_timedelta = current_datetime - last_seen
+      silence = silence_timedelta.days * 86400 + silence_timedelta.seconds
+
+      return false if times_seen % count_limit(times_seen) == 0
+      return false if times_seen % time_limit(silence) == 0
+      return true
+    end
+
+    def self._process_existing_aggregate(group: group, issue: issue, data: data, release: release)
+      date = [issue.datetime, group.last_seen].max
+      extra = {
+          last_seen: date,
+          # score: ScoreClause(group),
+      }
+      extra[:message] = issue.message if issue.message and issue.message != group.message
+      extra[:level] = data[:level] if group.level != data[:level]
+      extra[:culprit] = data[:culprit] if group.culprit != data[:culprit]
+      # TODO continue here.
+      is_regression = self._handle_regression(group, issue, release)
+
+      group.last_seen = extra[:last_seen]
+
+      update_args = { times_seen: 1 }
+      if issue.time_spent
+        update_args[:time_spent_total] = issue.time_spent
+        update_args[:time_spent_count] = 1
+      end
+
+      return is_regression
+    end
+
+    # here we save the grouped issue with all details
+    def self._save_aggregate(issue: issue, hash: hash, release: release, **args)
+      website = issue.website
+      # attempt to find a matching hash
+      group = GroupedIssue.find_by(checksum: hash)
+      existing_group_id = group.try(:id)
+
+      if existing_group_id.nil?
+        # args[:score]  = ScoreClause.calculate(1, args[:last_seen])
+        args[:checksum] = hash
+        group_is_new = true
+        group = GroupedIssue.create({website: website, **args})
+      else
+        group_is_new = false
+      end
+
+      # XXX(dcramer): it's important this gets called **before** the aggregate
+      # is processed as otherwise values like last_seen will get mutated
+      can_sample = should_sample(issue.datetime, group.last_seen, group.times_seen)
+
+      unless group_is_new
+        is_regression = self._process_existing_aggregate(
+            group: group,
+            issue: issue,
+            data: args,
+            release: release,
+        )
+      else
+        is_regression = false
+      end
+
+      # Determine if we've sampled enough data to store this issue
+      if group_is_new || is_regression
+        is_sample = false
+      else
+        is_sample = can_sample
+      end
+
+      return group, group_is_new, is_regression, is_sample
+    end
 
     def self._get_subscriber(website, data)
       user_data = data[:interfaces][:user]
