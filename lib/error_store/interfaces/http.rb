@@ -66,7 +66,10 @@ module ErrorStore::Interfaces
 
       result = []
       cookie_header = nil
-      value.each do |k, v|
+      value.map do |k, v|
+        k, v = k.first if k.is_a?(Hash)
+        v = v.join(', ') if v.is_a?(Array)
+
         if k.downcase == 'cookie'
           cookie_header = v
         else
@@ -85,4 +88,3 @@ module ErrorStore::Interfaces
     end
   end
 end
-

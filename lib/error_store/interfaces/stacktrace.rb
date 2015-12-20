@@ -18,9 +18,9 @@ module ErrorStore::Interfaces
 
       frame_list.each do |frame|
         if !has_system_frames
-          frame[:in_app] = false
-        elsif frame[:in_app].blank?
-          frame[:in_app] = false
+          frame._data[:in_app] = false
+        elsif frame._data[:in_app].blank?
+          frame._data[:in_app] = false
         end
       end
 
@@ -34,7 +34,7 @@ module ErrorStore::Interfaces
       end
 
       self._data[:has_system_frames] = has_system_frames
-      return self._data
+      return self
     end
 
     def to_json
@@ -71,4 +71,40 @@ module ErrorStore::Interfaces
       return false if data[:frames].length == system_frames
       return system_frames.zero?
     end
+
+    def get_culprit_string
+      default = nil
+      self._data[:frames].reverse_each do |frame|
+        if frame[:in_app]
+          return frame.get_culprit_string()
+        elsif default.nil?
+          default = frame.get_culprit_string()
+        end
+      end
+      return default
+    end
+
+    def get_hash(system_frames=true)
+      frames = self._data[:frames]
+
+      # TODO(dcramer): this should apply only to JS
+      # In a common case (I believe from window.onerror) we can end up with
+      # a stacktrace which includes a single frame and a reference that isnt
+      # valuable. It would generally point to the loading page, so it's possible
+      # we could improve this check using that information.
+      stack_invalid = (frames.length == 1 && frames.first[:lineno] == 1 && !frames.first[:function] && frames.first.path_url?)
+
+      return [] if stack_invalid
+
+      unless system_frames
+        frames = frames.map { |f| f if f._data[:in_app] }.compact || frames
+      end
+
+      output = []
+      frames.each do |frame|
+        output.concat(frame.get_hash())
+      end
+      return output
+    end
   end
+end

@@ -23,11 +23,12 @@ module ErrorStore::Interfaces
         module:      trim(data[:module], max_size: 128),
         stacktrace:  stacktrace,
       }
+      self
     end
 
     def to_json
-      if stacktrace
-        stacktrace = stacktrace.to_json()
+      if self._data[:stacktrace]
+        stacktrace = self._data[:stacktrace].to_json()
       else
         stacktrace = nil
       end
@@ -36,9 +37,18 @@ module ErrorStore::Interfaces
           type:       self._data[:type],
           value:      self._data[:value],
           module:     self._data[:module],
-          stacktrace: self._data[:stacktrace]
+          stacktrace: stacktrace
       }
+    end
+
+    def get_hash
+      output = nil
+      if self._data[:stacktrace]
+        output = self._data[:stacktrace].get_hash()
+        output << self._data[:type] if output and self._data[:type]
+      end
+      output = [self._data[:type], self._data[:value]].map { |e| e if e }.compact unless output
+      return output
     end
   end
 end
-

@@ -30,7 +30,7 @@ module ErrorStore::Interfaces
       end
 
       if !filename && abs_path
-        if is_url(abs_path)
+        if is_url?(abs_path)
           urlparts = URI(abs_path)
           if urlparts.path
             filename = urlparts.path
@@ -103,7 +103,7 @@ module ErrorStore::Interfaces
       else
         self._data[:colno] = nil
       end
-      return self._data
+      return self
     end
 
     def get_culprit_string
@@ -111,7 +111,82 @@ module ErrorStore::Interfaces
       return '' if fileloc.blank?
       return "#{fileloc} in #{self._data[:function] || '?'}"
     end
+
+    #####
+    # The hash of the frame varies depending on the data available.
+    # Our ideal scenario is the module name in addition to the line of
+    # context. However, in several scenarios we opt for other approaches due
+    # to platform constraints.
+    # This is one of the few areas in Sentry that isn't platform-agnostic.
+    #####
+    def get_hash
+      output = []
+      if self._data[:module]
+        if self.is_unhashable_module?
+          output << '<module>'
+        else
+          output << self._data[:module]
+        end
+      elsif self._data[:filename] and !self.path_url? and !self.is_caused_by?
+        output << remove_filename_outliers(self._data[:filename])
+      end
+
+      if self._data[:context_line].nil?
+        can_use_context = false
+      elsif self._data[:context_line].length > 120
+        can_use_context = false
+      elsif self.path_url? and !self._data[:function]
+        # the context is too risky to use here as it could be something
+        # coming from an HTML page or it could be minified/unparseable
+        # code, so lets defer to other lesser heuristics (like lineno)
+        can_use_context = false
+      elsif self._data[:function] and self.is_unhashable_function?
+        can_use_context = true
+      else
+        can_use_context = true
+      end
+
+      # XXX: hack around what appear to be non-useful lines of context
+      if can_use_context
+        output << self._data[:context_line]
+      elsif !output
+        # If we were unable to achieve any context at this point
+        # (likely due to a bad JavaScript error) we should just
+        # bail on recording this frame
+        return output
+      elsif self._data[:function]
+        if self.is_unhashable_function?
+          output << '<function>'
+        else
+          output << remove_function_outliers(self._data[:function])
+        end
+      elsif !self._data[:lineno].nil?
+        output << self._data[:lineno]
+      end
+      return output
+    end
+
+    def is_unhashable_module?
+      # this is Java specific
+      return self._data[:module].include?('$$Lambda$')
+    end
+
+    def is_unhashable_function?
+      # lambda$ is Java specific
+      # [Anonymous is PHP specific (used for things like SQL queries and JSON data)
+      return self._data[:function].start_with?('lambda$', '[Anonymous')
+    end
+
+    def is_caused_by?
+      # dont compute hash using frames containing the 'Caused by'
+      # text as it contains an exception value which may may contain dynamic
+      # values (see raven-java#125)
+      return self._data[:filename].start_with?('Caused by: ')
+    end
+
+    def path_url?
+      return false unless self._data[:abs_path]
+      return is_url?(self._data[:abs_path])
+    end
   end
 end
-
-

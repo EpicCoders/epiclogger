@@ -73,5 +73,37 @@ module ErrorStore::Interfaces
         values.delete(half_max)
       end
     end
+
+    def compute_hashes(platform)
+      system_hash = self.get_hash(true)
+      return [] unless system_hash
+
+      app_hash = self.get_hash(false)
+      return [system_hash] if system_hash == app_hash || !app_hash
+
+      return [system_hash, app_hash]
+    end
+
+    def get_hash(system_frames=true)
+      # optimize around the fact that some exceptions might have stacktraces
+      # while others may not and we ALWAYS want stacktraces over values
+      output = []
+      self._data[:values].each do |value|
+        next unless value._data[:stacktrace]
+        stack_hash = value._data[:stacktrace].get_hash(system_frames)
+        if stack_hash
+          output.concat(stack_hash)
+          output << value.type
+        end
+      end
+
+      unless output
+        self._data[:values].each do |value|
+          output.concat(value.get_hash())
+        end
+      end
+
+      return output
+    end
   end
 end
