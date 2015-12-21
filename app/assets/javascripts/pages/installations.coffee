@@ -1,12 +1,25 @@
 PubSub.subscribe('assigned.website', (ev, website)->
 
-  range = $('.input-range')
-  value = $('.range-value')
-  value.html range.attr('value')
-  value.html 'disabled' if range.attr('value') == '0'
-  range.on 'input', ->
-    value.html @value
-    return
+  # $('.input-range').slider
+  #   min: 0
+  #   max: 168
+  #   slide: (event, ui) ->
+  #     if ui.value == 0
+  #       $('.range-value').text 'disabled'
+  #     else if ui.value == 1
+  #       $('.range-value').text ui.value + ' hour'
+  #     else if ui.value > 12
+  #       step: 3
+  #     else if ui.value > 1 && ui.value < 25
+  #       $('.range-value').text ui.value + ' hours'
+
+  # range = $('.input-range')
+  # value = $('.range-value')
+  # value.html range.attr('value')
+  # value.html 'disabled' if range.attr('value') == '0'
+  # range.on 'input', ->
+  #   value.html @value
+  #   return
 
   $.getJSON Routes.api_v1_notifications_path(), { website_id: website.id }, (data) ->
     $('input[name=daily]').attr('checked', true) if data.daily
@@ -107,8 +120,10 @@ switchIndexTabs = () ->
     manipulateInstallationsIndex(target)
 
   $('#img-platforms').on 'click', (e) ->
-    manipulateInstallationsIndex($(e.target).parent())
+    position = $.inArray($(e.target).parent()[0], $('#img-platforms a')) + 2
     removeActiveClass()
+    manipulateInstallationsIndex($(e.target).parent())
+    $('#platforms-tabs li:nth-child('+position+')').addClass('active')
 
 PubSub.subscribe('assigned.website', (ev, website)->
   switch gon.action

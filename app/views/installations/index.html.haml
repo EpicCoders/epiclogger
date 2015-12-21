@@ -127,15 +127,15 @@
                 / .form-group
                 /   %label.control-label Slug*
                 /   %input.form-control{:required => "required", :type => "text", :name => "Slug"}
-          .panel.panel-default.codeview
-            .panel-heading Event Settings
-            .panel-body
-              %small Treat an event as resolved if it hasn't been seen for this amount of time.
-              %p
-              .range-slider
-                %input.input-range{:max => "30", :min => "0", :type => "range", :value => "0"}
-                  %span.range-value
-              %br
+          / .panel.panel-default.codeview
+          /   .panel-heading Event Settings
+          /   .panel-body
+          /     %small Treat an event as resolved if it hasn't been seen for this amount of time.
+          /     %p
+          /     .range-slider
+          /       %input.input-range{:max => "168", :min => "0", :type => "range", :value => "0"}
+          /         %span.range-value
+          /     %br
           .form-group
             %button.btn.btn-success#add-website Save Changes
             %button.btn.btn-warning Remove Project
@@ -289,7 +289,7 @@
                   %td.title
                   %td.domain
                   %td.app_key
-                  %td.app_id
+                  %td.app_secret
         .panel.panel-default.codeview
           .panel-heading Website Configuration
           %p Engage developers with users to solve errors. This is the js library that sends errors to our server. Use the iframe functionality to show the form,autofill the email address, removed unused css code.
@@ -358,6 +358,9 @@
       .panel.panel-default.tileview#client-platforms
         .panel-heading Platforms
         .panel-body#img-platforms
+          %a.tile.text-center{:name => 'javascript',:href => "#"}
+            %img{:src => image_path("icon_javascript.png")}/
+            %span Javascript
           %a.tile.text-center{:name => 'python',:href => "#"}
             %img{:src => image_path("icon_python.png")}/
             %span Python
@@ -367,15 +370,12 @@
           %a.tile.text-center{:name => 'ruby',:href => "#"}
             %img{:src => image_path("icon_ruby.png")}/
             %span Ruby
-          %a.tile.text-center{:name => 'javascript',:href => "#"}
-            %img{:src => image_path("icon_javascript.png")}/
-            %span Javascript
-          %a.tile.text-center{:name => 'java',:href => "#"}
-            %img{:src => image_path("icon_java.png")}/
-            %span Java
           %a.tile.text-center{:name => 'node.js',:href => "#"}
             %img{:src => image_path("icon_nodejs.png")}/
             %span Node.js
+          %a.tile.text-center{:name => 'java',:href => "#"}
+            %img{:src => image_path("icon_java.png")}/
+            %span Java
           %a.tile.text-center{:name => 'ios',:href => "#"}
             %img{:src => image_path("icon_ios.png")}/
             %span IOS

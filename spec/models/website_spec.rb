@@ -38,7 +38,7 @@ describe Website do
     it 'should add app_key and app_id to website' do
       website = Website.new(domain: 'domain@example.com', title: 'title for page')
       website.save
-      expect(website.app_id).not_to be_nil
+      expect(website.app_secret).not_to be_nil
       expect(website.app_key).not_to be_nil
     end
    end
