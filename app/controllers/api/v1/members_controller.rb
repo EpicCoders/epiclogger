@@ -17,12 +17,11 @@ class Api::V1::MembersController < Api::V1::ApiController
   end
 
   def destroy
-    record = WebsiteMember.find(params[:id]).website.website_members.where('member_id=?', current_member.id)
-    if record.present?
-      _not_allowed!("Owner access required!") if record[0].role == 'user'
+    if current_member.is_owner_of?(current_site)
       @website_member = WebsiteMember.find(params[:id])
-      _not_allowed!("Owner can't be removed!") if @website_member.role == 'owner'
       @website_member.destroy()
+    else
+      _not_allowed!("Owner access required.")
     end
   end
 
