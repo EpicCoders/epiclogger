@@ -17,8 +17,8 @@ class Api::V1::MembersController < Api::V1::ApiController
   end
 
   def destroy
-    if current_member.is_owner_of?(current_site)
-      @website_member = WebsiteMember.find(params[:id])
+    @website_member = WebsiteMember.find(params[:id])
+    if current_member.is_owner_of?(@website_member.website)
       @website_member.destroy()
     else
       _not_allowed!("Owner access required.")
