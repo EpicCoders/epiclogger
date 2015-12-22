@@ -1,4 +1,5 @@
-json.members @members do |member|
-  json.(member, :id, :name, :email)
-  json.role WebsiteMember.role.find_value(member.role)
+json.members @members do |website_member|
+  json.(website_member, :id, :role)
+  json.name website_member.member.name
+  json.email website_member.member.email
 end

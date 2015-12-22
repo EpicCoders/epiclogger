@@ -2,7 +2,7 @@ class Api::V1::MembersController < Api::V1::ApiController
   skip_before_action :authenticate_member!, only: [:create]
 
   def index
-    @members = current_site.members.select('members.*, website_members.role')
+    @members = current_site.website_members
   end
 
   def create
@@ -17,9 +17,11 @@ class Api::V1::MembersController < Api::V1::ApiController
   end
 
   def destroy
-    @member = Member.find(params[:id])
-    @member.destroy()
+    @website_member = WebsiteMember.find(params[:id])
+    _not_allowed!("Owner can't be removed!") if @website_member.role == 'owner'
+    @website_member.destroy()
   end
+
   private
   def website_member
     params.require(:website_member).permit(:token, :email, :website_id)
