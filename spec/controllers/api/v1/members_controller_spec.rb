@@ -3,7 +3,7 @@ require 'rails_helper'
 describe Api::V1::MembersController, :type => :controller do
   let(:member) { create :member }
   let(:website) {create :website}
-  let!(:website_member) { create :website_member, member_id: member.id, website_id: website.id, invitation_sent_at: Time.now.utc }
+  let!(:website_member) { create :website_member, member_id: member.id, website_id: website.id, invitation_sent_at: Time.now.utc, role: 1 }
   let(:default_params) { {website_id: website.id, format: :json} }
 
   render_views # this is used so we can check the json response from the controller
@@ -24,10 +24,10 @@ describe Api::V1::MembersController, :type => :controller do
         expect(response.body).to eq({
             members: [
               {
-                id: member.id,
+                id: website_member.id,
+                role: website_member.role,
                 name: member.name,
-                email: member.email,
-                role: website_member.role
+                email: member.email
               }
             ]
           }.to_json)
@@ -99,19 +99,21 @@ describe Api::V1::MembersController, :type => :controller do
   end
 
   describe 'DELETE #destroy' do
-    let(:params) { default_params.merge({ id: member.id, format: :js }) }
+    let!(:member2) {create :member}
+    let!(:website_member2) { create :website_member, member_id: member2.id, website_id: website.id, role: 2 }
+    let(:params) { default_params.merge({ id: website_member2.id, format: :js }) }
     context 'is logged in' do
       before { auth_member(member) }
 
-      it 'should delete member' do
+      it 'should delete website member' do
         expect{
           delete :destroy, params
-        }.to change(Member, :count).by(-1)
+        }.to change(WebsiteMember, :count).by(-1)
       end
 
       it 'should render js template' do
         delete :destroy, params
-        expect(response.body).to eq("$('tr#member_#{member.id}').remove();\n")
+        expect(response.body).to eq("$('tr#member_#{website_member2.id}').remove();\n")
         expect(response.content_type).to eq('text/javascript')
         expect(response).to have_http_status(200)
       end
