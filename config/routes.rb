@@ -13,6 +13,7 @@ Rails.application.routes.draw do
   resources :subscribers, only: [:index]
   resources :accounts, only: [:show]
   resources :installations, only: [:show, :index]
+  resources :website_members, only: [:index]
   # resources :settings, only: [:index]
 
   mount_devise_token_auth_for "Member", at: 'api/v1/auth', controllers: {
@@ -31,11 +32,12 @@ Rails.application.routes.draw do
           get :add_error
         end
       end
+      resources :website_members, only: [:index, :destroy]
       resources :grouped_issues, only: [:index, :show]
       resources :notifications, only: [:update, :index]
       resources :invitations, only: [:create]
       resources :subscribers, only: [:index]
-      resources :members, only: [:show, :create, :index, :destroy]
+      resources :members, only: [:show, :create]
       resources :websites, only: [:index, :show, :create, :update, :destroy]
     end
   end

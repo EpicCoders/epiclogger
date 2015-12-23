@@ -1,10 +1,6 @@
 class Api::V1::MembersController < Api::V1::ApiController
   skip_before_action :authenticate_member!, only: [:create]
 
-  def index
-    @members = current_site.website_members
-  end
-
   def create
     member = Member.find_by_email(website_member[:email])
     if params[:website_member]['token'].present?
@@ -14,15 +10,6 @@ class Api::V1::MembersController < Api::V1::ApiController
 
   def show
     @member = current_member
-  end
-
-  def destroy
-    @website_member = WebsiteMember.find(params[:id])
-    if current_member.is_owner_of?(@website_member.website)
-      @website_member.destroy()
-    else
-      _not_allowed!("Owner access required.")
-    end
   end
 
   private

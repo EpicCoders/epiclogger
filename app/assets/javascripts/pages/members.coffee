@@ -87,5 +87,6 @@ PubSub.subscribe('assigned.website', (ev, website)->
     when "index"
       $.getJSON Routes.api_v1_members_url(), { website_id: website.id }, (data) ->
         $('#members-container').render data, directive
+
 )
 
