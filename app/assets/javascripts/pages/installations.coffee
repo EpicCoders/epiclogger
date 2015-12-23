@@ -115,15 +115,14 @@ switchIndexTabs = () ->
 
   $('#platforms-tabs, #details-tabs').on 'click', (e) ->
     target = $(e.target.closest("li"))
-    removeActiveClass()
     target.addClass('active')
-    manipulateInstallationsIndex(target)
+    tab = '#'+e.target.parentElement.parentElement.id
+    manipulateInstallationsIndex(target, tab)
 
   $('#img-platforms').on 'click', (e) ->
     position = $.inArray($(e.target).parent()[0], $('#img-platforms a')) + 2
-    removeActiveClass()
-    manipulateInstallationsIndex($(e.target).parent())
     $('#platforms-tabs li:nth-child('+position+')').addClass('active')
+    manipulateInstallationsIndex($(e.target).parent(), "#platforms-tabs", true)
 
 PubSub.subscribe('assigned.website', (ev, website)->
   switch gon.action
@@ -173,52 +172,20 @@ hideListedTabs = () ->
     #ios'
   ).hide()
 
-manipulateInstallationsIndex = (target) ->
+manipulateInstallationsIndex = (target, tab, img) ->
   hideListedTabs()
-  if target.attr('name') == 'javascript'
+  removeActiveClass()
+  position = $.inArray(target[0], $(tab + ' li'))
+  if img != undefined
     $('#current-site').show()
-    $('#javascript').show()
-    $.cookie('configuration-tab', 2)
-  else if target.attr('name') == 'python'
+    $('#'+target.attr('name')).show()
+  else if position > 0 && tab == '#platforms-tabs'
     $('#current-site').show()
-    $('#python').show()
-    $.cookie('configuration-tab', 3)
-  else if target.attr('name') == 'php'
-    $('#current-site').show()
-    $('#php').show()
-    $.cookie('configuration-tab', 4)
-  else if target.attr('name') == 'ruby'
-    $('#current-site').show()
-    $('#ruby').show()
-    $.cookie('configuration-tab', 5)
-  else if target.attr('name') == 'node.js'
-    $('#current-site').show()
-    $('#node-js').show()
-    $.cookie('configuration-tab', 6)
-  else if target.attr('name') == 'java'
-    $('#current-site').show()
-    $('#java').show()
-    $.cookie('configuration-tab', 7)
-  else if target.attr('name') == 'ios'
-    $('#current-site').show()
-    $('#ios').show()
-    $.cookie('configuration-tab', 8)
-  else if target.attr('name') == 'all platforms'
+    $('#'+target.attr('name')).show()
+  else if tab == '#platforms-tabs' && position == 0
     $('#current-site').hide()
-    $.cookie('configuration-tab', 1)
     $('#client-information, #client-platforms, #client-frameworks').show()
-
-  else if target.attr('name') == 'settings'
-    $('#details-settings').show()
-    $.cookie('detail-tab', 1)
-  else if target.attr('name') == 'notifications'
-    $('#details-notifications').show()
-    $.cookie('detail-tab', 2)
-  else if target.attr('name') == 'rate limits'
-    $('#details-rate-limits').show()
-  else if target.attr('name') == 'tags'
-    $('#details-tags').show()
-  else if target.attr('name') == 'api keys'
-    $('#details-api-keys').show()
-    $.cookie('detail-tab', 3)
+  else if tab == '#details-tabs'
+    $('#details-'+target.attr('name').replace(/\s+/g, '-').toLowerCase()).show()
+    $.cookie('detail-tab', position+1)
 )
