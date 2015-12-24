@@ -1,6 +1,7 @@
 window.EpicLogger = (->
   pickedWebsite = undefined
   memberWebsites = undefined
+  errorCount = undefined
 
   doLoad: ->
     $('.loading').addClass('j-cloak')
@@ -16,22 +17,15 @@ window.EpicLogger = (->
         if $(window).width() < 1170
           $('.main-container').toggleClass('cbp-spcontent-pushed-right')
           $('.cbp-spmenu-vertical').toggleClass('cbp-spmenu-vertical-pushed-right')
-          $('.cbp-spmenu-horizontal').toggleClass('cbp-spmenu-horizontal-pushed-right')
       EpicLogger.bindResize()
       $('#pick_website').hide()
       $('.picked-website').on 'click', ->
         $('#websites-sidebar').toggleClass('show-websites')
-    $('#user_options').hover (->
-      $('#user_options .sub-menu').addClass 'open-menu'
-      return
-    ), ->
-      $('#user_options .sub-menu').removeClass 'open-menu'
-      return
 
   setUpSidebar: (width) ->
     if width >= 1170
       #decrease content max-width with the sidebars width since its being pushed to the right
-      $('.cbp-spcontent').css('max-width','calc(100% - 180px)')
+      $('.cbp-spcontent').css('max-width','calc(100% - 230px)')
 
       #push content to the right
       $('.main-container').addClass('cbp-spcontent-pushed-right')
@@ -40,11 +34,6 @@ window.EpicLogger = (->
       #remove mobile classes when its being resized to a higher width
       $('.main-container').removeClass('cbp-spcontent-full-width')
       $('.cbp-spmenu-vertical').removeClass('cbp-spmenu-vertical-hidden')
-
-      #push horizontal menu to the right
-      $('.cbp-spmenu-horizontal').removeClass('cbp-spmenu-horizontal-extend')
-      $('.cbp-spmenu-horizontal').addClass('cbp-spmenu-horizontal-pushed-right')
-      $('.cbp-spmenu-horizontal').css('max-width','calc(100% - 180px)')
 
       $('.toggle-left-sidebar').hide()
     else
@@ -59,12 +48,11 @@ window.EpicLogger = (->
       $('.main-container').addClass('cbp-spcontent-full-width')
       $('.cbp-spmenu-vertical').addClass('cbp-spmenu-vertical-hidden')
 
-      #set up horizontal menu
-      $('.cbp-spmenu-horizontal').removeClass('cbp-spmenu-horizontal-pushed-right')
-      $('.cbp-spmenu-horizontal').addClass('cbp-spmenu-horizontal-extend')
-      $('.cbp-spmenu-horizontal').css('max-width','none')
-
       $('.toggle-left-sidebar').show()
+
+  getErrorCount: (website) ->
+    $.getJSON Routes.api_v1_errors_path(), { website_id: website.id}, (data) ->
+      $('#errornav').append('<span class="error-count-badge">' + data.groups.length + '</span>')
 
   bindResize: ->
     $(window).unbind().on 'resize', (e) ->
@@ -94,6 +82,7 @@ window.EpicLogger = (->
       $('.picked-website').text(pickedWebsite.title).append("&nbsp&nbsp&nbsp<i class='fa fa-angle-down'>") # render the current website
       $.cookie('pickedWebsite', pickedWebsite.id, { path: '/' }) # save the website id in the cookies
       PubSub.publishSync('assigned.website', pickedWebsite)
+      EpicLogger.getErrorCount(pickedWebsite)
     return pickedWebsite
     false
 

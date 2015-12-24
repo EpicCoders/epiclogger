@@ -18,6 +18,7 @@
     .main-wrapper
       = render partial: 'layouts/menu'
       .main-container.container-fluid.cbp-spcontent
+        %i.fa.fa-bars.toggle-left-sidebar
         = yield
       - if Rails.application.assets.find_asset("pages/#{controller.controller_name}")
         = javascript_include_tag "pages/#{controller.controller_name}"

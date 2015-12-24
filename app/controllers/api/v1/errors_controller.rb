@@ -40,32 +40,26 @@ class Api::V1::ErrorsController < Api::V1::ApiController
     else
       checksum = Digest::MD5.hexdigest(error_params['stacktrace'].to_s)
     end
-    groupedissue = GroupedIssue.find_by_data_and_website_id(checksum,current_site.id)
-    if groupedissue.nil?
+
+    @group = GroupedIssue.find_by_data_and_website_id(checksum,current_site.id)
+    if @group.nil?
       @group = GroupedIssue.create_with(
         issue_logger: error_params["logger"],
         view: error_params["request"].to_s.gsub('=>', ':'),
         status: 3,platform: error_params["platform"],
         message: error_params["message"],
         times_seen: 1,
-        first_seen: Time.now,
-        last_seen: Time.now
-      )
+        first_seen: DateTime.current,
+        last_seen: DateTime.current
+      ).find_or_create_by(data: checksum, website_id: current_site.id)
     else
-      groupedissue.update_attributes(
-        :times_seen => groupedissue.times_seen + 1,
-        :last_seen => Time.now
+      @group.update_attributes(
+        :times_seen => @group.times_seen + 1,
+        :last_seen => DateTime.current
       )
     end
 
-    @group = GroupedIssue.create_with(
-      issue_logger: error_params['logger'],
-      view: error_params['request'].to_s.gsub('=>', ':'),
-      status: 3, platform: error_params['platform'],
-      message: error_params['message']
-    ).find_or_create_by(data: checksum, website_id: current_site.id)
-
-    source_code = open_url_content(error_params['stacktrace'])
+    source_code = open_url_content(error_params["stacktrace"])
 
     @error = Issue.create_with(
       description: error_params['stacktrace']['frames'].to_s.gsub('=>', ':'),
@@ -101,7 +95,7 @@ class Api::V1::ErrorsController < Api::V1::ApiController
   def current_issue_page(per_page, order)
     position = 1
     current_site.grouped_issues.each do |grouped_issue|
-      if Time.parse(grouped_issue.last_seen.to_s) > Time.parse(order)
+      if DateTime.parse(grouped_issue.last_seen.to_s) > DateTime.parse(order)
         position += 1
       end
     end
