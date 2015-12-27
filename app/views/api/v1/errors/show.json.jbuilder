@@ -2,6 +2,7 @@ json.(@error, :id, :message, :view, :times_seen, :first_seen, :last_seen, :data,
 json.issues @error.issues do |issue|
   json.(issue, :id, :platform, :page_title)
   json.data JSON.parse(issue.data)
+  json.description JSON.parse(issue.description)
   json.subscriber do
     json.(issue.subscriber, :id, :email)
     hash = Digest::MD5.hexdigest(issue.subscriber.email)

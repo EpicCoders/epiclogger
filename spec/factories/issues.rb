@@ -1,8 +1,8 @@
 FactoryGirl.define do
   factory :issue do
     page_title "Homepage"
+    description '[{"descr":"<title>Scratch Disk</title>\n"}]'
     data '[{"data":"<!doctype html>\n<html>\n<head>\n"}]'
-    message "Message for new issue"
     association :subscriber
   end
 end
