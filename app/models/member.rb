@@ -6,7 +6,6 @@ class Member < ActiveRecord::Base
   include DeviseTokenAuth::Concerns::User
   has_many :website_members, -> { uniq }, dependent: :destroy, autosave: true
   has_many :websites, through: :website_members
-  has_one :notification, dependent: :destroy, autosave: true
 
   validates :name, presence: true
   validates :email, presence: true, uniqueness: true

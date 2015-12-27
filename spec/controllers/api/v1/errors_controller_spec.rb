@@ -171,7 +171,6 @@ describe Api::V1::ErrorsController, :type => :controller do
               platform: issue_error.platform,
               page_title: issue_error.page_title,
               data: JSON.parse(issue_error.data),
-              description: JSON.parse(issue_error.description),
               subscriber:{
                 id: subscriber.id,
                 email: subscriber.email,
