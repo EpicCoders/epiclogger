@@ -128,8 +128,8 @@ switchIndexTabs = () ->
 PubSub.subscribe('assigned.website', (ev, website)->
   switch gon.action
     when "index"
-      hideListedTabs()
       switchIndexTabs()
+      $('.tab').hide()
       $('#client-details, #details-notifications').hide()
       $('#client-information, #client-platforms, #client-frameworks').show()
 
@@ -139,8 +139,8 @@ PubSub.subscribe('assigned.website', (ev, website)->
         apiKeyTab(data)
 
 getLastClicked = (id) ->
-  hideListedTabs()
   removeActiveClass()
+  $('.tab').hide()
   if id == '#details-tabs'
     position = $.cookie('detail-tab') || 1
     tabs = ['#details-settings', '#details-notifications', '#details-api-keys']
@@ -155,27 +155,9 @@ removeActiveClass = () ->
   $('#platforms-tabs li').removeClass('active')
   $('#details-tabs li').removeClass('active')
 
-hideListedTabs = () ->
-  $('#details-settings,
-    #details-notifications,
-    #client-integrations,
-    #current-site, #details-rate-limits,
-    #details-tags, #details-api-keys,
-    #client-information,
-    #client-platforms,
-    #client-frameworks,
-    #javascript,
-    #php,
-    #python,
-    #ruby,
-    #java,
-    #node-js,
-    #ios'
-  ).hide()
-
 manipulateInstallationsIndex = (target, tab, img) ->
-  hideListedTabs()
   removeActiveClass()
+  $('.tab').hide()
   position = $.inArray(target[0], $(tab + ' li'))
   target.addClass('active')
   if img != undefined
