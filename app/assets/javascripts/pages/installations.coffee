@@ -114,6 +114,7 @@ switchIndexTabs = () ->
 
 
   $('#platforms-tabs, #details-tabs').on 'click', (e) ->
+    return false if e.target.closest('li') == null
     target = $(e.target.closest("li"))
     target.addClass('active')
     tab = '#'+e.target.parentElement.parentElement.id
@@ -176,6 +177,7 @@ manipulateInstallationsIndex = (target, tab, img) ->
   hideListedTabs()
   removeActiveClass()
   position = $.inArray(target[0], $(tab + ' li'))
+  target.addClass('active')
   if img != undefined
     $('#current-site').show()
     $('#'+target.attr('name')).show()

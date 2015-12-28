@@ -64,7 +64,7 @@ window.EpicLogger = (->
       else
         if $.cookie('pickedWebsite')!=undefined
           EpicLogger.pickWebsite(undefined, $.cookie('pickedWebsite'))
-        else if data.websites.length > 0
+        else
           EpicLogger.pickWebsite(undefined, data.websites[0].id)
       PubSub.publish('details.websites', data );
 
@@ -118,8 +118,6 @@ window.EpicLogger = (->
         EpicLogger.doneLoad()
         EpicLogger.setMemberDetails()
         EpicLogger.renderMember()
-        $.getJSON Routes.api_v1_websites_url(), {member_id: $.auth.user.id}, (data) ->
-          $('#myModal').modal('show') if data.websites.length == 0
       else if ev == 'auth.validation.error'
         current_path = window.location.pathname
         console.log current_path

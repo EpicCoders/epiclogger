@@ -72,6 +72,7 @@ manipulateIndexElements = (data) ->
   $.obj = data
   if data.groups.length > 0
     $('#missing-errors').hide()
+    $('#grouped-issuescontainer').render data, directive
 
     # start the pagination
     $('.pagination-text').html(data.page + '/' + data.pages)
@@ -84,7 +85,6 @@ manipulateIndexElements = (data) ->
     $('.buttons').hide()
     $('#grouped-issues').hide()
     $('#missing-errors').show()
-  $('#grouped-issuescontainer').render data, directive
 
   $('#addWebsite').submit (e) ->
     e.preventDefault()
