@@ -17,6 +17,7 @@
 //= require jquery.cookie
 //= require jquery.deparam
 //= require pubsub
+//= require bootstrap
 //= require jquery.j-toker
 //= require bootstrap-sprockets
 //= require turbolinks

@@ -1,1 +1,1 @@
-json.website(@website, :id, :app_id, :app_key)
+json.website(@website, :id, :app_secret, :app_key)

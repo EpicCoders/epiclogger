@@ -2,18 +2,18 @@
   .col-md-12.pagecontainer
     %br
     .bs-example{"data-example-id" => "simple-nav-justified"}
-      %ul.nav.nav-pills.nav-justified#configuration-tabs
+      %ul.nav.nav-pills.nav-justified#top-tabs
         %li{:name => 'details',:role => "presentation"}
-          %a{:href => "#"}
+          %a{:href => "#client-details"}
             %h4 Details
         %li.active{:name => 'client configuration', :role => "presentation"}
-          %a{:href => "#"}
+          %a{:href => "#client-configuration"}
             %h4 Client Configuration
         %li{:name => 'integrations', :role => "presentation"}
-          %a{:href => "#"}
+          %a{:href => "#client-integrations"}
             %h4 Integrations
       %br
-      #client-integrations.tab
+      #client-integrations.tab.main-tabs
         %br
         %br
         .col-lg-12
@@ -79,20 +79,28 @@
                       %input{:type => "checkbox"}
 
 
-    .col-lg-12#client-details
-      %ul.nav.nav-tabs#details-tabs
-        %li.active{:name => 'settings',:role => "presentation"}
-          %a{:href => "#"} Settings
-        %li{:name => 'notifications',:role => "presentation"}
-          %a{:href => "#"} Notifications
-        / %li{:name => 'rate limits',:role => "presentation"}
-        /   %a{:href => "#"} Rate Limits
-        / %li{:name => 'tags',:role => "presentation"}
-        /   %a{:href => "#"} Tags
-        %li{:name => 'api keys',:role => "presentation"}
-          %a{:href => "#"} Api Keys
+    .col-lg-12#client-details.main-tabs
+      %ul.nav.nav-tabs#details-tabs.main-tabs
+        %li.active
+          %a{:href => "#settings"} Settings
+        %li
+          %a{:href => "#notifications"} Notifications
+        / %li
+        /   %a{:href => "#rate-limits"} Rate Limits
+        / %li
+        /   %a{:href => "#tags"} Tags
+        %li
+          %a{:href => "#api-keys"} Api Keys
       %br
-      #details-settings.tab
+        #home.tab
+          Text for home tab
+        #menu1.tab
+          Text for menu 1 here
+        #menu2.tab
+          Text for menu 2 here
+        #menu3.tab
+          Menu 3 here.
+      #settings-tab.tab
         .col-lg-6
           .panel.panel-default
             .panel-heading Project Details
@@ -153,7 +161,7 @@
               /   %textarea#comment.form-control{:placeholder => "e.g. example.com or https://example.com", :rows => "7"}
               / %small Separate multiple entries with a newline.
 
-      #details-notifications.tab
+      #notifications-tab.tab
         .col-lg-12
           .panel.panel-default
             .panel-heading Notifications
@@ -179,7 +187,7 @@
                   %span.fa.fa-save
                   Save settings
 
-      / #details-rate-limits.tab
+      / #rate-limits-tab.tab
       /   .col-lg-9
       /     .panel.panel-default
       /       .panel-heading Rate Limits
@@ -201,13 +209,13 @@
       /         %small This cannot be higher than the team (or system) allotted maximum. The value can be either a fixed number, or a percentage that is relative to the team's overall quota.
       /         %hr
       /         %button.btn.btn-primary Save Changes
-      / #details-tags.tab
+      / #tags-tab.tab
       /   .col-lg-9
       /     .panel.panel-default
       /       .panel-heading Manage Tags
       /       .panel-default
       /         %p We have not yet recorded any tags for this project.
-      #details-api-keys.tab
+      #api-keys-tab.tab
         .col-lg-12
           .panel.panel-default
             .panel-heading Manage API Keys
@@ -252,33 +260,24 @@
                         .badge.errors
 
 
-    .col-lg-12#client-configuration
-      %ul.nav.nav-tabs
+    .col-lg-12#client-configuration.main-tabs
+      %ul.nav.nav-tabs#platforms-tabs.main-tabs
         %li.active
-          %a{:href => "#"} Home
+          %a{:href => "#all-platforms"} All Platforms
         %li
-          %a{:href => "#"} Menu 1
+          %a{:href => "#javascript"} Javascript
         %li
-          %a{:href => "#"} Menu 2
+          %a{:href => "#python"} Python
         %li
-          %a{:href => "#"} Menu 3
-      %ul.nav.nav-tabs#platforms-tabs
-        %li.active{:name => 'all platforms',:role => "presentation"}
-          %a{:href => "#"} All Platforms
-        %li{:name => 'javascript',:role => "presentation"}
-          %a{:href => "#"} Javascript
-        %li{:name => 'python',:role => "presentation"}
-          %a{:href => "#"} Python
-        %li{:name => 'php',:role => "presentation"}
-          %a{:href => "#"} PHP
-        %li{:name => 'ruby',:role => "presentation"}
-          %a{:href => "#"} Ruby
-        %li{:name => 'node-js',:role => "presentation"}
-          %a{:href => "#"} Node.js
-        %li{:name => 'java',:role => "presentation"}
-          %a{:href => "#"} Java
-        %li{:name => 'ios',:role => "presentation"}
-          %a{:href => "#"} IOS
+          %a{"data-toggle" => "tab", :href => "#php"} PHP
+        %li
+          %a{:href => "#ruby"} Ruby
+        %li
+          %a{:href => "#node-js"} Node.js
+        %li
+          %a{:href => "#js"} Java
+        %li
+          %a{:href => "#ios"} IOS
       %br
       .col-md-12.pagecontainer#current-site.tab
         .pagetitle
@@ -302,7 +301,7 @@
         .panel.panel-default.codeview
           .panel-heading Website Configuration
           %p Engage developers with users to solve errors. This is the js library that sends errors to our server. Use the iframe functionality to show the form,autofill the email address, removed unused css code.
-          .panel-body.tab#javascript
+          .panel-body.tab#javascript-tab
             .codepanel
               %p
                 var _lopts = _lopts || [];
@@ -342,62 +341,63 @@
                 s.parentNode.insertBefore(loader, s);
               %p
                 })();
-          .panel-body.tab#python
+          .panel-body.tab#python-tab
             %p Python here
-          .panel-body.tab#php
+          .panel-body.tab#php-tab
             %p PHP here
-          .panel-body.tab#ruby
+          .panel-body.tab#ruby-tab
             %p Ruby here
-          .panel-body.tab#java
+          .panel-body.tab#java-tab
             %p Java here
-          .panel-body.tab#node-js
+          .panel-body.tab#node-js-tab
             %p Node.js here
-          .panel-body.tab#ios
+          .panel-body.tab#ios-tab
             %p IOS here
-      .panel.panel-default.codeview#client-information.tab
-        .panel-heading Client Configuration
-        .panel-body
-          %p To start sending events, configure your client with the following DSN value:
-          .codepanel
-            %span.line https://451cf228845b497b919281b158209a59:157cbe7bf9d34b67b906dea4d3e849d0@app.feedbacker.com/12798
-          %br/
-          %p If this is a client that only needs public access (like raven-js), you can use the following public DSN:
-          .codepanel
-            %span.line https://3291842f716643f2968b11e3c86113f9@app.feedbacker.com/12798
-      .panel.panel-default.tileview#client-platforms.tab
-        .panel-heading Platforms
-        .panel-body#img-platforms
-          %a.tile.text-center{:name => 'javascript',:href => "#"}
-            %img{:src => image_path("icon_javascript.png")}/
-            %span Javascript
-          %a.tile.text-center{:name => 'python',:href => "#"}
-            %img{:src => image_path("icon_python.png")}/
-            %span Python
-          %a.tile.text-center{:name => 'php',:href => "#"}
-            %img{:src => image_path("icon_php.png")}/
-            %span PHP
-          %a.tile.text-center{:name => 'ruby',:href => "#"}
-            %img{:src => image_path("icon_ruby.png")}/
-            %span Ruby
-          %a.tile.text-center{:name => 'node.js',:href => "#"}
-            %img{:src => image_path("icon_nodejs.png")}/
-            %span Node.js
-          %a.tile.text-center{:name => 'java',:href => "#"}
-            %img{:src => image_path("icon_java.png")}/
-            %span Java
-          %a.tile.text-center{:name => 'ios',:href => "#"}
-            %img{:src => image_path("icon_ios.png")}/
-            %span IOS
+      #all-platforms-tab.tab
+        .panel.panel-default.codeview#client-information
+          .panel-heading Client Configuration
+          .panel-body
+            %p To start sending events, configure your client with the following DSN value:
+            .codepanel
+              %span.line https://451cf228845b497b919281b158209a59:157cbe7bf9d34b67b906dea4d3e849d0@app.feedbacker.com/12798
+            %br/
+            %p If this is a client that only needs public access (like raven-js), you can use the following public DSN:
+            .codepanel
+              %span.line https://3291842f716643f2968b11e3c86113f9@app.feedbacker.com/12798
+        .panel.panel-default.tileview#client-platforms
+          .panel-heading Platforms
+          .panel-body#img-platforms
+            %a.tile.text-center{:href => "#javascript"}
+              %img{:src => image_path("icon_javascript.png")}/
+              %span Javascript
+            %a.tile.text-center{:href => "#python"}
+              %img{:src => image_path("icon_python.png")}/
+              %span Python
+            %a.tile.text-center{:href => "#php"}
+              %img{:src => image_path("icon_php.png")}/
+              %span PHP
+            %a.tile.text-center{:href => "#ruby"}
+              %img{:src => image_path("icon_ruby.png")}/
+              %span Ruby
+            %a.tile.text-center{:href => "#node-js"}
+              %img{:src => image_path("icon_nodejs.png")}/
+              %span Node.js
+            %a.tile.text-center{:href => "#java"}
+              %img{:src => image_path("icon_java.png")}/
+              %span Java
+            %a.tile.text-center{:href => "#ios"}
+              %img{:src => image_path("icon_ios.png")}/
+              %span IOS
 
-      .panel.panel-default.tileview.tab#client-frameworks
-        .panel-heading Frameworks
-        .panel-body
-          %a.tile.text-center{:href => "installations/show#rails-3"}
-            %img{:src => image_path("icon_rails.png")}/
-            %span Rails 3
-          %a.tile.text-center{:href => "installations/show#rails-4"}
-            %img{:src => image_path("icon_rails.png")}/
-            %span Rails 4
-          %a.tile.text-center{:href => "installations/show#django"}
-            %img{:src => image_path("icon_django.png")}/
-            %span Django
+        .panel.panel-default.tileview#client-frameworks
+          .panel-heading Frameworks
+          .panel-body
+            %a.tile.text-center{:href => "installations/show#rails-3"}
+              %img{:src => image_path("icon_rails.png")}/
+              %span Rails 3
+            %a.tile.text-center{:href => "installations/show#rails-4"}
+              %img{:src => image_path("icon_rails.png")}/
+              %span Rails 4
+            %a.tile.text-center{:href => "installations/show#django"}
+              %img{:src => image_path("icon_django.png")}/
+              %span Django
