@@ -17,7 +17,8 @@ Rails.application.routes.draw do
   # resources :settings, only: [:index]
 
   mount_devise_token_auth_for "Member", at: 'api/v1/auth', controllers: {
-    omniauth_callbacks: 'overrides/omniauth_callbacks'
+    omniauth_callbacks: 'overrides/omniauth_callbacks',
+    registrations: "overrides/registrations"
   }
   namespace :api, defaults: {format: :json} do
     scope module: 'v1' do
