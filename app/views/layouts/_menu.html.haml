@@ -32,8 +32,11 @@
         = nav_link  "Add new website", new_website_path(), {'title' => 'Add new website'}, 'plus'
         = nav_link "Errors", errors_url(), {'title' => 'Errors', :id => "errornav"}, 'exclamation-triangle'
         = nav_link "Installation", installations_url(), {'title' => 'Installation'}, 'code'
-        = nav_link "Settings", settings_url(), {'title' => 'Settings'}, 'cog'
         = nav_link "User", edit_member_url(1), {'title' => 'Users'}, 'user'
       %ul.icon-list
         = nav_link "Help", 'mailto:info@epiclogger.com', {'data-helpful'=>'epiclogger','data-helpful-modal'=>"on", :class=>'helpful-link', 'title' => 'Help'}, 'question'
-
+    .sidebar-footer
+      .footer-content
+        %img.profileimg.pull-left{:src => "http://0.gravatar.com/avatar/59b762ebf3d116bf806bcfa3fa12e65f"}/
+        %a{:href => "#{settings_url()}"}
+          %i.fa.fa-cog

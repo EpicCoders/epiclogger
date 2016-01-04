@@ -52,7 +52,9 @@ window.EpicLogger = (->
 
   getErrorCount: (website) ->
     $.getJSON Routes.api_v1_errors_path(), { website_id: website.id}, (data) ->
-      $('#errornav').append('<span class="error-count-badge">' + data.groups.length + '</span>')
+      $('.error-count-badge').remove();
+      if data.groups.length > 0
+        $('#errornav').append('<span class="error-count-badge">' + data.groups.length + '</span>')
 
   bindResize: ->
     $(window).unbind().on 'resize', (e) ->
