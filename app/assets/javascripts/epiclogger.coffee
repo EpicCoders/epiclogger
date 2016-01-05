@@ -21,6 +21,8 @@ window.EpicLogger = (->
       $('#pick_website').hide()
       $('.picked-website').on 'click', ->
         $('#websites-sidebar').toggleClass('show-websites')
+      $('.toggle-options').on 'click', ->
+        $('.options').toggleClass('hidden')
 
   setUpSidebar: (width) ->
     if width >= 1170
@@ -109,6 +111,12 @@ window.EpicLogger = (->
       else
         if $.cookie('pickedWebsite')!=undefined
           EpicLogger.pickWebsite(undefined, $.cookie('pickedWebsite'))
+        else
+          if data.websites.length > 0
+            EpicLogger.pickWebsite(undefined, data.websites[0].id)
+          else
+            EpicLogger.pickWebsite(undefined, undefined)
+
         if window.location.pathname != "/websites/new"
           EpicLogger.pickWebsite(undefined, data.websites[0].id)
       PubSub.publish('details.websites', data );

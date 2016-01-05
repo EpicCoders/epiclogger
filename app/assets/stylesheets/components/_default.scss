@@ -32,6 +32,10 @@ p {
   display:none;
 }
 
+.hidden{
+  display:none;
+}
+
 .active{
   background-color:#ffffff;
 
@@ -330,6 +334,40 @@ p {
           border-color:white;
         }
       }
+    }
+    .options{
+      width:65px;
+      height:55px;
+      position:absolute;
+      background-color:#ecf0f1;
+      right:10px;
+      top:20px;
+      border-right:1px transparent white;
+      border-radius:0px 5px 5px 0px;
+      a{
+        font-size:12px;
+        color:#7b7e91;
+        text-align:center;
+        display:block;
+        padding:5px;
+      }
+
+      a:hover{
+        text-decoration:none;
+        color:black;
+      }
+    }
+
+    .options:before{
+      position:absolute;
+      content:'';
+      right: 100%;
+      top:0px;
+      width:0px;
+      height:0px;
+      border-top:28px solid transparent;
+      border-right:10px solid #ecf0f1;
+      border-bottom:28px solid transparent;
     }
   }
 }

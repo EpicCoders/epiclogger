@@ -172,10 +172,8 @@ individualErrorSidebar = () ->
   $(document).ready ->
     if gon.action == "show" and gon.controller == "errors"
       setUpErrorSidebar($(window).width())
-  $('#pick_website').hover (->
-    $('#pick_website .sub-menu').addClass 'open-menu'
-  ), ->
-    $('#pick_website .sub-menu').removeClass 'open-menu'
+  $(".options-toggle").on 'click', () ->
+    $('#options').toggleClass('invisible')
   $('.toggle-left-sidebar').unbind('click').on 'click', () ->
     $('.toggle-left-sidebar').toggleClass('toggle-left-sidebar-open')
     $('.error-menu').toggleClass('error-menu-visible')
