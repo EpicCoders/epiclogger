@@ -1,9 +1,4 @@
 # important don't add $ -> here when using PubSub as the event will be assigned every time
-PubSub.subscribe('assigned.website', (ev, website)->
-  $.getJSON('/api/v1/websites', (data)->
-    location.href = '/websites' if data.websites.length == 0
-    )
-)
 directive = {
   groups:{
     warning: {

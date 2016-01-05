@@ -65,7 +65,10 @@ window.EpicLogger = (->
         if $.cookie('pickedWebsite')!=undefined
           EpicLogger.pickWebsite(undefined, $.cookie('pickedWebsite'))
         else
-          EpicLogger.pickWebsite(undefined, data.websites[0].id)
+          if memberWebsites.length == 0
+            $('#myModal').modal('show') if data.websites.length == 0
+          else
+            EpicLogger.pickWebsite(undefined, data.websites[0].id)
       PubSub.publish('details.websites', data );
 
       directive = {
