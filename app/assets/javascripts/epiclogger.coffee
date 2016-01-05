@@ -59,6 +59,9 @@ window.EpicLogger = (->
   setMemberDetails: (picked_id)->
     $.getJSON('/api/v1/websites', (data)->
       memberWebsites = data.websites
+      if (memberWebsites.length == 0 && window.location.pathname != "/errors")
+        EpicLogger.doLoad()
+        window.location = "/errors"
       if picked_id != undefined
         EpicLogger.pickWebsite(undefined, picked_id)
       else
