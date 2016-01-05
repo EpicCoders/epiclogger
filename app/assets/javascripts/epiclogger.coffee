@@ -66,7 +66,7 @@ window.EpicLogger = (->
           EpicLogger.pickWebsite(undefined, $.cookie('pickedWebsite'))
         else
           if memberWebsites.length == 0
-            $('#myModal').modal('show') if data.websites.length == 0
+            $('#myModal').modal('show')
           else
             EpicLogger.pickWebsite(undefined, data.websites[0].id)
       PubSub.publish('details.websites', data );

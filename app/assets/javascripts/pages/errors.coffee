@@ -174,6 +174,7 @@ $('.messageTextarea').keydown((event) ->
   if @value == ''
     @value = ''
   return
+
 $('form#notify').submit ->
   dataString = $('.messageTextarea').val()
   $.ajax
@@ -185,70 +186,24 @@ $('form#notify').submit ->
       return
   false
 
-#add below if for adding new website after first time signup
-
 PubSub.subscribe('assigned.website', (ev, website)->
   $.getJSON Routes.api_v1_website_path(website.id), (data) ->
     $('#current-website').render data
 )
 
-reset_platforms = () ->
-  $('#javascript, #node_js, #rails, #ruby, #python, #ios, #php, #java, #django').hide()
-
-addNewWebsite = (form, action) ->
-  $(form).submit (e) ->
-    e.preventDefault()
-    $.ajax
-      url: Routes.api_v1_websites_url()
-      type: 'post'
-      dataType: 'json'
-      data: { website: { domain: $(form).find('#domain').val(), title: $(form).find('#title').val() } }
-      success: (data) ->
-        EpicLogger.setMemberDetails(data.id)
-        if action == 'index'
-          manipulateWizard(2)
-          $('.tab1').addClass('disabled')
-          $('.tab2').removeClass('disabled')
-        else
-          alert 'Website added!'
-          location.href = '/installations'
-      error: (error) ->
-        alert "Website exists!" if error.status == 401
-    return
-  return
-
-reset_platforms()
-addNewWebsite('#modalWebsite', 'index')
+$('.tab').hide()
 $('.tab2, .tab3').addClass('disabled')
 
-$('#retry').on 'click', () ->
+$('#back').on 'click', () ->
+  $('.tab').hide()
   manipulateWizard(2)
-  reset_platforms()
 
 $('#finish').on 'click', () ->
   location.href = '/errors'
 
-$('#platform').on 'click', (platform) ->
-  reset_platforms()
-  switch platform.target.parentElement.name
-    when 'javascript'
-      $('#javascript').show()
-    when 'node_js'
-      $('#node_js').show()
-    when 'rails'
-      $('#rails').show()
-    when 'ruby'
-      $('#ruby').show()
-    when 'python'
-      $('#python').show()
-    when 'ios'
-      $('#ios').show()
-    when 'php'
-      $('#php').show()
-    when 'java'
-      $('#java').show()
-    when 'django'
-      $('#django').show()
+$('#platform a').on 'click', (e) ->
+  $('.tab').hide()
+  $('#'+this.name).show()
   manipulateWizard(3)
 
 manipulateWizard = (n) ->
@@ -259,3 +214,19 @@ manipulateWizard = (n) ->
     $('.stepwizard-row a[href="#step-' + n + '"]').removeClass 'btn-default'
     $('.stepwizard-row a[href="#step-' + n + '"]').addClass 'btn-primary'
   return
+
+$('#modalWebsite').submit (e) ->
+  e.preventDefault()
+  form = $('#modalWebsite')
+  $.ajax
+    url: Routes.api_v1_websites_url()
+    type: 'post'
+    dataType: 'json'
+    data: { website: { domain: form.find('#domain').val(), title: form.find('#title').val() } }
+    success: (data) ->
+      EpicLogger.setMemberDetails(data.id)
+      manipulateWizard(2)
+      $('.tab1').addClass('disabled')
+      $('.tab2').removeClass('disabled')
+  return
+return

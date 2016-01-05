@@ -61,7 +61,7 @@
                         %a.tile.text-center.resize-a{:name => "javascript"}
                           %img.resize-img{:src => image_path("icon_javascript.png")}/
                           %span Javascript
-                        %a.tile.text-center.resize-a{:name => "node_js"}
+                        %a.tile.text-center.resize-a{:name => "node-js"}
                           %img.resize-img{:src => image_path("icon_nodejs.png")}/
                           %span Node Js
                         %a.tile.text-center.resize-a{:name => "rails"}
@@ -91,7 +91,7 @@
                       .progress-bar.progress-bar-info.progress-bar-striped.active{"aria-valuemax" => "100", "aria-valuemin" => "0", "aria-valuenow" => "33", :role => "progressbar", :style => "width: 34%"}
                         Website added, pick your platform
                 #step-3.tab-pane.fade.padding20
-                  .col-md-12.pagecontainer#javascript
+                  .col-md-12.pagecontainer.tab#javascript
                     .pagetitle.text-center
                       %h3 Installation and configuration for Javascript
                     .panel.panel-default.codeview
@@ -153,31 +153,31 @@
                             s.parentNode.insertBefore(loader, s);
                           %p
                             })();
-                  .col-md-12.pagecontainer#node_js
+                  .col-md-12.pagecontainer.tab#node-js
                     .pagetitle.text-center
                       %h3 Installation and configuration for Node.js
-                  .col-md-12.pagecontainer#rails
+                  .col-md-12.pagecontainer.tab#rails
                     .pagetitle.text-center
                       %h3 Installation and configuration for Rails
-                  .col-md-12.pagecontainer#ruby
+                  .col-md-12.pagecontainer.tab#ruby
                     .pagetitle.text-center
                       %h3 Installation and configuration for Ruby
-                  .col-md-12.pagecontainer#python
+                  .col-md-12.pagecontainer.tab#python
                     .pagetitle.text-center
                       %h3 Installation and configuration for Python
-                  .col-md-12.pagecontainer#ios
+                  .col-md-12.pagecontainer.tab#ios
                     .pagetitle.text-center
                       %h3 Installation and configuration for IOS
-                  .col-md-12.pagecontainer#php
+                  .col-md-12.pagecontainer.tab#php
                     .pagetitle.text-center
                       %h3 Installation and configuration for Php
-                  .col-md-12.pagecontainer#java
+                  .col-md-12.pagecontainer.tab#java
                     .pagetitle.text-center
                       %h3 Installation and configuration for Java
-                  .col-md-12.pagecontainer#django
+                  .col-md-12.pagecontainer.tab#django
                     .pagetitle.text-center
                       %h3 Installation and configuration for Django
-                  %button.btn.btn-primary#retry{:style => "width: 150px;",:name => 2, :type => "button"}
+                  %button.btn.btn-primary#back{:style => "width: 150px;",:name => 2, :type => "button"}
                     %i.icon-next
                     Go Back
                   %button.btn.btn-success.pull-right#finish{:style => "width: 150px;",:name => 0, :type => "button"}
