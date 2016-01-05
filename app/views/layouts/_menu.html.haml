@@ -35,6 +35,11 @@
         = nav_link "User", edit_member_url(1), {'title' => 'Users'}, 'user'
       %ul.icon-list
         = nav_link "Help", 'mailto:info@epiclogger.com', {'data-helpful'=>'epiclogger','data-helpful-modal'=>"on", :class=>'helpful-link', 'title' => 'Help'}, 'question'
+      .project-details
+        %h5 PROJECT DETAILS
+        %a{:href => "#{settings_url()}"} Settings
+        %a{:href => "#"} Members
+
     .sidebar-footer
       .footer-content
         %img.profileimg.pull-left{:src => "http://0.gravatar.com/avatar/59b762ebf3d116bf806bcfa3fa12e65f"}/

@@ -81,7 +81,15 @@ window.EpicLogger = (->
           pickedWebsite = website
 
       pickedWebsite = memberWebsites[0] if pickedWebsite == undefined
-      $('.picked-website').text(pickedWebsite.title).append("&nbsp&nbsp&nbsp<i class='fa fa-angle-down'>") # render the current website
+
+      if pickedWebsite == undefined
+        $('.picked-website').text("EpicLogger")
+        $('.picked-website').unbind()
+      else
+        if pickedWebsite.title.length > 10
+          pickedWebsite.title = pickedWebsite.title.substring(0,8 ) + "..."
+        $('.picked-website').text(pickedWebsite.title).append("&nbsp&nbsp&nbsp<i class='fa fa-angle-down'>") # render the current website
+
       $.cookie('pickedWebsite', pickedWebsite.id, { path: '/' }) # save the website id in the cookies
       PubSub.publishSync('assigned.website', pickedWebsite)
       EpicLogger.getErrorCount(pickedWebsite)
@@ -109,6 +117,9 @@ window.EpicLogger = (->
         title: {
           'data-id': ()->
             this.id
+          html: ->
+            if this.title.length > 16
+              return this.title.substring(0,13) + "..."
         }
       }
       $('#websites-sidebar').render data.websites, directive
