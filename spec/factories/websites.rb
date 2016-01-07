@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :website do
     title "TestSite 1"
-    domain "example.com"
+    domain "http://example.com"
   end
 
 end

@@ -5,12 +5,12 @@ class WebsiteMember < ActiveRecord::Base
   enumerize :role, in: {:owner => 1, :user => 2}, default: :user, scope: true
   before_create :generate_token
 
-  validate :unique_domain
+  validate :unique_domain, :on => :create
 
   def unique_domain
     domain = URI.parse(self.website.domain)
     website_cases = ["http://#{domain.host}", "https://#{domain.host}", "ftp://#{domain.host}"]
-    errors.add :website, 'This website already exists for you' if Website.where("domain IN ?", website_cases).count > 1
+    errors.add :website, 'This website already exists for you' if Website.where("domain IN (?)", website_cases).count > 1
   end
 
 

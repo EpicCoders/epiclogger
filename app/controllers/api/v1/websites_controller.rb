@@ -4,7 +4,8 @@ class Api::V1::WebsitesController < Api::V1::ApiController
   end
 
   def create
-    @website = current_member.websites.create!( domain: website_params[:domain], title: website_params[:title] )
+    url = URI.parse(website_params[:domain])
+    @website = current_member.websites.create!( domain: url.scheme+"://"+url.host, title: website_params[:title] )
   rescue Exception => e
     _not_allowed! e.message
   end

@@ -35,7 +35,7 @@ describe Api::V1::WebsitesController, :type => :controller do
               id: website.id,
               title: website.title,
               domain: website.domain,
-              app_secret: website.app_secret,
+              app_id: website.app_id,
               app_key: website.app_key,
               errors: website.grouped_issues.count,
               subscribers: website.subscribers.count,
@@ -54,7 +54,7 @@ describe Api::V1::WebsitesController, :type => :controller do
   end
 
   describe 'POST #create' do
-    let(:params) { default_params.merge({website: { domain: 'www.google.com', title: 'google'} }) }
+    let(:params) { default_params.merge({website: { domain: 'http://www.google.com', title: 'google'} }) }
 
     context 'if logged in' do
       before { auth_member(member) }
@@ -79,7 +79,7 @@ describe Api::V1::WebsitesController, :type => :controller do
 
       it 'should render the right json' do
         post :create, params
-        website = Website.find_by_domain('www.google.com')
+        website = Website.find_by_domain('http://www.google.com')
         expect(response).to be_successful
         expect(response.body).to eq({
           id: website.id,
@@ -124,7 +124,7 @@ describe Api::V1::WebsitesController, :type => :controller do
         expect(response).to be_successful
         expect(response.body).to eq({
           id: website.id,
-          app_secret: website.app_secret,
+          app_id: website.app_id,
           app_key: website.app_key,
           domain: website.domain,
           title: website.title,
@@ -155,7 +155,7 @@ describe Api::V1::WebsitesController, :type => :controller do
       end
       it 'should delete only website from current member' do
         member2 = create :member
-        website2 = create :website
+        website2 = create :website, title: 'Title for website', domain: 'http://www.new-website.com'
         website_member2 = create :website_member, member: member2, website: website2
         expect {
           delete :destroy, default_params.merge({ id: website2.id, format: :js })
@@ -163,7 +163,7 @@ describe Api::V1::WebsitesController, :type => :controller do
       end
       it 'should render js template' do
         delete :destroy, params
-        expect(response.body).to eq("$('tr#website_#{website.id}').remove();\n")
+        expect(response.body).to eq("location.reload();")
         expect(response.content_type).to eq('text/javascript')
         expect(response).to have_http_status(200)
       end
