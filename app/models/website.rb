@@ -7,6 +7,7 @@ class Website < ActiveRecord::Base
 
   validates :title, :presence => true
   validates :domain, :presence => true
+  validates_associated :website_members
 
   attr_accessor :generate
 
