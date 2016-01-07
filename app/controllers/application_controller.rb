@@ -14,8 +14,7 @@ class ApplicationController < ActionController::Base
 
     def set_gon
       info = {env:Rails.env}
-      token = (params[:token].nil?) ? cookies[:lionseek_token] : params[:token]
-      # info[:lionseek_token] = token if token
+      token = (params[:token].nil?) ? cookies[:epiclogger_token] : params[:token]
       info[:controller] = controller_name
       info[:action] = action_name
       gon.push(info)

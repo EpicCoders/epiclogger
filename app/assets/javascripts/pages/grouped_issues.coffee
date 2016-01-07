@@ -1,6 +1,3 @@
-$.getJSON('/api/v1/websites', (data)->
-    location.href = '/websites/new' if data.websites.length > 0
-  )
 directive = {
   groups:{
     warning: {

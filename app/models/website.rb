@@ -13,6 +13,11 @@ class Website < ActiveRecord::Base
 
   before_create :generate_api_keys
   before_update :generate_api_keys, if: -> { self.generate }
+  after_create :create_notification
+
+  def create_notification
+    Notification.create( website_id: self.id, new_event: true )
+  end
 
   protected
   def generate_api_keys

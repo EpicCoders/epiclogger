@@ -15,12 +15,11 @@ PubSub.subscribe('assigned.website', (ev, website)->
     when "new"
       $('#formWebsite').submit (e) ->
         e.preventDefault()
-        form = $('#formWebsite')
         $.ajax
           url: Routes.api_v1_websites_url()
           type: 'post'
           dataType: 'json'
-          data: { website: { domain: form.find('#domain').val(), title: form.find('#title').val() } }
+          data: $('#formWebsite').serialize()
           success: (data) ->
             EpicLogger.setMemberDetails(data.id)
             swal("Success", "Website added!", "success")

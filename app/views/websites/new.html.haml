@@ -11,10 +11,10 @@
             %form#formWebsite{:action => "", :method => "post"}
               .form-group
                 %label.control-label Name
-                %input#title.form-control{:placeholder => "Website name", :required => "required", :type => "text", :name => 'title'}/
+                %input.form-control{:placeholder => "Website name", :required => "required", :type => "text", :name => 'website[title]'}/
               .form-group
                 %label.control-label Domain
-                %input#domain.form-control{:placeholder => "http://www.domain.com", :required => "required", :type => "url", :name => 'website'}/
+                %input.form-control{:placeholder => "http://www.domain.com", :required => "required", :type => "url", :name => 'website[domain]'}/
               .form-group
                 %button.btn.btn-success.m-t-n-xs{:type => "submit"} Save
       .col-md-6

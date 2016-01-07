@@ -233,23 +233,22 @@
                       %span.btn.btn-danger.pull-right#revoke
                         Revoke
                 %p
-                .bs-example{"data-example-id" => "badges-in-pills"}
-                  %ul.nav.nav-pills{:role => "tablist"}
-                    %li.active{:role => "presentation"}
-                      .label.label-success
-                        %i.fa.fa-user
-                        Members
-                        .badge.members
-                    %li.active{:role => "presentation"}
-                      .label.label-success
-                        %i.fa.fa-users
-                        Subscribers
-                        .badge.subscribers
-                    %li.active{:role => "presentation"}
-                      .label.label-danger
-                        %i.fa.fa-wrench
-                        Errors
-                        .badge.errors
+                %ul.nav.nav-pills
+                  %li.active
+                    .label.label-success
+                      %i.fa.fa-user
+                      Members
+                      .badge.members
+                  %li.active
+                    .label.label-success
+                      %i.fa.fa-users
+                      Subscribers
+                      .badge.subscribers
+                  %li.active
+                    .label.label-danger
+                      %i.fa.fa-wrench
+                      Errors
+                      .badge.errors
 
 
     .col-lg-12#client-configuration.main-tabs

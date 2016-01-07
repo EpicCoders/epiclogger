@@ -4,16 +4,9 @@ class Api::V1::WebsitesController < Api::V1::ApiController
   end
 
   def create
-    website_exists = WebsiteMember.where("member_id = ?", current_member.id).joins(:website).where("domain = ?", website_params["domain"])
-    if website_exists.blank?
-      @website = Website.create( domain: website_params[:domain], title: website_params[:title] )
-      Notification.create( website_id: @website.id, new_event: true)
-      if params[:role] == 'owner'
-        role = WebsiteMember.role.find_value(:owner).value
-      else
-        role = WebsiteMember.role.find_value(:user).value
-      end
-      @website.website_members.create( member_id: current_member.id, role: role )
+    website = WebsiteMember.where("member_id = ?", current_member.id).joins(:website).where("domain = ?", website_params[:domain])
+    if website.blank?
+      @website = current_member.websites.create!( domain: website_params[:domain], title: website_params[:title] )
     else
       _not_allowed!
     end
@@ -31,10 +24,13 @@ class Api::V1::WebsitesController < Api::V1::ApiController
   def destroy
     @website = current_member.websites.find(params[:id])
     @website.destroy()
+    respond_to do |format|
+      format.js {render inline: "location.reload();" }
+    end
   end
 
   private
-		def website_params
-			params.require(:website).permit(:domain, :generate, :title, :id)
-		end
+    def website_params
+      params.require(:website).permit(:domain, :generate, :title, :id)
+    end
 end

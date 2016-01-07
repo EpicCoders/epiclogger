@@ -19,10 +19,6 @@ class Api::V1::ApiController < ActionController::Base
     raise Epiclogger::Errors::NotAllowed.new(status), message
   end
 
-  # def _not_authorized message = "Not Authorized", status = 401
-  #   render json: {errors: message}, status: status
-  # end
-
   def current_site
     if params[:website_id] && current_member
       @current_site ||= current_member.websites.where("websites.id = ?", params[:website_id]).try(:first)
