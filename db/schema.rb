@@ -15,7 +15,6 @@ ActiveRecord::Schema.define(version: 20160107083456) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-  enable_extension "hstore"
 
   create_table "grouped_issues", force: :cascade do |t|
     t.integer  "website_id"
@@ -129,8 +128,8 @@ ActiveRecord::Schema.define(version: 20160107083456) do
     t.string   "domain",     null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string   "app_id"
     t.string   "app_key"
-    t.string   "app_secret"
   end
 
   add_foreign_key "issues", "subscribers"
