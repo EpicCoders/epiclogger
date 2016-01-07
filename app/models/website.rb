@@ -1,5 +1,4 @@
 class Website < ActiveRecord::Base
-  belongs_to :member
   has_one :notification, dependent: :destroy
   has_many :subscribers, dependent: :destroy
   has_many :grouped_issues, dependent: :destroy
@@ -25,9 +24,9 @@ class Website < ActiveRecord::Base
       key = SecureRandom.hex(24)
       break key unless Website.exists?(app_key: key)
     end
-    self.app_secret = loop do
-      secret = SecureRandom.hex(6)
-      break secret unless Website.exists?(app_secret: secret)
+    self.app_id = loop do
+      id = SecureRandom.hex(6)
+      break id unless Website.exists?(app_key: id)
     end
   end
 
