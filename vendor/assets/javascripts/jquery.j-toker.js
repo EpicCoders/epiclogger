@@ -655,7 +655,6 @@
         delete opts.config;
 
         opts.confirm_success_url = config.confirmationSuccessUrl();
-        opts.firsttime = true
 
         $.ajax({
             url: url,
