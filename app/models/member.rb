@@ -10,9 +10,8 @@ class Member < ActiveRecord::Base
   validates :name, presence: true
   validates :email, presence: true, uniqueness: true
 
-  #used in controllers to check if a member owns a website
   def is_owner_of?(website)
-    WebsiteMember.with_role(:owner).where(website: website).map(&:member_id).include?(self.id)
+    website.website_members.with_role(:owner).where(website: website).map(&:member_id).include?(self.id)
   end
 
 end
