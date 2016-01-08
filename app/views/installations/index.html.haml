@@ -1,17 +1,16 @@
 #installation.row
   .col-md-12.pagecontainer
     %br
-    .bs-example{"data-example-id" => "simple-nav-justified"}
-      %ul.nav.nav-pills.nav-justified#top-tabs
-        %li{:name => 'details',:role => "presentation"}
-          %a{:href => "#client-details"}
-            %h4 Details
-        %li.active{:name => 'client configuration', :role => "presentation"}
-          %a{:href => "#client-configuration"}
-            %h4 Client Configuration
-        %li{:name => 'integrations', :role => "presentation"}
-          %a{:href => "#client-integrations"}
-            %h4 Integrations
+    %ul.nav.nav-pills.nav-justified#top-tabs
+      %li{:name => 'details'}
+        %a{:href => "#client-details"}
+          %h4 Details
+      %li.active{:name => 'client configuration'}
+        %a{:href => "#client-configuration"}
+          %h4 Client Configuration
+      %li{:name => 'integrations'}
+        %a{:href => "#client-integrations"}
+          %h4 Integrations
       %br
       #client-integrations.tab.main-tabs
         %br
