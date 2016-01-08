@@ -71,6 +71,13 @@ describe Api::V1::WebsitesController, :type => :controller do
         }.to change(Website, :count).by(1)
       end
 
+      it 'should give error if website_exists' do
+        website = create :website, domain: 'http://www.google.com', title: 'Title for website'
+        expect {
+          post :create, { website:{ domain: 'http://www.google.com', title: 'Random title' }, format: :json }
+        }.to change(Website, :count).by(0)
+      end
+
       it 'should create a website member' do
         expect {
           post :create, params
@@ -153,6 +160,7 @@ describe Api::V1::WebsitesController, :type => :controller do
           delete :destroy, params
         }.to change(Website,:count).by(-1)
       end
+
       it 'should delete only website from current member' do
         member2 = create :member
         website2 = create :website, title: 'Title for website', domain: 'http://www.new-website.com'
@@ -161,6 +169,7 @@ describe Api::V1::WebsitesController, :type => :controller do
           delete :destroy, default_params.merge({ id: website2.id, format: :js })
         }.to change(Website, :count).by(0)
       end
+
       it 'should render js template' do
         delete :destroy, params
         expect(response.body).to eq("location.reload();")
@@ -168,6 +177,7 @@ describe Api::V1::WebsitesController, :type => :controller do
         expect(response).to have_http_status(200)
       end
     end
+
     it 'should give error if not logged in' do
       delete :destroy, params
       expect(response.body).to eq({errors: ['Authorized users only.']}.to_json)
