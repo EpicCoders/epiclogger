@@ -32,9 +32,9 @@ class Website < ActiveRecord::Base
       key = SecureRandom.hex(24)
       break key unless Website.exists?(app_key: key)
     end
-    self.app_id = loop do
-      id = SecureRandom.hex(6)
-      break id unless Website.exists?(app_key: id)
+    self.app_secret = loop do
+      secret = SecureRandom.hex(6)
+      break id unless Website.exists?(app_secret: secret)
     end
   end
 end
