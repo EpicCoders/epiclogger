@@ -23,12 +23,13 @@ class Api::V1::WebsitesController < Api::V1::ApiController
     @website = current_member.websites.find(params[:id])
     @website.destroy()
     respond_to do |format|
-      format.js {render inline: "location.reload();" }
+      format.js {render inline: "location.reload();" } unless current_member.websites.blank?
+      format.js {render inline: "location.href='"+new_website_path+"';" } if current_member.websites.blank?
     end
   end
 
   private
     def website_params
-      params.require(:website).permit(:domain, :generate, :title, :id)
+      params.require(:website).permit(:member_id, :domain, :generate, :title, :id)
     end
 end

@@ -59,19 +59,18 @@ window.EpicLogger = (->
   setMemberDetails: (picked_id)->
     $.getJSON('/api/v1/websites', (data)->
       memberWebsites = data.websites
-      if (memberWebsites.length == 0 && window.location.pathname != "/websites/new")
-        EpicLogger.doLoad()
-        window.location = "/websites/new"
+      if memberWebsites.length == 0
+        $.removeCookie('pickedWebsite', { path: '/' })
+        if window.location.pathname != "/websites/new"
+          EpicLogger.doLoad()
+          window.location = "/websites/new"
       if picked_id != undefined
         EpicLogger.pickWebsite(undefined, picked_id)
       else
         if $.cookie('pickedWebsite')!=undefined
           EpicLogger.pickWebsite(undefined, $.cookie('pickedWebsite'))
-        else
-          if memberWebsites.length == 0
-            $('#myModal').modal('show')
-          else
-            EpicLogger.pickWebsite(undefined, data.websites[0].id)
+        if window.location.pathname != "/websites/new"
+          EpicLogger.pickWebsite(undefined, data.websites[0].id)
       PubSub.publish('details.websites', data );
 
       directive = {

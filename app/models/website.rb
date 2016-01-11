@@ -2,7 +2,7 @@ class Website < ActiveRecord::Base
   has_one :notification, dependent: :destroy
   has_many :subscribers, dependent: :destroy
   has_many :grouped_issues, dependent: :destroy
-  has_many :website_members, -> { uniq }, dependent: :destroy, autosave: true
+  has_many :website_members, -> { uniq }, autosave: true
   has_many :members, through: :website_members
 
   validates :title, :presence => true
@@ -14,6 +14,13 @@ class Website < ActiveRecord::Base
   before_create :generate_api_keys
   before_update :generate_api_keys, if: -> { self.generate }
   after_create :create_notification
+  before_destroy :website_dependent
+
+  def website_dependent
+    self.website_members.each do |record|
+      record.delete
+    end
+  end
 
   def create_notification
     Notification.create( website_id: self.id, new_event: true )
