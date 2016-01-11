@@ -16,7 +16,10 @@
     = include_gon
     .loading.j-cloak
     = render partial: 'layouts/menu'
-    #maincontainer.container-fluid
+    - unless params[:controller] + '/' + params[:action] == 'websites/new'
+      #maincontainer.container-fluid
+        = yield
+    - else
       = yield
     - if Rails.application.assets.find_asset("pages/#{controller.controller_name}")
       = javascript_include_tag "pages/#{controller.controller_name}"

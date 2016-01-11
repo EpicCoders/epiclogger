@@ -81,19 +81,6 @@ manipulateIndexElements = (data) ->
     $('#grouped-issues').hide()
     $('#missing-errors').show()
 
-  $('#addWebsite').submit (e) ->
-    e.preventDefault()
-    $.ajax
-      url: Routes.api_v1_websites_url()
-      type: 'post'
-      dataType: 'json'
-      data: { website: { domain: $('#addWebsite').find('#domain').val(), title: $('#addWebsite').find('#title').val() } }
-      success: (data) ->
-        EpicLogger.setMemberDetails(data.id)
-        window.location = "/installations/show"
-    return
-  return
-
 errorStacktrace = (data) ->
   issue_nr =0
   $.each data.issues[0].description, (index, issue) ->

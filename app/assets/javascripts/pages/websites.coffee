@@ -8,11 +8,18 @@ directive = {
         Routes.api_v1_website_path(this.id, {format: 'js'})
   }
 }
+changeButtonValue = () ->
+  $.getJSON Routes.api_v1_websites_url(), {member_id: $.auth.user.id}, (data) ->
+    if data.websites.length > 0
+      $('#custom-button').text('Go back')
+      $('#custom-button').removeAttr('onclick')
+      $('#custom-button').attr('href', '/websites')
 
 PubSub.subscribe('assigned.website', (ev, website)->
   console.log gon.action
   switch gon.action
     when "new"
+      changeButtonValue()
       $('#myModal').modal('show')
       $.getJSON Routes.api_v1_website_path(website.id), (data) ->
         $('#current-website').render data
