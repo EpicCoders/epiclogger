@@ -6,6 +6,15 @@ class WebsiteMember < ActiveRecord::Base
   before_create :generate_token
 
   validate :unique_domain, :on => :create
+  before_destroy :validate_destroy
+
+  def validate_destroy
+    owners = WebsiteMember.with_role(:owner).where('website_id=?',self.website.id)
+    if owners.count == 1
+      self.errors.add :base, "Website must have at least one owner"
+      return false
+    end
+  end
 
   def unique_domain
     domain = URI.parse(self.website.domain)
