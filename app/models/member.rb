@@ -13,5 +13,4 @@ class Member < ActiveRecord::Base
   def is_owner_of?(website)
     website.website_members.with_role(:owner).where(website: website).map(&:member_id).include?(self.id)
   end
-
 end
