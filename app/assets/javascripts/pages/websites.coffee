@@ -18,6 +18,9 @@ directive = {
       "&lt;script&gt;<br />Raven.config('https://"+this.app_key+"@test-sentry89.herokuapp.com/"+this.id+"', {<br />
       # we highly recommend restricting exceptions to a domain in order to filter out clutter<br />
       whitelistUrls: [/example\.com/]<br />}).install();<br />&lt;/script&gt;"
+  node_client_configuration:
+    html: ()->
+      "var raven = require('raven');<br /><br />var client = new raven.Client('https://"+this.app_key+":"+this.app_id+"@test-sentry89.herokuapp.com/"+this.id+"');"
 }
 changeButtonValue = () ->
   $.getJSON Routes.api_v1_websites_url(), {member_id: $.auth.user.id}, (data) ->

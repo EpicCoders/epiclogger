@@ -50,7 +50,7 @@
                     .events_dsn
                     / .codepanel
                     %br/
-                    %h5 If this is a client that only needs public access (like raven-js), you can use the following public DSN:
+                    %h5 If this is a client that only needs public access (like epiclogger-js), you can use the following public DSN:
                     .codepanel
                       .public_dsn
                 .panel.panel-default.tileview
@@ -62,9 +62,6 @@
                     %a.tile.text-center.resize-a{:name => "node-js"}
                       %img.resize-img{:src => image_path("icon_nodejs.png")}/
                       %span Node Js
-                    %a.tile.text-center.resize-a{:name => "rails"}
-                      %img.resize-img{:src => image_path("icon_rails.png")}/
-                      %span Rails
                     %a.tile.text-center.resize-a{:name => "ruby"}
                       %img.resize-img{:src => image_path("icon_ruby.png")}/
                       %span Ruby
@@ -80,9 +77,6 @@
                     %a.tile.text-center.resize-a{:name => "java"}
                       %img.resize-img{:src => image_path("icon_java.png")}/
                       %span Java
-                    %a.tile.text-center.resize-a{:name => "django"}
-                      %img.resize-img{:src => image_path("icon_django.png")}/
-                      %span Django
                 .panel.panel-default.tileview#client-frameworks
                   .panel-heading Frameworks
                   .panel-body
@@ -95,8 +89,8 @@
                     %a.tile.text-center.resize-a{:href => "installations/show#django"}
                       %img.resize-img{:src => image_path("icon_django.png")}/
                       %span Django
-                %h5
-                  %p{:style => 'display:inline'} For more information on developing clients and the Sentry API, see the
+                %div
+                  %h5{:style => 'display:inline'} For more information on developing clients and the Sentry API, see the
                   %a{:href => '#'}documentation.
                 %p
                 %p
@@ -106,26 +100,25 @@
             #step-3.tab-pane.fade.padding20
               .col-md-12.pagecontainer.tab#javascript
                 .pagetitle.text-center
-                  %h3 Installation and configuration for Javascript
+                  %h3 Configuring Javascript
+                / .panel.panel-default.codeview
+                /   .panel-heading Current site information
+                /   .panel-body
+                /     %table.table
+                /       %thead
+                /         %tr
+                /           %th Website Title
+                /           %th Website Domain
+                /           %th App Key
+                /           %th App Secret
+                /       %tbody.websites
+                /         %tr
+                /           %td.title
+                /           %td.domain
+                /           %td.app_key
+                /           %td.app_id
                 .panel.panel-default.codeview
-                  .panel-heading Current site information
-                  .panel-body
-                    %table.table
-                      %thead
-                        %tr
-                          %th Website Title
-                          %th Website Domain
-                          %th App Key
-                          %th App Secret
-                      %tbody.websites
-                        %tr
-                          %td.title
-                          %td.domain
-                          %td.app_key
-                          %td.app_id
-                .panel.panel-default.codeview
-                  .panel-heading Website Configuration
-                  %p Engage developers with users to solve errors. This is the js library that sends errors to our server. Use the iframe functionality to show the form, autofill the email address, removed unused css code.
+                  .panel-heading
                   .panel-body
                     %div
                       %h5{:style => 'display:inline'} Start by installing
@@ -146,17 +139,48 @@
                     %h5 Add additional user context if it's available:
                     %pre
                       %code
-                        %p Raven.setUser({<br />email: '&lt;?php echo $_SESSION['email'] ?&gt;',<br />id: '&lt;?php echo $_SESSION['id'] ?&gt;'<br />});
-                    %h5 Now call out to the raven client to capture events:
+                        %p Epiclogger.setUser({<br />email: '&lt;?php echo $_SESSION['email'] ?&gt;',<br />id: '&lt;?php echo $_SESSION['id'] ?&gt;'<br />});
+                    %h5 Now call out to the epiclogger client to capture events:
                     %pre
                       %code
-                        *record a simple message<br />Raven.captureMessage('hello world!')<br /><br />*capture an exception<br />try {<br />  errorThrowingCode();<br />} catch(err) {<br />  Raven.captureException(err);<br />}
+                        *record a simple message<br />Epiclogger.captureMessage('hello world!')<br /><br />*capture an exception<br />try {<br />  errorThrowingCode();<br />} catch(err) {<br />  Epiclogger.captureException(err);<br />}
                     %div
-                      %h5{:style => 'display:inline'}For more information on other uses of Raven with Javascript, please see the official documentation for
-                      %a{:href => 'https://github.com/EpicCoders/epiclogger-js'}raven-js.
+                      %h5{:style => 'display:inline'}For more information on other uses of Epiclogger with Javascript, please see the official documentation for
+                      %a{:href => 'https://github.com/EpicCoders/epiclogger-js'}epiclogger-js.
               .col-md-12.pagecontainer.tab#node-js
                 .pagetitle.text-center
-                  %h3 Installation and configuration for Node.js
+                  %h3 Configuring Node.js
+                .panel.panel-default.codeview
+                  .panel-heading
+                  .panel-body
+                    %div
+                      %h5{:style => 'display:inline'} Start by installing
+                      %a{:href => 'https://github.com/EpicCoders/epiclogger-node'}epiclogger-node.
+                    %br
+                    %pre
+                      %code
+                        %p npm install epiclogger
+                    %h5 Create an instance of the client:
+                    %pre
+                      %code
+                        .node_client_configuration
+                    %h5 You can also optionally install a default error handler to catch all exceptions:
+                    %pre
+                      %code
+                        %p client.patchGlobal();
+                    %div
+                      %h5{:style => 'display:inline'} Ensure Node is run with
+                      %code NODE_ENV=production:
+                    %pre
+                      %code
+                        %p NODE_ENV=production node script.js
+                    %h5 Now call out to the epiclogger client to capture events:
+                    %pre
+                      %code
+                        *record a simple message<br />client.captureMessage('hello world!')<br /><br />*capture an exception<br />client.captureError(new Error('Uh oh!!'));
+                    %div
+                      %h5{:style => 'display:inline'}For more information on other uses of Epiclogger with Javascript, please see the official documentation for
+                      %a{:href => 'https://github.com/EpicCoders/epiclogger-node'}epiclogger-node.
               .col-md-12.pagecontainer.tab#rails
                 .pagetitle.text-center
                   %h3 Installation and configuration for Rails
