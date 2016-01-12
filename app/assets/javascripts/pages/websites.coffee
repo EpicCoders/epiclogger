@@ -40,7 +40,7 @@ goToStep = (n) ->
   return
 
 $('.tab').hide()
-$('.tab2, .tab3').addClass('disabled')
+# $('.tab2, .tab3').addClass('disabled')
 
 $('#back').on 'click', () ->
   $('.tab').hide()
