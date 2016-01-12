@@ -7,6 +7,17 @@ directive = {
       href: (params) ->
         Routes.api_v1_website_path(this.id, {format: 'js'})
   }
+  events_dsn:
+    html: ()->
+      '<span class="line">https://' + this.app_key + ':' + this.app_id + '@test-sentry89.herokuapp.com/' + this.id + '</span>'
+  public_dsn:
+    html: ()->
+      '<span class="line">https://' + this.app_key + '@test-sentry89.herokuapp.com/' + this.id + '</span>'
+  js_client_configuration:
+    html: ()->
+      "&lt;script&gt;<br />Raven.config('https://"+this.app_key+"@test-sentry89.herokuapp.com/"+this.id+"', {<br />
+      # we highly recommend restricting exceptions to a domain in order to filter out clutter<br />
+      whitelistUrls: [/example\.com/]<br />}).install();<br />&lt;/script&gt;"
 }
 changeButtonValue = () ->
   $.getJSON Routes.api_v1_websites_url(), {member_id: $.auth.user.id}, (data) ->
@@ -22,7 +33,7 @@ PubSub.subscribe('assigned.website', (ev, website)->
       changeButtonValue()
       $('#myModal').modal('show')
       $.getJSON Routes.api_v1_website_path(website.id), (data) ->
-        $('#current-website').render data
+        $('#current-website').render data, directive
     when "index"
       $.getJSON Routes.api_v1_websites_url(), {member_id: $.auth.user.id}, (data) ->
         $('#websites-container').render data, directive
@@ -41,7 +52,7 @@ goToStep = (n) ->
   return
 
 $('.tab').hide()
-$('.tab2, .tab3').addClass('disabled')
+# $('.tab2, .tab3').addClass('disabled')
 
 $('#back, .tab2').on 'click', () ->
   $('.tab').hide()
@@ -58,13 +69,13 @@ $('#platform a, .tab3').on 'click', (e) ->
   $('.tab3').removeClass('disabled')
 
 
-$('#modalWebsite').submit (e) ->
+$('#addWebsite').submit (e) ->
   e.preventDefault()
   $.ajax
     url: Routes.api_v1_websites_url()
     type: 'post'
     dataType: 'json'
-    data: $('#modalWebsite').serialize()
+    data: $('#addWebsite').serialize()
     success: (data) ->
       EpicLogger.setMemberDetails(data.id)
       goToStep(2)

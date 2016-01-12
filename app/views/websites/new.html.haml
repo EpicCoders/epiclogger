@@ -16,10 +16,10 @@
               .stepwizard-step
                 %a.btn.btn-default.btn-circle.tab3{"data-toggle" => "tab", :disabled => "disabled", :href => "#step-3"} 3
                 %p Configuration
-        .rate-updates
+        .rate-updates#current-website
           .tab-content.margintop0{:style => "border:none !important;"}
             #step-1.tab-pane.fade.active.in.padding20
-              %form#modalWebsite{:action => "", :method => "post"}
+              %form#addWebsite{:action => "", :method => "post"}
                 .form-group
                   %label.control-label Name
                   %input#title.form-control{:placeholder => "Website name", :required => "required", :type => "text", :name => 'website[title]'}/
@@ -46,16 +46,16 @@
                 .panel.panel-default.codeview
                   .panel-heading Client Configuration
                   .panel-body
-                    %p To start sending events, configure your client with the following DSN value:
-                    .codepanel
-                      %span.line https://451cf228845b497b919281b158209a59:157cbe7bf9d34b67b906dea4d3e849d0@app.feedbacker.com/12798
+                    %h5 To start sending events, configure your client with the following DSN value:
+                    .events_dsn
+                    / .codepanel
                     %br/
-                    %p If this is a client that only needs public access (like raven-js), you can use the following public DSN:
+                    %h5 If this is a client that only needs public access (like raven-js), you can use the following public DSN:
                     .codepanel
-                      %span.line https://3291842f716643f2968b11e3c86113f9@app.feedbacker.com/12798
+                      .public_dsn
                 .panel.panel-default.tileview
                   .panel-heading Platforms
-                  .panel-body#platform.text-center{:style => 'cursor: pointer'}
+                  .panel-body#platform{:style => 'cursor: pointer'}
                     %a.tile.text-center.resize-a{:name => "javascript"}
                       %img.resize-img{:src => image_path("icon_javascript.png")}/
                       %span Javascript
@@ -83,6 +83,21 @@
                     %a.tile.text-center.resize-a{:name => "django"}
                       %img.resize-img{:src => image_path("icon_django.png")}/
                       %span Django
+                .panel.panel-default.tileview#client-frameworks
+                  .panel-heading Frameworks
+                  .panel-body
+                    %a.tile.text-center.resize-a{:href => "installations/show#rails-3"}
+                      %img.resize-img{:src => image_path("icon_rails.png")}/
+                      %span Rails 3
+                    %a.tile.text-center.resize-a{:href => "installations/show#rails-4"}
+                      %img.resize-img{:src => image_path("icon_rails.png")}/
+                      %span Rails 4
+                    %a.tile.text-center.resize-a{:href => "installations/show#django"}
+                      %img.resize-img{:src => image_path("icon_django.png")}/
+                      %span Django
+                %h5
+                  %p{:style => 'display:inline'} For more information on developing clients and the Sentry API, see the
+                  %a{:href => '#'}documentation.
                 %p
                 %p
                 .progress
@@ -95,7 +110,7 @@
                 .panel.panel-default.codeview
                   .panel-heading Current site information
                   .panel-body
-                    %table.table#current-website
+                    %table.table
                       %thead
                         %tr
                           %th Website Title
@@ -112,45 +127,33 @@
                   .panel-heading Website Configuration
                   %p Engage developers with users to solve errors. This is the js library that sends errors to our server. Use the iframe functionality to show the form, autofill the email address, removed unused css code.
                   .panel-body
-                    .codepanel
-                      %p
-                        var _lopts = _lopts || [];
-                      %p
-                        _lopts.widget_domain    = "//localhost:8000/contact.html"; //the domain for where to send the data
-                      %p
-                        _lopts.widget_url       = "1213";  //the id of the user in their application
-                      %p
-                        _lopts.email = "rabotse@gmail.com";
-                      %p
-                        \// _lopts.theme            = "light";
-                      %p
-                        _lopts.modal_width      = "41%";
-                      %p
-                        _lopts.modal_height     = 532;
-                      %p
-                        \//_lopts.widget_container = "#iframe_widget";
-                      %p
-                        _lopts.custom_widget    = true;
-                      %p
-                        _lopts.side_btn         = true;
-                      %p
-                        _lopts.iframe_widget    = true;
-                      %p
-                        \//var local_script = "localhost:8000/loader.min.js";
-                      %p
-                        (function() {
-                      %p
-                        var loader = document.createElement('script'); loader.type = 'text/javascript'; loader.async = true;
-                      %p
-                        \//loader.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + local_script;
-                      %p
-                        loader.src = '../src/loader.min.js';
-                      %p
-                        var s = document.getElementsByTagName('script')[0];
-                      %p
-                        s.parentNode.insertBefore(loader, s);
-                      %p
-                        })();
+                    %div
+                      %h5{:style => 'display:inline'} Start by installing
+                      %a{:href => 'https://github.com/EpicCoders/epiclogger-js'}epiclogger-js.
+                    %br
+                    %pre
+                      %code
+                        %p &lt;script src="//cdn.epicloggerjs.com/1.1.2/jquery,native/epiclogger.min.js"&gt;&lt;/script&gt;
+                    %hr
+                    %h5 Add the any URLs which will be logging errors in your project's settings under Client Security:
+                    %br
+                    %img{:src => asset_path("epiclogger-js.png")}
+                    %hr
+                    %h5 Configure the client
+                    %pre
+                      %code
+                        .js_client_configuration
+                    %h5 Add additional user context if it's available:
+                    %pre
+                      %code
+                        %p Raven.setUser({<br />email: '&lt;?php echo $_SESSION['email'] ?&gt;',<br />id: '&lt;?php echo $_SESSION['id'] ?&gt;'<br />});
+                    %h5 Now call out to the raven client to capture events:
+                    %pre
+                      %code
+                        *record a simple message<br />Raven.captureMessage('hello world!')<br /><br />*capture an exception<br />try {<br />  errorThrowingCode();<br />} catch(err) {<br />  Raven.captureException(err);<br />}
+                    %div
+                      %h5{:style => 'display:inline'}For more information on other uses of Raven with Javascript, please see the official documentation for
+                      %a{:href => 'https://github.com/EpicCoders/epiclogger-js'}raven-js.
               .col-md-12.pagecontainer.tab#node-js
                 .pagetitle.text-center
                   %h3 Installation and configuration for Node.js
