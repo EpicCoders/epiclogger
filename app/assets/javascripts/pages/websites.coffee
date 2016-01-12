@@ -34,25 +34,28 @@ goToStep = (n) ->
   if n != 0
     $('.stepwizard-row a').removeClass('btn-primary')
     $('.stepwizard-row a').addClass('btn-default')
+    $('.tab'+n).attr('disabled', false)
     $('.stepwizard a[href="#step-' + n + '"]').tab 'show'
     $('.stepwizard-row a[href="#step-' + n + '"]').removeClass 'btn-default'
     $('.stepwizard-row a[href="#step-' + n + '"]').addClass 'btn-primary'
   return
 
 $('.tab').hide()
-# $('.tab2, .tab3').addClass('disabled')
+$('.tab2, .tab3').addClass('disabled')
 
-$('#back').on 'click', () ->
+$('#back, .tab2').on 'click', () ->
   $('.tab').hide()
+  $('.tab3').addClass('disabled')
   goToStep(2)
 
 $('#finish').on 'click', () ->
   location.href = '/errors'
 
-$('#platform a').on 'click', (e) ->
+$('#platform a, .tab3').on 'click', (e) ->
   $('.tab').hide()
   $('#'+this.name).show()
   goToStep(3)
+  $('.tab3').removeClass('disabled')
 
 
 $('#modalWebsite').submit (e) ->
