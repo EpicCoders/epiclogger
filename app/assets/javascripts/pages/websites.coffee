@@ -54,6 +54,21 @@ directive = {
   php_client_configuration:
     html: ()->
       "$client = new Raven_Client('https://"+this.app_key+":"+this.app_id+"@test-sentry89.herokuapp.com/"+this.id+"');"
+  java_client_configuration:
+    html: ()->
+      'import net.kencochrane.raven.Raven;<br />import net.kencochrane.raven.Raven;<br />import net.kencochrane.raven.event.EventBuilder;<br />import net.kencochrane.raven.event.interfaces.ExceptionInterface;<br /><br />public class Example {<br />    public static void main(String[] args) {<br />        String rawDsn = "https://'+this.app_key+":"+this.app_id+'@test-sentry89.herokuapp.com/'+this.id+'";<br />        Raven raven = RavenFactory.ravenInstance(new Dsn(rawDsn));<br /><br />        // record a simple message<br />        EventBuilder eventBuilder = new EventBuilder()<br />                        .setMessage("Hello from Raven!")<br />                        .setLevel(Event.Level.ERROR)<br />                        .setLogger(MyClass.class.getName())<br />                        .addSentryInterface(new ExceptionInterface(e));<br />                        <br />        raven.runBuilderHelpers(eventBuilder); // Optional<br />        raven.sendEvent(eventBuilder.build());<br />    }<br />}'
+  java_util_logging_client_configuration:
+    html: ()->
+      'level=ERROR<br />handlers=net.kencochrane.raven.jul.SentryHandler<br />net.kencochrane.raven.jul.SentryHandler.dsn=https://'+this.app_key+':'+this.app_id+'@test-sentry89.herokuapp.com/'+this.id+''
+  log4j_client_configuration:
+    html: ()->
+      'log4j.rootLogger=DEBUG, SentryAppender<br />log4j.appender.SentryAppender=net.kencochrane.raven.log4j.SentryAppender<br />log4j.appender.SentryAppender.dsn=https://'+this.app_key+':'+this.app_id+'@test-sentry89.herokuapp.com/'+this.id+'<br />level=ERROR'
+  log4j2_client_configuration:
+    html: ()->
+      '&lt;?xml version="1.0" encoding="UTF-8"?&gt;<br />&lt;configuration status="warn" packages="org.apache.logging.log4j.core,net.kencochrane.raven.log4j2"&gt;<br />    &lt;appenders&gt;<br />        &lt;Raven name="Sentry"&gt;<br />            &lt;dsn&gt;<br />                https://'+this.app_key+":"+this.app_id+'@test-sentry89.herokuapp.com/'+this.id+'<br />            &lt;/dsn&gt;<br />        &lt;/Raven&gt;<br />    &lt;/appenders&gt;<br /><br />    &lt;loggers&gt;<br />        &lt;root level="error"&gt;<br />            &lt;appender-ref ref="Sentry"/&gt;<br />        &lt;/root&gt;<br />    &lt;/loggers&gt;<br />&lt;/configuration&gt;'
+  logback_client_configuration:
+    html: ()->
+      '&lt;configuration&gt;<br />    &lt;appender name="Sentry" class="net.kencochrane.raven.logback.SentryAppender"&gt;<br />        &lt;dsn&gt;<br />            https://'+this.app_key+':'+this.app_id+'@test-sentry89.herokuapp.com/'+this.id+'<br />        &lt;/dsn&gt;<br />    &lt;/appender&gt;<br /><br />    &lt;root level="error"&gt;<br />        &lt;appender-ref ref="Sentry"/&gt;<br />    &lt;/root&gt;<br />&lt;/configuration&gt;'
 }
 changeButtonValue = () ->
   $.getJSON Routes.api_v1_websites_url(), {member_id: $.auth.user.id}, (data) ->

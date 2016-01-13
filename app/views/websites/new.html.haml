@@ -580,10 +580,98 @@
                       %a{:href => 'https://github.com/EpicCoders/epiclogger-php'}official documentation for epiclogger-php.
               .col-md-12.pagecontainer.tab#java
                 .pagetitle.text-center
-                  %h3 Installation and configuration for Java
-              .col-md-12.pagecontainer.tab#django
-                .pagetitle.text-center
-                  %h3 Installation and configuration for Django
+                  %h3 Configurating Java
+                %ul.nav.nav-tabs
+                  %li.active
+                    %a{:href => "#javatab"} Java
+                  %li
+                    %a{:href => "#java-util-logging"} java.util.logging
+                  %li
+                    %a{:href => "#log4j"} log4j
+                  %li
+                    %a{:href => "#log4j2"} log4j2
+                  %li
+                    %a{:href => "#logback"} logback
+                .panel-body.tabs#javatab
+                  %div
+                    %h5{:style => 'display:inline'} Start by installing
+                    %a{:href => 'https://github.com/EpicCoders/epiclogger-java'}epiclogger-java.
+                  %h5 The easiest way to add the Raven dependency is with Maven:
+                  %pre
+                    %code
+                      %h5 &lt;dependency&gt;<br />  &lt;groupId&gt;net.kencochrane.raven&lt;/groupId&gt;<br />  &lt;artifactId&gt;raven&lt;/artifactId&gt;<br />  &lt;version&gt;4.0&lt;/version&gt;<br />&lt;/dependency&gt;
+                  %h5 You can manually send events using the EventBuilder:
+                  %pre
+                    %code
+                      .java_client_configuration
+                  %hr
+                  %div
+                    %h5{:style => 'display:inline'}For more information on other uses of Epiclogger with Java, please see the
+                    %a{:href => 'https://github.com/EpicCoders/epiclogger-php'}official documentation for epiclogger-java.
+                .panel-body.tabs#java-util-logging
+                  %div
+                    %h5{:style => 'display:inline'} Start by installing
+                    %a{:href => 'https://github.com/EpicCoders/epiclogger-java'}epiclogger-java.
+                  %h5 The easiest way to add the Raven dependency is with Maven:
+                  %pre
+                    %code
+                      %h5 &lt;dependency&gt;<br />  &lt;groupId&gt;net.kencochrane.raven&lt;/groupId&gt;<br />  &lt;artifactId&gt;raven&lt;/artifactId&gt;<br />  &lt;version&gt;4.0&lt;/version&gt;<br />&lt;/dependency&gt;
+                  %h5 You'll need to configure the SentryHandler in your logging.properties:
+                  %pre
+                    %code
+                      .java_util_logging_client_configuration
+                  %hr
+                  %div
+                    %h5{:style => 'display:inline'}For more information on other uses of Epiclogger with Java, please see the
+                    %a{:href => 'https://github.com/EpicCoders/epiclogger-php'}official documentation for epiclogger-java.
+                .panel-body.tabs#log4j
+                  %div
+                    %h5{:style => 'display:inline'} Start by installing
+                    %a{:href => 'https://github.com/EpicCoders/epiclogger-java'}epiclogger-java.
+                  %h5 The easiest way to add the Raven dependency is with Maven:
+                  %pre
+                    %code
+                      %h5 &lt;dependency&gt;<br />  &lt;groupId&gt;net.kencochrane.raven&lt;/groupId&gt;<br />  &lt;artifactId&gt;raven&lt;/artifactId&gt;<br />  &lt;version&gt;4.0&lt;/version&gt;<br />&lt;/dependency&gt;
+                  %h5 You'll need to configure the SentryAppender in your logging configuration:
+                  %pre
+                    %code
+                      .log4j_client_configuration
+                  %hr
+                  %div
+                    %h5{:style => 'display:inline'}For more information on other uses of Epiclogger with Java, please see the
+                    %a{:href => 'https://github.com/EpicCoders/epiclogger-php'}official documentation for epiclogger-java.
+                .panel-body.tabs#log4j2
+                  %div
+                    %h5{:style => 'display:inline'} Start by installing
+                    %a{:href => 'https://github.com/EpicCoders/epiclogger-java'}epiclogger-java.
+                  %h5 The easiest way to add the Raven dependency is with Maven:
+                  %pre
+                    %code
+                      %h5 &lt;dependency&gt;<br />  &lt;groupId&gt;net.kencochrane.raven&lt;/groupId&gt;<br />  &lt;artifactId&gt;raven&lt;/artifactId&gt;<br />  &lt;version&gt;4.0&lt;/version&gt;<br />&lt;/dependency&gt;
+                  %h5 You'll need to configure the SentryAppender in your logging configuration:
+                  %pre
+                    %code
+                      .log4j2_client_configuration
+                  %hr
+                  %div
+                    %h5{:style => 'display:inline'}For more information on other uses of Epiclogger with Java, please see the
+                    %a{:href => 'https://github.com/EpicCoders/epiclogger-php'}official documentation for epiclogger-java.
+                .panel-body.tabs#logback
+                  %div
+                    %h5{:style => 'display:inline'} Start by installing
+                    %a{:href => 'https://github.com/EpicCoders/epiclogger-java'}epiclogger-java.
+                  %h5 The easiest way to add the Raven dependency is with Maven:
+                  %pre
+                    %code
+                      %h5 &lt;dependency&gt;<br />  &lt;groupId&gt;net.kencochrane.raven&lt;/groupId&gt;<br />  &lt;artifactId&gt;raven&lt;/artifactId&gt;<br />  &lt;version&gt;4.0&lt;/version&gt;<br />&lt;/dependency&gt;
+                  %h5 You'll need to configure the SentryAppender in your logging configuration:
+                  %pre
+                    %code
+                      .logback_client_configuration
+                  %hr
+                  %div
+                    %h5{:style => 'display:inline'}For more information on other uses of Epiclogger with Java, please see the
+                    %a{:href => 'https://github.com/EpicCoders/epiclogger-php'}official documentation for epiclogger-java.
               %button.btn.btn-primary#back{:style => "width: 150px;",:name => 2, :type => "button"}
                 %i.icon-next
                 Go Back
