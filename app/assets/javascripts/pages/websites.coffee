@@ -48,6 +48,12 @@ directive = {
   tornado_client_configuration:
     html: ()->
       'import tornado.web<br />from raven.contrib.tornado import AsyncSentryClient<br /><br />class MainHandler(tornado.web.RequestHandler):<br />    def get(self):<br />        self.write("Hello, world")<br /><br />application = tornado.web.Application([<br />    (r"/", MainHandler),<br />])<br />application.sentry_client = AsyncSentryClient(<br />    "https://'+this.app_key+":"+this.app_id+'@test-sentry89.herokuapp.com/'+this.id+'"<br />)'
+  ios_client_configuration:
+    html: ()->
+      '- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {<br />    // Configure the Sentry client<br />    [RavenClient clientWithDSN:@"https://'+this.app_key+':'+this.app_id+'@test-sentry89.herokuapp.com/'+this.id+'"];<br /><br />    // Install the global error handler<br />    [[RavenClient sharedClient] setupExceptionHandler];<br /><br />    return YES;<br />}'
+  php_client_configuration:
+    html: ()->
+      "$client = new Raven_Client('https://"+this.app_key+":"+this.app_id+"@test-sentry89.herokuapp.com/"+this.id+"');"
 }
 changeButtonValue = () ->
   $.getJSON Routes.api_v1_websites_url(), {member_id: $.auth.user.id}, (data) ->
