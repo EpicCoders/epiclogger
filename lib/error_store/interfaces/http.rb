@@ -8,18 +8,18 @@ module ErrorStore::Interfaces
       :http
     end
 
-    def sanitize_data(data, has_system_frames=nil)
+    def sanitize_data(data, has_system_frames = nil)
       raise ErrorStore::ValidationError.new(self), "No value for 'url'" unless data[:url]
 
       if data[:method]
         method = data[:method].upcase
         raise ErrorStore::ValidationError.new(self), "Invalid value for 'method'" unless ErrorStore::HTTP_METHODS.include?(method)
-        method = method
       else
-        method = nil
+        method = nil # TODO, check this is not used
       end
 
       url_uri      = URI(data[:url])
+      # TODO, query_string not used
       query_string = data[:query_string] || url_uri.query
       if query_string
         # if querystring was a dict, convert it to a string
@@ -57,7 +57,7 @@ module ErrorStore::Interfaces
         headers:   trim_pairs(headers),
         data:      body,
         url:       "#{url_uri.scheme}://#{url_uri.host}/#{url_uri.path}",
-        fragment:  trim(fragment, max_size: 1024),
+        fragment:  trim(fragment, max_size: 1024)
       }
     end
 
@@ -84,7 +84,7 @@ module ErrorStore::Interfaces
 
       value = Rack::Utils.parse_nested_query(value) if value.is_a?(String)
 
-      return value.map { |k, v| { k.encode('utf-8').strip => v } }
+      value.map { |k, v| { k.encode('utf-8').strip => v } }
     end
   end
 end

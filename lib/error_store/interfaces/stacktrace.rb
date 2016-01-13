@@ -8,7 +8,7 @@ module ErrorStore::Interfaces
       :stacktrace
     end
 
-    def sanitize_data(data, has_system_frames=nil)
+    def sanitize_data(data, has_system_frames = nil)
       raise ErrorStore::ValidationError.new(self), "No 'frames' present" unless data[:frames]
 
       slim_frame_data(data)
@@ -24,24 +24,24 @@ module ErrorStore::Interfaces
         end
       end
 
-      self._data[:frames] = frame_list
+      _data[:frames] = frame_list
 
       if data[:frames_omitted]
         raise ErrorStore::ValidationError.new(self), "Invalid value for 'frames_omitted'" if data[:frames_omitted].length != 2
-        self._data[:frames_omitted] = data[:frames_omitted]
+        _data[:frames_omitted] = data[:frames_omitted]
       else
-        self._data[:frames_omitted] = nil
+        _data[:frames_omitted] = nil
       end
 
-      self._data[:has_system_frames] = has_system_frames
-      return self
+      _data[:has_system_frames] = has_system_frames
+      self
     end
 
     def to_json
-      return {
-         frames:            self._data[:frames].map { |f| f.to_json() },
-         frames_omitted:    self._data[:frames_omitted],
-         has_system_frames: self._data[:has_system_frames],
+      {
+        frames:            _data[:frames].map(&:to_json),
+        frames_omitted:    _data[:frames_omitted],
+        has_system_frames: _data[:has_system_frames]
       }
     end
 
@@ -69,23 +69,23 @@ module ErrorStore::Interfaces
       end
 
       return false if data[:frames].length == system_frames
-      return system_frames.zero?
+      system_frames.zero?
     end
 
     def get_culprit_string
       default = nil
-      self._data[:frames].reverse_each do |frame|
+      _data[:frames].reverse_each do |frame|
         if frame[:in_app]
-          return frame.get_culprit_string()
+          return frame.get_culprit_string
         elsif default.nil?
-          default = frame.get_culprit_string()
+          default = frame.get_culprit_string
         end
       end
-      return default
+      default
     end
 
     def get_hash(system_frames=true)
-      frames = self._data[:frames]
+      frames = _data[:frames]
 
       # TODO(dcramer): this should apply only to JS
       # In a common case (I believe from window.onerror) we can end up with
@@ -102,9 +102,9 @@ module ErrorStore::Interfaces
 
       output = []
       frames.each do |frame|
-        output.concat(frame.get_hash())
+        output.concat(frame.get_hash)
       end
-      return output
+      output
     end
   end
 end

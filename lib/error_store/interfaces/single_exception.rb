@@ -12,7 +12,7 @@ module ErrorStore::Interfaces
       raise ErrorStore::ValidationError.new(self), "No 'type' or 'value' present" unless data[:type] || data[:value]
 
       if data[:stacktrace] && data[:stacktrace][:frames]
-        stacktrace = Stacktrace.new(@error).sanitize_data( data[:stacktrace], has_system_frames )
+        stacktrace = Stacktrace.new(@error).sanitize_data(data[:stacktrace], has_system_frames)
       else
         stacktrace = nil
       end
@@ -21,34 +21,34 @@ module ErrorStore::Interfaces
         type:        trim(data[:type], max_size: 128),
         value:       trim(data[:value], max_size: 4096),
         module:      trim(data[:module], max_size: 128),
-        stacktrace:  stacktrace,
+        stacktrace:  stacktrace
       }
       self
     end
 
     def to_json
-      if self._data[:stacktrace]
-        stacktrace = self._data[:stacktrace].to_json()
+      if _data[:stacktrace]
+        stacktrace = _data[:stacktrace].to_json
       else
         stacktrace = nil
       end
 
-      return {
-          type:       self._data[:type],
-          value:      self._data[:value],
-          module:     self._data[:module],
-          stacktrace: stacktrace
+      {
+        type:       _data[:type],
+        value:      _data[:value],
+        module:     _data[:module],
+        stacktrace: stacktrace
       }
     end
 
     def get_hash
       output = nil
-      if self._data[:stacktrace]
-        output = self._data[:stacktrace].get_hash()
-        output << self._data[:type] if output and self._data[:type]
+      if _data[:stacktrace]
+        output = _data[:stacktrace].get_hash
+        output << _data[:type] if output && _data[:type]
       end
-      output = [self._data[:type], self._data[:value]].map { |e| e if e }.compact unless output
-      return output
+      output = [_data[:type], _data[:value]].map { |e| e if e }.compact unless output
+      output
     end
   end
 end
