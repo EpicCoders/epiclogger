@@ -9,7 +9,7 @@ module ErrorStore
     end
 
     def find
-      # TODO here we would set up the error with all the details so we can call specific methods
+      # TODO, here we would set up the error with all the details so we can call specific methods
       # @data = normalize(error[:data]) || {}
       # @interface = get_interface()
       @data = decode_json(@issue.data)
@@ -27,8 +27,8 @@ module ErrorStore
       event_id = @data[:event_id]
       cache_key = "issue:#{_website.id}:#{event_id}"
 
-      # TODO filter sensitive data like passwords. Eventually add the option to manually define these.
-      # TODO filter data to not have the ip defined by user
+      # TODO, filter sensitive data like passwords. Eventually add the option to manually define these.
+      # TODO, filter data to not have the ip defined by user
       # STEP 2:
       # default_cache.set(cache_key, data, timeout=3600)
       # preprocess_event.delay(cache_key=cache_key, start_time=time())
@@ -36,7 +36,7 @@ module ErrorStore
       # Rails.cache.write(cache_key, @data)
       # ErrorWorker.perform_async(cache_key)
       ErrorStore::Error.store_error(@data)
-      return event_id
+      event_id
     end
 
     # 1. get website_id from header or params if it's a get
@@ -53,7 +53,7 @@ module ErrorStore
       # if the request is not get then we expect the app_secret to be present
       # we make the check here because we don't want to make a db request if
       # it's a post request and the app_secret is empty
-      if _auth.app_secret.blank? and !request.get?
+      if _auth.app_secret.blank? && !request.get?
         raise ErrorStore::MissingCredentials.new(self), 'Missing required api secret'
       end
 
@@ -70,7 +70,7 @@ module ErrorStore
       end
     end
 
-   # 3. read the body or url error data and validate it
+    # 3. read the body or url error data and validate it
     def validate_data
       # parse the data from the request and get it
       data = get_data
@@ -88,28 +88,28 @@ module ErrorStore
       data[:extra]        = data.fetch(:extra, {})
 
       # check if we have a message defined in our data
-      if data.has_key?(:message)
+      if data.key?(:message)
         data[:message] = trim(data[:message], max_size: MAX_MESSAGE_LENGTH) unless data[:message].blank?
       else
         data[:message] = '<no message>'
       end
 
       # check cluprit and if we have any trim it
-      if data.has_key?(:culprit)
+      if data.key?(:culprit)
         data[:culprit] = trim(data[:culprit], max_size: MAX_CULPRIT_LENGTH) unless data[:culprit].blank?
       else
         data[:culprit] = nil
       end
 
       # define an event id to be saved.
-      unless data.has_key?(:event_id)
-        data[:event_id] = SecureRandom.hex()
-      else
+      if data.key?(:event_id)
         if data[:event_id].length > 32
           Rails.logger.error("Event id value is longer than 32 chars #{data[:event_id]}")
           data[:errors] << { type: 'value_too_long', name: 'event_id', value: data[:event_id] }
-          data[:event_id] = SecureRandom.hex()
+          data[:event_id] = SecureRandom.hex
         end
+      else
+        data[:event_id] = SecureRandom.hex
       end
 
       # process timestamp data
@@ -135,11 +135,11 @@ module ErrorStore
         data[:fingerprint] = nil
       end
 
-      if data.has_key?(:platform)
-        unless VALID_PLATFORMS.include?(data[:platform])
-          data[:platform] = 'other'
-        else
+      if data.key?(:platform)
+        if VALID_PLATFORMS.include?(data[:platform])
           data[:platform] = trim(data[:platform], max_size: 64)
+        else
+          data[:platform] = 'other'
         end
       else
         data[:platform] = nil
@@ -175,9 +175,9 @@ module ErrorStore
           data[:errors] << { type: 'invalid_attribute', name: key }
         end
 
-        if !value.is_a?(Hash)
+        unless value.is_a?(Hash)
           if value.is_a?(Array)
-            value = {values: value}
+            value = { values: value }
           else
             Rails.logger.error("Invalid value data #{key}:#{value}")
             data[:errors] << { type: 'invalid_data', name: key, value: value }
@@ -187,8 +187,8 @@ module ErrorStore
 
         begin
           interface.sanitize_data(value)
-          data[:interfaces][interface.type()] = interface.to_json()
-        rescue Exception => e
+          data[:interfaces][interface.type] = interface.to_json
+        rescue => e
           Rails.logger.error("Invalid interface processing #{key}:#{value} with error #{e.message}")
           data[:errors] << { type: 'invalid_data', name: key, value: value }
         end
@@ -199,7 +199,7 @@ module ErrorStore
       if is_numeric?(level)
         begin
           data[:level] = LOG_LEVELS[level]
-        rescue Exception => e
+        rescue => e
           data[:errors] << { type: 'invalid_data', name: 'level', value: level }
           data[:level] = DEFAULT_LOG_LEVEL
         end
@@ -218,29 +218,7 @@ module ErrorStore
 
       data[:version] = _auth.version
 
-      return data
-    end
-
-    def generate_culprit(data)
-      culprit = ''
-
-      begin
-        stacktraces = data[:interfaces][:exception][:values].map { |e| e[:stacktrace] if e.has_key?(:stacktrace) }.compact
-      rescue Exception => e
-        if data[:interfaces].has_key?(:stacktrace)
-          stacktraces = [data[:interfaces][:stacktrace]]
-        else
-          stacktraces = nil
-        end
-      end
-
-      if stacktraces.nil?
-        culprit = data[:interfaces][:http].fetch(:url, '') if data[:interfaces].has_key?(:http)
-      else
-        culprit = ErrorStore::Interfaces::Stacktrace.new(self).sanitize_data(stacktraces[-1]).get_culprit_string()
-      end
-
-      return truncate(culprit, ErrorStore::MAX_CULPRIT_LENGTH)
+      data
     end
 
     # 4. store the error after validating the error data
@@ -269,7 +247,7 @@ module ErrorStore
 
       culprit = generate_culprit(data) if culprit.blank?
 
-      # TODO here the timestamp
+      # TODO, here the timestamp
       # date = datetime.fromtimestamp(data.pop('timestamp'))
       # date = date.replace(tzinfo=timezone.utc)
       date = data.delete(:timestamp) # ?? not done TODO fix
@@ -284,7 +262,7 @@ module ErrorStore
           platform: platform
       })
 
-      issue_user = self._get_subscriber(website, data)
+      issue_user = _get_subscriber(website, data)
 
       data[:fingerprint] = fingerprint || ['{{ default }}']
       hash = md5_from_hash(get_hash_for_issue(issue))
@@ -298,11 +276,10 @@ module ErrorStore
           last_seen: date,
           first_seen: date,
           time_spent_total: time_spent || 0,
-          time_spent_count: time_spent && 1 || 0,
+          time_spent_count: time_spent && 1 || 0
       }
 
-
-      group, is_new, is_regression, is_sample = self._save_aggregate(issue: issue, hash: hash, release: release, **group_params)
+      group, is_new, is_regression, is_sample = _save_aggregate(issue: issue, hash: hash, release: release, **group_params)
 
       issue.group = group
       issue.group_id = group.id
@@ -313,28 +290,27 @@ module ErrorStore
         retried = false
         begin
           Issue.transaction(isolation: :serializable) do
-            issue.save()
+            issue.save
           end
         rescue PG::TRSerializationFailure => exception
           if !retried
             retried = true
             retry
           else
-            Rails.logger.info("Exception in Error._get_subscriber")
+            Rails.logger.info('Exception in Error._get_subscriber')
             Rails.logger.info("Message: #{exception.message}")
             Rails.logger.info("Class: #{exception.class}")
             raise exception
           end
         rescue => exception
-          Rails.logger.info("Exception in Error._store_error")
+          Rails.logger.info('Exception in Error._store_error')
           Rails.logger.info("Message: #{exception.message}")
           Rails.logger.info("Class: #{exception.class}")
           raise exception
         end
       # end
-      return issue
+      issue
     end
-
 
     ## ErrorWorker
     # will be called when saving errors
@@ -387,21 +363,43 @@ module ErrorStore
         result << value
       end
       # todo return interfaces sorted by score
-      return result
+      result
+    end
+
+    def generate_culprit(data)
+      culprit = ''
+
+      begin
+        stacktraces = data[:interfaces][:exception][:values].map { |e| e[:stacktrace] if e.key?(:stacktrace) }.compact
+      rescue
+        if data[:interfaces].key?(:stacktrace)
+          stacktraces = [data[:interfaces][:stacktrace]]
+        else
+          stacktraces = nil
+        end
+      end
+
+      if stacktraces.nil?
+        culprit = data[:interfaces][:http].fetch(:url, '') if data[:interfaces].key?(:http)
+      else
+        culprit = ErrorStore::Interfaces::Stacktrace.new(self).sanitize_data(stacktraces[-1]).get_culprit_string
+      end
+
+      truncate(culprit, ErrorStore::MAX_CULPRIT_LENGTH)
     end
 
     def self.get_hash_for_issue(issue)
-      return get_hash_for_issue_with_reason(issue)[1]
+      get_hash_for_issue_with_reason(issue)[1]
     end
 
     def self.get_hash_for_issue_with_reason(issue)
-      interfaces = issue.get_interfaces()
+      interfaces = issue.get_interfaces
       interfaces.each do |interface|
         result = interface.compute_hashes(issue.platform)
         next unless result
-        return [ interface.type, result ]
+        return [interface.type, result]
       end
-      return [ :message, [issue.message] ]
+      [:message, [issue.message]]
     end
 
     def self.md5_from_hash(hash_chunks)
@@ -409,7 +407,7 @@ module ErrorStore
       hash_chunks.each do |chunk|
         result.update(chunk.to_s)
       end
-      return result.hexdigest()
+      result.hexdigest
     end
 
     def self._handle_regression(group, issue, release)
@@ -417,13 +415,18 @@ module ErrorStore
       # we now think its a regression, rely on the database to validate that
       # no one beat us to this
       date = [issue.datetime, group.last_seen].max
-      is_regression = GroupedIssue.where(id: group.id, status: [GroupedIssue.status.find_value(:resolved).value, GroupedIssue.status.find_value(:unresolved).value]).
-                            update_attributes( active_at: date, last_seen: date, status: :unresolved)
+      is_regression = GroupedIssue.where(id: group.id,
+                                         status: [
+                                                    GroupedIssue.status.find_value(:resolved).value,
+                                                    GroupedIssue.status.find_value(:unresolved).value
+                                                  ]
+                                        )
+                                  .update_attributes(active_at: date, last_seen: date, status: :unresolved)
 
       group.active_at = date
       group.status = :unresolved
 
-      return is_regression
+      is_regression
     end
 
     def self.count_limit(count)
@@ -432,14 +435,14 @@ module ErrorStore
       ErrorStore::SENTRY_SAMPLE_RATES.map do |amount, sample_rate|
         return sample_rate if count <= amount
       end
-      return ErrorStore::SENTRY_MAX_SAMPLE_RATE
+      ErrorStore::SENTRY_MAX_SAMPLE_RATE
     end
 
-    def self.time_limit(silence)  # ~ 3600 per hour
+    def self.time_limit(silence) # ~ 3600 per hour
       ErrorStore::SENTRY_SAMPLE_TIMES.map do |amount, sample_rate|
         return sample_rate if silence >= amount
       end
-      return ErrorStore::SENTRY_MAX_SAMPLE_TIME
+      ErrorStore::SENTRY_MAX_SAMPLE_TIME
     end
 
     def self.should_sample(current_datetime, last_seen, times_seen)
@@ -448,7 +451,7 @@ module ErrorStore
 
       return false if times_seen % count_limit(times_seen) == 0
       return false if times_seen % time_limit(silence) == 0
-      return true
+      true
     end
 
     def self._process_existing_aggregate(group: group, issue: issue, data: data, release: release)
@@ -457,11 +460,11 @@ module ErrorStore
           last_seen: date,
           # score: ScoreClause(group),
       }
-      extra[:message] = issue.message if issue.message and issue.message != group.message
+      extra[:message] = issue.message if issue.message && issue.message != group.message
       extra[:level] = data[:level] if group.level != data[:level]
       extra[:culprit] = data[:culprit] if group.culprit != data[:culprit]
-      # TODO continue here.
-      is_regression = self._handle_regression(group, issue, release)
+      # TODO, continue here.
+      is_regression = _handle_regression(group, issue, release)
 
       group.last_seen = extra[:last_seen]
 
@@ -471,7 +474,7 @@ module ErrorStore
         update_args[:time_spent_count] = 1
       end
 
-      return is_regression
+      is_regression
     end
 
     # here we save the grouped issue with all details
@@ -485,7 +488,7 @@ module ErrorStore
         # args[:score]  = ScoreClause.calculate(1, args[:last_seen])
         args[:checksum] = hash
         group_is_new = true
-        group = GroupedIssue.create({website: website, **args})
+        group = GroupedIssue.create(website: website, **args)
       else
         group_is_new = false
       end
@@ -494,15 +497,15 @@ module ErrorStore
       # is processed as otherwise values like last_seen will get mutated
       can_sample = should_sample(issue.datetime, group.last_seen, group.times_seen)
 
-      unless group_is_new
-        is_regression = self._process_existing_aggregate(
+      if group_is_new
+        is_regression = false
+      else
+        is_regression = _process_existing_aggregate(
             group: group,
             issue: issue,
             data: args,
             release: release,
         )
-      else
-        is_regression = false
       end
 
       # Determine if we've sampled enough data to store this issue
@@ -519,38 +522,38 @@ module ErrorStore
       user_data = data[:interfaces][:user]
       return if user_data.blank?
 
-      subscriber = Subscriber.new({
+      subscriber = Subscriber.new(
           website: website,
           identity: user_data[:id],
           email: user_data[:email],
           username: user_data[:username],
           ip_address: user_data[:ip_address]
-      })
+      )
       # Serialization Failure handling
       retried = false
 
       begin
         Subscriber.transaction(isolation: :serializable) do
-          subscriber.save()
+          subscriber.save
         end
       rescue PG::TRSerializationFailure => exception
         if !retried
           retried = true
           retry
         else
-          Rails.logger.info("Exception in Error._get_subscriber")
+          Rails.logger.info('Exception in Error._get_subscriber')
           Rails.logger.info("Message: #{exception.message}")
           Rails.logger.info("Class: #{exception.class}")
           # raise exception
         end
       rescue => exception
-        Rails.logger.info("Exception in Error._get_subscriber")
+        Rails.logger.info('Exception in Error._get_subscriber')
         Rails.logger.info("Message: #{exception.message}")
         Rails.logger.info("Class: #{exception.class}")
         # raise exception
       end
 
-      return subscriber
+      subscriber
     end
 
     # get the data sent via the request
@@ -573,12 +576,12 @@ module ErrorStore
         data = raw_data
       end
 
-      return decode_json(data)
+      decode_json(data)
     end
 
     def process_fingerprint(data)
       fingerprint = data[:fingerprint]
-      raise ErrorStore::InvalidFingerprint.new(self), 'Could not process fingerprint' unless fingerprint.is_a? Array
+      raise ErrorStore::InvalidFingerprint.new(self), 'Could not process fingerprint' unless fingerprint.is_a?(Array)
 
       result = []
       fingerprint.each do |section|
@@ -587,7 +590,7 @@ module ErrorStore
         end
         result << section
       end
-      return result
+      result
     end
 
     def process_timestamp(data)
@@ -600,8 +603,6 @@ module ErrorStore
       #       timestamp = timestamp.replace(tzinfo=None)
       #   timestamp = float(timestamp.strftime('%s'))
       # end
-
-
       timestamp = data[:timestamp]
       if !timestamp
         data.delete(:timestamp)
@@ -629,7 +630,7 @@ module ErrorStore
     end
 
     def get_origin
-      return request.headers['HTTP_ORIGIN'] || request.headers['HTTP_REFERER']
+      request.headers['HTTP_ORIGIN'] || request.headers['HTTP_REFERER']
     end
   end
 end

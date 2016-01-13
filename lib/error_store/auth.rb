@@ -19,21 +19,21 @@ module ErrorStore
           auth_req = parse_auth_header(_error.request.headers['HTTP_AUTHORIZATION'])
         end
       elsif _error.request.get?
-        # TODO make get request parsing
+        # TODO, make get request parsing
       end
 
       raise ErrorStore::MissingCredentials.new(self), 'Missing authentication information' unless auth_req
       # we set the client as the agent if we don't receive it
       auth_req['sentry_client'] = _error.request.headers['HTTP_USER_AGENT'] unless auth_req['sentry_client']
 
-      @client     = auth_req["sentry_client"]
-      @version    = auth_req["sentry_version"] || ErrorStore::CURRENT_VERSION
-      @app_secret = auth_req["sentry_secret"]
-      @app_key    = auth_req["sentry_key"]
+      @client     = auth_req['sentry_client']
+      @version    = auth_req['sentry_version'] || ErrorStore::CURRENT_VERSION
+      @app_secret = auth_req['sentry_secret']
+      @app_key    = auth_req['sentry_key']
     end
 
     def parse_auth_header(header)
-      Hash[header.split(' ', 2)[1].split(',').map { |x| x.strip().split('=') }]
+      Hash[header.split(' ', 2)[1].split(',').map { |x| x.strip.split('=') }]
     end
 
     def _error
