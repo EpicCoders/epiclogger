@@ -79,14 +79,14 @@
                       %span Java
                 .panel.panel-default.tileview#client-frameworks
                   .panel-heading Frameworks
-                  .panel-body
-                    %a.tile.text-center.resize-a{:href => "installations/show#rails-3"}
+                  .panel-body#frameworks
+                    %a.tile.text-center.resize-a{:name => '#ruby', :href => "#rails-3"}
                       %img.resize-img{:src => image_path("icon_rails.png")}/
                       %span Rails 3
-                    %a.tile.text-center.resize-a{:href => "installations/show#rails-4"}
+                    %a.tile.text-center.resize-a{:name => '#ruby', :href => "#rails-4"}
                       %img.resize-img{:src => image_path("icon_rails.png")}/
                       %span Rails 4
-                    %a.tile.text-center.resize-a{:href => "installations/show#django"}
+                    %a.tile.text-center.resize-a{:name => '#python', :href => "#django"}
                       %img.resize-img{:src => image_path("icon_django.png")}/
                       %span Django
                 %div
@@ -152,14 +152,14 @@
                   %h3 Configuring Node.js
                 %ul.nav.nav-tabs
                   %li.active
-                    %a{:href => "#nodejs"} Node.js
+                    %a{:href => "#node-jstab"} Node.js
                   %li
                     %a{:href => "#express"} Express
                   %li
                     %a{:href => "#connect"} Connect
                 .panel.panel-default.codeview
                   .panel-heading
-                  .panel-body.tabs#nodejs
+                  .panel-body.tabs#node-jstab
                     %div
                       %h5{:style => 'display:inline'} Start by installing
                       %a{:href => 'https://github.com/EpicCoders/epiclogger-node'}epiclogger-node.

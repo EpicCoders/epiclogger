@@ -109,7 +109,15 @@ $('li').on 'click', (e) ->
   $($(e.target).attr('href')).show()
 
 $('.tab').hide()
-# $('.tab2, .tab3').addClass('disabled')
+$('.tab2, .tab3').addClass('disabled')
+
+$('#frameworks a').on 'click', (e) ->
+  $('.tab3').removeClass('disabled')
+  goToStep(3)
+  $(this.name).show()
+  $(this.name + ' ul li').removeClass('active')
+  $(this.name + ' ul li a[href='+$(this).attr('href')+']').parent().addClass('active')
+  $($(this).attr('href')).show()
 
 $('#back, .tab2').on 'click', () ->
   $('.tab').hide()
@@ -121,11 +129,10 @@ $('#finish').on 'click', () ->
   location.href = '/errors'
 
 $('#platform a, .tab3').on 'click', (e) ->
-  $('.tab').hide()
-  $('#'+this.name).show()
-  goToStep(3)
   $('.tab3').removeClass('disabled')
-
+  goToStep(3)
+  $('#'+this.name).show()
+  $('#'+this.name + 'tab').show()
 
 $('#addWebsite').submit (e) ->
   e.preventDefault()
