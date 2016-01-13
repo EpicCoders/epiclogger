@@ -254,7 +254,7 @@
                   .panel-body.tabs#rubytab
                     %div
                       %h5{:style => 'display:inline'} Start by installing
-                      %a{:href => 'https://github.com/EpicCoders/epiclogger-node'}raven-ruby.
+                      %a{:href => 'https://github.com/EpicCoders/epiclogger-ruby'}raven-ruby.
                     %br
                     %pre
                       %code
@@ -284,11 +284,11 @@
                     %hr
                     %div
                       %h5{:style => 'display:inline'}For more information on other uses of Epiclogger with Javascript, please see the
-                      %a{:href => 'https://github.com/EpicCoders/epiclogger-node'}official documentation for raven-ruby.
+                      %a{:href => 'https://github.com/EpicCoders/epiclogger-ruby'}official documentation for raven-ruby.
                   .panel-body.tabs#rails-3
                     %div
                       %h5{:style => 'display:inline'} Start by installing
-                      %a{:href => 'https://github.com/EpicCoders/epiclogger-node'}raven-ruby.
+                      %a{:href => 'https://github.com/EpicCoders/epiclogger-ruby'}raven-ruby.
                     %br
                     %pre
                       %code
@@ -322,11 +322,11 @@
                     %hr
                     %div
                       %h5{:style => 'display:inline'}For more information on other uses of Epiclogger with Javascript, please see the
-                      %a{:href => 'https://github.com/EpicCoders/epiclogger-node'}official documentation for raven-ruby.
+                      %a{:href => 'https://github.com/EpicCoders/epiclogger-ruby'}official documentation for raven-ruby.
                   .panel-body.tabs#rails-4
                     %div
                       %h5{:style => 'display:inline'} Start by installing
-                      %a{:href => 'https://github.com/EpicCoders/epiclogger-node'}raven-ruby.
+                      %a{:href => 'https://github.com/EpicCoders/epiclogger-ruby'}raven-ruby.
                     %br
                     %pre
                       %code
@@ -360,11 +360,11 @@
                     %hr
                     %div
                       %h5{:style => 'display:inline'}For more information on other uses of Epiclogger with Javascript, please see the
-                      %a{:href => 'https://github.com/EpicCoders/epiclogger-node'}official documentation for raven-ruby.
+                      %a{:href => 'https://github.com/EpicCoders/epiclogger-ruby'}official documentation for raven-ruby.
                   .panel-body.tabs#sinatra
                     %div
                       %h5{:style => 'display:inline'} Start by installing
-                      %a{:href => 'https://github.com/EpicCoders/epiclogger-node'}raven-ruby.
+                      %a{:href => 'https://github.com/EpicCoders/epiclogger-ruby'}raven-ruby.
                     %br
                     %pre
                       %code
@@ -391,11 +391,11 @@
                     %hr
                     %div
                       %h5{:style => 'display:inline'}For more information on other uses of Epiclogger with Javascript, please see the
-                      %a{:href => 'https://github.com/EpicCoders/epiclogger-node'}official documentation for raven-ruby.
+                      %a{:href => 'https://github.com/EpicCoders/epiclogger-ruby'}official documentation for raven-ruby.
                   .panel-body.tabs#sidekiq
                     %div
                       %h5{:style => 'display:inline'} Start by installing
-                      %a{:href => 'https://github.com/EpicCoders/epiclogger-node'}raven-ruby.
+                      %a{:href => 'https://github.com/EpicCoders/epiclogger-ruby'}raven-ruby.
                     %br
                     %pre
                       %code
@@ -422,10 +422,106 @@
                     %hr
                     %div
                       %h5{:style => 'display:inline'}For more information on other uses of Epiclogger with Javascript, please see the
-                      %a{:href => 'https://github.com/EpicCoders/epiclogger-node'}official documentation for raven-ruby.
+                      %a{:href => 'https://github.com/EpicCoders/epiclogger-ruby'}official documentation for raven-ruby.
               .col-md-12.pagecontainer.tab#python
                 .pagetitle.text-center
-                  %h3 Installation and configuration for Python
+                  %h3 Configurating Python
+                %ul.nav.nav-tabs
+                  %li.active
+                    %a{:href => "#pythontab"} Python
+                  %li
+                    %a{:href => "#django"} Django
+                  %li
+                    %a{:href => "#flask"} Flask
+                  %li
+                    %a{:href => "#tornado"} Tornado
+                .panel-body.tabs#pythontab
+                  %div
+                    %h5{:style => 'display:inline'} Start by installing
+                    %a{:href => 'https://github.com/EpicCoders/epiclogger-python'}raven-python.
+                  %pre
+                    %code
+                      %h5 pip install raven
+                  %h5 Create an instance of the client:
+                  %pre
+                    %code
+                      .python_client_configuration
+                  %h5 Now call out to the raven client to capture events:
+                  %pre
+                    %code
+                      %h5 # record a simple message<br />client.captureMessage('hello world!')<br /><br /># capture an exception<br />try:<br />    1 / 0<br />except ZeroDivisionError:<br />    client.captureException()
+                  %h5 If you want to wrap a WSGI app to record uncaught exceptions, Raven provides a middleware for that:
+                  %pre
+                    %code
+                      %h5 from raven.middleware import Sentry<br /><br />application = Sentry(application, client=client)
+                  %h5 If you wish to test your connection to the server, you can use the raven test command:
+                  %pre
+                    %code
+                      .python_test_command
+                  %hr
+                  %div
+                    %h5{:style => 'display:inline'}For more information on other uses of Epiclogger with Javascript, please see the
+                    %a{:href => 'https://github.com/EpicCoders/epiclogger-python'}official documentation for raven-python.
+                .panel-body.tabs#django
+                  %div
+                    %h5{:style => 'display:inline'} Start by installing
+                    %a{:href => 'https://github.com/EpicCoders/epiclogger-python'}raven-python.
+                  %pre
+                    %code
+                      %h5 pip install raven
+                  %h5 Then simply modify your Django configuration:
+                  %pre
+                    %code
+                      .django_client_configuration
+                  %h5 That's it! Raven automatically installs an error handling hook to pipe all uncaught exceptions to Sentry.
+                  %h5 If you wish to test your connection to the server, you can use the raven test command:
+                  %pre
+                    %code
+                      %h5 python manage.py raven test
+                  %hr
+                  %div
+                    %h5{:style => 'display:inline'}For more information on other uses of Epiclogger with Javascript, please see the
+                    %a{:href => 'https://github.com/EpicCoders/epiclogger-python'}official documentation for raven-python.
+                .panel-body.tabs#flask
+                  %div
+                    %h5{:style => 'display:inline'} Start by installing
+                    %a{:href => 'https://github.com/EpicCoders/epiclogger-python'}raven-python.
+                  %pre
+                    %code
+                      %h5 pip install raven
+                  %h5 You'll also need blinker if you do not have it already:
+                  %pre
+                    %code
+                      %h5 pip install blinker
+                  %i Blinker is required for signals to work within Flask.
+                  %h5 Add the required configuration in your application setup:
+                  %pre
+                    %code
+                      .flask_client_configuration
+                  %hr
+                    %h5 That's it! Raven automatically installs an error handling hook to pipe all uncaught exceptions to Sentry.
+                    %div
+                      %h5{:style => 'display:inline'}For more information on other uses of Epiclogger with Javascript, please see the
+                      %a{:href => 'https://github.com/EpicCoders/epiclogger-python'}official documentation for raven-python.
+                .panel-body.tabs#tornado
+                  %div
+                    %h5{:style => 'display:inline'} Start by installing
+                    %a{:href => 'https://github.com/EpicCoders/epiclogger-python'}raven-python.
+                  %pre
+                    %code
+                      %h5 pip install raven
+                  %h5 Add the required configuration in your application setup:
+                  %pre
+                    %code
+                      .tornado_client_configuration
+                  %h5 Once the sentry client is attached to the application, request handlers can automatically capture uncaught exceptions by inheriting the SentryMixin class.
+                  %pre
+                    %code
+                      %h5 import tornado.web<br />from raven.contrib.tornado import SentryMixin<br /><br />class UncaughtExceptionExampleHandler(SentryMixin, tornado.web.RequestHandler):<br />    def get(self):<br />        1 / 0
+                  %hr
+                  %div
+                    %h5{:style => 'display:inline'}For more information on other uses of Epiclogger with Javascript, please see the
+                    %a{:href => 'https://github.com/EpicCoders/epiclogger-python'}official documentation for raven-python.
               .col-md-12.pagecontainer.tab#ios
                 .pagetitle.text-center
                   %h3 Installation and configuration for IOS

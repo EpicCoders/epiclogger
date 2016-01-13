@@ -33,6 +33,21 @@ directive = {
   sinatra_client_configuration:
     html: ()->
       "require 'sinatra'<br />require 'raven'<br /><br />Raven.configure do |config|<br />  config.dsn = 'https://"+this.app_key+":"+this.app_id+"@test-sentry89.herokuapp.com/"+this.id+"'<br />end<br /><br />use Raven::Rack<br /><br />get '/' do<br />  1 / 0<br />end"
+  python_client_configuration:
+    html: ()->
+      "from raven import Client<br /><br />client = Client('https://"+this.app_key+":"+this.app_id+"@test-sentry89.herokuapp.com/"+this.id+"')"
+  python_test_command:
+    html: ()->
+      "raven test https://"+this.app_key+":"+this.app_id+"@test-sentry89.herokuapp.com/"+this.id+""
+  django_client_configuration:
+    html: ()->
+      "# Set your DSN value<br />RAVEN_CONFIG = {<br />    'dsn': 'https://"+this.app_key+":"+this.app_id+"@test-sentry89.herokuapp.com/"+this.id+"',<br />}<br /><br /># Add raven to the list of installed apps<br />INSTALLED_APPS = INSTALLED_APPS + (<br />    # ...<br />    'raven.contrib.django.raven_compat',<br />)"
+  flask_client_configuration:
+    html: ()->
+      "from raven.contrib.flask import Sentry<br /><br />app.config['SENTRY_DSN'] = 'https://"+this.app_key+":"+this.app_id+"@test-sentry89.herokuapp.com/"+this.id+"'<br />sentry = Sentry(app)"
+  tornado_client_configuration:
+    html: ()->
+      'import tornado.web<br />from raven.contrib.tornado import AsyncSentryClient<br /><br />class MainHandler(tornado.web.RequestHandler):<br />    def get(self):<br />        self.write("Hello, world")<br /><br />application = tornado.web.Application([<br />    (r"/", MainHandler),<br />])<br />application.sentry_client = AsyncSentryClient(<br />    "https://'+this.app_key+":"+this.app_id+'@test-sentry89.herokuapp.com/'+this.id+'"<br />)'
 }
 changeButtonValue = () ->
   $.getJSON Routes.api_v1_websites_url(), {member_id: $.auth.user.id}, (data) ->
