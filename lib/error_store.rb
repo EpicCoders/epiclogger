@@ -12,9 +12,9 @@ module ErrorStore
     Dir[Pathname(File.dirname(__FILE__)).join('error_store/interfaces/*.rb')].each do |path|
       base = File.basename(path, '.rb')
       begin
-        klass = self.interface_class(base)
+        klass = interface_class(base)
         if !klass.respond_to?(:available) || klass.available
-          self.register_interface({
+          register_interface({
               name: klass.display_name,
               type: base.to_sym,
               interface: klass
@@ -45,9 +45,9 @@ module ErrorStore
 
   def self.get_interface(type)
     interface_name = INTERFACES[type]
-    interface = self.available_interfaces.find {|e| e[:type] == interface_name}.try(:[], :interface)
+    interface = available_interfaces.find { |e| e[:type] == interface_name }.try(:[], :interface)
     raise ErrorStore::InvalidInterface.new(self), 'This interface does not exist' if interface.nil?
-    return interface
+    interface
   end
 
   INTERFACES = {
@@ -68,7 +68,7 @@ module ErrorStore
     'sentry.interfaces.Query': :query,
     'sentry.interfaces.Http': :http,
     'sentry.interfaces.User': :user,
-    'sentry.interfaces.Csp': :csp,
+    'sentry.interfaces.Csp': :csp
   }
 
   CLIENT_RESERVED_ATTRS = [
@@ -93,29 +93,14 @@ module ErrorStore
     :environment,
     :interfaces
   ]
-  VALID_PLATFORMS = [
-    'as3',
-    'c',
-    'cfml',
-    'csharp',
-    'go',
-    'java',
-    'javascript',
-    'node',
-    'objc',
-    'other',
-    'perl',
-    'php',
-    'python',
-    'ruby',
-  ]
+  VALID_PLATFORMS = %w(as3 c cfml csharp go java javascript node objc other perl php python ruby)
 
   LOG_LEVELS = {
       10 => 'debug',
       20 => 'info',
       30 => 'warning',
       40 => 'error',
-      50 => 'fatal',
+      50 => 'fatal'
   }
 
   # The following values control the sampling rates
@@ -126,7 +111,7 @@ module ErrorStore
       [10000, 10],
       [100000, 50],
       [1000000, 300],
-      [10000000, 2000],
+      [10000000, 2000]
   ]
   SENTRY_MAX_SAMPLE_RATE = 10000
   SENTRY_SAMPLE_TIMES = [
@@ -140,13 +125,13 @@ module ErrorStore
   DEFAULT_LOG_LEVEL     = 'error'
   DEFAULT_LOGGER_NAME   = ''
   MAX_STACKTRACE_FRAMES = 50
-  MAX_HTTP_BODY_SIZE    = 4096 * 4  # 16kb
+  MAX_HTTP_BODY_SIZE    = 4096 * 4 # 16kb
   MAX_EXCEPTIONS        = 25
   MAX_HASH_ITEMS        = 50
   MAX_VARIABLE_SIZE     = 512
   MAX_CULPRIT_LENGTH    = 200
   MAX_MESSAGE_LENGTH    = 1024 * 8
-  HTTP_METHODS          = ['GET', 'POST', 'PUT', 'OPTIONS', 'HEAD', 'DELETE', 'TRACE', 'CONNECT', 'PATCH']
+  HTTP_METHODS          = %w(GET POST PUT OPTIONS HEAD DELETE TRACE CONNECT PATCH)
 
   class StoreError < StandardError
     attr_reader :website_id

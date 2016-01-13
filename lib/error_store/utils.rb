@@ -1,12 +1,12 @@
 module ErrorStore
   module Utils
     def is_numeric?(nr_string)
-       nr_string.to_s.match(/\A[+-]?\d+?(\.\d+)?\Z/) == nil ? false : true
+      nr_string.to_s.match(/\A[+-]?\d+?(\.\d+)?\Z/).nil? ? false : true
     end
 
     def decode_json(data)
       JSON.parse(data, symbolize_names: true)
-    rescue Exception => e
+    rescue
       raise ErrorStore::BadData.new(self), 'We could not decompress your request'
     end
 
@@ -16,20 +16,20 @@ module ErrorStore
       rescue Zlib::Error
         Base64.decode64(data)
       end
-    rescue Exception => e
+    rescue
       raise ErrorStore::BadData.new(self), 'We could not decompress your request'
     end
 
     def decompress_deflate(data)
       Zlib::Inflate.inflate(data)
-    rescue Exception => e
+    rescue
       raise ErrorStore::BadData.new(self), 'We could not decompress your request'
     end
 
     def decompress_gzip(data)
       gz = Zlib::GzipReader.new(StringIO.new(data))
       gz.read
-    rescue Exception => e
+    rescue
       raise ErrorStore::BadData.new(self), 'We could not decompress your request'
     end
 
@@ -39,29 +39,29 @@ module ErrorStore
       options = {
           max_depth: max_depth,
           max_size: max_size,
-          _depth: _depth + 1,
+          _depth: _depth + 1
       }
 
       return trim(value.to_s, _size: _size, max_size: max_size) if _depth > max_depth
 
       if value.is_a?(Hash)
         result  = {}
-        _size   += 2
+        _size += 2
         value.each_with_index do |v, k|
           trim_v    = trim(v, _size: _size, **options, &block)
           result[k] = trim_v
-          _size     += trim_v.encode('utf-8').length + 1
+          _size += trim_v.encode('utf-8').length + 1
           break if _size >= max_size
         end
       end
 
       if value.is_a?(Array)
-        result  = []
-        _size   += 2
+        result = []
+        _size += 2
         value.each do |v|
-          trim_v  = trim(v, _size: _size, **options, &block)
-          result  << trim_v
-          _size   += trim_v.encode('utf-8').length
+          trim_v = trim(v, _size: _size, **options, &block)
+          result << trim_v
+          _size += trim_v.encode('utf-8').length
           break if _size >= max_size
         end
       end
@@ -72,7 +72,7 @@ module ErrorStore
         result = value
       end
       return result unless block_given?
-      return yield(result)
+      yield(result)
     end
 
     def trim_hash(value, max_items: ErrorStore::MAX_HASH_ITEMS, **args, &block)
@@ -81,10 +81,9 @@ module ErrorStore
         value[key] = trim(value[key], **args, &block)
         value.delete(key) if index > max_items
       end
-      return value
+      value
     end
 
-    # TODO do we really need this? It's exactly like the one above. trim_hash
     def trim_pairs(iterable, max_items: ErrorStore::MAX_HASH_ITEMS, **args)
       max_items -= 1
       result = []
@@ -93,7 +92,7 @@ module ErrorStore
         result << { key => trim(value, **args) }
         return result if index > max_items
       end
-      return result
+      result
     end
 
     def validate_bool(value, required = true)
@@ -105,7 +104,7 @@ module ErrorStore
     end
 
     def is_url?(filename)
-      return filename.start_with?('file:', 'http:', 'https:')
+      filename.start_with?('file:', 'http:', 'https:')
     end
 
     def handle_nan(value)
@@ -116,20 +115,20 @@ module ErrorStore
         return '<-inf>' if value == -Float::INFINITY
         return '<nan>' if value == Float::NAN
       end
-      return value
+      value
     end
 
     #####
     # Remove filename build numbers. They can be version numbers or sha/md5/sha1
     #####
     def remove_filename_outliers(filename)
-      _filename_version_re = /(?:
+      filename_version_re = /(?:
         v?(?:\d+\.)*\d+|   # version numbers, v1, 1.0.0
         [a-f0-9]{7,8}|     # short sha
         [a-f0-9]{32}|      # md5
         [a-f0-9]{40}       # sha1
       )/ix
-      return filename.gsub(_filename_version_re, '<version>')
+      filename.gsub(filename_version_re, '<version>')
     end
 
     #####
@@ -138,9 +137,9 @@ module ErrorStore
     # - Remove metadata that we don't need
     #####
     def remove_function_outliers(function)
-      _ruby_anon_func = /_\d{2,}/i
+      ruby_anon_func = /_\d{2,}/i
       return 'block' if function.start_with?('block ')
-      return _ruby_anon_func.gsub('_<anon>', function)
+      ruby_anon_func.gsub('_<anon>', function)
     end
   end
 end

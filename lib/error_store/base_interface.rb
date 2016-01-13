@@ -5,7 +5,7 @@ module ErrorStore
 
     def initialize(error)
       @error = error
-      @_data  = {}
+      @_data = {}
     end
 
     def name
@@ -18,22 +18,22 @@ module ErrorStore
 
     def self.available
       # driver available if not rails test
-      return !Rails.env.test?
+      !Rails.env.test?
     end
 
     def to_json
       # keep only values of zero and not blank
-      return _data.delete_if { |k, v| v == 0 || v.blank? }
+      _data.delete_if { |_, v| v == 0 || v.blank? }
     end
 
     def get_hash
-      return []
+      []
     end
 
     def compute_hashes(platform)
-      result = self.get_hash()
+      result = get_hash
       return [] unless result
-      return [result]
+      [result]
     end
   end
 end
