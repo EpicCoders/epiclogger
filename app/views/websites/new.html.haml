@@ -150,9 +150,16 @@
               .col-md-12.pagecontainer.tab#node-js
                 .pagetitle.text-center
                   %h3 Configuring Node.js
+                %ul.nav.nav-tabs
+                  %li.active
+                    %a{:href => "#nodejs"} Node.js
+                  %li
+                    %a{:href => "#express"} Express
+                  %li
+                    %a{:href => "#connect"} Connect
                 .panel.panel-default.codeview
                   .panel-heading
-                  .panel-body
+                  .panel-body.tabs#nodejs
                     %div
                       %h5{:style => 'display:inline'} Start by installing
                       %a{:href => 'https://github.com/EpicCoders/epiclogger-node'}epiclogger-node.
@@ -178,15 +185,244 @@
                     %pre
                       %code
                         *record a simple message<br />client.captureMessage('hello world!')<br /><br />*capture an exception<br />client.captureError(new Error('Uh oh!!'));
+                    %hr
                     %div
-                      %h5{:style => 'display:inline'}For more information on other uses of Epiclogger with Javascript, please see the official documentation for
+                      %h5{:style => 'display:inline'}For more information on other uses of Epiclogger with Javascript, please see the
+                      %a{:href => 'https://github.com/EpicCoders/epiclogger-node'}official documentation for epiclogger-node.
+                  .panel-body.tabs#express
+                    %div
+                      %h5{:style => 'display:inline'} Start by installing
                       %a{:href => 'https://github.com/EpicCoders/epiclogger-node'}epiclogger-node.
-              .col-md-12.pagecontainer.tab#rails
-                .pagetitle.text-center
-                  %h3 Installation and configuration for Rails
+                    %br
+                    %pre
+                      %code
+                        %p npm install epiclogger
+                    %h5 Register an instance of the Express middleware:
+                    %pre
+                      %code
+                        .express_client_configuration
+                    %div
+                      %h5{:style => 'display:inline'} Ensure Node is run with
+                      %code NODE_ENV=production:
+                    %pre
+                      %code
+                        %p NODE_ENV=production node script.js
+                    %hr
+                    %h5 That's it! Epiclogger automatically installs an error handling hook to pipe all uncaught exceptions to Epiclogger.
+                    %div
+                      %h5{:style => 'display:inline'}For more information on other uses of Epiclogger with Javascript, please see the
+                      %a{:href => 'https://github.com/EpicCoders/epiclogger-node'}official documentation for epiclogger-node.
+                  .panel-body.tabs#connect
+                    %div
+                      %h5{:style => 'display:inline'} Start by installing
+                      %a{:href => 'https://github.com/EpicCoders/epiclogger-node'}epiclogger-node.
+                    %br
+                    %pre
+                      %code
+                        %p npm install epiclogger
+                    %h5 Register an instance of the Connect middleware after your main application handler:
+                    %pre
+                      %code
+                        .connect_client_configuration
+                    %div
+                      %h5{:style => 'display:inline'} Ensure Node is run with
+                      %code NODE_ENV=production:
+                    %pre
+                      %code
+                        %p NODE_ENV=production node script.js
+                    %hr
+                    %h5 That's it! Epiclogger automatically installs an error handling hook to pipe all uncaught exceptions to Epiclogger.
+                    %div
+                      %h5{:style => 'display:inline'}For more information on other uses of Epiclogger with Javascript, please see the
+                      %a{:href => 'https://github.com/EpicCoders/epiclogger-node'}official documentation for epiclogger-node.
               .col-md-12.pagecontainer.tab#ruby
                 .pagetitle.text-center
-                  %h3 Installation and configuration for Ruby
+                  %h3 Configuring Ruby
+                %ul.nav.nav-tabs
+                  %li.active
+                    %a{:href => "#rubytab"} Ruby
+                  %li
+                    %a{:href => "#rails-3"} Rails 3
+                  %li
+                    %a{:href => "#rails-4"} Rails 4
+                  %li
+                    %a{:href => "#sinatra"} Sinatra
+                  %li
+                    %a{:href => "#sidekiq"} Sidekiq
+                .panel.panel-default.codeview
+                  .panel-heading
+                  .panel-body.tabs#rubytab
+                    %div
+                      %h5{:style => 'display:inline'} Start by installing
+                      %a{:href => 'https://github.com/EpicCoders/epiclogger-node'}raven-ruby.
+                    %br
+                    %pre
+                      %code
+                        %p gem install sentry-raven
+                    %div
+                      %h5{:style => 'display:inline'} Or add it to your
+                      %code Gemfile:
+                    %pre
+                      %code
+                        %p gem "sentry-raven", :git => "https://github.com/getsentry/raven-ruby.git"
+                    %h5 Create an instance of the client:
+                    %pre
+                      %code
+                        .ruby_client_configuration
+                    %h5 Now wrap your application to capture events:
+                    %pre
+                      %code
+                        %h5 Raven.capture do<br />    MyApp.run<br />end
+                    %h5 You may want to give things a try, you might want to use the included Rake task to test your configuration:
+                    %pre
+                      %code
+                        %h5 rake raven:test
+                    %h5 Note: If you're not bootstrapping the Raven gem somewhere that's included in your Rakefile, you'll have to manually pass the DSN value:
+                    %pre
+                      %code
+                        %h5 rake raven:test[DSN]
+                    %hr
+                    %div
+                      %h5{:style => 'display:inline'}For more information on other uses of Epiclogger with Javascript, please see the
+                      %a{:href => 'https://github.com/EpicCoders/epiclogger-node'}official documentation for raven-ruby.
+                  .panel-body.tabs#rails-3
+                    %div
+                      %h5{:style => 'display:inline'} Start by installing
+                      %a{:href => 'https://github.com/EpicCoders/epiclogger-node'}raven-ruby.
+                    %br
+                    %pre
+                      %code
+                        %p gem install sentry-raven
+                    %div
+                      %h5{:style => 'display:inline'} Or add it to your
+                      %code Gemfile:
+                    %pre
+                      %code
+                        %p gem "sentry-raven", :git => "https://github.com/getsentry/raven-ruby.git"
+                    %div
+                      %h5{:style => 'display:inline'} Add a
+                      %code{:style => 'display:inline'} config/initializers/raven.rb
+                      %h5{:style => 'display:inline'} containing:
+                    %pre
+                      %code
+                        .ruby_client_configuration
+                    %h5 That's it! Raven automatically installs an error handling hook to pipe all uncaught exceptions to Sentry.
+                    %h5 If you wish to test your connection to the server, you can use the raven test command:
+                    %pre
+                      %code
+                        %h5 rake raven:test
+                    %h5 You may want to give things a try, you might want to use the included Rake task to test your configuration:
+                    %pre
+                      %code
+                        %h5 rake raven:test
+                    %h5 Note: If you're not bootstrapping the Raven gem somewhere that's included in your Rakefile, you'll have to manually pass the DSN value:
+                    %pre
+                      %code
+                        %h5 rake raven:test[DSN]
+                    %hr
+                    %div
+                      %h5{:style => 'display:inline'}For more information on other uses of Epiclogger with Javascript, please see the
+                      %a{:href => 'https://github.com/EpicCoders/epiclogger-node'}official documentation for raven-ruby.
+                  .panel-body.tabs#rails-4
+                    %div
+                      %h5{:style => 'display:inline'} Start by installing
+                      %a{:href => 'https://github.com/EpicCoders/epiclogger-node'}raven-ruby.
+                    %br
+                    %pre
+                      %code
+                        %p gem install sentry-raven
+                    %div
+                      %h5{:style => 'display:inline'} Or add it to your
+                      %code Gemfile:
+                    %pre
+                      %code
+                        %p gem "sentry-raven", :git => "https://github.com/getsentry/raven-ruby.git"
+                    %div
+                      %h5{:style => 'display:inline'} Add a
+                      %code{:style => 'display:inline'} config/initializers/raven.rb
+                      %h5{:style => 'display:inline'} containing:
+                    %pre
+                      %code
+                        .ruby_client_configuration
+                    %h5 That's it! Raven automatically installs an error handling hook to pipe all uncaught exceptions to Sentry.
+                    %h5 If you wish to test your connection to the server, you can use the raven test command:
+                    %pre
+                      %code
+                        %h5 rake raven:test
+                    %h5 You may want to give things a try, you might want to use the included Rake task to test your configuration:
+                    %pre
+                      %code
+                        %h5 rake raven:test
+                    %h5 Note: If you're not bootstrapping the Raven gem somewhere that's included in your Rakefile, you'll have to manually pass the DSN value:
+                    %pre
+                      %code
+                        %h5 rake raven:test[DSN]
+                    %hr
+                    %div
+                      %h5{:style => 'display:inline'}For more information on other uses of Epiclogger with Javascript, please see the
+                      %a{:href => 'https://github.com/EpicCoders/epiclogger-node'}official documentation for raven-ruby.
+                  .panel-body.tabs#sinatra
+                    %div
+                      %h5{:style => 'display:inline'} Start by installing
+                      %a{:href => 'https://github.com/EpicCoders/epiclogger-node'}raven-ruby.
+                    %br
+                    %pre
+                      %code
+                        %p gem install sentry-raven
+                    %div
+                      %h5{:style => 'display:inline'} Or add it to your
+                      %code Gemfile:
+                    %pre
+                      %code
+                        %p gem "sentry-raven", :git => "https://github.com/getsentry/raven-ruby.git"
+                    %h5 Configure the client and install the Rack middleware:
+                    %pre
+                      %code
+                        .sinatra_client_configuration
+                    %h5 That's it! Raven automatically installs an error handling hook to pipe all uncaught exceptions to Sentry.
+                    %h5 You may want to give things a try, you might want to use the included Rake task to test your configuration:
+                    %pre
+                      %code
+                        %h5 rake raven:test
+                    %h5 Note: If you're not bootstrapping the Raven gem somewhere that's included in your Rakefile, you'll have to manually pass the DSN value:
+                    %pre
+                      %code
+                        %h5 rake raven:test[DSN]
+                    %hr
+                    %div
+                      %h5{:style => 'display:inline'}For more information on other uses of Epiclogger with Javascript, please see the
+                      %a{:href => 'https://github.com/EpicCoders/epiclogger-node'}official documentation for raven-ruby.
+                  .panel-body.tabs#sidekiq
+                    %div
+                      %h5{:style => 'display:inline'} Start by installing
+                      %a{:href => 'https://github.com/EpicCoders/epiclogger-node'}raven-ruby.
+                    %br
+                    %pre
+                      %code
+                        %p gem install sentry-raven
+                    %div
+                      %h5{:style => 'display:inline'} Or add it to your
+                      %code Gemfile:
+                    %pre
+                      %code
+                        %p gem "sentry-raven", :git => "https://github.com/getsentry/raven-ruby.git"
+                    %h5 Configure the client within your application:
+                    %pre
+                      %code
+                        .ruby_client_configuration
+                    %h5 That's it! Raven automatically appends middleware to pipe all uncaught exceptions to Sentry.
+                    %h5 You may want to give things a try, you might want to use the included Rake task to test your configuration:
+                    %pre
+                      %code
+                        %h5 rake raven:test
+                    %h5 Note: If you're not bootstrapping the Raven gem somewhere that's included in your Rakefile, you'll have to manually pass the DSN value:
+                    %pre
+                      %code
+                        %h5 rake raven:test[DSN]
+                    %hr
+                    %div
+                      %h5{:style => 'display:inline'}For more information on other uses of Epiclogger with Javascript, please see the
+                      %a{:href => 'https://github.com/EpicCoders/epiclogger-node'}official documentation for raven-ruby.
               .col-md-12.pagecontainer.tab#python
                 .pagetitle.text-center
                   %h3 Installation and configuration for Python

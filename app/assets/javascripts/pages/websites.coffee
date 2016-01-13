@@ -20,7 +20,19 @@ directive = {
       whitelistUrls: [/example\.com/]<br />}).install();<br />&lt;/script&gt;"
   node_client_configuration:
     html: ()->
-      "var raven = require('raven');<br /><br />var client = new raven.Client('https://"+this.app_key+":"+this.app_id+"@test-sentry89.herokuapp.com/"+this.id+"');"
+      "var epiclogger = require('epiclogger');<br /><br />var client = new epiclogger.Client('https://"+this.app_key+":"+this.app_id+"@test-sentry89.herokuapp.com/"+this.id+"');"
+  express_client_configuration:
+    html: ()->
+      "var app = require('express').createServer();<br /><br />app.error(epiclogger.middleware.express('https://"+this.app_key+":"+this.app_id+"@test-sentry89.herokuapp.com/"+this.id+"'));"
+  connect_client_configuration:
+    html: ()->
+      "connect(<br />connect.bodyParser(),<br />connect.cookieParser(),<br />mainHandler,<br />raven.middleware.connect('https://"+this.app_key+":"+this.app_id+"@test-sentry89.herokuapp.com/"+this.id+"'),<br />).listen(3000);"
+  ruby_client_configuration:
+    html: ()->
+      "require 'raven'<br /><br />Raven.configure do |config|<br />  config.dsn = 'https://"+this.app_key+":"+this.app_id+"@test-sentry89.herokuapp.com/"+this.id+"'<br />end"
+  sinatra_client_configuration:
+    html: ()->
+      "require 'sinatra'<br />require 'raven'<br /><br />Raven.configure do |config|<br />  config.dsn = 'https://"+this.app_key+":"+this.app_id+"@test-sentry89.herokuapp.com/"+this.id+"'<br />end<br /><br />use Raven::Rack<br /><br />get '/' do<br />  1 / 0<br />end"
 }
 changeButtonValue = () ->
   $.getJSON Routes.api_v1_websites_url(), {member_id: $.auth.user.id}, (data) ->
@@ -37,6 +49,7 @@ PubSub.subscribe('assigned.website', (ev, website)->
       $('#myModal').modal('show')
       $.getJSON Routes.api_v1_website_path(website.id), (data) ->
         $('#current-website').render data, directive
+        $('.tabs').hide()
     when "index"
       $.getJSON Routes.api_v1_websites_url(), {member_id: $.auth.user.id}, (data) ->
         $('#websites-container').render data, directive
@@ -54,11 +67,17 @@ goToStep = (n) ->
     $('.stepwizard-row a[href="#step-' + n + '"]').addClass 'btn-primary'
   return
 
+$('li').on 'click', (e) ->
+  $('.tabs').hide()
+  $(e.target).tab('show')
+  $($(e.target).attr('href')).show()
+
 $('.tab').hide()
 # $('.tab2, .tab3').addClass('disabled')
 
 $('#back, .tab2').on 'click', () ->
   $('.tab').hide()
+  $('.tabs').hide()
   $('.tab3').addClass('disabled')
   goToStep(2)
 
