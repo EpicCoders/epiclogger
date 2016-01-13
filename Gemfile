@@ -25,7 +25,6 @@ gem 'coffee-rails', '~> 4.1.0'
 gem 'haml-rails'
 
 gem 'devise_token_auth'
-gem 'devise'
 gem 'omniauth-github'
 
 # jquery form validation plugin
@@ -38,7 +37,7 @@ gem 'jquery-rails'
 gem 'turbolinks'
 gem 'gon'
 gem 'jquery-turbolinks'
-gem "js-routes" # access rails routes in js
+gem 'js-routes' # access rails routes in js
 gem 'momentjs-rails'
 gem 'nprogress-rails' # loading for turbolinks
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
@@ -50,9 +49,9 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # gem 'bcrypt', '~> 3.1.7'
 
 # Loading env vars
-gem "figaro"
+gem 'figaro'
 
-#awesome replacement for JavaScript's alert.
+# awesome replacement for JavaScript's alert.
 gem 'sweet-alert'
 
 # Add server puma
@@ -62,18 +61,18 @@ gem 'puma'
 gem 'kaminari'
 
 group :development do
-  gem "better_errors"
-  gem "binding_of_caller"
+  gem 'better_errors'
+  gem 'binding_of_caller'
 
-  #gem 'spring'
-  #gem 'spring-commands-rspec'
+  # gem 'spring'
+  # gem 'spring-commands-rspec'
 end
 
 group :test do
   gem 'database_cleaner'
   gem 'capybara'
   gem 'shoulda-matchers', require: false
-  gem "codeclimate-test-reporter", require: false
+  gem 'codeclimate-test-reporter', require: false
 end
 
 group :development, :test do
@@ -82,7 +81,7 @@ group :development, :test do
   gem 'rspec-rails', '~> 3.4.0'
   gem 'factory_girl_rails'
 
-  gem 'brakeman', :require => false
+  gem 'brakeman', require: false
 
   # Let's open the emails in browser
   gem 'letter_opener'
@@ -93,7 +92,7 @@ end
 group :production, :staging do
   # Heroku features
   gem 'rails_12factor'
-  # gem "asset_sync"
+  # gem 'asset_sync'
   gem 'rack-host-redirect'
   gem 'heroku-deflater'
 end
