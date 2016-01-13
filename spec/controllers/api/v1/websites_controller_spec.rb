@@ -170,9 +170,18 @@ describe Api::V1::WebsitesController, :type => :controller do
         }.to change(Website, :count).by(0)
       end
 
-      it 'should render js template' do
+      it 'should reload page' do
+        website2 = create :website, title: 'Website title', domain: 'http://www.second-website.com'
+        website_member2 = create :website_member, member: member, website: website2
         delete :destroy, params
         expect(response.body).to eq("location.reload();")
+        expect(response.content_type).to eq('text/javascript')
+        expect(response).to have_http_status(200)
+      end
+
+      it 'should redirect_to new_website_path' do
+        delete :destroy, params
+        expect(response.body).to eq("location.href='/websites/new';")
         expect(response.content_type).to eq('text/javascript')
         expect(response).to have_http_status(200)
       end
