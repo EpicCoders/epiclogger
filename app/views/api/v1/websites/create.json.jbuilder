@@ -1,1 +1,1 @@
-json.(@website, :id, :domain, :created_at, :updated_at, :title)
+json.(@website, :id, :domain, :app_key, :app_id, :created_at, :updated_at, :title)

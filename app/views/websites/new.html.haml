@@ -47,12 +47,14 @@
                   .panel-heading Client Configuration
                   .panel-body
                     %h5 To start sending events, configure your client with the following DSN value:
-                    .events_dsn
-                    / .codepanel
+                    %pre
+                      %code
+                        %h5.platform-code https://{app_key}:{app_id}@test-sentry89.herokuapp.com/{id}
                     %br/
                     %h5 If this is a client that only needs public access (like epiclogger-js), you can use the following public DSN:
-                    .codepanel
-                      .public_dsn
+                    %pre
+                      %code
+                        %h5.platform-code https://{app_key}@test-sentry89.herokuapp.com/{id}
                 .panel.panel-default.tileview
                   .panel-heading Platforms
                   .panel-body#platform{:style => 'cursor: pointer'}
@@ -135,7 +137,7 @@
                     %h5 Configure the client
                     %pre
                       %code
-                        .js_client_configuration
+                        %h5.platform-code &lt;script&gt;<br />Raven.config('https://{app_key}@test-sentry89.herokuapp.com/{id}', {<br />    # we highly recommend restricting exceptions to a domain in order to filter out clutter<br />    whitelistUrls: [/example\.com/]<br />}).install();<br />&lt;/script&gt;
                     %h5 Add additional user context if it's available:
                     %pre
                       %code
@@ -170,7 +172,7 @@
                     %h5 Create an instance of the client:
                     %pre
                       %code
-                        .node_client_configuration
+                        %h5.platform-code var epiclogger = require('epiclogger');<br /><br />var client = new epiclogger.Client('https://{app_key}:{app_id}@test-sentry89.herokuapp.com/{id}');
                     %h5 You can also optionally install a default error handler to catch all exceptions:
                     %pre
                       %code
@@ -200,7 +202,7 @@
                     %h5 Register an instance of the Express middleware:
                     %pre
                       %code
-                        .express_client_configuration
+                        %h5.platform-code var app = require('express').createServer();<br /><br />app.error(raven.middleware.express('https://{app_key}:{app_id}@test-sentry89.herokuapp.com/{id}'));
                     %div
                       %h5{:style => 'display:inline'} Ensure Node is run with
                       %code NODE_ENV=production:
@@ -223,7 +225,7 @@
                     %h5 Register an instance of the Connect middleware after your main application handler:
                     %pre
                       %code
-                        .connect_client_configuration
+                        %h5.platform-code connect(<br />  connect.bodyParser(),<br />  connect.cookieParser(),<br />  mainHandler,<br />  raven.middleware.connect('https://{app_key}:{app_id}@test-sentry89.herokuapp.com/{id}'),<br />).listen(3000);
                     %div
                       %h5{:style => 'display:inline'} Ensure Node is run with
                       %code NODE_ENV=production:
@@ -268,11 +270,11 @@
                     %h5 Create an instance of the client:
                     %pre
                       %code
-                        .ruby_client_configuration
+                        %h5.platform-code require 'epiclogger'<br /><br />Epiclogger.configure do |config|<br />  config.dsn = 'https://{app_key}:{app_id}@test-sentry89.herokuapp.com/{id}'<br />end
                     %h5 Now wrap your application to capture events:
                     %pre
                       %code
-                        %h5 epiclogger.capture do<br />    MyApp.run<br />end
+                        %h5 Epiclogger.capture do<br />    MyApp.run<br />end
                     %h5 You may want to give things a try, you might want to use the included Rake task to test your configuration:
                     %pre
                       %code
@@ -305,7 +307,7 @@
                       %h5{:style => 'display:inline'} containing:
                     %pre
                       %code
-                        .ruby_client_configuration
+                        %h5.platform-code require 'epiclogger'<br /><br />Epiclogger.configure do |config|<br />  config.dsn = 'https://{app_key}:{app_id}@test-sentry89.herokuapp.com/{id}'<br />end
                     %h5 That's it! epiclogger automatically installs an error handling hook to pipe all uncaught exceptions to Sentry.
                     %h5 If you wish to test your connection to the server, you can use the epiclogger test command:
                     %pre
@@ -343,7 +345,7 @@
                       %h5{:style => 'display:inline'} containing:
                     %pre
                       %code
-                        .ruby_client_configuration
+                        %h5.platform-code require 'epiclogger'<br /><br />Epiclogger.configure do |config|<br />  config.dsn = 'https://{app_key}:{app_id}@test-sentry89.herokuapp.com/{id}'<br />end
                     %h5 That's it! epiclogger automatically installs an error handling hook to pipe all uncaught exceptions to Sentry.
                     %h5 If you wish to test your connection to the server, you can use the epiclogger test command:
                     %pre
@@ -378,7 +380,7 @@
                     %h5 Configure the client and install the Rack middleware:
                     %pre
                       %code
-                        .sinatra_client_configuration
+                        %h5.platform-code require 'sinatra'<br />require 'raven'<br /><br />Raven.configure do |config|<br />  config.dsn = 'https://{app_key}:{app_id}@test-sentry89.herokuapp.com/{id}'<br />end<br /><br />use Raven::Rack<br /><br />get '/' do<br />  1 / 0<br />end
                     %h5 That's it! epiclogger automatically installs an error handling hook to pipe all uncaught exceptions to Sentry.
                     %h5 You may want to give things a try, you might want to use the included Rake task to test your configuration:
                     %pre
@@ -409,7 +411,7 @@
                     %h5 Configure the client within your application:
                     %pre
                       %code
-                        .ruby_client_configuration
+                        %h5.platform-code require 'raven'<br /><br />Raven.configure do |config|<br />  config.dsn = 'https://{app_key}:{app_id}@test-sentry89.herokuapp.com/{id}'<br />end
                     %h5 That's it! epiclogger automatically appends middleware to pipe all uncaught exceptions to Sentry.
                     %h5 You may want to give things a try, you might want to use the included Rake task to test your configuration:
                     %pre
@@ -445,7 +447,7 @@
                   %h5 Create an instance of the client:
                   %pre
                     %code
-                      .python_client_configuration
+                      %h5.platform-code from raven import Client<br /><br />client = Client('https://{app_key}:{app_id}@test-sentry89.herokuapp.com/{id}')
                   %h5 Now call out to the epiclogger client to capture events:
                   %pre
                     %code
@@ -457,7 +459,7 @@
                   %h5 If you wish to test your connection to the server, you can use the epiclogger test command:
                   %pre
                     %code
-                      .python_test_command
+                      %h5.platform-code raven test https://{app_key}:{app_id}@test-sentry89.herokuapp.com/{id}
                   %hr
                   %div
                     %h5{:style => 'display:inline'}For more information on other uses of Epiclogger with Python, please see the
@@ -472,7 +474,7 @@
                   %h5 Then simply modify your Django configuration:
                   %pre
                     %code
-                      .django_client_configuration
+                      %h5.platform-code # Set your DSN value<br />RAVEN_CONFIG = {<br />    'dsn': 'https://{app_key}:{app_id}@test-sentry89.herokuapp.com/{id}',<br />}<br /><br /># Add raven to the list of installed apps<br />INSTALLED_APPS = INSTALLED_APPS + (<br />    # ...<br />    'raven.contrib.django.raven_compat',<br />)
                   %h5 That's it! epiclogger automatically installs an error handling hook to pipe all uncaught exceptions to Sentry.
                   %h5 If you wish to test your connection to the server, you can use the epiclogger test command:
                   %pre
@@ -497,7 +499,7 @@
                   %h5 Add the required configuration in your application setup:
                   %pre
                     %code
-                      .flask_client_configuration
+                      %h5.platform-code from raven.contrib.flask import Sentry<br /><br />app.config['SENTRY_DSN'] = 'https://{app_key}:{app_id}@test-sentry89.herokuapp.com/{id}'<br />sentry = Sentry(app)
                   %hr
                     %h5 That's it! epiclogger automatically installs an error handling hook to pipe all uncaught exceptions to Sentry.
                     %div
@@ -513,7 +515,7 @@
                   %h5 Add the required configuration in your application setup:
                   %pre
                     %code
-                      .tornado_client_configuration
+                      %h5.platform-code import tornado.web<br />from raven.contrib.tornado import AsyncSentryClient<br /><br />class MainHandler(tornado.web.RequestHandler):<br />    def get(self):<br />        self.write("Hello, world")<br /><br />application = tornado.web.Application([<br />    (r"/", MainHandler),<br />])<br />application.sentry_client = AsyncSentryClient(<br />    "https://{app_key}:{app_id}@test-sentry89.herokuapp.com/{id}"<br />)
                   %h5 Once the sentry client is attached to the application, request handlers can automatically capture uncaught exceptions by inheriting the SentryMixin class.
                   %pre
                     %code
@@ -540,7 +542,7 @@
                       %code application:didFinishLaunchingWithOptions:
                     %pre
                       %code
-                        .ios_client_configuration
+                        %h5.platform-code - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {<br />    // Configure the Sentry client<br />    [RavenClient clientWithDSN:@"https://{app_key}:{app_id}@test-sentry89.herokuapp.com/{id}"];<br /><br />    // Install the global error handler<br />    [[RavenClient sharedClient] setupExceptionHandler];<br /><br />    return YES;<br />}
                     %hr
                     %h5 That's it! epiclogger automatically installs an error handling hook to pipe all uncaught exceptions to Sentry.
                     %div
@@ -562,7 +564,7 @@
                     %h5 Create an instance of the client:
                     %pre
                       %code
-                        .php_client_configuration
+                        %h5.platform-code $client = new Raven_Client('https://{app_key}:{app_id}@test-sentry89.herokuapp.com/{id}');
                     %h5 Now call out to the raven client to capture events:
                     %pre
                       %code
@@ -603,7 +605,7 @@
                   %h5 You can manually send events using the EventBuilder:
                   %pre
                     %code
-                      .java_client_configuration
+                      %h5.platform-code import net.kencochrane.raven.Raven;<br />import net.kencochrane.raven.Raven;<br />import net.kencochrane.raven.event.EventBuilder;<br />import net.kencochrane.raven.event.interfaces.ExceptionInterface;<br /><br />public class Example {<br />    public static void main(String[] args) {<br />        String rawDsn = "https://{app_key}:{app_id}@test-sentry89.herokuapp.com/{id}";<br />        Raven raven = RavenFactory.ravenInstance(new Dsn(rawDsn));<br /><br />        // record a simple message<br />        EventBuilder eventBuilder = new EventBuilder()<br />                        .setMessage("Hello from Raven!")<br />                        .setLevel(Event.Level.ERROR)<br />                        .setLogger(MyClass.class.getName())<br />                        .addSentryInterface(new ExceptionInterface(e));<br />                        <br />        raven.runBuilderHelpers(eventBuilder); // Optional<br />        raven.sendEvent(eventBuilder.build());<br />    }<br />}
                   %hr
                   %div
                     %h5{:style => 'display:inline'}For more information on other uses of Epiclogger with Java, please see the
@@ -619,7 +621,7 @@
                   %h5 You'll need to configure the SentryHandler in your logging.properties:
                   %pre
                     %code
-                      .java_util_logging_client_configuration
+                      %h5.platform-code level=ERROR<br />handlers=net.kencochrane.raven.jul.SentryHandler<br />net.kencochrane.raven.jul.SentryHandler.dsn=https://{app_key}:{app_id}@test-sentry89.herokuapp.com/{id}
                   %hr
                   %div
                     %h5{:style => 'display:inline'}For more information on other uses of Epiclogger with Java, please see the
@@ -635,7 +637,7 @@
                   %h5 You'll need to configure the SentryAppender in your logging configuration:
                   %pre
                     %code
-                      .log4j_client_configuration
+                      %h5.platform-code log4j.rootLogger=DEBUG, SentryAppender<br />log4j.appender.SentryAppender=net.kencochrane.raven.log4j.SentryAppender<br />log4j.appender.SentryAppender.dsn=https://{app_key}:{app_id}@test-sentry89.herokuapp.com/{id}<br />level=ERROR
                   %hr
                   %div
                     %h5{:style => 'display:inline'}For more information on other uses of Epiclogger with Java, please see the
@@ -651,7 +653,7 @@
                   %h5 You'll need to configure the SentryAppender in your logging configuration:
                   %pre
                     %code
-                      .log4j2_client_configuration
+                      %h5.platform-code &lt;?xml version="1.0" encoding="UTF-8"?&gt;<br />&lt;configuration status="warn" packages="org.apache.logging.log4j.core,net.kencochrane.raven.log4j2"&gt;<br />    &lt;appenders&gt;<br />        &lt;Raven name="Sentry"&gt;<br />            &lt;dsn&gt;<br />                https://{app_key}:{app_id}@test-sentry89.herokuapp.com/{id}<br />            &lt;/dsn&gt;<br />        &lt;/Raven&gt;<br />    &lt;/appenders&gt;<br /><br />    &lt;loggers&gt;<br />        &lt;root level="error"&gt;<br />            &lt;appender-ref ref="Sentry"/&gt;<br />        &lt;/root&gt;<br />    &lt;/loggers&gt;<br />&lt;/configuration&gt;
                   %hr
                   %div
                     %h5{:style => 'display:inline'}For more information on other uses of Epiclogger with Java, please see the
@@ -667,7 +669,7 @@
                   %h5 You'll need to configure the SentryAppender in your logging configuration:
                   %pre
                     %code
-                      .logback_client_configuration
+                      %h5.platform-code &lt;configuration&gt;<br />    &lt;appender name="Sentry" class="net.kencochrane.raven.logback.SentryAppender"&gt;<br />        &lt;dsn&gt;<br />            https://{app_key}:{app_id}@test-sentry89.herokuapp.com/{id}<br />        &lt;/dsn&gt;<br />    &lt;/appender&gt;<br /><br />    &lt;root level="error"&gt;<br />        &lt;appender-ref ref="Sentry"/&gt;<br />    &lt;/root&gt;<br />&lt;/configuration&gt;
                   %hr
                   %div
                     %h5{:style => 'display:inline'}For more information on other uses of Epiclogger with Java, please see the
