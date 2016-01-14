@@ -56,7 +56,7 @@ $('li').on 'click', (e) ->
   $($(e.target).attr('href')).show()
 
 $('.tab').hide()
-# $('.tab2, .tab3').addClass('disabled')
+$('.tab2, .tab3').addClass('disabled')
 
 $('#frameworks a').on 'click', (e) ->
   $('.tab3').removeClass('disabled')
@@ -93,9 +93,9 @@ $('#addWebsite').submit (e) ->
       goToStep(2)
       $('.tab1').addClass('disabled')
       $('.tab2').removeClass('disabled')
-      replaceHtmlText('*{app_key}', data.app_key)
-      replaceHtmlText('*{app_id}', data.app_id)
-      replaceHtmlText('*{id}', data.id)
+      replaceHtmlText(/{app_key}/g, data.app_key)
+      replaceHtmlText(/{app_id}/g, data.app_id)
+      replaceHtmlText(/{id}/g, data.id)
     error: (error) ->
       sweetAlert("Error", "Website exists!", "error") if error.status == 401
   return
