@@ -91,6 +91,8 @@ describe Api::V1::WebsitesController, :type => :controller do
         expect(response.body).to eq({
           id: website.id,
           domain: website.domain,
+          app_key: website.app_key,
+          app_id: website.app_id,
           created_at: website.created_at,
           updated_at: website.updated_at,
           title: website.title
