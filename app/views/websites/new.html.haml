@@ -28,12 +28,12 @@
                   %input#domain.form-control{:placeholder => "http://www.domain.com", :required => "required", :type => "url", :name => 'website[domain]'}/
                 %br
                 %br
-                %button.btn.btn-success.pull-left#valid_website{:style => "width: 150px;",:name => 2, :type => "submit"}
-                  %i.icon-next
-                  Next
-                %a.btn.btn-warning.pull-right#custom-button{:style => "width: 150px;", :href => "#", :onclick => 'EpicLogger.logout()'}
+                %a.btn.btn-warning.pull-left#custom-button{:style => "width: 150px;", :href => "#", :onclick => 'EpicLogger.logout()'}
                   %i.icon-next
                   Log out
+                %button.btn.btn-success.pull-right#valid_website{:style => "width: 150px;",:name => 2, :type => "submit"}
+                  %i.icon-next
+                  Next
               %br
               %br
               %br
@@ -103,22 +103,6 @@
               .col-md-12.pagecontainer.tab#javascript
                 .pagetitle.text-center
                   %h3 Configuring Javascript
-                / .panel.panel-default.codeview
-                /   .panel-heading Current site information
-                /   .panel-body
-                /     %table.table
-                /       %thead
-                /         %tr
-                /           %th Website Title
-                /           %th Website Domain
-                /           %th App Key
-                /           %th App Secret
-                /       %tbody.websites
-                /         %tr
-                /           %td.title
-                /           %td.domain
-                /           %td.app_key
-                /           %td.app_id
                 .panel.panel-default
                   .panel-heading
                   .panel-body

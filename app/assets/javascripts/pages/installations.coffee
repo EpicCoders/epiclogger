@@ -1,14 +1,21 @@
+replaceHtmlText = (selected, replace_with) ->
+  $.each $('.platform-code'), (index, code) ->
+    $(code).html($(code).html().replace( selected, replace_with))
+
 PubSub.subscribe('assigned.website', (ev, website)->
   switch gon.action
     when "index"
       createWebsite()
       $('.tab, .main-tabs').hide()
-      $('#client-configuration, #platforms-tabs, #all-platforms-tab').show()
+      $('#client-configuration, #platforms-tabs, #all-platforms').show()
 
       $.getJSON Routes.api_v1_website_path(website.id), (data) ->
         $('#current-website').render data
-        $('#current-site').render data
-        apiKeyTab(data)
+        generateApiKey(data)
+
+        replaceHtmlText(/{app_key}/g, data.app_key)
+        replaceHtmlText(/{app_id}/g, data.app_id)
+        replaceHtmlText(/{id}/g, data.id)
 
       $.getJSON Routes.api_v1_notifications_path(), { website_id: website.id }, (data) ->
         $('input[name=daily]').attr('checked', true) if data.daily
@@ -42,28 +49,7 @@ PubSub.subscribe('assigned.website', (ev, website)->
               swal("Success!", "You will recieve notifications soon.", "success")
 )
 
-# $('.input-range').slider
-#   min: 0
-#   max: 168
-#   slide: (event, ui) ->
-#     if ui.value == 0
-#       $('.range-value').text 'disabled'
-#     else if ui.value == 1
-#       $('.range-value').text ui.value + ' hour'
-#     else if ui.value > 12
-#       step: 3
-#     else if ui.value > 1 && ui.value < 25
-#       $('.range-value').text ui.value + ' hours'
-
-# range = $('.input-range')
-# value = $('.range-value')
-# value.html range.attr('value')
-# value.html 'disabled' if range.attr('value') == '0'
-# range.on 'input', ->
-#   value.html @value
-#   return
-
-apiKeyTab = (data) ->
+generateApiKey = (data) ->
   $.website_id = data.id
   $('#generateAppKey, #revoke').on 'click', (e)->
     e.preventDefault();
@@ -108,39 +94,41 @@ createWebsite = () ->
           sweetAlert("Error", "Website exists", "error") if error.status == 401
 
 
-  $('#top-tabs a').on 'click', (e) ->
-    e.preventDefault()
-    $('.main-tabs').hide()
-    $(this).tab('show')
-    $($(this).attr('href')).show()
-    ul = $($($(this).attr('href') + ' ul')[0])
-    ul.show()
-    content = $("#" + ul.attr('id') + ' li.active a').attr('href')
-    $(content + '-tab').show()
-    if content != '#all-platforms' && $(this).attr('href') == "#client-configuration"
-      $('#current-site').show()
+$('#top-tabs a').on 'click', (e) ->
+  e.preventDefault()
+  $('.main-tabs').hide()
+  $(this).tab('show')
+  $($(this).attr('href')).show()
+  ul = $($($(this).attr('href') + ' ul')[0])
+  ul.show()
+  content = $("#" + ul.attr('id') + ' li.active a').attr('href')
+  $(content).show()
 
-  $('#platforms-tabs a').click (e) ->
-    e.preventDefault()
-    toggleTabs( e.target,'platforms' )
+$('#client-configuration li').on 'click', (e) ->
+  li = $('#client-configuration li').slice(8)
+  $(this).tab('show')
+  $('.tabs').hide()
+  $($(this).find('a').attr('href')).show()
+  $($(this).find('a').attr('href') + 'tab').show()
 
-  $('#details-tabs a').click (e) ->
-    e.preventDefault()
-    toggleTabs( e.target,'details' )
+$('#platforms-tabs a').click (e) ->
+  e.preventDefault()
+  toggleTabs( e.target,'platforms' )
 
-  $('#img-platforms a').on 'click', (e) ->
-    e.preventDefault()
-    $('.tab').hide()
-    $('#current-site').show()
-    $($(this).attr('href') + '-tab').show()
-    $('#platforms-tabs li').removeClass('active')
+$('#details-tabs a').click (e) ->
+  e.preventDefault()
+  toggleTabs( e.target,'details' )
 
-  toggleTabs = (target,location) ->
-    $('.tab').hide()
-    $(target).tab('show')
-    tag = $(target).attr('href')
-    if location == 'platforms'
-      if tag != '#all-platforms'
-        $('#current-site').show()
-    $(tag + '-tab').show()
-    return
+$('#img-platforms a').on 'click', (e) ->
+  e.preventDefault()
+  $('.tab').hide()
+  $($(this).attr('href')).show()
+  $('#platforms-tabs li').removeClass('active')
+
+toggleTabs = (target,location) ->
+  $('.tab').hide()
+  $(target).tab('show')
+  tag = $(target).attr('href')
+  $(tag).show()
+  $('#'+this.name + 'tab').show()
+  return

@@ -56,7 +56,7 @@ $('li').on 'click', (e) ->
   $($(e.target).attr('href')).show()
 
 $('.tab').hide()
-$('.tab2, .tab3').addClass('disabled')
+# $('.tab2, .tab3').addClass('disabled')
 
 $('#frameworks a').on 'click', (e) ->
   $('.tab3').removeClass('disabled')
