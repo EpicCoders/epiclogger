@@ -1,16 +1,16 @@
-/* http://prismjs.com/download.html?themes=prism-twilight&languages=css+clike+javascript+apacheconf+coffeescript+ruby+haml+http+json+sass+scss+yaml&plugins=line-highlight+line-numbers+show-invisibles+autolinker+show-language+highlight-keywords+remove-initial-line-feed+previewer-base+previewer-color+previewer-gradient+autoloader */
+/* http://prismjs.com/download.html?themes=prism&languages=markup+css+clike+javascript+apacheconf+coffeescript+ruby+haml+http+jade+json+less+sas+sass+scss+yaml&plugins=line-highlight+line-numbers+remove-initial-line-feed+previewer-base+previewer-color+previewer-gradient+autoloader */
 /**
- * prism.js Twilight theme
- * Based (more or less) on the Twilight theme originally of Textmate fame.
- * @author Remy Bach
+ * prism.js default theme for JavaScript, CSS and HTML
+ * Based on dabblet (http://dabblet.com)
+ * @author Lea Verou
  */
 
 code[class*="language-"] {
-  color: white;
-  direction: ltr;
+  color: black;
+  text-shadow: 0 1px white;
   font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  direction: ltr;
   text-align: left;
-  text-shadow: 0 -.1em .2em black;
   white-space: pre;
   word-spacing: normal;
   word-break: normal;
@@ -26,11 +26,11 @@ code[class*="language-"] {
 }
 
 pre[class*="language-"] {
-  color: white;
-  direction: ltr;
+  color: black;
+  text-shadow: 0 1px white;
   font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  direction: ltr;
   text-align: left;
-  text-shadow: 0 -.1em .2em black;
   white-space: pre;
   word-spacing: normal;
   word-break: normal;
@@ -43,84 +43,65 @@ pre[class*="language-"] {
   -moz-hyphens: none;
   -ms-hyphens: none;
   hyphens: none;
-  background: hsl(0, 0%, 8%);
-  /* #141414 */
+  &::-moz-selection, ::-moz-selection {
+    text-shadow: none;
+    background: #b3d4fc;
+  }
 }
 
-:not(pre) > code[class*="language-"] {
-  background: hsl(0, 0%, 8%);
-  /* #141414 */
+code[class*="language-"] {
+  &::-moz-selection, ::-moz-selection {
+    text-shadow: none;
+    background: #b3d4fc;
+  }
+}
+
+pre[class*="language-"] {
+  &::selection, ::selection {
+    text-shadow: none;
+    background: #b3d4fc;
+  }
+}
+
+code[class*="language-"] {
+  &::selection, ::selection {
+    text-shadow: none;
+    background: #b3d4fc;
+  }
+}
+
+@media print {
+  code[class*="language-"], pre[class*="language-"] {
+    text-shadow: none;
+  }
 }
 
 /* Code blocks */
 
 pre[class*="language-"] {
-  border-radius: .5em;
-  border: 0.3em solid hsl(0, 0%, 33%);
-  /* #282A2B */
-  box-shadow: 1px 1px .5em black inset;
+  padding: 1em;
   margin: .5em 0;
   overflow: auto;
-  padding: 1em;
-  &::selection {
-    /* Safari */
-    background: hsl(200, 4%, 16%);
-    /* #282A2B */
-    /* Firefox */
-    background: hsl(200, 4%, 16%);
-    /* #282A2B */
-  }
-  &::-moz-selection, ::-moz-selection {
-    text-shadow: none;
-    background: hsla(0, 0%, 93%, 0.15);
-    /* #EDEDED */
-  }
 }
 
-/* Text Selection colour */
-
-code[class*="language-"] {
-  &::-moz-selection, ::-moz-selection {
-    text-shadow: none;
-    background: hsla(0, 0%, 93%, 0.15);
-    /* #EDEDED */
-  }
-}
-
-pre[class*="language-"] {
-  &::selection, ::selection {
-    text-shadow: none;
-    background: hsla(0, 0%, 93%, 0.15);
-    /* #EDEDED */
-  }
-}
-
-code[class*="language-"] {
-  &::selection, ::selection {
-    text-shadow: none;
-    background: hsla(0, 0%, 93%, 0.15);
-    /* #EDEDED */
-  }
+:not(pre) > code[class*="language-"], pre[class*="language-"] {
+  background: #f5f2f0;
 }
 
 /* Inline code */
 
 :not(pre) > code[class*="language-"] {
+  padding: .1em;
   border-radius: .3em;
-  border: 0.13em solid hsl(0, 0%, 33%);
-  /* #545454 */
-  box-shadow: 1px 1px .3em -.1em black inset;
-  padding: .15em .2em .05em;
   white-space: normal;
 }
 
 .token {
   &.comment, &.prolog, &.doctype, &.cdata {
-    color: hsl(0, 0%, 47%);
-    /* #777777 */
+    color: slategray;
   }
   &.punctuation {
-    opacity: .7;
+    color: #999;
   }
 }
 
@@ -129,44 +110,34 @@ code[class*="language-"] {
 }
 
 .token {
-  &.tag, &.boolean, &.number, &.deleted {
-    color: hsl(14, 58%, 55%);
-    /* #CF6A4C */
+  &.property, &.tag, &.boolean, &.number, &.constant, &.symbol, &.deleted {
+    color: #905;
   }
-  &.keyword, &.property, &.selector, &.constant, &.symbol, &.builtin {
-    color: hsl(53, 89%, 79%);
-    /* #F9EE98 */
+  &.selector, &.attr-name, &.string, &.char, &.builtin, &.inserted {
+    color: #690;
   }
-  &.attr-name, &.attr-value, &.string, &.char, &.operator, &.entity, &.url {
-    color: hsl(76, 21%, 52%);
-    /* #8F9D6A */
+  &.operator, &.entity, &.url {
+    color: #a67f59;
+    background: hsla(0, 0%, 100%, 0.5);
   }
 }
 
 .language-css .token.string, .style .token.string {
-  color: hsl(76, 21%, 52%);
-  /* #8F9D6A */
+  color: #a67f59;
+  background: hsla(0, 0%, 100%, 0.5);
 }
 
 .token {
-  &.variable, &.inserted {
-    color: hsl(76, 21%, 52%);
-    /* #8F9D6A */
+  &.atrule, &.attr-value, &.keyword {
+    color: #07a;
   }
-  &.atrule {
-    color: hsl(218, 22%, 55%);
-    /* #7587A6 */
+  &.function {
+    color: #DD4A68;
   }
-  &.regex {
-    color: hsl(42, 75%, 65%);
-    /* #E9C062 */
+  &.regex, &.important, &.variable {
+    color: #e90;
   }
-  &.important {
-    color: hsl(42, 75%, 65%);
-    /* #E9C062 */
-    font-weight: bold;
-  }
-  &.bold {
+  &.important, &.bold {
     font-weight: bold;
   }
   &.italic {
@@ -174,93 +145,6 @@ code[class*="language-"] {
   }
   &.entity {
     cursor: help;
-  }
-}
-
-pre[data-line] {
-  padding: 1em 0 1em 3em;
-  position: relative;
-}
-
-/* Markup */
-
-.language-markup .token {
-  &.tag, &.attr-name, &.punctuation {
-    color: hsl(33, 33%, 52%);
-    /* #AC885B */
-  }
-}
-
-/* Make the tokens sit above the line highlight so the colours don't look faded. */
-
-.token {
-  position: relative;
-  z-index: 1;
-}
-
-.line-highlight {
-  background: -moz-linear-gradient(left, hsla(0, 0%, 33%, 0.1) 70%, hsla(0, 0%, 33%, 0));
-  /* #545454 */
-  background: -o-linear-gradient(left, hsla(0, 0%, 33%, 0.1) 70%, hsla(0, 0%, 33%, 0));
-  /* #545454 */
-  background: -webkit-linear-gradient(left, hsla(0, 0%, 33%, 0.1) 70%, hsla(0, 0%, 33%, 0));
-  /* #545454 */
-  background: hsla(0, 0%, 33%, 0.25);
-  /* #545454 */
-  background: linear-gradient(left, hsla(0, 0%, 33%, 0.1) 70%, hsla(0, 0%, 33%, 0));
-  /* #545454 */
-  border-bottom: 1px dashed hsl(0, 0%, 33%);
-  /* #545454 */
-  border-top: 1px dashed hsl(0, 0%, 33%);
-  /* #545454 */
-  left: 0;
-  line-height: inherit;
-  margin-top: 0.75em;
-  /* Same as .prism’s padding-top */
-  padding: inherit 0;
-  pointer-events: none;
-  position: absolute;
-  right: 0;
-  white-space: pre;
-  z-index: 0;
-  &:before {
-    background-color: hsl(215, 15%, 59%);
-    /* #8794A6 */
-    border-radius: 999px;
-    box-shadow: 0 1px white;
-    color: hsl(24, 20%, 95%);
-    /* #F5F2F0 */
-    content: attr(data-start);
-    font: bold 65%/1.5 sans-serif;
-    left: .6em;
-    min-width: 1em;
-    padding: 0 .5em;
-    position: absolute;
-    text-align: center;
-    text-shadow: none;
-    top: .4em;
-    vertical-align: .3em;
-  }
-  &[data-end]:after {
-    background-color: hsl(215, 15%, 59%);
-    /* #8794A6 */
-    border-radius: 999px;
-    box-shadow: 0 1px white;
-    color: hsl(24, 20%, 95%);
-    /* #F5F2F0 */
-    content: attr(data-start);
-    font: bold 65%/1.5 sans-serif;
-    left: .6em;
-    min-width: 1em;
-    padding: 0 .5em;
-    position: absolute;
-    text-align: center;
-    text-shadow: none;
-    top: .4em;
-    vertical-align: .3em;
-    bottom: .4em;
-    content: attr(data-end);
-    top: auto;
   }
 }
 
@@ -356,56 +240,6 @@ pre.line-numbers {
     display: block;
     padding-right: 0.8em;
     text-align: right;
-  }
-}
-
-.token {
-  &.tab:not(:empty):before, &.cr:before, &.lf:before {
-    color: hsl(24, 20%, 85%);
-  }
-  &.tab:not(:empty):before {
-    content: '\21E5';
-  }
-  &.cr:before {
-    content: '\240D';
-  }
-  &.crlf:before {
-    content: '\240D\240A';
-  }
-  &.lf:before {
-    content: '\240A';
-  }
-  a {
-    color: inherit;
-  }
-}
-
-div.prism-show-language {
-  position: relative;
-  > div.prism-show-language-label {
-    color: black;
-    background-color: #CFCFCF;
-    display: inline-block;
-    position: absolute;
-    bottom: auto;
-    left: auto;
-    top: 0;
-    right: 0;
-    width: auto;
-    height: auto;
-    font-size: 0.9em;
-    border-radius: 0 0 0 5px;
-    padding: 0 0.5em;
-    text-shadow: none;
-    z-index: 1;
-    -webkit-box-shadow: none;
-    -moz-box-shadow: none;
-    box-shadow: none;
-    -webkit-transform: none;
-    -moz-transform: none;
-    -ms-transform: none;
-    -o-transform: none;
-    transform: none;
   }
 }
 
