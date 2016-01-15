@@ -63,7 +63,6 @@ gem 'kaminari'
 group :development do
   gem 'better_errors'
   gem 'binding_of_caller'
-
   # gem 'spring'
   # gem 'spring-commands-rspec'
 end
@@ -85,8 +84,6 @@ group :development, :test do
 
   # Let's open the emails in browser
   gem 'letter_opener'
-  # Access an IRB console on exception pages or by using <%= console %> in views
-  gem 'web-console', '~> 3.0'
 end
 
 group :production, :staging do
