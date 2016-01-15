@@ -54,9 +54,6 @@ gem 'figaro'
 # awesome replacement for JavaScript's alert.
 gem 'sweet-alert'
 
-# Add server puma
-gem 'puma'
-
 # Add Kaminari for pagination.
 gem 'kaminari'
 
@@ -75,6 +72,9 @@ group :test do
 end
 
 group :development, :test do
+  # Add server puma
+  gem 'puma'
+
   gem 'faker'
   gem 'pry'
   gem 'rspec-rails', '~> 3.4.0'
@@ -92,4 +92,6 @@ group :production, :staging do
   # gem 'asset_sync'
   gem 'rack-host-redirect'
   gem 'heroku-deflater'
+  # Use Phusion Passenger for server
+  gem 'passenger'
 end
