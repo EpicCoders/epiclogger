@@ -125,6 +125,14 @@ $('#img-platforms a').on 'click', (e) ->
   $($(this).attr('href')).show()
   $('#platforms-tabs li').removeClass('active')
 
+$('#client-frameworks a').on 'click', (e) ->
+  $('.tab').hide()
+  $(this.name).show()
+  $('li a[href='+this.name+']').tab('show')
+  $('.tabs').hide()
+  $(this.name + ' ul li a[href='+$(this).attr('href')+']').tab('show')
+  $($(this).attr('href')).show()
+
 toggleTabs = (target,location) ->
   $('.tab').hide()
   $(target).tab('show')

@@ -58,12 +58,11 @@ $('li').on 'click', (e) ->
 $('.tab').hide()
 # $('.tab2, .tab3').addClass('disabled')
 
-$('#frameworks a').on 'click', (e) ->
+$('#client-frameworks a').on 'click', (e) ->
   $('.tab3').removeClass('disabled')
   goToStep(3)
   $(this.name).show()
-  $(this.name + ' ul li').removeClass('active')
-  $(this.name + ' ul li a[href='+$(this).attr('href')+']').parent().addClass('active')
+  $(this.name + ' ul li a[href='+$(this).attr('href')+']').tab('show')
   $($(this).attr('href')).show()
 
 $('#back, .tab2').on 'click', () ->
