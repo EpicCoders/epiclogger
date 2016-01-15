@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby '2.2.0'
+ruby '2.2.2'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.5'
@@ -10,7 +10,7 @@ gem 'pg'
 gem 'enumerize'
 
 # Use bootstrap
-gem 'bootstrap-sass', '~> 3.3.4'
+gem 'bootstrap-sass', '~> 3.3.6'
 gem 'font-awesome-sass'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0.1'
@@ -86,7 +86,7 @@ group :development, :test do
   # Let's open the emails in browser
   gem 'letter_opener'
   # Access an IRB console on exception pages or by using <%= console %> in views
-  gem 'web-console', '~> 2.0'
+  gem 'web-console', '~> 3.0'
 end
 
 group :production, :staging do
