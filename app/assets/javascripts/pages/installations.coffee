@@ -99,9 +99,9 @@ $('#top-tabs a').on 'click', (e) ->
   $('.main-tabs').hide()
   $(this).tab('show')
   $($(this).attr('href')).show()
-  ul = $($($(this).attr('href') + ' ul')[0])
+  ul = $($($(this).attr('href')+' ul')[0])
   ul.show()
-  content = $("#" + ul.attr('id') + ' li.active a').attr('href')
+  content = $("#"+ ul.attr('id')+' li.active a').attr('href')
   $(content).show()
 
 $('#client-configuration li').on 'click', (e) ->
@@ -120,23 +120,25 @@ $('#details-tabs a').click (e) ->
   toggleTabs( e.target,'details' )
 
 $('#img-platforms a').on 'click', (e) ->
-  e.preventDefault()
   $('.tab').hide()
-  $($(this).attr('href')).show()
-  $('#platforms-tabs li').removeClass('active')
+  attr = $(this).attr('href')
+  $('#platforms-tabs a[href='+attr+']').tab('show')
+  $(attr).show()
+  $(attr+'tab').show()
 
 $('#client-frameworks a').on 'click', (e) ->
   $('.tab').hide()
   $(this.name).show()
+  attr = $(this).attr('href')
   $('li a[href='+this.name+']').tab('show')
   $('.tabs').hide()
-  $(this.name + ' ul li a[href='+$(this).attr('href')+']').tab('show')
-  $($(this).attr('href')).show()
+  $(this.name + ' ul li a[href='+attr+']').tab('show')
+  $(attr).show()
 
 toggleTabs = (target,location) ->
   $('.tab').hide()
   $(target).tab('show')
   tag = $(target).attr('href')
   $(tag).show()
-  $('#'+this.name + 'tab').show()
+  $('#'+this.name+'tab').show()
   return

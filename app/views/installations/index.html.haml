@@ -842,38 +842,38 @@
                 %h5.platform-code https://{app_key}@test-sentry89.herokuapp.com/{id}
         .panel.panel-default.tileview#client-platforms
           .panel-heading Platforms
-          .panel-body#img-platforms
-            %a.tile.text-center{:href => "#javascript"}
-              %img{:src => image_path("icon_javascript.png")}/
+          .panel-body#img-platforms{:style => 'cursor: pointer'}
+            %a.tile.resize-a.text-center{:href => "#javascript"}
+              %img.resize-img{:src => image_path("icon_javascript.png")}/
               %span Javascript
-            %a.tile.text-center{:href => "#python"}
-              %img{:src => image_path("icon_python.png")}/
+            %a.tile.resize-a.text-center{:href => "#python"}
+              %img.resize-img{:src => image_path("icon_python.png")}/
               %span Python
-            %a.tile.text-center{:href => "#php"}
-              %img{:src => image_path("icon_php.png")}/
+            %a.tile.resize-a.text-center{:href => "#php"}
+              %img.resize-img{:src => image_path("icon_php.png")}/
               %span PHP
-            %a.tile.text-center{:href => "#ruby"}
-              %img{:src => image_path("icon_ruby.png")}/
+            %a.tile.resize-a.text-center{:href => "#ruby"}
+              %img.resize-img{:src => image_path("icon_ruby.png")}/
               %span Ruby
-            %a.tile.text-center{:href => "#node-js"}
-              %img{:src => image_path("icon_nodejs.png")}/
+            %a.tile.resize-a.text-center{:href => "#node-js"}
+              %img.resize-img{:src => image_path("icon_nodejs.png")}/
               %span Node.js
-            %a.tile.text-center{:href => "#java"}
-              %img{:src => image_path("icon_java.png")}/
+            %a.tile.resize-a.text-center{:href => "#java"}
+              %img.resize-img{:src => image_path("icon_java.png")}/
               %span Java
-            %a.tile.text-center{:href => "#ios"}
-              %img{:src => image_path("icon_ios.png")}/
+            %a.tile.resize-a.text-center{:href => "#ios"}
+              %img.resize-img{:src => image_path("icon_ios.png")}/
               %span IOS
 
         .panel.panel-default.tileview#client-frameworks
           .panel-heading Frameworks
           .panel-body
-            %a.tile.text-center{:name => '#ruby', :href => "#rails-3"}
-              %img{:src => image_path("icon_rails.png")}/
+            %a.tile.resize-a.text-center{:name => '#ruby', :href => "#rails-3"}
+              %img.resize-img{:src => image_path("icon_rails.png")}/
               %span Rails 3
-            %a.tile.text-center{:name => '#ruby',:href => "#rails-4"}
-              %img{:src => image_path("icon_rails.png")}/
+            %a.tile.resize-a.text-center{:name => '#ruby',:href => "#rails-4"}
+              %img.resize-img{:src => image_path("icon_rails.png")}/
               %span Rails 4
-            %a.tile.text-center{:name => '#python',:href => "#django"}
-              %img{:src => image_path("icon_django.png")}/
+            %a.tile.resize-a.text-center{:name => '#python',:href => "#django"}
+              %img.resize-img{:src => image_path("icon_django.png")}/
               %span Django
