@@ -57,6 +57,8 @@ gem 'sweet-alert'
 # Add Kaminari for pagination.
 gem 'kaminari'
 
+gem 'cancancan', '~> 1.10'
+
 group :development do
   gem 'better_errors'
   gem 'binding_of_caller'
