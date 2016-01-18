@@ -29,12 +29,12 @@ class Website < ActiveRecord::Base
 
   def generate_api_keys
     self.app_key = loop do
-      key = SecureRandom.hex(24)
+      key = SecureRandom.hex(16)
       break key unless Website.exists?(app_key: key)
     end
     self.app_secret = loop do
-      secret = SecureRandom.hex(6)
-      break id unless Website.exists?(app_secret: secret)
+      secret = SecureRandom.hex(16)
+      break secret unless Website.exists?(app_secret: secret)
     end
   end
 end
