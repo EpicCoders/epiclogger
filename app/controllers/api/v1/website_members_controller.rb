@@ -7,8 +7,8 @@ class Api::V1::WebsiteMembersController < Api::V1::ApiController
   def destroy
     @website_member = WebsiteMember.find(params[:id])
     @website_member.destroy()
-    unless @website_member.errors.messages[:base].blank?
-      _not_allowed!(@website_member.errors.messages[:base][0])
+    unless @website_member.errors.full_messages.blank?
+      _not_allowed!(@website_member.errors.full_messages.first)
     end
     respond_to do |format|
       format.js {render inline: "location.reload();" }

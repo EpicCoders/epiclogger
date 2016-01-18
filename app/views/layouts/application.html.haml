@@ -16,7 +16,7 @@
     = include_gon
     .loading.j-cloak
     = render partial: 'layouts/menu'
-    - unless params[:controller] + '/' + params[:action] == 'websites/new'
+    - unless params[:controller] == 'websites' && params[:action] == 'new'
       #maincontainer.container-fluid
         = yield
     - else
