@@ -36,6 +36,10 @@ class Api::V1::ApiController < ActionController::Base
     end
   end
 
+  def current_notification
+    current_site.notification
+  end
+
   def current_group
     @current_group ||= current_site.grouped_issues.find(params[:group_id])
   end

@@ -2,11 +2,11 @@ class Api::V1::NotificationsController < Api::V1::ApiController
   skip_before_action :authenticate_member!, only: [:create]
 
   def index
-    @notification = current_site.notification
+    @notification = current_notification
   end
 
   def update
-    @notification = Notification.find(params[:id])
+    @notification = current_notification
     @notification.update_attributes(notification_params)
   end
 
