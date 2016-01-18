@@ -24,9 +24,9 @@ directive = {
   subscribers_count:
     html: ()->
       "Send an update to #{this.subscribers_count} subscribers"
-  issue_subscriber:
-    html: ()->
-      "Id: #{this.issues[0].subscriber.id}<br/><br/>IP Adress: 10.156.45.154.. <br/><br/>Email: #{this.issues[0].subscriber.email}<br/><br/>Data: ()"
+  # issue_subscriber:
+  #   html: ()->
+  #     "Id: #{this.issues[0].subscriber.id}<br/><br/>IP Adress: 10.156.45.154.. <br/><br/>Email: #{this.issues[0].subscriber.email}<br/><br/>Data: ()"
 }
 PubSub.subscribe('assigned.website', (ev, website)->
   switch gon.action
@@ -40,9 +40,33 @@ PubSub.subscribe('assigned.website', (ev, website)->
         page = page - 1
         request(website.id, page)
     when 'show'
-      $.getJSON '/api/v1/errors/' + gon.error_id, { website_id: website.id }, (data) ->
+      $.getJSON '/api/v1/errors/' + gon.error_id, { group_id: gon.error_id, website_id: website.id }, (data) ->
         manipulateShowElements(data)
         $('#grouped-issuedetails').render data, directive
+
+      $('#solve').on 'click', (e)->
+        e.preventDefault();
+        $('#solve').hide()
+        $('.resolved').show()
+        $('.notify').attr('disabled', 'disabled')
+        $.ajax
+          data: {website_id: website.id, group_id: gon.error_id, error: {status: 'resolved'}}
+          url: Routes.api_v1_error_url(gon.error_id)
+          type: 'PUT'
+          success: (result)->
+            swal("Status updated", "Great job!", "success")
+        return
+
+      $('form#notify').submit ->
+        dataString = $('.messageTextarea').val()
+        $.ajax
+          url: Routes.notify_subscribers_api_v1_error_url(gon.error_id)
+          type: 'POST'
+          data: {website_id: website.id, group_id: gon.error_id, message: dataString}
+          success: (data) ->
+            $('.messageTextarea').val('')
+            return
+        false
 )
 
 request = (website_id, page) ->
@@ -81,21 +105,8 @@ manipulateIndexElements = (data) ->
     $('#grouped-issues').hide()
     $('#missing-errors').show()
 
-errorStacktrace = (data) ->
-  issue_nr =0
-  $.each data.issues[0].description, (index, issue) ->
-    issue_nr+=1
-    button = ' <button class="btn btn-warning btn-xs glyphicon glyphicon-plus" data-target="#expand_'+issue_nr+'"+ data-toggle="collapse" title="Click to expand"> View source</button>'
-    $('<p>' + issue.filename + ' ? in ' + issue.function + ' at line ' + issue.lineno + '/' + issue.colno + '</p>' + button).prependTo '.stacktrace'
-  object_nr =0
-  $.each data.issues[0].data, (index, object) ->
-    object_nr+=1
-    $('.stacktrace_error').append("<div class=collapse id='expand_"+object_nr+"'></div>")
-    $.each object, (key, value) ->
-      $('#expand_' + object_nr).text value
-
 manipulateShowElements = (data) ->
-  errorStacktrace(data)
+  # errorStacktrace(data)
   if data.status == 'resolved'
     $('#solve').hide()
     $('.notify').attr('disabled', 'disabled')
@@ -135,19 +146,6 @@ $('select#sortinput').change ->
     $('#grouped-issues').render $.obj.grouped_issues.sort(SortByUsersSubscribed), directive
   return
 
-$('#solve').on 'click', (e)->
-  e.preventDefault();
-  $('#solve').hide()
-  $('.resolved').show()
-  $('.notify').attr('disabled', 'disabled')
-  $.ajax
-    data: {error: {status: 'resolved'}}
-    url: Routes.api_v1_error_url(gon.error_id)
-    type: 'PUT'
-    success: (result)->
-      swal("Status updated", "Great job!", "success")
-  return
-
 $('.messageTextarea').keydown((event) ->
   if event.keyCode == 13
     $('#notify').submit()
@@ -162,13 +160,47 @@ $('.messageTextarea').keydown((event) ->
     @value = ''
   return
 
-$('form#notify').submit ->
-  dataString = $('.messageTextarea').val()
+PubSub.subscribe('assigned.website', (ev, website)->
+  $.getJSON Routes.api_v1_website_path(website.id), (data) ->
+    $('#current-website').render data
+)
+
+$('.tab').hide()
+$('.tab2, .tab3').addClass('disabled')
+
+$('#back').on 'click', () ->
+  $('.tab').hide()
+  manipulateWizard(2)
+
+$('#finish').on 'click', () ->
+  location.href = '/errors'
+
+$('#platform a').on 'click', (e) ->
+  $('.tab').hide()
+  $('#'+this.name).show()
+  manipulateWizard(3)
+
+manipulateWizard = (n) ->
+  if n != 0
+    $('.stepwizard-row a').removeClass('btn-primary')
+    $('.stepwizard-row a').addClass('btn-default')
+    $('.stepwizard a[href="#step-' + n + '"]').tab 'show'
+    $('.stepwizard-row a[href="#step-' + n + '"]').removeClass 'btn-default'
+    $('.stepwizard-row a[href="#step-' + n + '"]').addClass 'btn-primary'
+  return
+
+$('#modalWebsite').submit (e) ->
+  e.preventDefault()
+  form = $('#modalWebsite')
   $.ajax
-    url: Routes.notify_subscribers_api_v1_error_url(gon.error_id)
-    type: 'POST'
-    data: {message: dataString}
+    url: Routes.api_v1_websites_url()
+    type: 'post'
+    dataType: 'json'
+    data: { website: { domain: form.find('#domain').val(), title: form.find('#title').val() } }
     success: (data) ->
-      $('.messageTextarea').val('')
-      return
-  false
+      EpicLogger.setMemberDetails(data.id)
+      manipulateWizard(2)
+      $('.tab1').addClass('disabled')
+      $('.tab2').removeClass('disabled')
+  return
+return

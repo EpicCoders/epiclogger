@@ -11,16 +11,16 @@ class Api::V1::ErrorsController < Api::V1::ApiController
   end
 
   def show
-    @grouped_issue = GroupedIssue.find(params[:id])
+    @grouped_issue = current_group
   end
 
    def update
-    @error = GroupedIssue.find(params[:id])
+    @error = current_group
     @error.update_attributes(status: error_params[:status], resolved_at: Time.now)
   end
 
   def notify_subscribers
-    @group = GroupedIssue.find(params[:id])
+    @group = current_group
     @message = params[:message]
     @group.website.members.each do |member|
       UserMailer.notify_subscriber(@group, member, @message).deliver_now
