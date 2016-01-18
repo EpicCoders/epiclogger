@@ -19,9 +19,13 @@ class Api::V1::ApiController < ActionController::Base
     @current_ability ||= ::ApiAbility.new(current_member)
   end
 
-  # rescue_from CanCan::AccessDenied do |exception|
-    
-  # end
+   rescue_from CanCan::AccessDenied do |exception|
+    if current_member
+      _not_authorized "Not Allowed", 403
+    else
+      _not_authorized exception.message
+    end
+  end
 
   def _not_allowed! message = "Not Authorized", status = 401
     raise Epiclogger::Errors::NotAllowed.new(status), message

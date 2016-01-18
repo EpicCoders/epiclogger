@@ -1,4 +1,5 @@
 class InvitationsController < ApplicationController
+  load_and_authorize_resource class: WebsiteMember
   def new
   end
   def show
