@@ -7,10 +7,12 @@ class Api::V1::NotificationsController < Api::V1::ApiController
   end
 
   def update
+    binding.pry
     @notification.update_attributes(notification_params)
   end
 
   private
+
   def notification_params
     params.require(:notification).permit(:id, :member_id, :daily, :realtime, :new_event, :frequent_event)
   end
