@@ -40,7 +40,7 @@ PubSub.subscribe('assigned.website', (ev, website)->
         page = page - 1
         request(website.id, page)
     when 'show'
-      $.getJSON '/api/v1/errors/' + gon.error_id, { group_id: gon.error_id, website_id: website.id }, (data) ->
+      $.getJSON '/api/v1/errors/' + gon.error_id, { website_id: website.id }, (data) ->
         manipulateShowElements(data)
         $('#grouped-issuedetails').render data, directive
 
@@ -50,7 +50,7 @@ PubSub.subscribe('assigned.website', (ev, website)->
         $('.resolved').show()
         $('.notify').attr('disabled', 'disabled')
         $.ajax
-          data: {website_id: website.id, group_id: gon.error_id, error: {status: 'resolved'}}
+          data: {error: {status: 'resolved'}}
           url: Routes.api_v1_error_url(gon.error_id)
           type: 'PUT'
           success: (result)->

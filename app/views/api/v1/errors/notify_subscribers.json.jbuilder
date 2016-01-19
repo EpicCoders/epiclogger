@@ -1,1 +1,1 @@
-json.error(@group, :id)
+json.error(@error, :id)

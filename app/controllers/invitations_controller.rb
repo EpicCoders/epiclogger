@@ -1,6 +1,4 @@
 class InvitationsController < ApplicationController
-  alias_method :current_user, :current_member
-  load_and_authorize_resource class: WebsiteMember
   def new
   end
   def show

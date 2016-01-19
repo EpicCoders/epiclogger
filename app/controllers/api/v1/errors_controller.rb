@@ -1,4 +1,5 @@
 class Api::V1::ErrorsController < Api::V1::ApiController
+  load_and_authorize_resource class: GroupedIssue
   require 'digest/md5'
   require 'net/http'
   require 'uri'
@@ -11,19 +12,17 @@ class Api::V1::ErrorsController < Api::V1::ApiController
   end
 
   def show
-    @grouped_issue = current_group
+    @error
   end
 
    def update
-    @error = current_group
     @error.update_attributes(status: error_params[:status], resolved_at: Time.now)
   end
 
   def notify_subscribers
-    @group = current_group
     @message = params[:message]
-    @group.website.members.each do |member|
-      UserMailer.notify_subscriber(@group, member, @message).deliver_now
+    @error.website.members.each do |member|
+      UserMailer.notify_subscriber(@error, member, @message).deliver_now
     end
   end
 

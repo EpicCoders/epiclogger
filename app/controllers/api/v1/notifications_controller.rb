@@ -1,12 +1,12 @@
 class Api::V1::NotificationsController < Api::V1::ApiController
+  load_and_authorize_resource
   skip_before_action :authenticate_member!, only: [:create]
 
   def index
-    @notification = current_notification
+    @notification = current_site.notification
   end
 
   def update
-    @notification = current_notification
     @notification.update_attributes(notification_params)
   end
 

@@ -19,7 +19,7 @@ class Api::V1::ApiController < ActionController::Base
     @current_ability ||= ::ApiAbility.new(current_member)
   end
 
-   rescue_from CanCan::AccessDenied do |exception|
+  rescue_from CanCan::AccessDenied do |exception|
     if current_member
       _not_authorized "Not Allowed", 403
     else
@@ -38,13 +38,5 @@ class Api::V1::ApiController < ActionController::Base
       @current_site ||= Website.find_by_app_id_and_app_key(params[:id], params[:sentry_key])
       # @current_site ||= Website.find_by_app_id_and_app_key(params["app_id"],params["app_key"])
     end
-  end
-
-  def current_notification
-    current_site.notification
-  end
-
-  def current_group
-    @current_group ||= current_site.grouped_issues.find(params[:group_id])
   end
 end

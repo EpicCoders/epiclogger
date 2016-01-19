@@ -37,7 +37,6 @@ PubSub.subscribe('assigned.website', (ev, website)->
             type: 'put'
             dataType: 'json'
             data: {
-              website_id: website.id,
               notification: {
                 daily: $('input[name=daily]').is(':checked'),
                 realtime: $('input[name=realtime]').is(':checked'),
