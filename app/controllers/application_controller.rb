@@ -1,5 +1,4 @@
 class ApplicationController < ActionController::Base
-  alias_method :current_user, :current_member
   # include DeviseTokenAuth::Concerns::SetUserByToken
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.

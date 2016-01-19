@@ -76,7 +76,7 @@ describe Api::V1::ErrorsController, :type => :controller do
 
   describe 'POST #notify_subscribers' do
     before { auth_member(member) }
-    let(:params) { default_params.merge({ message: message, id: group.id }) }
+    let(:params) { default_params.merge({ message: message, id: group.id, group_id: group.id }) }
 
     it 'should email subscribers' do
       mailer = double('UserMailer')
@@ -128,7 +128,7 @@ describe Api::V1::ErrorsController, :type => :controller do
   end
 
   describe 'GET #show' do
-    let(:params) { default_params.merge({ status: 'resolved', id: group.id, website_id: website.id}) }
+    let(:params) { default_params.merge({ status: 'resolved', group_id: group.id, id: group.id, website_id: website.id}) }
     render_views
     context 'if logged in' do
       before { auth_member(member) }
@@ -166,7 +166,6 @@ describe Api::V1::ErrorsController, :type => :controller do
               platform: issue_error.platform,
               page_title: issue_error.page_title,
               data: JSON.parse(issue_error.data),
-              description: JSON.parse(issue_error.description),
               subscriber:{
                 id: subscriber.id,
                 email: subscriber.email,
@@ -187,7 +186,7 @@ describe Api::V1::ErrorsController, :type => :controller do
   end
 
   describe 'PUT #update' do
-    let(:params) { default_params.merge({ error: { status: 'resolved' }, id: group.id, website_id: website.id}) }
+    let(:params) { default_params.merge({ error: { status: 'resolved' }, id: group.id, group_id: group.id, website_id: website.id}) }
     before { auth_member(member) }
     it 'should assign error' do
       put :update, params
@@ -202,7 +201,7 @@ describe Api::V1::ErrorsController, :type => :controller do
 
     it 'should not allow update of other parameters other than status' do
       expect{
-        put :update, { id: group.id, error: { error: 'some' }, website: website.id, format: :json }
+        put :update, { id: group.id, group_id: group.id, error: { error: 'some' }, website_id: website.id, format: :json }
       }.to_not change(group, :status).from("unresolved")
     end
 
