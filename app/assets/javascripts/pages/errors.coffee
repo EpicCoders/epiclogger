@@ -172,10 +172,7 @@ individualErrorSidebar = () ->
   $(document).ready ->
     if gon.action == "show" and gon.controller == "errors"
       setUpErrorSidebar($(window).width())
-  $(".options-toggle").on 'click', () ->
-    $('#options').toggleClass('invisible')
   $('.toggle-left-sidebar').unbind('click').on 'click', () ->
-    $('.toggle-left-sidebar').toggleClass('toggle-left-sidebar-open')
     $('.error-menu').toggleClass('error-menu-visible')
     $('.cbp-spcontent').toggleClass('content-fullwidth')
     if $(window).width() < 1170

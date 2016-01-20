@@ -9,18 +9,17 @@
           = nav_link "", errors_url(), {'title' => 'Errors'}, 'exclamation-triangle'
           = nav_link "", installations_url(), {'title' => 'Installation'}, 'code'
           = nav_link "", edit_member_url(1), {'title' => 'Users'}, 'user'
-        %ul.icon-list
           = nav_link "", 'mailto:info@epiclogger.com', {'data-helpful'=>'epiclogger','data-helpful-modal'=>"on", :class=>'helpful-link', 'title' => 'Help'}, 'question'
-        %ul.icon-list
           = nav_link "", settings_url(), {'title' => 'Settings'}, 'cog'
       .footer
         .inner
-          #options.invisible
-            %a{:href => "#", :onclick => 'EpicLogger.logout()'}
-              %i.fa.fa-sign-out
-            %a{:href => "#"}
-              %i.fa.fa-cogs
-          %img.options-toggle.profileimg.pull-left{:src => "http://0.gravatar.com/avatar/59b762ebf3d116bf806bcfa3fa12e65f"}/
+          .dropdown.btn-group
+            %img.dropdown-toggle.profileimg.pull-left{:src => "http://0.gravatar.com/avatar/59b762ebf3d116bf806bcfa3fa12e65f","data-toggle" => "dropdown"}/
+            %ul.dropdown-menu
+              %li
+                %a{:href => "#"} Account
+              %li
+                %a{:href => "#", :onclick => 'EpicLogger.logout()'} Logout
     .error_sidebar
       .sidebar_header
         %button{:class=>"fa fa-arrow-left btn previous"}
@@ -42,7 +41,6 @@
         = nav_link "Errors", errors_url(), {'title' => 'Errors', :id => "errornav"}, 'exclamation-triangle'
         = nav_link "Installation", installations_url(), {'title' => 'Installation'}, 'code'
         = nav_link "User", edit_member_url(1), {'title' => 'Users'}, 'user'
-      %ul.icon-list
         = nav_link "Help", 'mailto:info@epiclogger.com', {'data-helpful'=>'epiclogger','data-helpful-modal'=>"on", :class=>'helpful-link', 'title' => 'Help'}, 'question'
       .project-details
         %h5 PROJECT DETAILS
@@ -52,8 +50,11 @@
     .sidebar-footer
       .footer-content
         %img.profileimg.pull-left{:src => "http://0.gravatar.com/avatar/59b762ebf3d116bf806bcfa3fa12e65f"}/
-        %a.toggle-options{:href => "#"}
-          %i.fa.fa-cog
-      .options.hidden
-        %a{:href => "#"} Account
-        %a{:href => "#", :onclick => 'EpicLogger.logout()'} Logout
+        .dropdown.btn-group
+          %a.btn.dropdown-toggle{"data-toggle" => "dropdown", :href => "#"}
+            %i.fa.fa-cog
+          %ul.dropdown-menu
+            %li
+              %a{:href => "#"} Account
+            %li
+              %a{:href => "#", :onclick => 'EpicLogger.logout()'} Logout

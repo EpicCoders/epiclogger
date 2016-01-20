@@ -13,7 +13,6 @@ window.EpicLogger = (->
   setSidebar: ->
     if (gon.controller != "errors" and gon.action != "show") or (gon.controller == "errors" and gon.action == "index")
       $('.toggle-left-sidebar').unbind('click').on 'click', () ->
-        $('.toggle-left-sidebar').toggleClass('toggle-left-sidebar-open')
         if $(window).width() < 1170
           $('.main-container').toggleClass('cbp-spcontent-pushed-right')
           $('.cbp-spmenu-vertical').toggleClass('cbp-spmenu-vertical-pushed-right')
@@ -21,8 +20,6 @@ window.EpicLogger = (->
       $('#pick_website').hide()
       $('.picked-website').on 'click', ->
         $('#websites-sidebar').toggleClass('show-websites')
-      $('.toggle-options').on 'click', ->
-        $('.options').toggleClass('hidden')
 
   setUpSidebar: (width) ->
     if width >= 1170
