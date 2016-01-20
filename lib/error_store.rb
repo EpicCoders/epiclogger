@@ -104,7 +104,7 @@ module ErrorStore
   }
 
   # The following values control the sampling rates
-  SENTRY_SAMPLE_RATES = [
+  SAMPLE_RATES = [
       # up until N events, store 1 in M
       [50, 1],
       [1000, 2],
@@ -113,13 +113,13 @@ module ErrorStore
       [1000000, 300],
       [10000000, 2000]
   ]
-  SENTRY_MAX_SAMPLE_RATE = 10000
-  SENTRY_SAMPLE_TIMES = [
+  MAX_SAMPLE_RATE = 10000
+  SAMPLE_TIMES = [
       [3600, 1],
       [360, 10],
       [60, 60],
   ]
-  SENTRY_MAX_SAMPLE_TIME = 10000
+  MAX_SAMPLE_TIME = 10000
 
   CURRENT_VERSION       = '5'
   DEFAULT_LOG_LEVEL     = 'error'
