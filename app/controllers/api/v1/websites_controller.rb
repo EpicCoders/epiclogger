@@ -1,27 +1,21 @@
 class Api::V1::WebsitesController < Api::V1::ApiController
   load_and_authorize_resource
-  def index
-    @websites = current_member.websites
-  end
+  def index; end
 
   def create
     url = URI.parse(website_params[:domain])
-    @website = current_member.websites.create!(domain: url.scheme + '://' + url.host, title: website_params[:title])
+    @website = current_member.websites.create!(domain: "#{url.scheme}://#{url.host}", title: website_params[:title])
   rescue Exception => e
     _not_allowed! e.message
   end
 
-  def show
-    @website = current_member.websites.find(params[:id])
-  end
+  def show; end
 
   def update
-    @website = current_member.websites.find(website_params[:id])
     @website.update_attributes(website_params)
   end
 
   def destroy
-    @website = current_member.websites.find(params[:id])
     @website.destroy
     respond_to do |format|
       format.js {render inline: 'location.reload();' } unless current_member.websites.blank?

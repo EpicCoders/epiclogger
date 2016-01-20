@@ -13,6 +13,7 @@ class Api::V1::MembersController < Api::V1::ApiController
   end
 
   private
+
   def website_member
     params.require(:website_member).permit(:token, :email, :website_id)
   end
