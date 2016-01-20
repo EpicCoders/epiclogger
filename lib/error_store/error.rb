@@ -1,4 +1,4 @@
-module ErrorStore
+  module ErrorStore
   class Error
     include ErrorStore::Utils
     attr_accessor :request, :context, :data, :auth, :issue
@@ -286,15 +286,15 @@ module ErrorStore
       # let's check and see if we have the content encoding defined in headers
       content_encoding = request.headers['HTTP_CONTENT_ENCODING']
 
-      if content_encoding == 'gzip'
-        data = decompress_gzip(raw_data)
-      elsif content_encoding == 'deflate'
-        data = decompress_deflate(raw_data)
-      elsif !raw_data.start_with?('{')
-        data = decode_and_decompress(raw_data)
-      else
-        data = raw_data
-      end
+      data = if content_encoding == 'gzip'
+               decompress_gzip(raw_data)
+             elsif content_encoding == 'deflate'
+               decompress_deflate(raw_data)
+             elsif !raw_data.start_with?('{')
+               decode_and_decompress(raw_data)
+             else
+               raw_data
+             end
 
       decode_json(data)
     end
@@ -345,7 +345,7 @@ module ErrorStore
 
       data[:timestamp] = timestamp.strftime('%s').to_i
       return data
-    rescue Exception => e
+    rescue => e
       raise ErrorStore::InvalidTimestamp.new(self), 'We could not process timestamp'
     end
 
