@@ -1,6 +1,6 @@
 class InvitationsController < ApplicationController
-  def new
-  end
+  def new; end
+
   def show
     if @member = Member.find_by_email(params[:email])
       WebsiteMember.where( invitation_token: params[:id] ).update_all( member_id: @member.id )

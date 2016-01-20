@@ -1,9 +1,9 @@
 class MembersController < ApplicationController
   layout "landing", only: [:new, :create]
+  # what why??
   skip_before_action :authenticate_member!
 
-  def index
-  end
+  def index; end
 
   def edit
     gon.notification_id = Member.find(params[:id]).notification.id
@@ -14,6 +14,5 @@ class MembersController < ApplicationController
     gon.website_id = params[:website_id]
   end
 
-  def create
-  end
+  def create; end
 end
