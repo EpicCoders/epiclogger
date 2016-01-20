@@ -51,7 +51,15 @@ module ErrorStore
       issue_user = _get_subscriber(website, data)
 
       data[:fingerprint] = fingerprint || ['{{ default }}']
-      hash = md5_from_hash(get_hash_for_issue(issue))
+      # binding.pry
+      hash = if !fingerprint.nil?
+               get_hash_from_fingerprint(issue, fingerprint).map { |h| md5_from_hash(h) }
+             elsif !checksum.nil?
+               [checksum]
+             else
+               get_hash_for_issue(issue).map { |h| md5_from_hash(h) }
+             end
+      # binding.pry
 
       group_params = {
           message: message,
@@ -99,7 +107,7 @@ module ErrorStore
     end
 
     # here we save the grouped issue with all details
-    def _save_aggregate(issue: issue, hash: hash, release: release, **args)
+    def _save_aggregate(issue, hash, release, **args)
       website = issue.website
       # attempt to find a matching hash
       group = GroupedIssue.find_by(checksum: hash)
@@ -122,19 +130,19 @@ module ErrorStore
         is_regression = false
       else
         is_regression = _process_existing_aggregate(
-            group: group,
-            issue: issue,
-            data: args,
-            release: release,
+          group: group,
+          issue: issue,
+          data: args,
+          release: release
         )
       end
 
       # Determine if we've sampled enough data to store this issue
-      is_saif group_is_new || is_regression
-        is_sample = false
-      else
-        is_sample = can_sample
-      end
+      is_sample = if group_is_new || is_regression
+                    false
+                  else
+                    can_sample
+                  end
 
       return group, group_is_new, is_regression, is_sample
     end
@@ -155,7 +163,7 @@ module ErrorStore
       ErrorStore::SENTRY_MAX_SAMPLE_TIME
     end
 
-    def _process_existing_aggregate(group: group, issue: issue, data: data, release: release)
+    def _process_existing_aggregate(group, issue, data, release)
       date = [issue.datetime, group.last_seen].max
       extra = {
           last_seen: date,
@@ -265,6 +273,7 @@ module ErrorStore
     end
 
     def get_hash_for_issue(issue)
+      # binding.pry
       get_hash_for_issue_with_reason(issue)[1]
     end
 
@@ -278,6 +287,52 @@ module ErrorStore
       [:message, [issue.message]]
     end
 
+    def get_hashes_from_fingerprint(issue, fingerprint)
+      default_values = ['{{ default }}', '{{default}}']
+      if default_values.any? { |i| fingerprint.include?(i) }
+        default_hashes = get_hashes_for_issue(issue)
+        hash_count = default_hashes.length
+      else
+        hash_count = 1
+      end
+
+      hashes = []
+      (0..hash_count).each do |i|
+        result = []
+        fingerprint.each do |bit|
+          if default_values.include?(bit)
+            result.concat(default_hashes[i])
+          else
+            result << bit
+          end
+        end
+        hashes << result
+      end
+      hashes
+    end
+
+    def get_hashes_from_fingerprint_with_reason(issue, fingerprint)
+      default_values = ['{{ default }}', '{{default}}']
+      if default_values.any? { |i| fingerprint.include?(i) }
+        default_hashes = get_hashes_for_issue_with_reason(issue)
+        hash_count = default_hashes[1].length
+      else
+        hash_count = 1
+      end
+
+      hashes = fingerprint
+      (0..hash_count).each do
+        fingerprint.each do |bit|
+          if default_values.include?(bit)
+            hashes[bit].concat(default_hashes)
+          else
+            hashes[bit] = bit
+          end
+        end
+      end
+      hashes.items
+    end
+
     def md5_from_hash(hash_chunks)
       result = Digest::MD5.new
       hash_chunks.each do |chunk|
@@ -285,7 +340,5 @@ module ErrorStore
       end
       result.hexdigest
     end
-
-
   end
 end
