@@ -1,4 +1,4 @@
-/* http://prismjs.com/download.html?themes=prism&languages=markup+css+clike+javascript+apacheconf+coffeescript+ruby+haml+http+jade+json+less+sas+sass+scss+yaml&plugins=line-highlight+line-numbers+remove-initial-line-feed+previewer-base+previewer-color+previewer-gradient+autoloader */
+/* http://prismjs.com/download.html?themes=prism&languages=markup+css+clike+javascript+apacheconf+coffeescript+ruby+haml+jade+json+less+sas+sass+scss+yaml&plugins=line-numbers+show-language+highlight-keywords+previewer-base+previewer-color */
 /**
  * prism.js default theme for JavaScript, CSS and HTML
  * Based on dabblet (http://dabblet.com)
@@ -148,63 +148,6 @@ pre[class*="language-"] {
   }
 }
 
-pre[data-line] {
-  position: relative;
-  padding: 1em 0 1em 3em;
-}
-
-.line-highlight {
-  position: absolute;
-  left: 0;
-  right: 0;
-  padding: inherit 0;
-  margin-top: 1em;
-  /* Same as .prism’s padding-top */
-  background: hsla(24, 20%, 50%, 0.08);
-  background: -moz-linear-gradient(left, hsla(24, 20%, 50%, 0.1) 70%, hsla(24, 20%, 50%, 0));
-  background: -webkit-linear-gradient(left, hsla(24, 20%, 50%, 0.1) 70%, hsla(24, 20%, 50%, 0));
-  background: -o-linear-gradient(left, hsla(24, 20%, 50%, 0.1) 70%, hsla(24, 20%, 50%, 0));
-  background: linear-gradient(left, hsla(24, 20%, 50%, 0.1) 70%, hsla(24, 20%, 50%, 0));
-  pointer-events: none;
-  line-height: inherit;
-  white-space: pre;
-  &:before {
-    content: attr(data-start);
-    position: absolute;
-    top: .4em;
-    left: .6em;
-    min-width: 1em;
-    padding: 0 .5em;
-    background-color: hsla(24, 20%, 50%, 0.4);
-    color: hsl(24, 20%, 95%);
-    font: bold 65%/1.5 sans-serif;
-    text-align: center;
-    vertical-align: .3em;
-    border-radius: 999px;
-    text-shadow: none;
-    box-shadow: 0 1px white;
-  }
-  &[data-end]:after {
-    content: attr(data-start);
-    position: absolute;
-    top: .4em;
-    left: .6em;
-    min-width: 1em;
-    padding: 0 .5em;
-    background-color: hsla(24, 20%, 50%, 0.4);
-    color: hsl(24, 20%, 95%);
-    font: bold 65%/1.5 sans-serif;
-    text-align: center;
-    vertical-align: .3em;
-    border-radius: 999px;
-    text-shadow: none;
-    box-shadow: 0 1px white;
-    content: attr(data-end);
-    top: auto;
-    bottom: .4em;
-  }
-}
-
 pre.line-numbers {
   position: relative;
   padding-left: 3.8em;
@@ -240,6 +183,35 @@ pre.line-numbers {
     display: block;
     padding-right: 0.8em;
     text-align: right;
+  }
+}
+
+div.prism-show-language {
+  position: relative;
+  > div.prism-show-language-label {
+    color: black;
+    background-color: #CFCFCF;
+    display: inline-block;
+    position: absolute;
+    bottom: auto;
+    left: auto;
+    top: 0;
+    right: 0;
+    width: auto;
+    height: auto;
+    font-size: 0.9em;
+    border-radius: 0 0 0 5px;
+    padding: 0 0.5em;
+    text-shadow: none;
+    z-index: 1;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    -webkit-transform: none;
+    -moz-transform: none;
+    -ms-transform: none;
+    -o-transform: none;
+    transform: none;
   }
 }
 
@@ -326,32 +298,5 @@ pre.line-numbers {
   &:before {
     background-color: inherit;
     background-clip: padding-box;
-  }
-}
-
-.prism-previewer-gradient {
-  background-image: linear-gradient(45deg, #bbb 25%, transparent 25%, transparent 75%, #bbb 75%, #bbb), linear-gradient(45deg, #bbb 25%, #eee 25%, #eee 75%, #bbb 75%, #bbb);
-  background-size: 10px 10px;
-  background-position: 0 0, 5px 5px;
-  width: 64px;
-  margin-left: -32px;
-  &:before {
-    content: none;
-  }
-  div {
-    position: absolute;
-    top: -5px;
-    left: -5px;
-    right: -5px;
-    bottom: -5px;
-    -webkit-border-radius: 10px;
-    -moz-border-radius: 10px;
-    border-radius: 10px;
-    border: 5px solid #fff;
-    -webkit-box-shadow: 0 0 3px rgba(0, 0, 0, 0.5) inset, 0 0 10px rgba(0, 0, 0, 0.75);
-    -moz-box-shadow: 0 0 3px rgba(0, 0, 0, 0.5) inset, 0 0 10px rgba(0, 0, 0, 0.75);
-    -ms-box-shadow: 0 0 3px rgba(0, 0, 0, 0.5) inset, 0 0 10px rgba(0, 0, 0, 0.75);
-    -o-box-shadow: 0 0 3px rgba(0, 0, 0, 0.5) inset, 0 0 10px rgba(0, 0, 0, 0.75);
-    box-shadow: 0 0 3px rgba(0, 0, 0, 0.5) inset, 0 0 10px rgba(0, 0, 0, 0.75);
   }
 }
