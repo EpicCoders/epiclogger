@@ -5,28 +5,27 @@ class Website < ActiveRecord::Base
   has_many :website_members, -> { uniq }, autosave: true
   has_many :members, through: :website_members
 
-  validates :title, :presence => true
-  validates :domain, :presence => true
+  validates :title, presence: true
+  validates :domain, presence: true
   validates_associated :website_members
 
   attr_accessor :generate
 
   before_create :generate_api_keys
-  before_update :generate_api_keys, if: -> { self.generate }
+  before_update :generate_api_keys, if: -> { generate }
   after_create :create_notification
   before_destroy :website_dependent
 
   def website_dependent
-    self.website_members.each do |record|
-      record.delete
-    end
+    website_members.each(&:delete)
   end
 
   def create_notification
-    Notification.create( website_id: self.id, new_event: true )
+    Notification.create(website_id: id, new_event: true)
   end
 
   protected
+
   def generate_api_keys
     self.app_key = loop do
       key = SecureRandom.hex(24)
@@ -37,6 +36,4 @@ class Website < ActiveRecord::Base
       break id unless Website.exists?(app_key: id)
     end
   end
-
 end
-

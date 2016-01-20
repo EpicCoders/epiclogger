@@ -1,10 +1,10 @@
 require 'rails_helper'
 
-describe Api::V1::ErrorsController, type: :controller do
+describe Api::V1::NotificationsController, type: :controller do
   let(:member) { create :member }
   let(:website) { create :website }
   let!(:website_member) { create :website_member, website: website, member: member }
-  let(:notification) { create :notification, website: website, new_event: true }
+  let!(:notification) { create :notification, website: website, new_event: true }
   let(:default_params) { { website_id: website.id, format: :json } }
 
   describe 'GET #index' do
@@ -15,6 +15,11 @@ describe Api::V1::ErrorsController, type: :controller do
         expect(response).to be_successful
         expect(response.content_type).to eq('application/json')
       end
+
+      xit 'returns all notifications' do
+        get :index, default_params
+        expect(assigns(:notification)).to eq(website.notification)
+      end
     end
     context 'if not logged in' do
       it 'should give error' do
@@ -24,6 +29,7 @@ describe Api::V1::ErrorsController, type: :controller do
       end
     end
   end
+
   describe 'PUT #update' do
     let(:params) { default_params.merge({ notification: { daily: true, realtime: false, new_event: true, frequent_event: false }, id: notification.id }) }
     context 'if logged in' do
