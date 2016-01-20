@@ -136,11 +136,11 @@ module ErrorStore
       end
 
       if data.key?(:platform)
-        if VALID_PLATFORMS.include?(data[:platform])
-          data[:platform] = trim(data[:platform], max_size: 64)
-        else
-          data[:platform] = 'other'
-        end
+        data[:platform] = if VALID_PLATFORMS.include?(data[:platform])
+                            trim(data[:platform], max_size: 64)
+                          else
+                            'other'
+                          end
       else
         data[:platform] = nil
       end
@@ -151,7 +151,7 @@ module ErrorStore
         data.delete(:modules)
       end
 
-      if !data[:extra].blank? and !data[:extra].is_a?(Hash)
+      if !data[:extra].blank? && !data[:extra].is_a?(Hash)
         Rails.logger.error("Invalid extra #{data[:extra]}")
         data[:errors] << { type: 'invalid_data', name: 'extra', value: data[:extra] }
         data.delete(:extra)
