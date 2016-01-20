@@ -9,15 +9,15 @@ module ErrorStore
     # 1. get website_id from header or params if it's a get
     def get_authorization
       if _error.request.post?
-        unless _error.request.headers.env.has_key?('HTTP_X_SENTRY_AUTH') || _error.request.headers.env.has_key?('HTTP_AUTHORIZATION')
+        unless _error.request.headers.env.key?('HTTP_X_SENTRY_AUTH') || _error.request.headers.env.key?('HTTP_AUTHORIZATION')
           raise ErrorStore::MissingCredentials.new(self), 'Missing authentication header'
         end
 
-        if _error.request.headers['HTTP_X_SENTRY_AUTH'].include?('Sentry')
-          auth_req = parse_auth_header(_error.request.headers['HTTP_X_SENTRY_AUTH'])
-        elsif _error.request.headers['HTTP_AUTHORIZATION'].include?('Sentry')
-          auth_req = parse_auth_header(_error.request.headers['HTTP_AUTHORIZATION'])
-        end
+        auth_req = if _error.request.headers['HTTP_X_SENTRY_AUTH'].include?('Sentry')
+                     parse_auth_header(_error.request.headers['HTTP_X_SENTRY_AUTH'])
+                   elsif _error.request.headers['HTTP_AUTHORIZATION'].include?('Sentry')
+                     parse_auth_header(_error.request.headers['HTTP_AUTHORIZATION'])
+                   end
       elsif _error.request.get?
         # TODO, make get request parsing
       end
