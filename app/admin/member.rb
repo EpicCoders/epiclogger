@@ -66,11 +66,11 @@ ActiveAdmin.register Member do
     active_admin_comments
   end
 
-  action_item only: :show, if: proc { !member.confirmed? } do
+  action_item :show, if: proc { !member.confirmed? } do
     link_to 'Confirm member', confirm_admin_member_path(member), method: :put
   end
 
-  action_item only: :show, if: proc { member.confirmed? } do
+  action_item :show, if: proc { member.confirmed? } do
     link_to 'Unconfirm member', unconfirm_admin_member_path(member), method: :put
   end
 

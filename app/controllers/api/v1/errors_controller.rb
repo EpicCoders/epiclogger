@@ -1,8 +1,5 @@
 class Api::V1::ErrorsController < Api::V1::ApiController
   load_and_authorize_resource class: GroupedIssue
-  require 'digest/md5'
-  require 'net/http'
-  require 'uri'
   skip_before_action :authenticate_member!, except: [:index, :show, :update, :notify_subscribers]
 
   def index
@@ -22,7 +19,7 @@ class Api::V1::ErrorsController < Api::V1::ApiController
   end
 
   def update
-    @error.update_attributes(status: error_params[:status], resolved_at: Time.now)
+    @error.update_attributes(status: error_params[:status], resolved_at: Time.now.utc)
   end
 
   def notify_subscribers
@@ -35,6 +32,6 @@ class Api::V1::ErrorsController < Api::V1::ApiController
   private
 
   def error_params
-    @error_params ||= params.require(:error).permit(:description, :message, :name, :status, :logger, :platform, :stacktrace => [:frames => ["filename"]] ,:request => [:url, :headers => ["User-Agent"]], :user => [:email, :name], :extra => [:title])
+    @error_params ||= params.require(:error).permit(:description, :message, :name, :status, :logger, :platform)
   end
 end
