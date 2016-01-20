@@ -24,6 +24,13 @@ class Website < ActiveRecord::Base
     Notification.create(website_id: id, new_event: true)
   end
 
+  def self.daily_report
+    date = Time.now - 1.day
+    Website.select("websites.id").joins(:grouped_issues).where("grouped_issues.updated_at > ?", date).uniq.each do |website|
+      UserMailer.notify_daily(website.id).deliver_now
+    end
+  end
+
   protected
 
   def generate_api_keys
