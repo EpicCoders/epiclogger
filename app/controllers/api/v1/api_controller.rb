@@ -21,9 +21,9 @@ class Api::V1::ApiController < ActionController::Base
 
   rescue_from CanCan::AccessDenied do |exception|
     if current_member
-      _not_authorized "Not Allowed", 403
+      _not_allowed! "Not Allowed"
     else
-      _not_authorized exception.message
+      _not_allowed! exception.message
     end
   end
 

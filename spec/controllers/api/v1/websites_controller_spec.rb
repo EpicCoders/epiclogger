@@ -176,7 +176,7 @@ describe Api::V1::WebsitesController, :type => :controller do
         website2 = create :website, title: 'Website title', domain: 'http://www.second-website.com'
         website_member2 = create :website_member, member: member, website: website2
         delete :destroy, params
-        expect(response.body).to eq("location.reload();")
+        expect(response.body).to eq("location.reload;")
         expect(response.content_type).to eq('text/javascript')
         expect(response).to have_http_status(200)
       end
