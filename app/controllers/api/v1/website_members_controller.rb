@@ -1,6 +1,8 @@
 class Api::V1::WebsiteMembersController < Api::V1::ApiController
   load_and_authorize_resource
-  def index; end
+  def index
+    @members = current_site.website_members
+  end
 
   def destroy
     @website_member.destroy

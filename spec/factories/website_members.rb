@@ -3,5 +3,4 @@ FactoryGirl.define do
     association :website
     association :member
   end
-
 end

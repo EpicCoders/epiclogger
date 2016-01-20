@@ -22,6 +22,7 @@ class ApiAbility
       can :manage, Website do |website|
         member.is_owner_of?(website)
       end
+      can :create, Website
       can :manage, WebsiteMember do |website_member|
         member.is_owner_of?(website_member.website)
       end
