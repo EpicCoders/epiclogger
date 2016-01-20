@@ -1,5 +1,4 @@
 class Website < ActiveRecord::Base
-  has_one :notification, dependent: :destroy
   has_many :subscribers, dependent: :destroy
   has_many :grouped_issues, dependent: :destroy
   has_many :website_members, -> { uniq }, autosave: true
@@ -13,15 +12,10 @@ class Website < ActiveRecord::Base
 
   before_create :generate_api_keys
   before_update :generate_api_keys, if: -> { generate }
-  after_create :create_notification
   before_destroy :website_dependent
 
   def website_dependent
     website_members.each(&:delete)
-  end
-
-  def create_notification
-    Notification.create(website_id: id, new_event: true)
   end
 
   def self.daily_report

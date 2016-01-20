@@ -28,6 +28,6 @@ class Api::V1::WebsitesController < Api::V1::ApiController
   private
 
   def website_params
-    params.require(:website).permit(:member_id, :domain, :generate, :title, :id)
+    params.require(:website).permit(:member_id, :domain, :generate, :title, :id, :new_event, :frequent_event, :daily, :realtime)
   end
 end

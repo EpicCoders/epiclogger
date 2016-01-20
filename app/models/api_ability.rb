@@ -13,9 +13,6 @@ class ApiAbility
       can :manage, Message do |message|
         member.is_owner_of?(message.issue.group.website)
       end
-      can :manage, Notification do |notification|
-        member.is_owner_of?(notification.website)
-      end
       can :manage, Subscriber do |subscriber|
         member.is_owner_of?(subscriber.website)
       end

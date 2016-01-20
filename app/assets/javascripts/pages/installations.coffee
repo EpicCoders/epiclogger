@@ -10,6 +10,11 @@ PubSub.subscribe('assigned.website', (ev, website)->
       $('#client-configuration, #platforms-tabs, #all-platforms').show()
 
       $.getJSON Routes.api_v1_website_path(website.id), (data) ->
+        $('input[name=daily]').attr('checked', true) if data.daily
+        $('input[name=realtime]').attr('checked', true) if data.realtime
+        $('input[name=new_event]').attr('checked', true) if data.new_event
+        $('input[name=frequent_event]').attr('checked',true) if data.frequent_event
+        $('#save, #add-website').prop('disabled', true)
         $('#current-website').render data
         generateApiKey(data)
 
@@ -17,36 +22,29 @@ PubSub.subscribe('assigned.website', (ev, website)->
         replaceHtmlText(/{app_id}/g, data.app_id)
         replaceHtmlText(/{id}/g, data.id)
 
-      $.getJSON Routes.api_v1_notifications_path(), { website_id: website.id }, (data) ->
-        $('input[name=daily]').attr('checked', true) if data.daily
-        $('input[name=realtime]').attr('checked', true) if data.realtime
-        $('input[name=new_event]').attr('checked', true) if data.new_event
-        $('input[name=frequent_event]').attr('checked',true) if data.frequent_event
-        $('#save, #add-website').prop('disabled', true)
+      $('#title, #domain').change ->
+        $('#add-website').prop('disabled', false)
 
-        $('#title, #domain').change ->
-          $('#add-website').prop('disabled', false)
+      $('input').change ->
+        $('#save').prop('disabled', false)
 
-        $('input').change ->
-          $('#save').prop('disabled', false)
-
-        $('#save').on 'click', (e) ->
-          e.preventDefault()
-          $.ajax
-            url: Routes.api_v1_notification_path(data.id)
-            type: 'put'
-            dataType: 'json'
-            data: {
-              notification: {
-                daily: $('input[name=daily]').is(':checked'),
-                realtime: $('input[name=realtime]').is(':checked'),
-                new_event: $('input[name=new_event]').is(':checked'),
-                frequent_event: $('input[name=frequent_event]').is(':checked')
-              }
+      $('#save').on 'click', (e) ->
+        e.preventDefault()
+        $.ajax
+          url: Routes.api_v1_website_path(website.id)
+          type: 'put'
+          dataType: 'json'
+          data: {
+            website: {
+              daily: $('input[name=daily]').is(':checked'),
+              realtime: $('input[name=realtime]').is(':checked'),
+              new_event: $('input[name=new_event]').is(':checked'),
+              frequent_event: $('input[name=frequent_event]').is(':checked')
             }
-            success: (data) ->
-              $('#save').prop('disabled', true)
-              swal("Success!", "You will recieve notifications soon.", "success")
+          }
+          success: (data) ->
+            $('#save').prop('disabled', true)
+            swal("Success!", "You will recieve notifications soon.", "success")
 )
 
 generateApiKey = (data) ->

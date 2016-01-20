@@ -5,10 +5,6 @@ class MembersController < ApplicationController
 
   def index; end
 
-  def edit
-    gon.notification_id = Member.find(params[:id]).notification.id
-  end
-
   def new
     gon.token = params[:id]
     gon.website_id = params[:website_id]
