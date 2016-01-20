@@ -45,7 +45,7 @@ module ErrorStore
       return trim(value.to_s, _size: _size, max_size: max_size) if _depth > max_depth
 
       if value.is_a?(Hash)
-        result  = {}
+        result = {}
         _size += 2
         value.each_with_index do |v, k|
           trim_v    = trim(v, _size: _size, **options, &block)

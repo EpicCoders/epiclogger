@@ -157,10 +157,10 @@ module ErrorStore
     end
 
     def time_limit(silence) # ~ 3600 per hour
-      ErrorStore::SENTRY_SAMPLE_TIMES.map do |amount, sample_rate|
+      ErrorStore::SAMPLE_TIMES.map do |amount, sample_rate|
         return sample_rate if silence >= amount
       end
-      ErrorStore::SENTRY_MAX_SAMPLE_TIME
+      ErrorStore::MAX_SAMPLE_TIME
     end
 
     def _process_existing_aggregate(group, issue, data, release)
@@ -208,10 +208,10 @@ module ErrorStore
     def count_limit(count)
       # TODO: could we do something like num_to_store = max(math.sqrt(100*count)+59, 200) ?
       # ~ 150 * ((log(n) - 1.5) ^ 2 - 0.25)
-      ErrorStore::SENTRY_SAMPLE_RATES.map do |amount, sample_rate|
+      ErrorStore::SAMPLE_RATES.map do |amount, sample_rate|
         return sample_rate if count <= amount
       end
-      ErrorStore::SENTRY_MAX_SAMPLE_RATE
+      ErrorStore::MAX_SAMPLE_RATE
     end
 
     def generate_culprit(data)
