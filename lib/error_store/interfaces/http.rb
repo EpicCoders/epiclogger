@@ -12,26 +12,26 @@ module ErrorStore::Interfaces
       raise ErrorStore::ValidationError.new(self), "No value for 'url'" unless data[:url]
 
       if data[:method]
-        method = data[:method].upcase
+        _data[:method] = data[:method].upcase
         raise ErrorStore::ValidationError.new(self), "Invalid value for 'method'" unless ErrorStore::HTTP_METHODS.include?(method)
+        _data[:method] = method
       else
-        method = nil # TODO, check this is not used
+        _data[:method] = nil # TODO, check this is not used
       end
 
       url_uri      = URI(data[:url])
-      # TODO, query_string not used
       query_string = data[:query_string] || url_uri.query
       if query_string
-        # if querystring was a dict, convert it to a string
+        # if querystring was a hash, convert it to a string
         if query_string.is_a?(Hash)
           query_string = query_string.to_query
-        else
+        elsif query_string[0] == '?'
           # remove '?' prefix
-          query_string[0] = '' if query_string[0] == '?'
+          query_string[0] = ''
         end
-        query_string = trim(query_string, max_size: 4096)
+        _data[:query_string] = trim(query_string, max_size: 4096)
       else
-        query_string = ''
+        _data[:query_string] = ''
       end
 
       fragment = data[:fragment] || url_uri.fragment
@@ -51,7 +51,7 @@ module ErrorStore::Interfaces
 
       body = trim(body, max_size: ErrorStore::MAX_HTTP_BODY_SIZE) if body
 
-      self._data = {
+      _data = {
         cookies:   trim_pairs(format_cookies(cookies)),
         env:       trim_hash(data[:env] || {}),
         headers:   trim_pairs(headers),

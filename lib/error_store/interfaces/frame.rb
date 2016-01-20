@@ -45,11 +45,11 @@ module ErrorStore::Interfaces
       function = nil if function == '?'
 
       context_locals = data[:vars] || {}
-      if context_locals.is_a?(Array)
-        context_locals = Hash[context_locals]
-      elsif !context_locals.is_a?(Hash)
-        context_locals = {}
-      end
+      context_locals = if context_locals.is_a?(Array)
+                         Hash[context_locals]
+                       elsif !context_locals.is_a?(Hash)
+                         {}
+                       end
 
       context_locals = trim_hash(context_locals) do |result|
         handle_nan(result)
@@ -128,20 +128,20 @@ module ErrorStore::Interfaces
         output << remove_filename_outliers(_data[:filename])
       end
 
-      if _data[:context_line].nil?
-        can_use_context = false
-      elsif _data[:context_line].length > 120
-        can_use_context = false
-      elsif path_url? && !_data[:function]
-        # the context is too risky to use here as it could be something
-        # coming from an HTML page or it could be minified/unparseable
-        # code, so lets defer to other lesser heuristics (like lineno)
-        can_use_context = false
-      elsif _data[:function] && is_unhashable_function?
-        can_use_context = true
-      else
-        can_use_context = true
-      end
+      can_use_context = if _data[:context_line].nil?
+                          false
+                        elsif _data[:context_line].length > 120
+                          false
+                        elsif path_url? && !_data[:function]
+                          # the context is too risky to use here as it could be something
+                          # coming from an HTML page or it could be minified/unparseable
+                          # code, so lets defer to other lesser heuristics (like lineno)
+                          false
+                        elsif _data[:function] && is_unhashable_function?
+                          true
+                        else
+                          true
+                        end
 
       # XXX: hack around what appear to be non-useful lines of context
       if can_use_context
