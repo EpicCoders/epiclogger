@@ -120,7 +120,7 @@ $('#details-tabs a').click (e) ->
 $('#img-platforms a').on 'click', (e) ->
   $('.tab').hide()
   attr = $(this).attr('href')
-  $('#platforms-tabs a[href='+attr+']').tab('show')
+  $($("a[href='"+attr+"']")[0]).tab('show')
   $(attr).show()
   $(attr+'tab').show()
 
@@ -128,9 +128,8 @@ $('#client-frameworks a').on 'click', (e) ->
   $('.tab').hide()
   $(this.name).show()
   attr = $(this).attr('href')
-  $('li a[href='+this.name+']').tab('show')
+  $($("a[href='"+attr+"']")[1]).tab('show')
   $('.tabs').hide()
-  $(this.name + ' ul li a[href='+attr+']').tab('show')
   $(attr).show()
 
 toggleTabs = (target,location) ->
