@@ -1,60 +1,61 @@
--if controller.controller_name == "errors" && controller.action_name == "show"
-  %nav.error-menu.error-menu-vertical
-    .icon_sidebar
-      .header
-        = image_tag("logo_transparent_light.png")
-      .content
+- unless params[:controller] == 'websites' && params[:action] == 'new'
+  -if controller.controller_name == "errors" && controller.action_name == "show"
+    %nav.error-menu.error-menu-vertical
+      .icon_sidebar
+        .header
+          = image_tag("logo_transparent_light.png")
+        .content
+          %ul.icon-list
+            = nav_link  "", new_website_path(), {'title' => 'Add new website'}, 'plus'
+            = nav_link "", errors_url(), {'title' => 'Errors'}, 'exclamation-triangle'
+            = nav_link "", installations_url(), {'title' => 'Installation'}, 'code'
+            = nav_link "", edit_member_url(1), {'title' => 'Users'}, 'user'
+            = nav_link "", 'mailto:info@epiclogger.com', {'data-helpful'=>'epiclogger','data-helpful-modal'=>"on", :class=>'helpful-link', 'title' => 'Help'}, 'question'
+            = nav_link "", settings_url(), {'title' => 'Settings'}, 'cog'
+        .footer
+          .inner
+            .dropdown.btn-group
+              %img.dropdown-toggle.profileimg.pull-left{:src => "http://0.gravatar.com/avatar/59b762ebf3d116bf806bcfa3fa12e65f","data-toggle" => "dropdown"}/
+              %ul.dropdown-menu
+                %li
+                  %a{:href => "#"} Account
+                %li
+                  %a{:href => "#", :onclick => 'EpicLogger.logout()'} Logout
+      .error_sidebar
+        .sidebar_header
+          %button{:class=>"fa fa-arrow-left btn previous"}
+          %span{:class=>"sidebar_pagination_text"}
+          %button{:class=>"fa fa-arrow-right btn next"}
+        .sidebar_elements
+  -else
+    %nav.cbp-spmenu.cbp-spmenu-vertical.cbp-spmenu-left.regular-menu-vertical
+      .sidebar-header
+        .website-container
+          = image_tag("logo_transparent_light.png")
+          .pick_wrapper
+            %a.picked-website{:href => "#"}
+            %ul#websites-sidebar
+              = nav_link "Some website", '#', {:class=>'title picked', 'data-id'=>'', 'onclick'=>'EpicLogger.pickWebsite(this)'}
+      .sidebar-content
         %ul.icon-list
-          = nav_link  "", new_website_path(), {'title' => 'Add new website'}, 'plus'
-          = nav_link "", errors_url(), {'title' => 'Errors'}, 'exclamation-triangle'
-          = nav_link "", installations_url(), {'title' => 'Installation'}, 'code'
-          = nav_link "", edit_member_url(1), {'title' => 'Users'}, 'user'
-          = nav_link "", 'mailto:info@epiclogger.com', {'data-helpful'=>'epiclogger','data-helpful-modal'=>"on", :class=>'helpful-link', 'title' => 'Help'}, 'question'
-          = nav_link "", settings_url(), {'title' => 'Settings'}, 'cog'
-      .footer
-        .inner
+          = nav_link  "Add new website", new_website_path(), {'title' => 'Add new website'}, 'plus'
+          = nav_link "Errors", errors_url(), {'title' => 'Errors', :id => "errornav"}, 'exclamation-triangle'
+          = nav_link "Installation", installations_url(), {'title' => 'Installation'}, 'code'
+          / # = nav_link "User", edit_member_url(1), {'title' => 'Users'}, 'user'
+          = nav_link "Help", 'mailto:info@epiclogger.com', {'data-helpful'=>'epiclogger','data-helpful-modal'=>"on", :class=>'helpful-link', 'title' => 'Help'}, 'question'
+        .project-details
+          %h5 PROJECT DETAILS
+          %a{:href => "#{websites_url()}"} Websites
+          %a{:href => "#{website_members_url()}"} Members
+
+      .sidebar-footer
+        .footer-content
+          %img.profileimg.pull-left{:src => "http://0.gravatar.com/avatar/59b762ebf3d116bf806bcfa3fa12e65f"}/
           .dropdown.btn-group
-            %img.dropdown-toggle.profileimg.pull-left{:src => "http://0.gravatar.com/avatar/59b762ebf3d116bf806bcfa3fa12e65f","data-toggle" => "dropdown"}/
+            %a.btn.dropdown-toggle{"data-toggle" => "dropdown", :href => "#"}
+              %i.fa.fa-cog
             %ul.dropdown-menu
               %li
                 %a{:href => "#"} Account
               %li
                 %a{:href => "#", :onclick => 'EpicLogger.logout()'} Logout
-    .error_sidebar
-      .sidebar_header
-        %button{:class=>"fa fa-arrow-left btn previous"}
-        %span{:class=>"sidebar_pagination_text"}
-        %button{:class=>"fa fa-arrow-right btn next"}
-      .sidebar_elements
--else
-  %nav.cbp-spmenu.cbp-spmenu-vertical.cbp-spmenu-left.regular-menu-vertical
-    .sidebar-header
-      .website-container
-        = image_tag("logo_transparent_light.png")
-        .pick_wrapper
-          %a.picked-website{:href => "#"}
-          %ul#websites-sidebar
-            = nav_link "Some website", '#', {:class=>'title picked', 'data-id'=>'', 'onclick'=>'EpicLogger.pickWebsite(this)'}
-    .sidebar-content
-      %ul.icon-list
-        = nav_link  "Add new website", new_website_path(), {'title' => 'Add new website'}, 'plus'
-        = nav_link "Errors", errors_url(), {'title' => 'Errors', :id => "errornav"}, 'exclamation-triangle'
-        = nav_link "Installation", installations_url(), {'title' => 'Installation'}, 'code'
-        = nav_link "User", edit_member_url(1), {'title' => 'Users'}, 'user'
-        = nav_link "Help", 'mailto:info@epiclogger.com', {'data-helpful'=>'epiclogger','data-helpful-modal'=>"on", :class=>'helpful-link', 'title' => 'Help'}, 'question'
-      .project-details
-        %h5 PROJECT DETAILS
-        %a{:href => "#{settings_url()}"} Settings
-        %a{:href => "#"} Members
-
-    .sidebar-footer
-      .footer-content
-        %img.profileimg.pull-left{:src => "http://0.gravatar.com/avatar/59b762ebf3d116bf806bcfa3fa12e65f"}/
-        .dropdown.btn-group
-          %a.btn.dropdown-toggle{"data-toggle" => "dropdown", :href => "#"}
-            %i.fa.fa-cog
-          %ul.dropdown-menu
-            %li
-              %a{:href => "#"} Account
-            %li
-              %a{:href => "#", :onclick => 'EpicLogger.logout()'} Logout

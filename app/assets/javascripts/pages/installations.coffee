@@ -79,7 +79,7 @@ createWebsite = () ->
         url: Routes.api_v1_websites_url()
         type: 'post'
         dataType: 'json'
-        data: { role: $('#member-role').val(), website: { domain: domain_url, title: url_title } }
+        data: { website: { domain: domain_url, title: url_title } }
         success: (data) ->
           EpicLogger.setMemberDetails(data.id)
           swal("Good job!", "Website added!", "success")

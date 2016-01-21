@@ -109,13 +109,10 @@ window.EpicLogger = (->
         if $.cookie('pickedWebsite')!=undefined
           EpicLogger.pickWebsite(undefined, $.cookie('pickedWebsite'))
         else
-          if data.websites.length > 0
+          if $.cookie('pickedWebsite')!=undefined
+            EpicLogger.pickWebsite(undefined, $.cookie('pickedWebsite'))
+          if window.location.pathname != "/websites/new"
             EpicLogger.pickWebsite(undefined, data.websites[0].id)
-          else
-            EpicLogger.pickWebsite(undefined, undefined)
-
-        if window.location.pathname != "/websites/new"
-          EpicLogger.pickWebsite(undefined, data.websites[0].id)
       PubSub.publish('details.websites', data );
 
       directive = {

@@ -17,10 +17,9 @@ class WebsiteMember < ActiveRecord::Base
 
   def unique_domain
     domain = URI.parse(website.domain)
-    website_cases = ["http://#{domain.host}", "https://#{domain.host}", "ftp://#{domain.host}"]
-    errors.add :website, 'This website already exists for you' if Website.where("domain IN (?)", website_cases).count > 1
+    website_cases = ['http://#{domain.host}', 'https://#{domain.host}', 'ftp://#{domain.host}']
+    errors.add :website, 'This website already exists for you' if Website.where('domain IN (?)', website_cases).count > 1
   end
-
 
   def generate_token
     self.invitation_token = loop do
