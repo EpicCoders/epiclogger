@@ -176,6 +176,7 @@ ActiveRecord::Schema.define(version: 20160201141034) do
     t.boolean  "daily",          default: false
     t.boolean  "realtime",       default: false
     t.string   "app_secret"
+    t.string   "platform"
   end
 
   add_foreign_key "issues", "subscribers"
