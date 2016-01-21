@@ -52,25 +52,24 @@ module ErrorStore
 
       data[:fingerprint] = fingerprint || ['{{ default }}']
       # binding.pry
-      hash = if !fingerprint.nil?
-               get_hash_from_fingerprint(issue, fingerprint).map { |h| md5_from_hash(h) }
-             elsif !checksum.nil?
-               [checksum]
-             else
-               get_hash_for_issue(issue).map { |h| md5_from_hash(h) }
-             end
-      # binding.pry
+      hashes = if !fingerprint.nil?
+                 get_hash_from_fingerprint(issue, fingerprint).map { |h| md5_from_hash(h) }
+               elsif !checksum.nil?
+                 [checksum]
+               else
+                 get_hash_for_issue(issue).map { |h| md5_from_hash(h) }
+               end
 
       group_params = {
-          message: message,
-          platform: platform,
-          culprit: culprit,
-          issue_logger: logger_name,
-          level: level,
-          last_seen: date,
-          first_seen: date,
-          time_spent_total: time_spent || 0,
-          time_spent_count: time_spent && 1 || 0
+        message: message,
+        platform: platform,
+        culprit: culprit,
+        issue_logger: logger_name,
+        level: level,
+        last_seen: date,
+        first_seen: date,
+        time_spent_total: time_spent || 0,
+        time_spent_count: time_spent && 1 || 0
       }
 
       group, is_new, is_regression, is_sample = _save_aggregate(issue: issue, hash: hash, release: release, **group_params)

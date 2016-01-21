@@ -11,15 +11,24 @@ module ErrorStore::Interfaces
     def sanitize_data(data, has_system_frames = nil)
       raise ErrorStore::ValidationError.new(self), "No 'type' or 'value' present" unless data[:type] || data[:value]
 
-      if data[:stacktrace] && data[:stacktrace][:frames]
-        stacktrace = Stacktrace.new(@error).sanitize_data(data[:stacktrace], has_system_frames)
-      else
-        stacktrace = nil
+      stacktrace = if data[:stacktrace] && data[:stacktrace][:frames]
+                     Stacktrace.new(@error).sanitize_data(data[:stacktrace], has_system_frames)
+                   end
+
+      type = data[:type]
+      value = data[:value]
+      # we get the type from value if type not specified
+      # TypeError: foo (no space)
+      if !type && value.split(' ', 2)[0].include?(':')
+        type, value = value.split(':', 2)
+        value = value.strip
       end
 
+      value = value.to_json unless value.blank? && value.is_a?(String)
+
       _data = {
-        type:        trim(data[:type], max_size: 128),
-        value:       trim(data[:value], max_size: 4096),
+        type:        trim(type, max_size: 128),
+        value:       trim(value, max_size: 4096),
         module:      trim(data[:module], max_size: 128),
         stacktrace:  stacktrace
       }
