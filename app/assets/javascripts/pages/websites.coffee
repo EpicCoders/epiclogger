@@ -62,7 +62,7 @@ $('#client-frameworks a').on 'click', (e) ->
   $('.tab3').removeClass('disabled')
   goToStep(3)
   $(this.name).show()
-  $(this.name + ' ul li a[href='+$(this).attr('href')+']').tab('show')
+  $($("a[href='"+$(this).attr('href')+"']")[0]).tab('show')
   $($(this).attr('href')).show()
 
 $('#back, .tab2').on 'click', () ->
