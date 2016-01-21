@@ -169,5 +169,4 @@ ActiveRecord::Schema.define(version: 20160120100325) do
 
   add_foreign_key "issues", "subscribers"
   add_foreign_key "issues", "websites"
-  add_foreign_key "notifications", "websites"
 end

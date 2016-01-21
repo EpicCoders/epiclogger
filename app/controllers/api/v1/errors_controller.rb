@@ -6,7 +6,7 @@ class Api::V1::ErrorsController < Api::V1::ApiController
     errors_per_page = params[:error_count].to_i || 10
     current_error = params[:current_issue]
     if current_error
-      @page = current_issue_page(errors_per_page,current_error)
+      @page = current_issue_page(errors_per_page, current_error)
     else
       @page = params[:page] || 1
     end
