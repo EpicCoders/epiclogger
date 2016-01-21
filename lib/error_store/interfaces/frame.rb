@@ -73,7 +73,7 @@ module ErrorStore::Interfaces
       in_app = validate_bool(data[:in_app], false)
       raise ErrorStore::ValidationError.new(self), "Invalid value for 'in_app'" unless in_app
 
-      self._data = {
+      _data = {
         abs_path:      trim(abs_path, max_size: 256),
         filename:      trim(filename, max_size: 256),
         module:        trim(errmodule, max_size: 256),

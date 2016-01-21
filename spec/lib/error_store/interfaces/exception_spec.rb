@@ -12,7 +12,7 @@ RSpec.describe ErrorStore::Interfaces::Exception do
     it 'checks [:values][:stacktrace] and calls SingleException without has_system_frames'
     it 'sets _data[:values] to eq SingleExceptions'
     it 'raises ValidationError if data[:exc_omitted].length is equal to 2'
-    it 'returns Exception interface'
+    it 'returns Exception instance'
   end
 
   xdescribe 'to_json' do

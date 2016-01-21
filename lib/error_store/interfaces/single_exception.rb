@@ -8,7 +8,7 @@ module ErrorStore::Interfaces
       :single_exception
     end
 
-    def sanitize_data(data, has_system_frames=nil)
+    def sanitize_data(data, has_system_frames = nil)
       raise ErrorStore::ValidationError.new(self), "No 'type' or 'value' present" unless data[:type] || data[:value]
 
       if data[:stacktrace] && data[:stacktrace][:frames]
@@ -17,7 +17,7 @@ module ErrorStore::Interfaces
         stacktrace = nil
       end
 
-      self._data = {
+      _data = {
         type:        trim(data[:type], max_size: 128),
         value:       trim(data[:value], max_size: 4096),
         module:      trim(data[:module], max_size: 128),
@@ -27,11 +27,7 @@ module ErrorStore::Interfaces
     end
 
     def to_json
-      if _data[:stacktrace]
-        stacktrace = _data[:stacktrace].to_json
-      else
-        stacktrace = nil
-      end
+      stacktrace = _data[:stacktrace].to_json if _data[:stacktrace]
 
       {
         type:       _data[:type],

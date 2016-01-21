@@ -59,10 +59,11 @@ module ErrorStore::Interfaces
         url:       "#{url_uri.scheme}://#{url_uri.host}/#{url_uri.path}",
         fragment:  trim(fragment, max_size: 1024)
       }
+      self
     end
 
     def format_headers(value)
-      return [] unless value
+      return [] if value.blank?
 
       result = []
       cookie_header = nil

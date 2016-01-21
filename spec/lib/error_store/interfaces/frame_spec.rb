@@ -34,6 +34,7 @@ RSpec.describe ErrorStore::Interfaces::Frame do
     it 'sets lineno to nil if lower than 0'
 
     it 'sets colno to number'
+    it 'returns a Frame instance'
   end
 
   xdescribe 'get_culprit_string' do
