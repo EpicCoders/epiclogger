@@ -20,7 +20,6 @@
 //= require pubsub
 //= require bootstrap
 //= require jquery.j-toker
-//= require bootstrap-sprockets
 //= require turbolinks
 //= require routes
 //= require moment
