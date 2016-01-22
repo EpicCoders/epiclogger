@@ -5,7 +5,7 @@ replaceHtmlText = (selected, replace_with) ->
 PubSub.subscribe('assigned.website', (ev, website)->
   switch gon.action
     when "index"
-      createWebsite()
+      createWebsite(website.id)
       $('.tab, .main-tabs').hide()
       $('#client-configuration, #platforms-tabs, #all-platforms').show()
 
@@ -14,7 +14,7 @@ PubSub.subscribe('assigned.website', (ev, website)->
         $('input[name=realtime]').attr('checked', true) if data.realtime
         $('input[name=new_event]').attr('checked', true) if data.new_event
         $('input[name=frequent_event]').attr('checked',true) if data.frequent_event
-        $('#save, #add-website').prop('disabled', true)
+        $('#save, #edit-website').prop('disabled', true)
         $('#current-website').render data
         generateApiKey(data)
 
@@ -23,7 +23,7 @@ PubSub.subscribe('assigned.website', (ev, website)->
         replaceHtmlText(/{id}/g, data.id)
 
       $('#title, #domain').change ->
-        $('#add-website').prop('disabled', false)
+        $('#edit-website').prop('disabled', false)
 
       $('input').change ->
         $('#save').prop('disabled', false)
@@ -63,33 +63,22 @@ generateApiKey = (data) ->
         ), 2000
     return
 
-createWebsite = () ->
-  $('#add-website').on 'click', (e) ->
+createWebsite = (website_id) ->
+  $('#edit-website').on 'click', (e) ->
     e.preventDefault()
-    domain_url = $('#formWebsite').find('#domain').val()
-    url_title = $('#formWebsite').find('#title').val()
-    if (domain_url.replace(/\s+/g, '') || url_title.replace(/\s+/g, '')) == null || (domain_url.replace(/\s+/g, '') || url_title.replace(/\s+/g, '')) == ""
-      swal("A valid website is is needed.")
-      setTimeout (->
+    $.ajax
+      url: Routes.api_v1_website_url(website_id)
+      type: 'put'
+      dataType: 'json'
+      data: $('#formWebsite').serialize()
+      success: (data) ->
+        EpicLogger.setMemberDetails(data.id)
+        swal("Success!", "Website settings updated!", "success")
+        $('#edit-website').prop('disabled', true)
+        setTimeout (->
           location.href = '/installations'
           return
         ), 2000
-    else
-      $.ajax
-        url: Routes.api_v1_websites_url()
-        type: 'post'
-        dataType: 'json'
-        data: { website: { domain: domain_url, title: url_title } }
-        success: (data) ->
-          EpicLogger.setMemberDetails(data.id)
-          swal("Good job!", "Website added!", "success")
-          $('#add-website').prop('disabled', true)
-          setTimeout (->
-            location.href = '/installations'
-            return
-          ), 2000
-        error: (error) ->
-          sweetAlert("Error", "Website exists", "error") if error.status == 401
 
 
 $('#top-tabs a').on 'click', (e) ->
@@ -103,9 +92,8 @@ $('#top-tabs a').on 'click', (e) ->
   $(content).show()
 
 $('#client-configuration li').on 'click', (e) ->
-  li = $('#client-configuration li').slice(8)
-  $(this).tab('show')
   $('.tabs').hide()
+  $(this).tab('show')
   $($(this).find('a').attr('href')).show()
   $($(this).find('a').attr('href') + 'tab').show()
 

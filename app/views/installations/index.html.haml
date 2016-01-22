@@ -100,22 +100,56 @@
                 %form#formWebsite{:action => "", :method => "post"}
                   .form-group
                     %label.control-label Name
-                    %input#title.form-control{:placeholder => "Website name", :required => "required", :type => "text", :name => 'title'}/
+                    %input#title.form-control{:placeholder => "Website name", :required => "required", :type => "text", :name => 'website[title]'}/
                   .form-group
                     %label.control-label Domain
-                    %input#domain.form-control{:placeholder => "http://www.domain.com", :required => "required", :type => "url", :name => 'website'}/
+                    %input#domain.form-control{:placeholder => "http://www.domain.com", :required => "required", :type => "url", :name => 'website[domain]'}/
                   %hr
+                  %nav.navbar.navbar-inverse
+                    .container-fluid
+                      .navbar-header
+                        %a.navbar-brand{:href => "#"} WebSiteName
+                      %ul.nav.navbar-nav
+                        %li.active
+                          %a{:href => "#"} Home
+                        %li.dropdown
+                          %a.dropdown-toggle{"data-toggle" => "dropdown", :href => "#"}
+                            Page 1
+                            %span.caret
+                          %ul.dropdown-menu
+                            %li
+                              %a{:href => "#"} Page 1-1
+                            %li
+                              %a{:href => "#"} Page 1-2
+                            %li
+                              %a{:href => "#"} Page 1-3
+                        %li
+                          %a{:href => "#"} Page 2
+                        %li
+                          %a{:href => "#"} Page 3
                   .form-group
                     %label.control-label Platforms*
                     %br
                     %select
-                      %option Javascript
-                      %option Python
-                      %option PHP
-                      %option Ruby
-                      %option Java
-                      %option Node.js
-                      %option IOS
+                      %option{:value => 'connect'} Connect(Node.js)
+                      %option{:value => 'django'} Django(Python)
+                      %option{:value => 'express'} Express(Node.js)
+                      %option{:value => 'flask'} Flask(Python)
+                      %option{:value => 'ios'} IOS
+                      %option{:value => 'java'} Java
+                      %option{:value => 'log4j'} Log4j(Java)
+                      %option{:value => 'log4j2'} Log4j 2.x(Java)
+                      %option{:value => 'logback'} Logback(Java)
+                      %option{:value => 'javascript'} Javascript
+                      %option{:value => 'node.js'} Node.js
+                      %option{:value => 'php'} PHP
+                      %option{:value => 'python'} Python
+                      %option{:value => 'ruby'} Ruby
+                      %option{:value => 'rails-3'} Rails 3(Ruby)
+                      %option{:value => 'rails-4'} Rails 4(Ruby)
+                      %option{:value => 'sidekiq'} Sidekiq
+                      %option{:value => 'sinatra'} Sinatra
+                      %option{:value => 'tornado'} Tornado
                   %hr
                   .form-group
                     %label.control-label Role*
@@ -136,7 +170,7 @@
             /         %span.range-value
             /     %br
             .form-group
-              %button.btn.btn-success#add-website Save Changes
+              %button.btn.btn-success#edit-website Save Changes
               %button.btn.btn-warning Remove Project
           .col-lg-6
             .panel.panel-default.codeview
@@ -275,13 +309,13 @@
           .panel-body
             %h5 To start sending events, configure your client with the following DSN value:
             %pre
-              %code.language-html
-                %h5.platform-code https://{app_key}:{app_id}@test-sentry89.herokuapp.com/{id}
+              %code.language-html.platform-code
+                https://{app_key}:{app_id}@test-sentry89.herokuapp.com/{id}
             %br/
             %h5 If this is a client that only needs public access (like epiclogger-js), you can use the following public DSN:
             %pre
-              %code.language-html
-                %h5.platform-code https://{app_key}@test-sentry89.herokuapp.com/{id}
+              %code.language-html.platform-code
+                https://{app_key}@test-sentry89.herokuapp.com/{id}
         .panel.panel-default.tileview#client-platforms
           .panel-heading Platforms
           .panel-body#img-platforms{:style => 'cursor: pointer'}

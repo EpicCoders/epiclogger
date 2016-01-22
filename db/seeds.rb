@@ -9,8 +9,8 @@
 member = Member.create(name: 'Test Member', email: 'spiridon.alin@gmail.com', password: 'password', password_confirmation: 'password', uid: SecureRandom.hex(10), provider: :email, confirmed_at: Time.now)
 AdminUser.create!(email: 'admin@example.com', password: 'password', password_confirmation: 'password')
 if member_1.errors.blank?
-  website_1 = Website.create(title: 'EpicLogger', domain: 'www.epiclogger.com')
-  website_2 = Website.create(title: 'EpicCoders', domain: 'www.epiccoders.com')
+  website_1 = Website.create(title: 'EpicLogger', domain: 'www.epiclogger.com', platform: 'javascript')
+  website_2 = Website.create(title: 'EpicCoders', domain: 'www.epiccoders.com', platform: 'ruby')
 
   # group_1 = GroupedIssue.create(website_id: website_1)
   # group_2 = GroupedIssue.create(website_id: website_2)
