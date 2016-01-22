@@ -12,11 +12,11 @@ module ErrorStore::Interfaces
       raise ErrorStore::ValidationError.new(self), "No value for 'url'" unless data[:url]
 
       if data[:method]
-        _data[:method] = data[:method].upcase
+        method = data[:method].upcase
         raise ErrorStore::ValidationError.new(self), "Invalid value for 'method'" unless ErrorStore::HTTP_METHODS.include?(method)
-        _data[:method] = method
+        self._data[:method] = method
       else
-        _data[:method] = nil # TODO, check this is not used
+        self._data[:method] = nil # TODO, check this is not used
       end
 
       url_uri      = URI(data[:url])
@@ -29,9 +29,9 @@ module ErrorStore::Interfaces
           # remove '?' prefix
           query_string[0] = ''
         end
-        _data[:query_string] = trim(query_string, max_size: 4096)
+        self._data[:query_string] = trim(query_string, max_size: 4096)
       else
-        _data[:query_string] = ''
+        self._data[:query_string] = ''
       end
 
       fragment = data[:fragment] || url_uri.fragment
@@ -51,7 +51,7 @@ module ErrorStore::Interfaces
 
       body = trim(body, max_size: ErrorStore::MAX_HTTP_BODY_SIZE) if body
 
-      _data = {
+      self._data = {
         cookies:   trim_pairs(format_cookies(cookies)),
         env:       trim_hash(data[:env] || {}),
         headers:   trim_pairs(headers),

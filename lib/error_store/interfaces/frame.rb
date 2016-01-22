@@ -44,7 +44,7 @@ module ErrorStore::Interfaces
 
       function = nil if function == '?'
 
-      context_locals = data[:vars] || {}
+      context_locals = data[:vars]
       context_locals = if context_locals.is_a?(Array)
                          Hash[context_locals]
                        elsif !context_locals.is_a?(Hash)
@@ -73,7 +73,7 @@ module ErrorStore::Interfaces
       in_app = validate_bool(data[:in_app], false)
       raise ErrorStore::ValidationError.new(self), "Invalid value for 'in_app'" unless in_app
 
-      _data = {
+      self._data = {
         abs_path:      trim(abs_path, max_size: 256),
         filename:      trim(filename, max_size: 256),
         module:        trim(errmodule, max_size: 256),
@@ -90,15 +90,15 @@ module ErrorStore::Interfaces
       if !data[:lineno].blank?
         lineno = data[:lineno].to_i
         lineno = nil if lineno < 0
-        _data[:lineno] = lineno
+        self._data[:lineno] = lineno
       else
-        _data[:lineno] = nil
+        self._data[:lineno] = nil
       end
 
       if !data[:colno].blank?
-        _data[:colno] = data[:colno].to_i
+        self._data[:colno] = data[:colno].to_i
       else
-        _data[:colno] = nil
+        self._data[:colno] = nil
       end
       self
     end

@@ -15,13 +15,13 @@ module ErrorStore::Interfaces
 
       trim_exceptions(data)
       has_system_frames = data_has_system_frames(data)
-      _data[:values] = data[:values].map { |v| SingleException.new(@error).sanitize_data(v, has_system_frames) }
+      self._data[:values] = data[:values].map { |v| SingleException.new(@error).sanitize_data(v, has_system_frames) }
 
       if data[:exc_omitted]
         raise ErrorStore::ValidationError.new(self), "Invalid value for 'exc_omitted'" unless data[:exc_omitted].length == 2
-        _data[:exc_omitted] = data[:exc_omitted]
+        self._data[:exc_omitted] = data[:exc_omitted]
       else
-        _data[:exc_omitted] = nil
+        self._data[:exc_omitted] = nil
       end
       self
     end

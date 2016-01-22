@@ -24,16 +24,16 @@ module ErrorStore::Interfaces
         end
       end
 
-      _data[:frames] = frame_list
+      self._data[:frames] = frame_list
 
       if data[:frames_omitted]
         raise ErrorStore::ValidationError.new(self), "Invalid value for 'frames_omitted'" if data[:frames_omitted].length != 2
-        _data[:frames_omitted] = data[:frames_omitted]
+        self._data[:frames_omitted] = data[:frames_omitted]
       else
-        _data[:frames_omitted] = nil
+        self._data[:frames_omitted] = nil
       end
 
-      _data[:has_system_frames] = has_system_frames
+      self._data[:has_system_frames] = has_system_frames
       self
     end
 
