@@ -1,1 +1,1 @@
-json.website(@website, :id, :app_id, :app_key, :new_event, :frequent_event, :daily, :realtime)
+json.website(@website, :id, :app_id, :app_key, :platform, :new_event, :frequent_event, :daily, :realtime)

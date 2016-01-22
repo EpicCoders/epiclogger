@@ -19,6 +19,22 @@ replaceHtmlText = (selected, replace_with) ->
   $.each $('.platform-code'), (index, code) ->
     $(code).html($(code).html().replace( selected, replace_with))
 
+updatePlatform = (website_id) ->
+  $('#finish').on 'click', () ->
+    visibleTab = $('li.active:visible a').attr('name') || $.platform[0].toUpperCase() + $.platform.slice(1)
+    $.ajax
+      url: Routes.api_v1_website_url(website_id)
+      type: 'put'
+      dataType: 'json'
+      data: { website: { platform: visibleTab }}
+      success: (data) ->
+        swal("Good job!", "You will recieve notifications as soon as something will happen on your website.","success")
+        setTimeout (->
+          location.href = '/errors'
+          return
+        ), 2000
+    return
+
 PubSub.subscribe('assigned.website', (ev, website)->
   console.log gon.action
 
@@ -28,6 +44,7 @@ PubSub.subscribe('assigned.website', (ev, website)->
       $('#myModal').modal('show')
       $.getJSON Routes.api_v1_website_path(website.id), (data) ->
         $('#current-website').render data, directive
+        updatePlatform(website.id)
         $('.tabs').hide()
 
         replaceHtmlText(/{app_key}/g, data.app_key)
@@ -56,7 +73,7 @@ $('li').on 'click', (e) ->
   $($(e.target).attr('href')).show()
 
 $('.tab').hide()
-$('.tab2, .tab3').addClass('disabled')
+# $('.tab2, .tab3').addClass('disabled')
 
 $('#client-frameworks a').on 'click', (e) ->
   $('.tab3').removeClass('disabled')
@@ -71,12 +88,10 @@ $('#back, .tab2').on 'click', () ->
   $('.tab3').addClass('disabled')
   goToStep(2)
 
-$('#finish').on 'click', () ->
-  location.href = '/errors'
-
 $('#platform a, .tab3').on 'click', (e) ->
   $('.tab3').removeClass('disabled')
   goToStep(3)
+  $.platform = this.name
   $('#'+this.name).show()
   $('#'+this.name + 'tab').show()
 

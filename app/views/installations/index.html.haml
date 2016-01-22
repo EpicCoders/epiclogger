@@ -105,57 +105,67 @@
                     %label.control-label Domain
                     %input#domain.form-control{:placeholder => "http://www.domain.com", :required => "required", :type => "url", :name => 'website[domain]'}/
                   %hr
-                  %nav.navbar.navbar-inverse
-                    .container-fluid
-                      .navbar-header
-                        %a.navbar-brand{:href => "#"} WebSiteName
-                      %ul.nav.navbar-nav
-                        %li.active
-                          %a{:href => "#"} Home
-                        %li.dropdown
-                          %a.dropdown-toggle{"data-toggle" => "dropdown", :href => "#"}
-                            Page 1
-                            %span.caret
-                          %ul.dropdown-menu
-                            %li
-                              %a{:href => "#"} Page 1-1
-                            %li
-                              %a{:href => "#"} Page 1-2
-                            %li
-                              %a{:href => "#"} Page 1-3
-                        %li
-                          %a{:href => "#"} Page 2
-                        %li
-                          %a{:href => "#"} Page 3
                   .form-group
                     %label.control-label Platforms*
                     %br
-                    %select
-                      %option{:value => 'connect'} Connect(Node.js)
-                      %option{:value => 'django'} Django(Python)
-                      %option{:value => 'express'} Express(Node.js)
-                      %option{:value => 'flask'} Flask(Python)
-                      %option{:value => 'ios'} IOS
-                      %option{:value => 'java'} Java
-                      %option{:value => 'log4j'} Log4j(Java)
-                      %option{:value => 'log4j2'} Log4j 2.x(Java)
-                      %option{:value => 'logback'} Logback(Java)
-                      %option{:value => 'javascript'} Javascript
-                      %option{:value => 'node.js'} Node.js
-                      %option{:value => 'php'} PHP
-                      %option{:value => 'python'} Python
-                      %option{:value => 'ruby'} Ruby
-                      %option{:value => 'rails-3'} Rails 3(Ruby)
-                      %option{:value => 'rails-4'} Rails 4(Ruby)
-                      %option{:value => 'sidekiq'} Sidekiq
-                      %option{:value => 'sinatra'} Sinatra
-                      %option{:value => 'tornado'} Tornado
+                    .dropdown
+                      %button.btn.btn-default.cust-dropdown.dropdown-toggle#platform{"data-toggle" => "dropdown", :type => "button"}
+                        Platforms
+                        %span.caret
+                      %ul.dropdown-menu
+                        %li
+                          %a{:href => '#', :name => 'Connect(Node.js)'} Connect(Node.js)
+                        %li
+                          %a{:href => '#', :name => 'Django(Python)'} Django(Python)
+                        %li
+                          %a{:href => '#', :name => 'Express(Node.js)'} Express(Node.js)
+                        %li
+                          %a{:href => '#', :name => 'Flask(Python)'} Flask(Python)
+                        %li
+                          %a{:href => '#', :name => 'IOS'} IOS
+                        %li
+                          %a{:href => '#', :name => 'Java'} Java
+                        %li
+                          %a{:href => '#', :name => 'Java Util Logging(Java)'} Java
+                        %li
+                          %a{:href => '#', :name => 'Log4j(Java)'} Log4j(Java)
+                        %li
+                          %a{:href => '#', :name => 'Log4j 2.x(Java)'} Log4j 2.x(Java)
+                        %li
+                          %a{:href => '#', :name => 'Logback(Java)'} Logback(Java)
+                        %li
+                          %a{:href => '#', :name => 'Javascript'} Javascript
+                        %li
+                          %a{:href => '#', :name => 'Node.js'} Node.js
+                        %li
+                          %a{:href => '#', :name => 'PHP'} PHP
+                        %li
+                          %a{:href => '#', :name => 'Python'} Python
+                        %li
+                          %a{:href => '#', :name => 'Ruby'} Ruby
+                        %li
+                          %a{:href => '#', :name => 'Rails 3(Ruby)'} Rails 3(Ruby)
+                        %li
+                          %a{:href => '#', :name => 'Rails 4(Ruby)'} Rails 4(Ruby)
+                        %li
+                          %a{:href => '#', :name => 'Sidekiq'} Sidekiq
+                        %li
+                          %a{:href => '#', :name => 'Sinatra'} Sinatra
+                        %li
+                          %a{:href => '#', :name => 'Tornado'} Tornado
                   %hr
                   .form-group
-                    %label.control-label Role*
+                    %label.control-label Owner*
                     %br
-                    %select.owners
-                      %option.email
+                    .dropdown.owners
+                      %button.btn.btn-default.cust-dropdown.dropdown-toggle#owner{"data-toggle" => "dropdown", :type => "button"}
+                        Owners
+                        %span.caret
+                      %ul.dropdown-menu
+                        %li
+                          %div{:style => 'padding: 5px'}
+                            %a.email{:href => '#'}
+                            %a{:style => 'padding: 10px', :href => '#'} ×
                   / %hr
                   / .form-group
                   /   %label.control-label Slug*

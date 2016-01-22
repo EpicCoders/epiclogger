@@ -16,6 +16,9 @@ PubSub.subscribe('assigned.website', (ev, website)->
         $('input[name=frequent_event]').attr('checked',true) if data.frequent_event
         $('#save, #edit-website').prop('disabled', true)
         $('#current-website').render data
+        $('#platform').html(data.platform + ' <span class="caret"></span>')
+        $('#owner').html(data.owners[0].email)
+        $('#owner').append('<a style="padding:10px; href="#">×</a><span class="caret"></span>')
         generateApiKey(data)
 
         replaceHtmlText(/{app_key}/g, data.app_key)
@@ -63,6 +66,11 @@ generateApiKey = (data) ->
         ), 2000
     return
 
+$('.dropdown-menu li a').click ->
+  selText = $(this).text()
+  $(this).parents('.dropdown').find('.dropdown-toggle').html selText + ' <span class="caret"></span>'
+  return
+
 createWebsite = (website_id) ->
   $('#edit-website').on 'click', (e) ->
     e.preventDefault()
@@ -94,6 +102,7 @@ $('#top-tabs a').on 'click', (e) ->
 $('#client-configuration li').on 'click', (e) ->
   $('.tabs').hide()
   $(this).tab('show')
+  $(this).addClass('active')
   $($(this).find('a').attr('href')).show()
   $($(this).find('a').attr('href') + 'tab').show()
 
