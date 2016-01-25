@@ -157,15 +157,18 @@
                   .form-group
                     %label.control-label Owner*
                     %br
-                    .dropdown.owners
+                    .dropdown
                       %button.btn.btn-default.cust-dropdown.dropdown-toggle#owner{"data-toggle" => "dropdown", :type => "button"}
                         Owners
                         %span.caret
                       %ul.dropdown-menu
                         %li
-                          %div{:style => 'padding: 5px'}
-                            %a.email{:href => '#'}
-                            %a{:style => 'padding: 10px', :href => '#'} ×
+                          %table.table#owners
+                            %tbody.members
+                              %tr.website_member_row{"id"=>1}
+                                %td.email
+                                %td.text-right
+                                  = link_to '×', api_v1_website_members_path(), :method => :delete, :remote => "true", data: {confirm: "Are you sure?"}, :class => "delete_member"
                   / %hr
                   / .form-group
                   /   %label.control-label Slug*

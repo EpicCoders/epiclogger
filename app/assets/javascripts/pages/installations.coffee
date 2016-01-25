@@ -1,3 +1,13 @@
+directive = {
+  members:{
+    member_row:
+      id: (params)->
+        "member_" + this.id
+    delete_member:
+      href: (params) ->
+        Routes.api_v1_website_member_path( this.id, {format: 'js', website_id: this.website_id})
+  }
+}
 replaceHtmlText = (selected, replace_with) ->
   $.each $('.platform-code'), (index, code) ->
     $(code).html($(code).html().replace( selected, replace_with))
@@ -8,6 +18,10 @@ PubSub.subscribe('assigned.website', (ev, website)->
       createWebsite(website.id)
       $('.tab, .main-tabs').hide()
       $('#client-configuration, #platforms-tabs, #all-platforms').show()
+      $.getJSON Routes.api_v1_website_members_url(), { website_id: website.id }, (data) ->
+        $('#owners').render data, directive
+        $('#owner').html(data.members[0].email)
+        $('#owner').append('<span class="caret"></span>')
 
       $.getJSON Routes.api_v1_website_path(website.id), (data) ->
         $('input[name=daily]').attr('checked', true) if data.daily
@@ -17,8 +31,6 @@ PubSub.subscribe('assigned.website', (ev, website)->
         $('#save, #edit-website').prop('disabled', true)
         $('#current-website').render data
         $('#platform').html(data.platform + ' <span class="caret"></span>')
-        $('#owner').html(data.owners[0].email)
-        $('#owner').append('<a style="padding:10px; href="#">×</a><span class="caret"></span>')
         generateApiKey(data)
 
         replaceHtmlText(/{app_key}/g, data.app_key)
