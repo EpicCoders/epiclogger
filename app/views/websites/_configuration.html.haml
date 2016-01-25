@@ -57,13 +57,14 @@
   .col-md-12.pagecontainer.tab#node-js
     .pagetitle.text-center
       %h3 Configuring Node.js
-    %ul.nav.nav-tabs
-      %li.active
-        %a{:name =>"Node.js",:href => "#node-jstab"} Node.js
-      %li
-        %a{:name =>"Express(Node.js)", :href => "#express"} Express
-      %li
-        %a{:name =>"Connect(Node.js)",:href => "#connect"} Connect
+    #custom-bootstrap.navbar.navbar-default{:role => "navigation"}
+      %ul.nav.navbar-nav.navbar-left
+        %li.active
+          %a{:name =>"Node.js",:href => "#node-jstab"} Node.js
+        %li
+          %a{:name =>"Express(Node.js)", :href => "#express"} Express
+        %li
+          %a{:name =>"Connect(Node.js)",:href => "#connect"} Connect
     .panel.panel-default.codeview
       .panel-heading
       .panel-body.tabs#node-jstab
@@ -166,15 +167,16 @@
   .col-md-12.pagecontainer.tab#python
     .pagetitle.text-center
       %h3 Configurating Python
-    %ul.nav.nav-tabs
-      %li.active
-        %a{:name =>"Python", :href => "#pythontab"} Python
-      %li
-        %a{:name =>"Django(Python)", :href => "#django"} Django
-      %li
-        %a{:name =>"Flask(Python)", :href => "#flask"} Flask
-      %li
-        %a{:name =>"Tornado(Python)", :href => "#tornado"} Tornado
+    #custom-bootstrap.navbar.navbar-default{:role => "navigation"}
+      %ul.nav.navbar-nav.navbar-left
+        %li.active
+          %a{:name =>"Python", :href => "#pythontab"} Python
+        %li
+          %a{:name =>"Django(Python)", :href => "#django"} Django
+        %li
+          %a{:name =>"Flask(Python)", :href => "#flask"} Flask
+        %li
+          %a{:name =>"Tornado(Python)", :href => "#tornado"} Tornado
     .panel-body.tabs#pythontab
       %div
         %h5{:style => 'display:inline'} Start by installing
@@ -372,17 +374,18 @@
   .col-md-12.pagecontainer.tab#ruby
     .pagetitle.text-center
       %h3 Configuring Ruby
-    %ul.nav.nav-tabs
-      %li.active
-        %a{:name =>"Ruby", :href => "#rubytab"} Ruby
-      %li
-        %a{:name =>"Rails 3(Ruby)", :href => "#rails-3"} Rails 3
-      %li
-        %a{:name =>"Rails 4(Ruby)", :href => "#rails-4"} Rails 4
-      %li
-        %a{:name =>"Sinatra", :href => "#sinatra"} Sinatra
-      %li
-        %a{:name =>"Sidekiq", :href => "#sidekiq"} Sidekiq
+    #custom-bootstrap.navbar.navbar-default{:role => "navigation"}
+      %ul.nav.navbar-nav.navbar-left
+        %li.active
+          %a{:name =>"Ruby", :href => "#rubytab"} Ruby
+        %li
+          %a{:name =>"Rails 3(Ruby)", :href => "#rails-3"} Rails 3
+        %li
+          %a{:name =>"Rails 4(Ruby)", :href => "#rails-4"} Rails 4
+        %li
+          %a{:name =>"Sinatra", :href => "#sinatra"} Sinatra
+        %li
+          %a{:name =>"Sidekiq", :href => "#sidekiq"} Sidekiq
     .panel.panel-default.codeview
       .panel-heading
       .panel-body.tabs#rubytab
@@ -601,17 +604,18 @@
   .col-md-12.pagecontainer.tab#java
     .pagetitle.text-center
       %h3 Configurating Java
-    %ul.nav.nav-tabs
-      %li.active
-        %a{:name =>"Java", :href => "#javatab"} Java
-      %li
-        %a{:name =>"Java Util Logging(Java)", :href => "#java-util-logging"} java.util.logging
-      %li
-        %a{:name =>"Log4j(Java)", :href => "#log4j"} log4j
-      %li
-        %a{:name =>"Log4j2(Java)", :href => "#log4j2"} log4j2
-      %li
-        %a{:name =>"Logback(Java)", :href => "#logback"} logback
+    #custom-bootstrap.navbar.navbar-default{:role => "navigation"}
+      %ul.nav.navbar-nav.navbar-left
+        %li.active
+          %a{:name =>"Java", :href => "#javatab"} Java
+        %li
+          %a{:name =>"Java Util Logging(Java)", :href => "#java-util-logging"} java.util.logging
+        %li
+          %a{:name =>"Log4j(Java)", :href => "#log4j"} log4j
+        %li
+          %a{:name =>"Log4j2(Java)", :href => "#log4j2"} log4j2
+        %li
+          %a{:name =>"Logback(Java)", :href => "#logback"} logback
     .panel-body.tabs#javatab
       %div
         %h5{:style => 'display:inline'} Start by installing

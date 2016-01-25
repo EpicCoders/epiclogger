@@ -72,17 +72,18 @@
 
 
   .col-lg-12#client-details.main-tabs
-    %ul.nav.nav-tabs#details-tabs.main-tabs
-      %li.active
-        %a{:href => "#settings"} Settings
-      %li
-        %a{:href => "#notifications"} Notifications
-      / %li
-      /   %a{:href => "#rate-limits"} Rate Limits
-      / %li
-      /   %a{:href => "#tags"} Tags
-      %li
-        %a{:href => "#api-keys"} Api Keys
+    #custom-bootstrap.navbar.navbar-default{:role => "navigation"}
+      %ul.nav.navbar-nav.navbar-left#details-tabs.main-tabs
+        %li.active
+          %a{:href => "#settings"} Settings
+        %li
+          %a{:href => "#notifications"} Notifications
+        / %li
+        /   %a{:href => "#rate-limits"} Rate Limits
+        / %li
+        /   %a{:href => "#tags"} Tags
+        %li
+          %a{:href => "#api-keys"} Api Keys
     %br
     #current-website
       #settings.tab
@@ -291,24 +292,24 @@
 
 
   .col-lg-12#client-configuration.main-tabs
-    %ul.nav.nav-tabs#platforms-tabs.main-tabs
-      %li.active
-        %a{:href => "#all-platforms"} All Platforms
-      %li
-        %a{:href => "#javascript"} Javascript
-      %li
-        %a{:href => "#python"} Python
-      %li
-        %a{:href => "#php"} PHP
-      %li
-        %a{:href => "#ruby"} Ruby
-      %li
-        %a{:href => "#node-js"} Node.js
-      %li
-        %a{:href => "#java"} Java
-      %li
-        %a{:href => "#ios"} IOS
-    %br
+    #custom-bootstrap.navbar.navbar-default{:role => "navigation"}
+      %ul.nav.navbar-nav.navbar-left#platforms-tabs.main-tabs
+        %li.active
+          %a{:href => "#all-platforms"} All Platforms
+        %li
+          %a{:href => "#javascript"} Javascript
+        %li
+          %a{:href => "#python"} Python
+        %li
+          %a{:href => "#php"} PHP
+        %li
+          %a{:href => "#ruby"} Ruby
+        %li
+          %a{:href => "#node-js"} Node.js
+        %li
+          %a{:href => "#java"} Java
+        %li
+          %a{:href => "#ios"} IOS
     #all-platforms.tab
       .panel.panel-default.codeview#client-information
         .panel-heading Client Configuration
