@@ -1,372 +1,365 @@
 #installation.row
-  .col-md-12.pagecontainer
-    %br
-    %ul.nav.nav-pills.nav-justified#top-tabs
+  #custom-bootstrap-menu.navbar.navbar-default{:role => "navigation"}
+    %ul.nav.navbar-nav.navbar-left#top-tabs
       %li{:name => 'details'}
-        %a{:href => "#client-details"}
-          %h4 Details
+        %a{:href => "#client-details"} Details
       %li.active{:name => 'client configuration'}
-        %a{:href => "#client-configuration"}
-          %h4 Client Configuration
+        %a{:href => "#client-configuration"} Client Configuration
       %li{:name => 'integrations'}
-        %a{:href => "#client-integrations"}
-          %h4 Integrations
-      %br
-      #client-integrations.tab.main-tabs
-        %br
-        %br
+        %a{:href => "#client-integrations"} Integrations
+    %br
+  .col-lg-12#client-integrations.tab.main-tabs
+    .panel.panel-default
+      .panel-heading Manage Integrations
+      .panel-body
+        %table.table.table-striped
+          %thead
+            %tr
+              %th Integration
+              %th Version
+              %th.text-center Enabled
+          %tbody
+            %tr
+              %td
+                Auto Tag: Browsers
+                %br
+                %small
+                  By
+                  %a{:href => ""} Epiclogger Team
+              %td 6.4.4
+              %td.text-center
+                %input{:type => "checkbox"}
+            %tr
+              %td
+                Auto Tag: Interface Types
+                %br
+                %small
+                  By
+                  %a{:href => ""} Epiclogger Team
+              %td 6.4.4
+              %td.text-center
+                %input{:type => "checkbox"}
+            %tr
+              %td
+                Auto Tag: Operating Systems
+                %br
+                %small
+                  By
+                  %a{:href => ""} Epiclogger Team
+              %td 6.4.4
+              %td.text-center
+                %input{:type => "checkbox"}
+            %tr
+              %td
+                Auto Tag: URLs
+                %br
+                %small
+                  By
+                  %a{:href => ""} Epiclogger Team
+              %td 6.4.4
+              %td.text-center
+                %input{:type => "checkbox"}
+            %tr
+              %td
+                Mail
+                %br
+                %small
+                  By
+                  %a{:href => ""} Epiclogger TeamMail
+              %td 6.4.4
+              %td.text-center
+                %input{:type => "checkbox"}
+
+
+  .col-lg-12#client-details.main-tabs
+    %ul.nav.nav-tabs#details-tabs.main-tabs
+      %li.active
+        %a{:href => "#settings"} Settings
+      %li
+        %a{:href => "#notifications"} Notifications
+      / %li
+      /   %a{:href => "#rate-limits"} Rate Limits
+      / %li
+      /   %a{:href => "#tags"} Tags
+      %li
+        %a{:href => "#api-keys"} Api Keys
+    %br
+    #current-website
+      #settings.tab
+        .col-lg-6
+          .panel.panel-default
+            .panel-heading Project Details
+            .panel-body
+              %form#formWebsite{:action => "", :method => "post"}
+                .form-group
+                  %label.control-label Name
+                  %input#title.form-control{:placeholder => "Website name", :required => "required", :type => "text", :name => 'website[title]'}/
+                .form-group
+                  %label.control-label Domain
+                  %input#domain.form-control{:placeholder => "http://www.domain.com", :required => "required", :type => "url", :name => 'website[domain]'}/
+                %hr
+                .form-group
+                  %label.control-label Platforms*
+                  %br
+                  .dropdown
+                    %button.btn.btn-default.cust-dropdown.dropdown-toggle#platform{"data-toggle" => "dropdown", :type => "button"}
+                      Platforms
+                      %span.caret
+                    %ul.dropdown-menu
+                      %li
+                        %a{:href => '#', :name => 'Connect(Node.js)'} Connect(Node.js)
+                      %li
+                        %a{:href => '#', :name => 'Django(Python)'} Django(Python)
+                      %li
+                        %a{:href => '#', :name => 'Express(Node.js)'} Express(Node.js)
+                      %li
+                        %a{:href => '#', :name => 'Flask(Python)'} Flask(Python)
+                      %li
+                        %a{:href => '#', :name => 'IOS'} IOS
+                      %li
+                        %a{:href => '#', :name => 'Java'} Java
+                      %li
+                        %a{:href => '#', :name => 'Java Util Logging(Java)'} Java
+                      %li
+                        %a{:href => '#', :name => 'Log4j(Java)'} Log4j(Java)
+                      %li
+                        %a{:href => '#', :name => 'Log4j 2.x(Java)'} Log4j 2.x(Java)
+                      %li
+                        %a{:href => '#', :name => 'Logback(Java)'} Logback(Java)
+                      %li
+                        %a{:href => '#', :name => 'Javascript'} Javascript
+                      %li
+                        %a{:href => '#', :name => 'Node.js'} Node.js
+                      %li
+                        %a{:href => '#', :name => 'PHP'} PHP
+                      %li
+                        %a{:href => '#', :name => 'Python'} Python
+                      %li
+                        %a{:href => '#', :name => 'Ruby'} Ruby
+                      %li
+                        %a{:href => '#', :name => 'Rails 3(Ruby)'} Rails 3(Ruby)
+                      %li
+                        %a{:href => '#', :name => 'Rails 4(Ruby)'} Rails 4(Ruby)
+                      %li
+                        %a{:href => '#', :name => 'Sidekiq'} Sidekiq
+                      %li
+                        %a{:href => '#', :name => 'Sinatra'} Sinatra
+                      %li
+                        %a{:href => '#', :name => 'Tornado'} Tornado
+                %hr
+                .form-group
+                  %label.control-label Owner*
+                  %br
+                  .dropdown
+                    %button.btn.btn-default.cust-dropdown.dropdown-toggle#owner{"data-toggle" => "dropdown", :type => "button"}
+                      Owners
+                      %span.caret
+                    %ul.dropdown-menu
+                      %li
+                        %table.table#owners
+                          %tbody.members
+                            %tr.website_member_row{"id"=>1}
+                              %td.email
+                              %td.text-right
+                                = link_to '×', api_v1_website_members_path(), :method => :delete, :remote => "true", data: {confirm: "Are you sure?"}, :class => "delete_member"
+                / %hr
+                / .form-group
+                /   %label.control-label Slug*
+                /   %input.form-control{:required => "required", :type => "text", :name => "Slug"}
+          / .panel.panel-default.codeview
+          /   .panel-heading Event Settings
+          /   .panel-body
+          /     %small Treat an event as resolved if it hasn't been seen for this amount of time.
+          /     %p
+          /     .range-slider
+          /       %input.input-range{:max => "168", :min => "0", :type => "range", :value => "0"}
+          /         %span.range-value
+          /     %br
+          .form-group
+            %button.btn.btn-success#edit-website Save Changes
+            %button.btn.btn-warning Remove Project
+        .col-lg-6
+          .panel.panel-default.codeview
+            .panel-heading Project Details
+            .panel-body
+              .well.wel-sm
+                %p After adding the website domain we are going to offer you a javascript code to add to your error pages so the users will get recorded when they receive errors.
+                %p You will be able to get in contact with your users after the errors are received and send them messages to let them know the issues are resolved.
+              / %p Configure origin URLs which Epiclogger should accept events from. This is used for communication with clients like raven-js.
+              / %p This will restrict requirements based on the Origin and Referrer headers.
+              / .form-group
+              /   %label{:for => "comment"} Allowed Domains:
+              /   %textarea#comment.form-control{:placeholder => "e.g. example.com or https://example.com", :rows => "7"}
+              / %small Separate multiple entries with a newline.
+
+      #notifications.tab
         .col-lg-12
           .panel.panel-default
-            .panel-heading Manage Integrations
+            .panel-heading Notifications
             .panel-body
-              %table.table.table-striped
-                %thead
-                  %tr
-                    %th Integration
-                    %th Version
-                    %th.text-center Enabled
-                %tbody
-                  %tr
-                    %td
-                      Auto Tag: Browsers
+              .col-lg-9
+                %label Events
+                .alert.alert-info
+                  Epiclogger will automatically notify you whenever an event is first seen, or its state changes from resolved to unresolved.
+                %p
+                  %input{:name => "daily", :type => "checkbox", :value => "daily"}
+                    Recieve daily reports
+                %p
+                  %input{:name => "realtime", :type => "checkbox", :value => "realtime"}
+                    Receive realtime error emails
+                %p
+                  %input{:name => "new_event", :type => "checkbox", :value => "new_event"}
+                    Receive emails when a new event happens
+                %p
+                  %input{:name => "frequent_event", :type => "checkbox", :value => "frequent_event"}
+                    Recieve another email if an event/error happens more than 10 times in a certain time interval.
+              .col-lg-3
+                %button.btn.btn-primary.pull-right#save
+                  %span.fa.fa-save
+                  Save settings
+
+      / #rate-limits.tab
+      /   .col-lg-9
+      /     .panel.panel-default
+      /       .panel-heading Rate Limits
+      /       .panel-body
+      /         %p With the nature of Epiclogger, sometimes the amount of data collected can be overwhelming. You can set rate limits per-project to ensure that a single flood of<br>errors won't affect any other projects utilizing Epiclogger.
+
+      /         %p Rate limits apply on a per-minute basis, which means that they rollover at the start of a new minute. When you attempt to send an event and the project is over<br> its quota, the client will receive an HTTP 429 (Too Many Requests) response.
+      /         %strong Note: The Epiclogger application is not configured to manage rate limits.
+
+      /         %p
+      /         %form#formWebsite{:action => "", :method => "post"}
+      /           .form-group
+      /             .col-lg-4
+      /               %label.control-label Maximum events per minute
+      /               %input#title.form-control{:placeholder => "90%", :required => "required", :type => "text", :name => 'name'}/
+      /         %br
+      /         %br
+      /         %br
+      /         %small This cannot be higher than the team (or system) allotted maximum. The value can be either a fixed number, or a percentage that is relative to the team's overall quota.
+      /         %hr
+      /         %button.btn.btn-primary Save Changes
+      / #tags.tab
+      /   .col-lg-9
+      /     .panel.panel-default
+      /       .panel-heading Manage Tags
+      /       .panel-default
+      /         %p We have not yet recorded any tags for this project.
+      #api-keys.tab
+        .col-lg-12
+          .panel.panel-default
+            .panel-heading Manage API Keys
+            .panel-body
+              %button.btn.btn-primary.pull-right#generateAppKey
+                %span.fa.fa-key
+                Generate new key
+              .row
+                %a.btn.btn-link{:href => "installations"}
+                  %span.glyphicon.glyphicon-flag
+                  Get help to install libraries
+                %p
+                .codeview
+                  .codepanel
+                    .col-lg-1
+                      %h5 App Id:
+                      %h5 App Key:
+                    .col-lg-8
+                      %h5.app_id
+                      %h5.app_key
+                    .col-lg-3
                       %br
-                      %small
-                        By
-                        %a{:href => ""} Epiclogger Team
-                    %td 6.4.4
-                    %td.text-center
-                      %input{:type => "checkbox"}
-                  %tr
-                    %td
-                      Auto Tag: Interface Types
-                      %br
-                      %small
-                        By
-                        %a{:href => ""} Epiclogger Team
-                    %td 6.4.4
-                    %td.text-center
-                      %input{:type => "checkbox"}
-                  %tr
-                    %td
-                      Auto Tag: Operating Systems
-                      %br
-                      %small
-                        By
-                        %a{:href => ""} Epiclogger Team
-                    %td 6.4.4
-                    %td.text-center
-                      %input{:type => "checkbox"}
-                  %tr
-                    %td
-                      Auto Tag: URLs
-                      %br
-                      %small
-                        By
-                        %a{:href => ""} Epiclogger Team
-                    %td 6.4.4
-                    %td.text-center
-                      %input{:type => "checkbox"}
-                  %tr
-                    %td
-                      Mail
-                      %br
-                      %small
-                        By
-                        %a{:href => ""} Epiclogger TeamMail
-                    %td 6.4.4
-                    %td.text-center
-                      %input{:type => "checkbox"}
+                      %span.btn.btn-danger.pull-right#revoke
+                        Revoke
+                %p
+                %ul.nav.nav-pills
+                  %li.active
+                    .label.label-success
+                      %i.fa.fa-user
+                      Members
+                      .badge.members
+                  %li.active
+                    .label.label-success
+                      %i.fa.fa-users
+                      Subscribers
+                      .badge.subscribers
+                  %li.active
+                    .label.label-danger
+                      %i.fa.fa-wrench
+                      Errors
+                      .badge.errors
 
 
-    .col-lg-12#client-details.main-tabs
-      %ul.nav.nav-tabs#details-tabs.main-tabs
-        %li.active
-          %a{:href => "#settings"} Settings
-        %li
-          %a{:href => "#notifications"} Notifications
-        / %li
-        /   %a{:href => "#rate-limits"} Rate Limits
-        / %li
-        /   %a{:href => "#tags"} Tags
-        %li
-          %a{:href => "#api-keys"} Api Keys
-      %br
-      #current-website
-        #settings.tab
-          .col-lg-6
-            .panel.panel-default
-              .panel-heading Project Details
-              .panel-body
-                %form#formWebsite{:action => "", :method => "post"}
-                  .form-group
-                    %label.control-label Name
-                    %input#title.form-control{:placeholder => "Website name", :required => "required", :type => "text", :name => 'website[title]'}/
-                  .form-group
-                    %label.control-label Domain
-                    %input#domain.form-control{:placeholder => "http://www.domain.com", :required => "required", :type => "url", :name => 'website[domain]'}/
-                  %hr
-                  .form-group
-                    %label.control-label Platforms*
-                    %br
-                    .dropdown
-                      %button.btn.btn-default.cust-dropdown.dropdown-toggle#platform{"data-toggle" => "dropdown", :type => "button"}
-                        Platforms
-                        %span.caret
-                      %ul.dropdown-menu
-                        %li
-                          %a{:href => '#', :name => 'Connect(Node.js)'} Connect(Node.js)
-                        %li
-                          %a{:href => '#', :name => 'Django(Python)'} Django(Python)
-                        %li
-                          %a{:href => '#', :name => 'Express(Node.js)'} Express(Node.js)
-                        %li
-                          %a{:href => '#', :name => 'Flask(Python)'} Flask(Python)
-                        %li
-                          %a{:href => '#', :name => 'IOS'} IOS
-                        %li
-                          %a{:href => '#', :name => 'Java'} Java
-                        %li
-                          %a{:href => '#', :name => 'Java Util Logging(Java)'} Java
-                        %li
-                          %a{:href => '#', :name => 'Log4j(Java)'} Log4j(Java)
-                        %li
-                          %a{:href => '#', :name => 'Log4j 2.x(Java)'} Log4j 2.x(Java)
-                        %li
-                          %a{:href => '#', :name => 'Logback(Java)'} Logback(Java)
-                        %li
-                          %a{:href => '#', :name => 'Javascript'} Javascript
-                        %li
-                          %a{:href => '#', :name => 'Node.js'} Node.js
-                        %li
-                          %a{:href => '#', :name => 'PHP'} PHP
-                        %li
-                          %a{:href => '#', :name => 'Python'} Python
-                        %li
-                          %a{:href => '#', :name => 'Ruby'} Ruby
-                        %li
-                          %a{:href => '#', :name => 'Rails 3(Ruby)'} Rails 3(Ruby)
-                        %li
-                          %a{:href => '#', :name => 'Rails 4(Ruby)'} Rails 4(Ruby)
-                        %li
-                          %a{:href => '#', :name => 'Sidekiq'} Sidekiq
-                        %li
-                          %a{:href => '#', :name => 'Sinatra'} Sinatra
-                        %li
-                          %a{:href => '#', :name => 'Tornado'} Tornado
-                  %hr
-                  .form-group
-                    %label.control-label Owner*
-                    %br
-                    .dropdown
-                      %button.btn.btn-default.cust-dropdown.dropdown-toggle#owner{"data-toggle" => "dropdown", :type => "button"}
-                        Owners
-                        %span.caret
-                      %ul.dropdown-menu
-                        %li
-                          %table.table#owners
-                            %tbody.members
-                              %tr.website_member_row{"id"=>1}
-                                %td.email
-                                %td.text-right
-                                  = link_to '×', api_v1_website_members_path(), :method => :delete, :remote => "true", data: {confirm: "Are you sure?"}, :class => "delete_member"
-                  / %hr
-                  / .form-group
-                  /   %label.control-label Slug*
-                  /   %input.form-control{:required => "required", :type => "text", :name => "Slug"}
-            / .panel.panel-default.codeview
-            /   .panel-heading Event Settings
-            /   .panel-body
-            /     %small Treat an event as resolved if it hasn't been seen for this amount of time.
-            /     %p
-            /     .range-slider
-            /       %input.input-range{:max => "168", :min => "0", :type => "range", :value => "0"}
-            /         %span.range-value
-            /     %br
-            .form-group
-              %button.btn.btn-success#edit-website Save Changes
-              %button.btn.btn-warning Remove Project
-          .col-lg-6
-            .panel.panel-default.codeview
-              .panel-heading Project Details
-              .panel-body
-                .well.wel-sm
-                  %p After adding the website domain we are going to offer you a javascript code to add to your error pages so the users will get recorded when they receive errors.
-                  %p You will be able to get in contact with your users after the errors are received and send them messages to let them know the issues are resolved.
-                / %p Configure origin URLs which Epiclogger should accept events from. This is used for communication with clients like raven-js.
-                / %p This will restrict requirements based on the Origin and Referrer headers.
-                / .form-group
-                /   %label{:for => "comment"} Allowed Domains:
-                /   %textarea#comment.form-control{:placeholder => "e.g. example.com or https://example.com", :rows => "7"}
-                / %small Separate multiple entries with a newline.
+  .col-lg-12#client-configuration.main-tabs
+    %ul.nav.nav-tabs#platforms-tabs.main-tabs
+      %li.active
+        %a{:href => "#all-platforms"} All Platforms
+      %li
+        %a{:href => "#javascript"} Javascript
+      %li
+        %a{:href => "#python"} Python
+      %li
+        %a{:href => "#php"} PHP
+      %li
+        %a{:href => "#ruby"} Ruby
+      %li
+        %a{:href => "#node-js"} Node.js
+      %li
+        %a{:href => "#java"} Java
+      %li
+        %a{:href => "#ios"} IOS
+    %br
+    #all-platforms.tab
+      .panel.panel-default.codeview#client-information
+        .panel-heading Client Configuration
+        .panel-body
+          %h5 To start sending events, configure your client with the following DSN value:
+          %pre
+            %code.language-html.platform-code
+              https://{app_key}:{app_id}@test-sentry89.herokuapp.com/{id}
+          %br/
+          %h5 If this is a client that only needs public access (like epiclogger-js), you can use the following public DSN:
+          %pre
+            %code.language-html.platform-code
+              https://{app_key}@test-sentry89.herokuapp.com/{id}
+      .panel.panel-default.tileview#client-platforms
+        .panel-heading Platforms
+        .panel-body#img-platforms{:style => 'cursor: pointer'}
+          %a.tile.resize-a.text-center{:href => "#javascript"}
+            %img.resize-img{:src => image_path("icon_javascript.png")}/
+            %span Javascript
+          %a.tile.resize-a.text-center{:href => "#python"}
+            %img.resize-img{:src => image_path("icon_python.png")}/
+            %span Python
+          %a.tile.resize-a.text-center{:href => "#php"}
+            %img.resize-img{:src => image_path("icon_php.png")}/
+            %span PHP
+          %a.tile.resize-a.text-center{:href => "#ruby"}
+            %img.resize-img{:src => image_path("icon_ruby.png")}/
+            %span Ruby
+          %a.tile.resize-a.text-center{:href => "#node-js"}
+            %img.resize-img{:src => image_path("icon_nodejs.png")}/
+            %span Node.js
+          %a.tile.resize-a.text-center{:href => "#java"}
+            %img.resize-img{:src => image_path("icon_java.png")}/
+            %span Java
+          %a.tile.resize-a.text-center{:href => "#ios"}
+            %img.resize-img{:src => image_path("icon_ios.png")}/
+            %span IOS
 
-        #notifications.tab
-          .col-lg-12
-            .panel.panel-default
-              .panel-heading Notifications
-              .panel-body
-                .col-lg-9
-                  %label Events
-                  .alert.alert-info
-                    Epiclogger will automatically notify you whenever an event is first seen, or its state changes from resolved to unresolved.
-                  %p
-                    %input{:name => "daily", :type => "checkbox", :value => "daily"}
-                      Recieve daily reports
-                  %p
-                    %input{:name => "realtime", :type => "checkbox", :value => "realtime"}
-                      Receive realtime error emails
-                  %p
-                    %input{:name => "new_event", :type => "checkbox", :value => "new_event"}
-                      Receive emails when a new event happens
-                  %p
-                    %input{:name => "frequent_event", :type => "checkbox", :value => "frequent_event"}
-                      Recieve another email if an event/error happens more than 10 times in a certain time interval.
-                .col-lg-3
-                  %button.btn.btn-primary.pull-right#save
-                    %span.fa.fa-save
-                    Save settings
-
-        / #rate-limits.tab
-        /   .col-lg-9
-        /     .panel.panel-default
-        /       .panel-heading Rate Limits
-        /       .panel-body
-        /         %p With the nature of Epiclogger, sometimes the amount of data collected can be overwhelming. You can set rate limits per-project to ensure that a single flood of<br>errors won't affect any other projects utilizing Epiclogger.
-
-        /         %p Rate limits apply on a per-minute basis, which means that they rollover at the start of a new minute. When you attempt to send an event and the project is over<br> its quota, the client will receive an HTTP 429 (Too Many Requests) response.
-        /         %strong Note: The Epiclogger application is not configured to manage rate limits.
-
-        /         %p
-        /         %form#formWebsite{:action => "", :method => "post"}
-        /           .form-group
-        /             .col-lg-4
-        /               %label.control-label Maximum events per minute
-        /               %input#title.form-control{:placeholder => "90%", :required => "required", :type => "text", :name => 'name'}/
-        /         %br
-        /         %br
-        /         %br
-        /         %small This cannot be higher than the team (or system) allotted maximum. The value can be either a fixed number, or a percentage that is relative to the team's overall quota.
-        /         %hr
-        /         %button.btn.btn-primary Save Changes
-        / #tags.tab
-        /   .col-lg-9
-        /     .panel.panel-default
-        /       .panel-heading Manage Tags
-        /       .panel-default
-        /         %p We have not yet recorded any tags for this project.
-        #api-keys.tab
-          .col-lg-12
-            .panel.panel-default
-              .panel-heading Manage API Keys
-              .panel-body
-                %button.btn.btn-primary.pull-right#generateAppKey
-                  %span.fa.fa-key
-                  Generate new key
-                #current-website.row
-                  %a.btn.btn-link{:href => "installations"}
-                    %span.glyphicon.glyphicon-flag
-                    Get help to install libraries
-                  %p
-                  .codeview
-                    .codepanel
-                      .col-lg-1
-                        %h5 App Id:
-                        %h5 App Key:
-                      .col-lg-8
-                        %h5.app_secret
-                        %h5.app_key
-                      .col-lg-3
-                        %br
-                        %span.btn.btn-danger.pull-right#revoke
-                          Revoke
-                  %p
-                  %ul.nav.nav-pills
-                    %li.active
-                      .label.label-success
-                        %i.fa.fa-user
-                        Members
-                        .badge.members
-                    %li.active
-                      .label.label-success
-                        %i.fa.fa-users
-                        Subscribers
-                        .badge.subscribers
-                    %li.active
-                      .label.label-danger
-                        %i.fa.fa-wrench
-                        Errors
-                        .badge.errors
-
-    .col-lg-12#client-configuration.main-tabs
-      %ul.nav.nav-tabs#platforms-tabs.main-tabs
-        %li.active
-          %a{:href => "#all-platforms"} All Platforms
-        %li
-          %a{:href => "#javascript"} Javascript
-        %li
-          %a{:href => "#python"} Python
-        %li
-          %a{:href => "#php"} PHP
-        %li
-          %a{:href => "#ruby"} Ruby
-        %li
-          %a{:href => "#node-js"} Node.js
-        %li
-          %a{:href => "#java"} Java
-        %li
-          %a{:href => "#ios"} IOS
-      %br
-      #all-platforms.tab
-
-        .panel.panel-default.codeview#client-information
-          .panel-heading Client Configuration
-          .panel-body
-            %h5 To start sending events, configure your client with the following DSN value:
-            %pre
-              %code.language-html.platform-code
-                https://{app_key}:{app_id}@test-sentry89.herokuapp.com/{id}
-            %br/
-            %h5 If this is a client that only needs public access (like epiclogger-js), you can use the following public DSN:
-            %pre
-              %code.language-html.platform-code
-                https://{app_key}@test-sentry89.herokuapp.com/{id}
-        .panel.panel-default.tileview#client-platforms
-          .panel-heading Platforms
-          .panel-body#img-platforms{:style => 'cursor: pointer'}
-            %a.tile.resize-a.text-center{:href => "#javascript"}
-              %img.resize-img{:src => image_path("icon_javascript.png")}/
-              %span Javascript
-            %a.tile.resize-a.text-center{:href => "#python"}
-              %img.resize-img{:src => image_path("icon_python.png")}/
-              %span Python
-            %a.tile.resize-a.text-center{:href => "#php"}
-              %img.resize-img{:src => image_path("icon_php.png")}/
-              %span PHP
-            %a.tile.resize-a.text-center{:href => "#ruby"}
-              %img.resize-img{:src => image_path("icon_ruby.png")}/
-              %span Ruby
-            %a.tile.resize-a.text-center{:href => "#node-js"}
-              %img.resize-img{:src => image_path("icon_nodejs.png")}/
-              %span Node.js
-            %a.tile.resize-a.text-center{:href => "#java"}
-              %img.resize-img{:src => image_path("icon_java.png")}/
-              %span Java
-            %a.tile.resize-a.text-center{:href => "#ios"}
-              %img.resize-img{:src => image_path("icon_ios.png")}/
-              %span IOS
-
-        .panel.panel-default.tileview#client-frameworks
-          .panel-heading Frameworks
-          .panel-body
-            %a.tile.resize-a.text-center{:name => '#ruby', :href => "#rails-3"}
-              %img.resize-img{:src => image_path("icon_rails.png")}/
-              %span Rails 3
-            %a.tile.resize-a.text-center{:name => '#ruby',:href => "#rails-4"}
-              %img.resize-img{:src => image_path("icon_rails.png")}/
-              %span Rails 4
-            %a.tile.resize-a.text-center{:name => '#python',:href => "#django"}
-              %img.resize-img{:src => image_path("icon_django.png")}/
-              %span Django
-        %div
-          %h5{:style => 'display:inline'} For more information on developing clients and the Sentry API, see the
-          %a{:href => '#'}documentation.
-      = render partial: 'websites/configuration'
+      .panel.panel-default.tileview#client-frameworks
+        .panel-heading Frameworks
+        .panel-body
+          %a.tile.resize-a.text-center{:name => '#ruby', :href => "#rails-3"}
+            %img.resize-img{:src => image_path("icon_rails.png")}/
+            %span Rails 3
+          %a.tile.resize-a.text-center{:name => '#ruby',:href => "#rails-4"}
+            %img.resize-img{:src => image_path("icon_rails.png")}/
+            %span Rails 4
+          %a.tile.resize-a.text-center{:name => '#python',:href => "#django"}
+            %img.resize-img{:src => image_path("icon_django.png")}/
+            %span Django
+      %div
+        %h5{:style => 'display:inline'} For more information on developing clients and the Sentry API, see the
+        %a{:href => '#'}documentation.
+    = render partial: 'websites/configuration'
