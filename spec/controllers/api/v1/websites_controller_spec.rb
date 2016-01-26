@@ -140,6 +140,7 @@ describe Api::V1::WebsitesController, :type => :controller do
             app_key: website.app_key,
             domain: website.domain,
             title: website.title,
+            platform: website.platform,
             new_event: website.new_event,
             frequent_event: website.frequent_event,
             daily: website.daily,
