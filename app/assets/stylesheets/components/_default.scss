@@ -480,12 +480,12 @@ img.profileimg {
 /* code for custom dropdown navbar */
 
 #custom-bootstrap-menu.navbar-default {
-  height: 9%;
+  height: 6.5%;
   font-size: 18px;
   background-color: rgba(239, 239, 242, 1);
 }
 #custom-bootstrap-menu.navbar-default .navbar-nav>li>a {
-  padding-top: 23px;
+  padding-top: 21px;
   color: rgba(119, 119, 119, 1);
   background-color: rgba(239, 239, 242, 1);
 }
@@ -497,8 +497,8 @@ img.profileimg {
 #custom-bootstrap-menu.navbar-default .navbar-nav>.active>a,
 #custom-bootstrap-menu.navbar-default .navbar-nav>.active>a:hover,
 #custom-bootstrap-menu.navbar-default .navbar-nav>.active>a:focus {
-  padding-top: 23px;
-  padding-bottom: 23px;
+  padding-top: 21px;
+  padding-bottom: 21px;
   color: rgba(163, 163, 163, 1);
   background-color: rgba(220, 220, 224, 1);
 }
