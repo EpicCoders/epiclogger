@@ -20,16 +20,16 @@ module ErrorStore
       message       = data.delete(:message)
       level         = data.delete(:level)
 
-      culprit       = data.delete(:culprit) || nil
-      time_spent    = data.delete(:time_spent) || nil
-      logger_name   = data.delete(:logger) || nil
-      server_name   = data.delete(:server_name) || nil
-      site          = data.delete(:site) || nil
-      checksum      = data.delete(:checksum) || nil
-      fingerprint   = data.delete(:fingerprint) || nil
-      platform      = data.delete(:platform) || nil
-      release       = data.delete(:release) || nil
-      environment   = data.delete(:environment) || nil
+      culprit       = data.delete(:culprit)
+      time_spent    = data.delete(:time_spent)
+      logger_name   = data.delete(:logger)
+      server_name   = data.delete(:server_name)
+      site          = data.delete(:site)
+      checksum      = data.delete(:checksum)
+      fingerprint   = data.delete(:fingerprint)
+      platform      = data.delete(:platform)
+      release       = data.delete(:release)
+      environment   = data.delete(:environment)
 
       culprit = generate_culprit(data) if culprit.blank?
 
@@ -38,15 +38,15 @@ module ErrorStore
       # date = date.replace(tzinfo=timezone.utc)
       date = data.delete(:timestamp) # ?? not done TODO fix
 
-      issue = Issue.new({
-          website: website,
-          event_id: event_id,
-          data: data.to_json,
-          time_spent: time_spent,
-          datetime: date,
-          message: message,
-          platform: platform
-      })
+      issue = Issue.new(
+        website: website,
+        event_id: event_id,
+        data: data.to_json,
+        time_spent: time_spent,
+        datetime: date,
+        message: message,
+        platform: platform
+      )
 
       issue_user = _get_subscriber(website, data)
 
@@ -72,7 +72,12 @@ module ErrorStore
         time_spent_count: time_spent && 1 || 0
       }
 
-      group, is_new, is_regression, is_sample = _save_aggregate(issue: issue, hash: hash, release: release, **group_params)
+      group, is_new, is_regression, is_sample = _save_aggregate(
+        issue: issue,
+        hash: hash,
+        release: release,
+        **group_params
+      )
 
       issue.group = group
       issue.group_id = group.id
@@ -283,7 +288,7 @@ module ErrorStore
         next unless result
         return [interface.type, result]
       end
-      [:message, [issue.message]]
+      [:message, [[issue.message]]]
     end
 
     def get_hashes_from_fingerprint(issue, fingerprint)
