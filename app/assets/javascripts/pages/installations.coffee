@@ -12,55 +12,31 @@ replaceHtmlText = (selected, replace_with) ->
   $.each $('.platform-code'), (index, code) ->
     $(code).html($(code).html().replace( selected, replace_with))
 
-PubSub.subscribe('assigned.website', (ev, website)->
-  switch gon.action
-    when "index"
-      createWebsite(website.id)
-      $('.tab, .main-tabs').hide()
-      $('#client-details, #details-tabs, #settings').show()
-      $.getJSON Routes.api_v1_website_members_url(), { website_id: website.id }, (data) ->
-        $('#owners').render data, directive
-        $('#owner').html(data.website_members[0].email)
-        $('#owner').append('<span class="caret"></span>')
+websiteChanged = (website) ->
+  return true if $('#domain').attr('value') != website.domain
+  return true if $('#title').attr('value') != website.title
+  return true if $('#platform').text().replace(/\s/g, '') != website.platform
+  return false
 
-      $.getJSON Routes.api_v1_website_path(website.id), (data) ->
-        $('input[name=daily]').attr('checked', true) if data.daily
-        $('input[name=realtime]').attr('checked', true) if data.realtime
-        $('input[name=new_event]').attr('checked', true) if data.new_event
-        $('input[name=frequent_event]').attr('checked',true) if data.frequent_event
-        $('#save, #edit-website').prop('disabled', true)
-        $('#current-website').render data
-        $('#platform').html(data.platform + ' <span class="caret"></span>')
-        generateApiKey(data)
-
-        replaceHtmlText(/{app_key}/g, data.app_key)
-        replaceHtmlText(/{app_id}/g, data.app_id)
-        replaceHtmlText(/{id}/g, data.id)
-
-      $('#title, #domain').change ->
-        $('#edit-website').prop('disabled', false)
-
-      $('input').change ->
-        $('#save').prop('disabled', false)
-
-      $('#save').on 'click', (e) ->
-        e.preventDefault()
-        $.ajax
-          url: Routes.api_v1_website_path(website.id)
-          type: 'put'
-          dataType: 'json'
-          data: {
-            website: {
-              daily: $('input[name=daily]').is(':checked'),
-              realtime: $('input[name=realtime]').is(':checked'),
-              new_event: $('input[name=new_event]').is(':checked'),
-              frequent_event: $('input[name=frequent_event]').is(':checked')
-            }
-          }
-          success: (data) ->
-            $('#save').prop('disabled', true)
-            swal("Success!", "You will recieve notifications soon.", "success")
-)
+editWebsite = (website) ->
+  $.website = website
+  $('#edit-website').on 'click', (e) ->
+    e.preventDefault()
+    if websiteChanged($.website)
+      $.ajax
+        url: Routes.api_v1_website_url($.website.id)
+        type: 'put'
+        dataType: 'json'
+        data: $('#formWebsite').serialize()
+        success: (data) ->
+          EpicLogger.setMemberDetails(data.id)
+          swal("Success!", "Website settings updated!", "success")
+          setTimeout (->
+            location.href = '/installations'
+            return
+          ), 2000
+    else
+      swal("Notification", "Make a change to your website before editing", "warning")
 
 generateApiKey = (data) ->
   $.website_id = data.id
@@ -78,28 +54,71 @@ generateApiKey = (data) ->
         ), 2000
     return
 
+handleEditDetails = (website_id) ->
+  $.getJSON Routes.api_v1_website_path(website_id), (data) ->
+
+    editWebsite(data)
+    generateApiKey(data)
+
+    $('input[name=daily]').attr('checked', true) if data.daily
+    $('input[name=realtime]').attr('checked', true) if data.realtime
+    $('input[name=new_event]').attr('checked', true) if data.new_event
+    $('input[name=frequent_event]').attr('checked',true) if data.frequent_event
+    $('#save').prop('disabled', true)
+    $('#current-website').render data
+    $('#platform').html(data.platform + ' <span class="caret"></span>')
+
+  $('input').change ->
+    $('#save').prop('disabled', false)
+
+  $('#save').on 'click', (e) ->
+    e.preventDefault()
+    $.ajax
+      url: Routes.api_v1_website_path(website_id)
+      type: 'put'
+      dataType: 'json'
+      data: {
+        website: {
+          daily: $('input[name=daily]').is(':checked'),
+          realtime: $('input[name=realtime]').is(':checked'),
+          new_event: $('input[name=new_event]').is(':checked'),
+          frequent_event: $('input[name=frequent_event]').is(':checked')
+        }
+      }
+      success: (data) ->
+        $('#save').prop('disabled', true)
+        swal("Success!", "You will recieve notifications soon.", "success")
+
+
+PubSub.subscribe('assigned.website', (ev, website)->
+  switch gon.action
+    when "index"
+      handleEditDetails(website.id)
+      $('.tab, .main-tabs').hide()
+      $('#client-details, #details-tabs, #settings').show()
+      $.getJSON Routes.api_v1_website_members_url(), { website_id: website.id }, (data) ->
+        $('#owners').render data, directive
+        $('#owner').html(data.website_members[0].email)
+        $('#owner').append('<span class="caret"></span>')
+
+
+        replaceHtmlText(/{app_key}/g, data.app_key)
+        replaceHtmlText(/{app_id}/g, data.app_id)
+        replaceHtmlText(/{id}/g, data.id)
+)
+
 $('.dropdown-menu li a').click ->
   selText = $(this).text()
   $(this).parents('.dropdown').find('.dropdown-toggle').html selText + ' <span class="caret"></span>'
   return
 
-createWebsite = (website_id) ->
-  $('#edit-website').on 'click', (e) ->
-    e.preventDefault()
-    $.ajax
-      url: Routes.api_v1_website_url(website_id)
-      type: 'put'
-      dataType: 'json'
-      data: $('#formWebsite').serialize()
-      success: (data) ->
-        EpicLogger.setMemberDetails(data.id)
-        swal("Success!", "Website settings updated!", "success")
-        $('#edit-website').prop('disabled', true)
-        setTimeout (->
-          location.href = '/installations'
-          return
-        ), 2000
-
+switchTab = (target,location) ->
+  $('.tab').hide()
+  $(target).tab('show')
+  tag = $(target).attr('href')
+  $(tag).show()
+  $('#'+this.name+'tab').show()
+  return
 
 $('#top-tabs a').on 'click', (e) ->
   e.preventDefault()
@@ -120,11 +139,11 @@ $('#client-configuration li').on 'click', (e) ->
 
 $('#platforms-tabs a').click (e) ->
   e.preventDefault()
-  toggleTabs( e.target,'platforms' )
+  switchTab(e.target,'platforms')
 
 $('#details-tabs a').click (e) ->
   e.preventDefault()
-  toggleTabs( e.target,'details' )
+  switchTab(e.target,'details')
 
 $('#img-platforms a').on 'click', (e) ->
   $('.tab').hide()
@@ -140,11 +159,3 @@ $('#client-frameworks a').on 'click', (e) ->
   $($("a[href='"+attr+"']")[1]).tab('show')
   $('.tabs').hide()
   $(attr).show()
-
-toggleTabs = (target,location) ->
-  $('.tab').hide()
-  $(target).tab('show')
-  tag = $(target).attr('href')
-  $(tag).show()
-  $('#'+this.name+'tab').show()
-  return
