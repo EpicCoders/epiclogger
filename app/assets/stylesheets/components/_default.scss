@@ -36,7 +36,7 @@ p {
   display:none;
 }
 
-.active{
+.active-link{
   background-color:#ffffff;
 
   a{
@@ -53,7 +53,7 @@ p {
   }
 }
 
-.active:hover{
+.active-link:hover{
   background-color:#ffffff !important;
 
   a{
@@ -353,7 +353,7 @@ p {
         }
 
         .dropdown-menu{
-          top:-40%;
+          top:-50%;
           left:auto;
           min-width:40px;
           font-size:10px;

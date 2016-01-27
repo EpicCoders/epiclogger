@@ -9,14 +9,15 @@
             = nav_link  "", new_website_path(), {'title' => 'Add new website'}, 'plus'
             = nav_link "", errors_url(), {'title' => 'Errors'}, 'exclamation-triangle'
             = nav_link "", installations_url(), {'title' => 'Installation'}, 'code'
-            = nav_link "", edit_member_url(1), {'title' => 'Users'}, 'user'
+            = nav_link "", website_members_url(), {'title' => 'Members'}, 'users'
             = nav_link "", 'mailto:info@epiclogger.com', {'data-helpful'=>'epiclogger','data-helpful-modal'=>"on", :class=>'helpful-link', 'title' => 'Help'}, 'question'
-            / # = nav_link "", settings_url(), {'title' => 'Settings'}, 'cog'
         .footer
           .inner
             .dropdown.btn-group
               %img.dropdown-toggle.profileimg.pull-left{:src => "http://0.gravatar.com/avatar/59b762ebf3d116bf806bcfa3fa12e65f","data-toggle" => "dropdown"}/
               %ul.dropdown-menu
+                %li
+                  %a{:href => "#{websites_url()}"} Websites
                 %li
                   %a{:href => "#"} Account
                 %li

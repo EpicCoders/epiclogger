@@ -19,7 +19,7 @@ window.EpicLogger = (->
       EpicLogger.bindResize()
       $('#pick_website').hide()
       $('.website-container').find('#add-new').slideUp 80
-      $('.picked-website').on 'click', ->
+      $('.picked-website, #websites-sidebar').on 'click', ->
         $('#websites-sidebar').toggleClass('show-websites')
         $('.website-container').find('#add-new').slideToggle()
 
