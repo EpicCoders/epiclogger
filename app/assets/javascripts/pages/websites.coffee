@@ -59,12 +59,12 @@ PubSub.subscribe('assigned.website', (ev, website)->
 
 goToStep = (n) ->
   if n != 0
-    $('.stepwizard-row a').removeClass('btn-primary')
+    $('.stepwizard-row a').removeClass('btn-info')
     $('.stepwizard-row a').addClass('btn-default')
     $('.tab'+n).attr('disabled', false)
     $('.stepwizard a[href="#step-' + n + '"]').tab 'show'
     $('.stepwizard-row a[href="#step-' + n + '"]').removeClass 'btn-default'
-    $('.stepwizard-row a[href="#step-' + n + '"]').addClass 'btn-primary'
+    $('.stepwizard-row a[href="#step-' + n + '"]').addClass 'btn-info'
   return
 
 $('li').on 'click', (e) ->
@@ -73,7 +73,7 @@ $('li').on 'click', (e) ->
   $($(e.target).attr('href')).show()
 
 $('.tab').hide()
-$('.tab2, .tab3').addClass('disabled')
+# $('.tab2, .tab3').addClass('disabled')
 
 $('#client-frameworks a').on 'click', (e) ->
   $('.tab3').removeClass('disabled')

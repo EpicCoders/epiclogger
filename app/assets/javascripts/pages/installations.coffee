@@ -1,5 +1,5 @@
 directive = {
-  members:{
+  website_members:{
     member_row:
       id: (params)->
         "member_" + this.id
@@ -17,10 +17,10 @@ PubSub.subscribe('assigned.website', (ev, website)->
     when "index"
       createWebsite(website.id)
       $('.tab, .main-tabs').hide()
-      $('#client-configuration, #platforms-tabs, #all-platforms').show()
+      $('#client-details, #details-tabs, #settings').show()
       $.getJSON Routes.api_v1_website_members_url(), { website_id: website.id }, (data) ->
         $('#owners').render data, directive
-        $('#owner').html(data.members[0].email)
+        $('#owner').html(data.website_members[0].email)
         $('#owner').append('<span class="caret"></span>')
 
       $.getJSON Routes.api_v1_website_path(website.id), (data) ->

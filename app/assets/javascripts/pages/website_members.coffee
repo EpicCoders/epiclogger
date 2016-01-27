@@ -1,6 +1,6 @@
 PubSub.subscribe('assigned.website', (ev, website)->
   directive = {
-    members:{
+    website_members:{
       role:
         html: ()->
           "#{this.role}"

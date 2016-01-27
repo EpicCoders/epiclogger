@@ -1,9 +1,9 @@
 #installation.row
   #custom-bootstrap-menu.navbar.navbar-default{:role => "navigation"}
     %ul.nav.navbar-nav.navbar-left#top-tabs
-      %li{:name => 'details'}
+      %li.active{:name => 'details'}
         %a{:href => "#client-details"} Details
-      %li.active{:name => 'client configuration'}
+      %li{:name => 'client configuration'}
         %a{:href => "#client-configuration"} Client Configuration
       %li{:name => 'integrations'}
         %a{:href => "#client-integrations"} Integrations
@@ -158,11 +158,11 @@
                     %ul.dropdown-menu
                       %li
                         %table.table#owners
-                          %tbody.members
+                          %tbody.website_members
                             %tr.website_member_row{"id"=>1}
-                              %td.email
-                              %td.text-right
-                                = link_to '×', api_v1_website_members_path(), :method => :delete, :remote => "true", data: {confirm: "Are you sure?"}, :class => "delete_member"
+                              %td.email{:style => 'cursor:pointer'}
+                              %td
+                                %a{:href => "#{api_v1_website_members_path()}", :class => "delete_member", :method => :delete, :remote => "true", data: {confirm: "Are you sure?"}}×
                 / %hr
                 / .form-group
                 /   %label.control-label Slug*

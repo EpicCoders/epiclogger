@@ -1,6 +1,6 @@
 #page-background
-  .col-lg-9.align-wizard
-    .panel.panel-primary
+  .col-lg-8.align-wizard
+    .panel.panel-info
       .panel-heading.text-center
         %h4 Create New Project
       .panel-body
@@ -8,7 +8,7 @@
           .stepwizard
             .stepwizard-row
               .stepwizard-step
-                %a.btn.btn-primary.btn-circle.active-step.tab1{"data-toggle" => "tab", :href => "#step-1"} 1
+                %a.btn.btn-info.btn-circle.active-step.tab1{"data-toggle" => "tab", :href => "#step-1"} 1
                 %p Add Website
               .stepwizard-step
                 %a.btn.btn-default.btn-circle.tab2{"data-toggle" => "tab", :disabled => "disabled", :href => "#step-2"} 2
@@ -27,18 +27,12 @@
                   %label.control-label Domain
                   %input#domain.form-control{:placeholder => "http://www.domain.com", :required => "required", :type => "url", :name => 'website[domain]'}/
                 %br
-                %br
-                %a.btn.btn-warning.pull-left#custom-button{:style => "width: 150px;", :href => "#", :onclick => 'EpicLogger.logout()'}
+                %a.btn.btn-default.pull-left#custom-button{:style => "width: 150px;", :href => "#", :onclick => 'EpicLogger.logout()'}
                   %i.icon-next
                   Log out
-                %button.btn.btn-success.pull-right#valid_website{:style => "width: 150px;",:name => 2, :type => "submit"}
+                %button.btn.btn-primary.pull-right#valid_website{:style => "width: 150px;",:name => 2, :type => "submit"}
                   %i.icon-next
                   Next
-              %br
-              %br
-              %br
-                .progress
-                  .progress-bar.progress-bar-info.progress-bar-striped.active{"aria-valuemax" => "100", "aria-valuemin" => "0", "aria-valuenow" => "33", :role => "progressbar", :style => "width: 1%"}
             #step-2.tab-pane.fade.padding20
               .col-md-12.pagecontainer
                 .pagetitle.text-center
@@ -94,20 +88,11 @@
                 %div
                   %h5{:style => 'display:inline'} For more information on developing clients and the Sentry API, see the
                   %a{:href => '#'}documentation.
-                %p
-                %p
-                .progress
-                  .progress-bar.progress-bar-info.progress-bar-striped.active{"aria-valuemax" => "100", "aria-valuemin" => "0", "aria-valuenow" => "33", :role => "progressbar", :style => "width: 34%"}
-                    Website added, pick your platform
             #step-3.tab-pane.fade.padding20
               = render partial: 'websites/configuration'
-              %button.btn.btn-primary#back{:style => "width: 150px;",:name => 2, :type => "button"}
+              %button.btn.btn-default#back{:style => "width: 150px;",:name => 2, :type => "button"}
                 %i.icon-next
                 Go Back
               %button.btn.btn-success.pull-right#finish{:style => "width: 150px;",:name => 0, :type => "button"}
                 %i.icon-next
                 Finish
-              %p
-              .progress
-                .progress-bar.progress-bar-info.progress-bar-striped.active{"aria-valuemax" => "100", "aria-valuemin" => "0", "aria-valuenow" => "33", :role => "progressbar", :style => "width: 67%"}
-                  Two steps behind, configure youre app and start
