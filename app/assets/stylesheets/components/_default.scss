@@ -173,6 +173,8 @@ p {
         }
 
         #add-new{
+          margin-left: -50px;
+          width: 250px;
           padding-bottom:20px;
           a{
             text-decoration: none;
@@ -181,7 +183,6 @@ p {
 
         ul{
           margin-top:10px;
-          transition:all linear 0.2s;
           -webkit-padding-start: 0px;
           list-style-type:none;
           max-height:0px;
@@ -208,6 +209,8 @@ p {
       }
 
       .show-websites{
+        margin-left: -60px;
+        width: 250px;
         max-height:1000px !important;
       }
     }
@@ -301,18 +304,28 @@ p {
       }
     }
   }
+  .footer-help:hover{
+    background: #DCDCE0;
+  }
   .footer-help{
-    bottom:60px;
-    width:230px;
-    height:100px;
+    bottom:110px;
+    border-radius: 2px;
+    background: white;
+    width:210px;
+    height:60px;
     position:fixed;
-    margin-left: 1.2%;
-      button{
-        background-color: #1d1e22;
-        text-decoration:none;
+    margin-left: 0.6%;
+      i{
+        padding-top: 7px;
+        padding-left: 7px;
+        text-decoration: underline;
       }
-      a{
-        text-decoration:none;
+      strong{
+        text-decoration: underline;
+      }
+      small{
+        padding-left: 7px;
+        text-decoration: underline;
       }
   }
 

@@ -20,8 +20,8 @@ window.EpicLogger = (->
       $('#pick_website').hide()
       $('.website-container').find('#add-new').slideUp 80
       $('.picked-website, #websites-sidebar').on 'click', ->
+        $('.website-container').find('#add-new').toggle()
         $('#websites-sidebar').toggleClass('show-websites')
-        $('.website-container').find('#add-new').slideToggle()
 
   setUpSidebar: (width) ->
     if width >= 1170

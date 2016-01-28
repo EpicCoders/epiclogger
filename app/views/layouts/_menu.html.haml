@@ -51,10 +51,12 @@
           %a{:href => "#{website_members_url()}"} Members
 
       .footer-help
+        %a{:title => 'Help', :href => 'mailto:info@epiclogger.com', :target =>"_top"}
+          %i.glyphicon.glyphicon-bullhorn
+          %strong Need help?
+          %br
+          %small Write us an email we will answer fast
         %button.btn.btn-default.btn-link.btn-xs
-          %a{:title => 'Help', :href => 'mailto:info@epiclogger.com', :target =>"_top"}
-            %h5 Need help?
-            %small  Write us an email we will answer fast
       .sidebar-footer
         %ul.icon-list
         .footer-content
