@@ -56,6 +56,10 @@ generateApiKey = (data) ->
 
 handleEditDetails = (website_id) ->
   $.getJSON Routes.api_v1_website_path(website_id), (data) ->
+    $('#owner').render data, directive
+    replaceHtmlText(/{app_key}/g, data.app_key)
+    replaceHtmlText(/{app_id}/g, data.app_id)
+    replaceHtmlText(/{id}/g, data.id)
 
     editWebsite(data)
     generateApiKey(data)
@@ -67,6 +71,7 @@ handleEditDetails = (website_id) ->
     $('#save').prop('disabled', true)
     $('#current-website').render data
     $('#platform').html(data.platform + ' <span class="caret"></span>')
+    $('#owner').html(data.owners[0].email+ ' <span class="caret"></span>')
 
   $('input').change ->
     $('#save').prop('disabled', false)
@@ -96,20 +101,11 @@ PubSub.subscribe('assigned.website', (ev, website)->
       handleEditDetails(website.id)
       $('.tab, .main-tabs').hide()
       $('#client-details, #details-tabs, #settings').show()
-      $.getJSON Routes.api_v1_website_members_url(), { website_id: website.id }, (data) ->
-        $('#owners').render data, directive
-        $('#owner').html(data.website_members[0].email)
-        $('#owner').append('<span class="caret"></span>')
-
-
-        replaceHtmlText(/{app_key}/g, data.app_key)
-        replaceHtmlText(/{app_id}/g, data.app_id)
-        replaceHtmlText(/{id}/g, data.id)
 )
 
 $('.dropdown-menu li a').click ->
   selText = $(this).text()
-  $(this).parents('.dropdown').find('.dropdown-toggle').html selText + ' <span class="caret"></span>'
+  $(this).parents('.dropdown').find('.dropdown-toggle').html(selText + ' <span class="caret"></span>')
   return
 
 switchTab = (target,location) ->

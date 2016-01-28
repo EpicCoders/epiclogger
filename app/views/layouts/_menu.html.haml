@@ -37,17 +37,18 @@
             %a.picked-website{:href => "#"}
             %ul#websites-sidebar
               = nav_link "Some website", '#', {:class=>'title picked', 'data-id'=>'', 'onclick'=>'EpicLogger.pickWebsite(this)'}
-            #add-new.nav.nav-pills.nav-stacked
-              = link_to new_website_path(), class: 'title' do
-                = icon('globe')
+            .add-new
+              %a.title{:href => "#{new_website_path()}"}
+                %i.fa.fa-globe
                 Add new Website
       .sidebar-content
         %ul.icon-list
           = nav_link "Errors", errors_url(), {'title' => 'Errors', :id => "errornav"}, 'exclamation-triangle'
-          = nav_link "Installation", installations_url(), {'title' => 'Installation'}, 'code'
+          / # = nav_link "Installation", installations_url(), {'title' => 'Installation'}, 'code'
           / # = nav_link "User", edit_member_url(1), {'title' => 'Users'}, 'user'
         .project-details
           %h5 PROJECT DETAILS
+          %a{:href => "#{installations_url()}"} Installation
           %a{:href => "#{website_members_url()}"} Members
 
       .footer-help
@@ -55,13 +56,13 @@
           %i.glyphicon.glyphicon-bullhorn
           %strong Need help?
           %br
-          %small Write us an email we will answer fast
+          %small Write us an email we will fast
         %button.btn.btn-default.btn-link.btn-xs
       .sidebar-footer
         %ul.icon-list
         .footer-content
           %img.profileimg.pull-left{:src => "http://0.gravatar.com/avatar/59b762ebf3d116bf806bcfa3fa12e65f"}/
-          .dropdown.btn-group
+          .dropup.btn-group
             %a.btn.dropdown-toggle{"data-toggle" => "dropdown", :href => "#"}
               %i.fa.fa-cog
             %ul.dropdown-menu

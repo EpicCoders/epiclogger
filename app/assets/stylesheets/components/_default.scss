@@ -136,6 +136,42 @@ p {
 
 /* ++++++++++  Menu Styling ++++++++++++++++++++++ */
 
+.add-new:hover{
+  width: 305px;
+  margin-left: -100px;
+  cursor: pointer;
+  background:#0e0e10;
+  padding-bottom: 10px;
+  padding-top:10px;
+  a{
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #757988;
+    margin-left: 70px;
+    text-decoration: none;
+  }
+  i{
+    color: #DCDCE;
+    position: absolute;
+  }
+}
+
+.add-new{
+  width: 250px;
+  margin-bottom:20px;
+  a{
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #757988;
+    margin-left: -30px;
+    text-decoration: none;
+  }
+  i{
+    color: #DCDCE;
+    margin-left: -20px;
+    position: absolute;
+  }
+}
 
 .regular-menu-vertical {
   background-color:#1d1e22;
@@ -169,15 +205,6 @@ p {
             float:right;
             margin-right:10px;
             margin-top:2px;
-          }
-        }
-
-        #add-new{
-          margin-left: -50px;
-          width: 250px;
-          padding-bottom:20px;
-          a{
-            text-decoration: none;
           }
         }
 
@@ -305,9 +332,10 @@ p {
     }
   }
   .footer-help:hover{
-    background: #DCDCE0;
+    background: #EFEFF2;
   }
   .footer-help{
+    cursor: pointer;
     bottom:110px;
     border-radius: 2px;
     background: white;
@@ -316,16 +344,19 @@ p {
     position:fixed;
     margin-left: 0.6%;
       i{
-        padding-top: 7px;
-        padding-left: 7px;
-        text-decoration: underline;
+        margin-top: 10px;
+        padding-left: 15px;
+      }
+      a{
+        text-decoration: none;
       }
       strong{
-        text-decoration: underline;
+        padding-top: 7px;
+        padding-left: 7px;
       }
       small{
-        padding-left: 7px;
-        text-decoration: underline;
+        text-align: center;
+        padding-left: 40px;
       }
   }
 
@@ -345,8 +376,10 @@ p {
         float:left;
       }
 
-      .dropdown{
+      .dropup{
         a{
+          text-align: center;
+          font-size:12px;
           padding:5px 10px;
           i{
             color: #7b7e91;
@@ -366,9 +399,8 @@ p {
         }
 
         .dropdown-menu{
-          top:-50%;
-          left:auto;
-          min-width:40px;
+          left: -60%;
+          min-width:90px;
           font-size:10px;
 
           li{
@@ -504,8 +536,10 @@ img.profileimg {
   height: 33px;
 }
 
-.cust-dropdown {
-  margin-left: 2%;
+#current-website {
+  .dropdown{
+    margin-left: 2%;
+  }
 }
 
 /* code for custom dropdown navbar */
