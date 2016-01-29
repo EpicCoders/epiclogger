@@ -132,6 +132,14 @@ module ErrorStore
       ErrorStore::MAX_SAMPLE_TIME
     end
 
+    def count_limit(count)
+      # ~ 150 * ((log(n) - 1.5) ^ 2 - 0.25)
+      ErrorStore::SAMPLE_RATES.map do |amount, sample_rate|
+        return sample_rate if count <= amount
+      end
+      ErrorStore::MAX_SAMPLE_RATE
+    end
+
     def _process_existing_aggregate(group, issue, data)
       date = [issue.datetime, group.last_seen].max
       extra = {
@@ -151,10 +159,8 @@ module ErrorStore
         update_args[:time_spent_total] = issue.time_spent
         update_args[:time_spent_count] = 1
       end
-      # ??? what??
-      # buffer.incr(Group, update_kwargs, {
-      #       'id': group.id,
-      #   }, extra)
+
+      GroupedIssue.update_counters(group.id, update_args)
 
       is_regression
     end
@@ -174,15 +180,6 @@ module ErrorStore
       group.status = :unresolved
 
       is_regression
-    end
-
-    def count_limit(count)
-      # TODO: could we do something like num_to_store = max(math.sqrt(100*count)+59, 200) ?
-      # ~ 150 * ((log(n) - 1.5) ^ 2 - 0.25)
-      ErrorStore::SAMPLE_RATES.map do |amount, sample_rate|
-        return sample_rate if count <= amount
-      end
-      ErrorStore::MAX_SAMPLE_RATE
     end
 
     def generate_culprit(data)
