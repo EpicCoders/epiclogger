@@ -118,7 +118,7 @@ module ErrorStore
 
     def should_sample(current_datetime, last_seen, times_seen)
       silence_timedelta = current_datetime - last_seen
-      silence = silence_timedelta.days * 86_400 + silence_timedelta.seconds
+      silence = (silence_timedelta / 1.day) * 86_400 + (silence_timedelta / 1.second)
 
       return false if times_seen % count_limit(times_seen) == 0
       return false if times_seen % time_limit(silence) == 0
