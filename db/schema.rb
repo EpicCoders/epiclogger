@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160120100325) do
+ActiveRecord::Schema.define(version: 20160129121928) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -57,13 +57,12 @@ ActiveRecord::Schema.define(version: 20160120100325) do
     t.text     "message"
     t.string   "view"
     t.integer  "status",           default: 3
-    t.integer  "times_seen",       default: 1
+    t.integer  "times_seen",       default: 0
     t.datetime "first_seen"
     t.datetime "last_seen"
     t.text     "data"
     t.integer  "score"
-    t.datetime "time_spent_total"
-    t.integer  "time_spent_count"
+    t.integer  "time_spent_count", default: 0
     t.datetime "resolved_at"
     t.datetime "active_at"
     t.string   "platform"
@@ -71,6 +70,7 @@ ActiveRecord::Schema.define(version: 20160120100325) do
     t.datetime "updated_at",                   null: false
     t.string   "culprit"
     t.string   "checksum"
+    t.integer  "time_spent_total", default: 0
   end
 
   create_table "issues", force: :cascade do |t|
@@ -155,10 +155,10 @@ ActiveRecord::Schema.define(version: 20160120100325) do
   add_index "website_members", ["website_id"], name: "index_website_members_on_website_id", using: :btree
 
   create_table "websites", force: :cascade do |t|
-    t.string   "title",      null: false
-    t.string   "domain",     null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.string   "title",                          null: false
+    t.string   "domain",                         null: false
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
     t.string   "app_key"
     t.boolean  "new_event",      default: true
     t.boolean  "frequent_event", default: false
