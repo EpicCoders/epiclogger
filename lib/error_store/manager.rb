@@ -9,7 +9,6 @@ module ErrorStore
 
     # 4. store the error after validating the error data
     def store_error
-      # binding.pry
       website_id = @data.delete(:website)
       website = Website.find(website_id)
 
@@ -47,18 +46,17 @@ module ErrorStore
         message: message,
         platform: platform
       )
-
-      issue_user = _get_subscriber(website, data)
+      issue.subscriber = _get_subscriber(website, data)
 
       data[:fingerprint] = fingerprint || ['{{ default }}']
-      # binding.pry
-      hashes = if !fingerprint.nil?
-                 get_hash_from_fingerprint(issue, fingerprint).map { |h| md5_from_hash(h) }
-               elsif !checksum.nil?
-                 [checksum]
-               else
-                 get_hash_for_issue(issue).map { |h| md5_from_hash(h) }
-               end
+
+      hash = if !fingerprint.nil?
+               md5_from_hash(get_hash_from_fingerprint(issue, fingerprint))
+             elsif !checksum.nil?
+               checksum
+             else
+               md5_from_hash(get_hash_for_issue(issue))
+             end
 
       group_params = {
         message: message,
@@ -72,12 +70,7 @@ module ErrorStore
         time_spent_count: time_spent && 1 || 0
       }
 
-      group, is_new, is_regression, is_sample = _save_aggregate(
-        issue: issue,
-        hash: hash,
-        release: release,
-        **group_params
-      )
+      group, is_sample = _save_aggregate(issue, hash, **group_params)
 
       issue.group = group
       issue.group_id = group.id
@@ -111,7 +104,7 @@ module ErrorStore
     end
 
     # here we save the grouped issue with all details
-    def _save_aggregate(issue, hash, release, **args)
+    def _save_aggregate(issue, hash, **args)
       website = issue.website
       # attempt to find a matching hash
       group = GroupedIssue.find_by(checksum: hash)
@@ -133,12 +126,7 @@ module ErrorStore
       if group_is_new
         is_regression = false
       else
-        is_regression = _process_existing_aggregate(
-          group: group,
-          issue: issue,
-          data: args,
-          release: release
-        )
+        is_regression = _process_existing_aggregate(group, issue, args)
       end
 
       # Determine if we've sampled enough data to store this issue
@@ -148,12 +136,12 @@ module ErrorStore
                     can_sample
                   end
 
-      return group, group_is_new, is_regression, is_sample
+      return group, is_sample
     end
 
     def should_sample(current_datetime, last_seen, times_seen)
       silence_timedelta = current_datetime - last_seen
-      silence = silence_timedelta.days * 86400 + silence_timedelta.seconds
+      silence = silence_timedelta.days * 86_400 + silence_timedelta.seconds
 
       return false if times_seen % count_limit(times_seen) == 0
       return false if times_seen % time_limit(silence) == 0
@@ -167,17 +155,17 @@ module ErrorStore
       ErrorStore::MAX_SAMPLE_TIME
     end
 
-    def _process_existing_aggregate(group, issue, data, release)
+    def _process_existing_aggregate(group, issue, data)
       date = [issue.datetime, group.last_seen].max
       extra = {
-          last_seen: date,
-          # score: ScoreClause(group),
+        last_seen: date,
+        # score: ScoreClause(group),
       }
       extra[:message] = issue.message if issue.message && issue.message != group.message
       extra[:level] = data[:level] if group.level != data[:level]
       extra[:culprit] = data[:culprit] if group.culprit != data[:culprit]
-      # TODO, continue here.
-      is_regression = _handle_regression(group, issue, release)
+
+      is_regression = _handle_regression(group, issue)
 
       group.last_seen = extra[:last_seen]
 
@@ -190,18 +178,16 @@ module ErrorStore
       is_regression
     end
 
-    def _handle_regression(group, issue, release)
+    def _handle_regression(group, issue)
       return unless group.is_resolved?
+
       # we now think its a regression, rely on the database to validate that
       # no one beat us to this
       date = [issue.datetime, group.last_seen].max
-      is_regression = GroupedIssue.where(id: group.id,
-                                         status: [
-                                                    GroupedIssue.status.find_value(:resolved).value,
-                                                    GroupedIssue.status.find_value(:unresolved).value
-                                                  ]
-                                        )
-                                  .update_attributes(active_at: date, last_seen: date, status: :unresolved)
+      statuses = [GroupedIssue.status.find_value(:resolved).value, GroupedIssue.status.find_value(:unresolved).value]
+      is_regression = GroupedIssue.where(id: group.id, status: statuses)
+                      .where('active_at < ?', date - 5.seconds)
+                      .update_all(active_at: date, last_seen: date, status: :unresolved)
 
       group.active_at = date
       group.status = :unresolved
@@ -277,7 +263,6 @@ module ErrorStore
     end
 
     def get_hash_for_issue(issue)
-      # binding.pry
       get_hash_for_issue_with_reason(issue)[1]
     end
 
@@ -288,7 +273,7 @@ module ErrorStore
         next unless result
         return [interface.type, result]
       end
-      [:message, [[issue.message]]]
+      [:message, [issue.message]]
     end
 
     def get_hashes_from_fingerprint(issue, fingerprint)
