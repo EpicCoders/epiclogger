@@ -40,6 +40,19 @@ describe Api::V1::WebsitesController, :type => :controller do
               errors: website.grouped_issues.count,
               subscribers: website.subscribers.count,
               members: website.members.count
+              owners: [
+                {
+                  id:
+                  email:
+                  name:
+                  created_at:
+                  updated_at:
+                  provider:
+                  uid:
+                  nikname:
+                  image: null
+                }
+              ]
             }
           ]
         }.to_json)

@@ -57,14 +57,30 @@ PubSub.subscribe('assigned.website', (ev, website)->
 
 )
 
+form = $('#example-form')
+form.validate
+  errorPlacement: (error, element) ->
+    element.before error
+    return
+  rules: confirm: equalTo: '#password'
+form.children('div').steps
+  headerTag: 'h3'
+  bodyTag: 'section'
+  transitionEffect: 'slideLeft'
+  onStepChanging: (event, currentIndex, newIndex) ->
+    form.validate().settings.ignore = ':disabled,:hidden'
+    form.valid()
+  onFinishing: (event, currentIndex) ->
+    form.validate().settings.ignore = ':disabled'
+    form.valid()
+  onFinished: (event, currentIndex) ->
+    alert 'Submitted!'
+    return
 goToStep = (n) ->
   if n != 0
-    $('.stepwizard-row a').removeClass('btn-info')
-    $('.stepwizard-row a').addClass('btn-default')
-    $('.tab'+n).attr('disabled', false)
-    $('.stepwizard a[href="#step-' + n + '"]').tab 'show'
-    $('.stepwizard-row a[href="#step-' + n + '"]').removeClass 'btn-default'
-    $('.stepwizard-row a[href="#step-' + n + '"]').addClass 'btn-info'
+    $('.stepwizard-row a').removeClass('active-step')
+    $('.stepwizard a[href="#step-'+n+'"]').tab('show')
+    $('.stepwizard-row a[href="#step-' + n + '"]').addClass('active-step')
   return
 
 $('li').on 'click', (e) ->
@@ -76,7 +92,6 @@ $('.tab').hide()
 # $('.tab2, .tab3').addClass('disabled')
 
 $('#client-frameworks a').on 'click', (e) ->
-  $('.tab3').removeClass('disabled')
   goToStep(3)
   $(this.name).show()
   $($("a[href='"+$(this).attr('href')+"']")[1]).tab('show')
@@ -85,11 +100,9 @@ $('#client-frameworks a').on 'click', (e) ->
 $('#back, .tab2').on 'click', () ->
   $('.tab').hide()
   $('.tabs').hide()
-  $('.tab3').addClass('disabled')
   goToStep(2)
 
 $('#platform a, .tab3').on 'click', (e) ->
-  $('.tab3').removeClass('disabled')
   goToStep(3)
   $.platform = this.name
   $('#'+this.name).show()
@@ -105,8 +118,6 @@ $('#addWebsite').submit (e) ->
     success: (data) ->
       EpicLogger.setMemberDetails(data.id)
       goToStep(2)
-      $('.tab1').addClass('disabled')
-      $('.tab2').removeClass('disabled')
       replaceHtmlText(/{app_key}/g, data.app_key)
       replaceHtmlText(/{app_id}/g, data.app_id)
       replaceHtmlText(/{id}/g, data.id)

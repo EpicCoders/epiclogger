@@ -37,9 +37,10 @@
             %a.picked-website{:href => "#"}
             %ul#websites-sidebar
               = nav_link "Some website", '#', {:class=>'title picked', 'data-id'=>'', 'onclick'=>'EpicLogger.pickWebsite(this)'}
+            .border
             .add-new
               %a.title{:href => "#{new_website_path()}"}
-                %i.fa.fa-globe
+                %i.fa.fa-plus
                 Add new Website
       .sidebar-content
         %ul.icon-list

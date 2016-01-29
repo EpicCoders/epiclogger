@@ -15,6 +15,7 @@
 //= require jquery_ujs
 //= require transparency
 //= require prism
+//= require wizard-steps
 //= require jquery.cookie
 //= require jquery.deparam
 //= require pubsub

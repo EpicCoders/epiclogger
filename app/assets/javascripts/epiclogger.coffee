@@ -18,9 +18,9 @@ window.EpicLogger = (->
           $('.cbp-spmenu-vertical').toggleClass('cbp-spmenu-vertical-pushed-right')
       EpicLogger.bindResize()
       $('#pick_website').hide()
-      $('.website-container').find('.add-new').slideUp 80
+      $('.website-container').find('.add-new, .border').slideUp 80
       $('.picked-website, #websites-sidebar').on 'click', ->
-        $('.website-container').find('.add-new').toggle()
+        $('.website-container').find('.add-new, .border').toggle()
         $('#websites-sidebar').toggleClass('show-websites')
 
   setUpSidebar: (width) ->
