@@ -76,30 +76,7 @@ module ErrorStore
       issue.group_id = group.id
 
       # save the issue unless its been sampled
-      # binding.pry
-      # unless is_sample
-        retried = false
-        begin
-          Issue.transaction(isolation: :serializable) do
-            issue.save
-          end
-        rescue PG::TRSerializationFailure => exception
-          if !retried
-            retried = true
-            retry
-          else
-            Rails.logger.info('Exception in Error._get_subscriber')
-            Rails.logger.info("Message: #{exception.message}")
-            Rails.logger.info("Class: #{exception.class}")
-            raise exception
-          end
-        rescue => exception
-          Rails.logger.info('Exception in Error._store_error')
-          Rails.logger.info("Message: #{exception.message}")
-          Rails.logger.info("Class: #{exception.class}")
-          raise exception
-        end
-      # end
+      db_store(:issue) { issue.save } unless is_sample
       issue
     end
 
@@ -174,6 +151,10 @@ module ErrorStore
         update_args[:time_spent_total] = issue.time_spent
         update_args[:time_spent_count] = 1
       end
+      # ??? what??
+      # buffer.incr(Group, update_kwargs, {
+      #       'id': group.id,
+      #   }, extra)
 
       is_regression
     end
@@ -236,29 +217,7 @@ module ErrorStore
         ip_address: user_data[:ip_address]
       )
       # Serialization Failure handling
-      retried = false
-
-      begin
-        Subscriber.transaction(isolation: :serializable) do
-          subscriber.save
-        end
-      rescue PG::TRSerializationFailure => exception
-        if !retried
-          retried = true
-          retry
-        else
-          Rails.logger.info('Exception in Error._get_subscriber')
-          Rails.logger.info("Message: #{exception.message}")
-          Rails.logger.info("Class: #{exception.class}")
-          # raise exception
-        end
-      rescue => exception
-        Rails.logger.info('Exception in Error._get_subscriber')
-        Rails.logger.info("Message: #{exception.message}")
-        Rails.logger.info("Class: #{exception.class}")
-        # raise exception
-      end
-
+      db_store(:subscriber) { subscriber.save }
       subscriber
     end
 
@@ -328,6 +287,30 @@ module ErrorStore
         result.update(chunk.to_s)
       end
       result.hexdigest
+    end
+
+    def db_store(model)
+      retried = false
+      begin
+        model.to_s.classify.constantize.transaction(isolation: :serializable) do
+          yield
+        end
+      rescue PG::TRSerializationFailure => exception
+        if !retried
+          retried = true
+          retry
+        else
+          Rails.logger.info('Exception in Error._get_subscriber')
+          Rails.logger.info("Message: #{exception.message}")
+          Rails.logger.info("Class: #{exception.class}")
+          raise exception
+        end
+      rescue => exception
+        Rails.logger.info('Exception in Error._get_subscriber')
+        Rails.logger.info("Message: #{exception.message}")
+        Rails.logger.info("Class: #{exception.class}")
+        raise exception
+      end
     end
   end
 end
