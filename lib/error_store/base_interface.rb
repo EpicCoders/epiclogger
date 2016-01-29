@@ -29,11 +29,5 @@ module ErrorStore
     def get_hash
       []
     end
-
-    def compute_hashes(platform)
-      result = get_hash
-      return [] unless result
-      [result]
-    end
   end
 end

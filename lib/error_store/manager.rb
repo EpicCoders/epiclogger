@@ -284,7 +284,7 @@ module ErrorStore
     def get_hash_for_issue_with_reason(issue)
       interfaces = issue.get_interfaces
       interfaces.each do |interface|
-        result = interface.compute_hashes(issue.platform)
+        result = interface.get_hash
         next unless result
         return [interface.type, result]
       end

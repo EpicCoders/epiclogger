@@ -72,16 +72,6 @@ module ErrorStore::Interfaces
       end
     end
 
-    def compute_hashes(platform)
-      system_hash = get_hash(true)
-      return [] unless system_hash
-
-      app_hash = get_hash(false)
-      return [system_hash] if system_hash == app_hash || !app_hash
-
-      [system_hash, app_hash]
-    end
-
     def get_hash(system_frames = true)
       # some exceptions might have stacktraces
       # while others may not and we ALWAYS want stacktraces over values

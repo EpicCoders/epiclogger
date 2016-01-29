@@ -28,10 +28,6 @@ RSpec.describe ErrorStore::Interfaces::Exception do
     it 'trims exceptions to max'
   end
 
-  xdescribe 'compute_hashes' do
-    it 'returns array of system_hash and app_hash'
-  end
-
   xdescribe 'get_hash' do
     it 'returns system_hash if system_frames true'
     it 'returns app_hash if system_frames false'
