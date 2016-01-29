@@ -8,23 +8,13 @@ module ErrorStore::Interfaces
       :stacktrace
     end
 
-    def sanitize_data(data, has_system_frames = nil)
+    def sanitize_data(data, has_frames = nil)
       raise ErrorStore::ValidationError.new(self), "No 'frames' present" unless data[:frames]
 
       slim_frame_data(data)
-      has_system_frames = data_has_system_frames(data) if has_system_frames.nil?
+      has_frames = !data[:frames].blank? if has_frames.nil?
 
-      frame_list = data[:frames].map { |f| Frame.new(@error).sanitize_data(f) }
-
-      frame_list.each do |frame|
-        if !has_system_frames
-          frame._data[:in_app] = false
-        elsif frame._data[:in_app].blank?
-          frame._data[:in_app] = false
-        end
-      end
-
-      self._data[:frames] = frame_list
+      self._data[:frames] = data[:frames].map { |f| Frame.new(@error).sanitize_data(f) }
 
       if data[:frames_omitted]
         raise ErrorStore::ValidationError.new(self), "Invalid value for 'frames_omitted'" if data[:frames_omitted].length != 2
@@ -33,7 +23,7 @@ module ErrorStore::Interfaces
         self._data[:frames_omitted] = nil
       end
 
-      self._data[:has_system_frames] = has_system_frames
+      self._data[:has_frames] = has_frames
       self
     end
 
@@ -41,7 +31,7 @@ module ErrorStore::Interfaces
       {
         frames:            _data[:frames].map(&:to_json),
         frames_omitted:    _data[:frames_omitted],
-        has_system_frames: _data[:has_system_frames]
+        has_frames:        _data[:has_frames]
       }
     end
 
@@ -62,29 +52,11 @@ module ErrorStore::Interfaces
       end
     end
 
-    def data_has_system_frames(data)
-      system_frames = 0
-      data[:frames].each do |frame|
-        system_frames += 1 unless frame[:in_app]
-      end
-
-      return false if data[:frames].length == system_frames
-      system_frames.zero?
-    end
-
     def get_culprit_string
-      default = nil
-      _data[:frames].reverse_each do |frame|
-        if frame[:in_app]
-          return frame.get_culprit_string
-        elsif default.nil?
-          default = frame.get_culprit_string
-        end
-      end
-      default
+      _data[:frames].last.try(:get_culprit_string)
     end
 
-    def get_hash(system_frames=true)
+    def get_hash
       frames = _data[:frames]
 
       # TODO(dcramer): this should apply only to JS
@@ -95,10 +67,6 @@ module ErrorStore::Interfaces
       stack_invalid = (frames.length == 1 && frames.first[:lineno] == 1 && !frames.first[:function] && frames.first.path_url?)
 
       return [] if stack_invalid
-
-      unless system_frames
-        frames = frames.map { |f| f if f._data[:in_app] }.compact || frames
-      end
 
       output = []
       frames.each do |frame|

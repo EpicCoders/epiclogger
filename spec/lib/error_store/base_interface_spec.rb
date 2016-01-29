@@ -21,9 +21,4 @@ RSpec.describe ErrorStore::BaseInterface do
   xdescribe 'get_hash' do
     it 'returns the hash'
   end
-
-  xdescribe 'compute_hashes' do
-    # not done
-    it 'returns an array of hashes'
-  end
 end

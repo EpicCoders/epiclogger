@@ -8,7 +8,7 @@ module ErrorStore::Interfaces
       :frame
     end
 
-    def sanitize_data(data, has_system_frames = nil)
+    def sanitize_data(data)
       abs_path  = data[:abs_path]
       filename  = data[:filename]
       function  = data[:function]
@@ -70,15 +70,11 @@ module ErrorStore::Interfaces
         pre_context   = post_context = nil
       end
 
-      in_app = validate_bool(data[:in_app], false)
-      raise ErrorStore::ValidationError.new(self), "Invalid value for 'in_app'" unless in_app
-
       self._data = {
         abs_path:      trim(abs_path, max_size: 256),
         filename:      trim(filename, max_size: 256),
         module:        trim(errmodule, max_size: 256),
         function:      trim(function, max_size: 256),
-        in_app:        in_app,
         context_line:  context_line,
         pre_context:   pre_context,
         post_context:  post_context,
@@ -114,7 +110,6 @@ module ErrorStore::Interfaces
     # Our ideal scenario is the module name in addition to the line of
     # context. However, in several scenarios we opt for other approaches due
     # to platform constraints.
-    # This is one of the few areas in Sentry that isn't platform-agnostic.
     #####
     def get_hash
       output = []

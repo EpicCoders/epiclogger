@@ -14,8 +14,8 @@ module ErrorStore::Interfaces
       raise ErrorStore::ValidationError.new(self), 'No "values" present' unless data[:values]
 
       trim_exceptions(data)
-      has_system_frames = data_has_system_frames(data)
-      self._data[:values] = data[:values].map { |v| SingleException.new(@error).sanitize_data(v, has_system_frames) }
+      has_frames = data_has_frames(data)
+      self._data[:values] = data[:values].map { |v| SingleException.new(@error).sanitize_data(v, has_frames) }
 
       if data[:exc_omitted]
         raise ErrorStore::ValidationError.new(self), "Invalid value for 'exc_omitted'" unless data[:exc_omitted].length == 2
@@ -28,31 +28,21 @@ module ErrorStore::Interfaces
 
     def to_json
       {
-        values: _data[:values].map(&:to_json),
+        values:      _data[:values].map(&:to_json),
         exc_omitted: _data[:exc_omitted]
       }
     end
 
-    def data_has_system_frames(data)
-      system_frames = 0
-      app_frames = 0
+    def data_has_frames(data)
+      nr_frames = 0
       data[:values].each do |exc|
         next unless exc[:stacktrace]
         frames = exc[:stacktrace][:frames] || []
-
-        frames.each do |frame|
-          # XXX(dcramer): handle PHP sending an empty array for a frame
-          next unless frame.is_a?(Hash)
-          if frame[:in_app] == true
-            app_frames += 1
-          else
-            system_frames += 1
-          end
-        end
+        frames.each { |frame| nr_frames += 1 if frame.is_a?(Hash) }
       end
-      # if there is a mix of frame styles then we indicate that system frames
-      # are present and should be represented as a split
-      (app_frames * system_frames) > 0
+      # check if frames are 0 or not
+      # true if not zero
+      !nr_frames.zero?
     end
 
     def trim_exceptions(data)
@@ -72,13 +62,13 @@ module ErrorStore::Interfaces
       end
     end
 
-    def get_hash(system_frames = true)
+    def get_hash
       # some exceptions might have stacktraces
       # while others may not and we ALWAYS want stacktraces over values
       output = []
       _data[:values].each do |value|
         next unless value._data[:stacktrace]
-        stack_hash = value._data[:stacktrace].get_hash(system_frames)
+        stack_hash = value._data[:stacktrace].get_hash
         if stack_hash
           output.concat(stack_hash)
           output << value.type

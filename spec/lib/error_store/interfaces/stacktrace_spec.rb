@@ -24,12 +24,6 @@ RSpec.describe ErrorStore::Interfaces::Stacktrace do
     it 'removes vars, pre_context and post_context from frames'
   end
 
-  xdescribe 'data_has_system_frames' do
-    it 'returns false if nr. of frames equal to system_frames'
-    it 'returns false if no system_frames'
-    it 'returns true is system_frames > 0'
-  end
-
   xdescribe 'get_culprit_string' do
     it 'returns nil if no frames'
     context 'frame with in_app true' do
