@@ -22,13 +22,9 @@ module ErrorStore
       culprit       = data.delete(:culprit)
       time_spent    = data.delete(:time_spent)
       logger_name   = data.delete(:logger)
-      server_name   = data.delete(:server_name)
-      site          = data.delete(:site)
       checksum      = data.delete(:checksum)
       fingerprint   = data.delete(:fingerprint)
       platform      = data.delete(:platform)
-      release       = data.delete(:release)
-      environment   = data.delete(:environment)
 
       culprit = generate_culprit(data) if culprit.blank?
 
