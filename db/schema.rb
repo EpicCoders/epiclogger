@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160201122639) do
+ActiveRecord::Schema.define(version: 20160201141034) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -52,30 +52,41 @@ ActiveRecord::Schema.define(version: 20160201122639) do
 
   create_table "grouped_issues", force: :cascade do |t|
     t.integer  "website_id"
-    t.integer  "issue_logger"
+    t.string   "issue_logger",     limit: 64
     t.integer  "level"
     t.text     "message"
-    t.integer  "status",           default: 3
-    t.integer  "times_seen",       default: 0
+    t.integer  "status",                      default: 3
+    t.integer  "times_seen",                  default: 0
     t.datetime "first_seen"
     t.datetime "last_seen"
     t.text     "data"
     t.integer  "score"
-    t.integer  "time_spent_count", default: 0
+    t.integer  "time_spent_count",            default: 0
     t.datetime "resolved_at"
     t.datetime "active_at"
-    t.string   "platform"
-    t.datetime "created_at",                   null: false
-    t.datetime "updated_at",                   null: false
+    t.string   "platform",         limit: 64
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
     t.string   "culprit"
-    t.string   "checksum"
-    t.integer  "time_spent_total", default: 0
+    t.string   "checksum",         limit: 32
+    t.integer  "time_spent_total",            default: 0
   end
+
+  add_index "grouped_issues", ["active_at"], name: "index_grouped_issues_on_active_at", using: :btree
+  add_index "grouped_issues", ["culprit"], name: "index_grouped_issues_on_culprit", using: :btree
+  add_index "grouped_issues", ["first_seen"], name: "index_grouped_issues_on_first_seen", using: :btree
+  add_index "grouped_issues", ["issue_logger"], name: "index_grouped_issues_on_issue_logger", using: :btree
+  add_index "grouped_issues", ["last_seen"], name: "index_grouped_issues_on_last_seen", using: :btree
+  add_index "grouped_issues", ["level"], name: "index_grouped_issues_on_level", using: :btree
+  add_index "grouped_issues", ["resolved_at"], name: "index_grouped_issues_on_resolved_at", using: :btree
+  add_index "grouped_issues", ["status"], name: "index_grouped_issues_on_status", using: :btree
+  add_index "grouped_issues", ["times_seen"], name: "index_grouped_issues_on_times_seen", using: :btree
+  add_index "grouped_issues", ["website_id", "checksum"], name: "index_grouped_issues_on_website_id_and_checksum", unique: true, using: :btree
+  add_index "grouped_issues", ["website_id"], name: "index_grouped_issues_on_website_id", using: :btree
 
   create_table "issues", force: :cascade do |t|
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
-    t.string   "page_title"
     t.integer  "group_id"
     t.string   "platform"
     t.text     "data"
@@ -87,6 +98,7 @@ ActiveRecord::Schema.define(version: 20160201122639) do
     t.text     "message"
   end
 
+  add_index "issues", ["datetime"], name: "index_issues_on_datetime", using: :btree
   add_index "issues", ["group_id"], name: "index_issues_on_group_id", using: :btree
   add_index "issues", ["subscriber_id"], name: "index_issues_on_subscriber_id", using: :btree
   add_index "issues", ["website_id"], name: "index_issues_on_website_id", using: :btree
