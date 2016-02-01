@@ -8,120 +8,148 @@ directive = {
         Routes.api_v1_website_path(this.id, {format: 'js'})
   }
 }
-changeButtonValue = () ->
-  $.getJSON Routes.api_v1_websites_url(), {member_id: $.auth.user.id}, (data) ->
-    if data.websites.length > 0
-      $('#custom-button').text('Go back')
-      $('#custom-button').removeAttr('onclick')
-      $('#custom-button').attr('href', '/websites')
+changeButtonValues = (step) ->
+  a = $($('ul[role="menu"] li a')[0])
+  switch step
+    when 3
+      $('#steps-uid-0-t-1').parent().addClass('disabled')
+      $('ul[role="menu"]').show()
+      a.text('Prev')
+      a.attr('onclick', 'EpicLogger.hideFormUl()')
+      a.attr('href', '#previous')
+    when 1
+      $.getJSON Routes.api_v1_websites_url(), {member_id: $.auth.user.id}, (data) ->
+        li = $($('ul[role="menu"] li')[0])
+        if data.websites.length > 0
+          a.text('Go Back')
+          a.removeAttr('href')
+          li.removeClass('disabled')
+          a.attr('onclick', 'location.href = "/websites"')
+        else
+          a.text('Logout')
+          li.removeClass('disabled')
+          a.attr('onclick', 'EpicLogger.logout()')
 
 replaceHtmlText = (selected, replace_with) ->
   $.each $('.platform-code'), (index, code) ->
     $(code).html($(code).html().replace( selected, replace_with))
 
-updatePlatform = (website_id) ->
-  $('#finish').on 'click', () ->
-    visibleTab = $('li.active:visible a').attr('name') || $.platform[0].toUpperCase() + $.platform.slice(1)
-    $.ajax
-      url: Routes.api_v1_website_url(website_id)
-      type: 'put'
-      dataType: 'json'
-      data: { website: { platform: visibleTab }}
-      success: (data) ->
-        swal("Good job!", "You will recieve notifications as soon as something will happen on your website.","success")
-        setTimeout (->
-          location.href = '/errors'
-          return
-        ), 2000
-    return
+createWebsite = () ->
+  $.ajax
+    url: Routes.api_v1_websites_url()
+    type: 'post'
+    dataType: 'json'
+    data: $('#wizard-form').serialize()
+    success: (data) ->
+      $('#steps-uid-0-t-0').parent().addClass('disabled')
+      $('ul[role="menu"]').hide()
+      EpicLogger.setMemberDetails(data.id)
+      $.website = data
+      auto_refresh = setInterval (->
+        replaceHtmlText(/{app_key}/g, $.website.app_key)
+        replaceHtmlText(/{app_id}/g, $.website.app_id)
+        replaceHtmlText(/{id}/g, $.website.id)
+        if $($('.platform-code')[1]).html().indexOf($.website.app_key) >= 0
+          clearInterval(auto_refresh)
+        return
+      ), 200
+    error: (error) ->
+      sweetAlert("Error status 401!", "Bad url or website already exists!", "error")
+      return false
+  return
+
+chosePlatform = () ->
+
+  $('.tab').hide()
+  $('li').on 'click', (e) ->
+    $('.tabs').hide()
+    $(e.target).tab('show')
+    $($(e.target).attr('href')).show()
+
+  $('#client-frameworks a').on 'click', (e) ->
+    $(this.name).show()
+    $($("a[href='"+$(this).attr('href')+"']")[1]).tab('show')
+    changeButtonValues(3)
+    $.element = $(this).attr('href')
+    auto_refresh = setInterval (->
+      $($.element).show()
+      if $($.element).is(':visible')
+        clearInterval(auto_refresh)
+      return
+    ), 100
+
+  $('#platform a').on 'click', (e) ->
+    $.platform = this.name
+    $('.tab').hide()
+    $(this.name).show()
+    changeButtonValues(3)
+    $.element = this.name
+    auto_refresh = setInterval (->
+      $($.element + 'tab').show()
+      if $($.element+'tab').is(':visible') || $($.element+'tab').length == 0
+        clearInterval(auto_refresh)
+      return
+    ), 100
+
+updatePlatform = () ->
+  visibleTab = $(visibleTab = $('li.active:visible a')[1]).attr('name') || $.platform[1].toUpperCase() + $.platform.slice(2)
+  $.ajax
+    url: Routes.api_v1_website_url($.website.id)
+    type: 'put'
+    dataType: 'json'
+    data: { website: { platform: visibleTab }}
+    success: (data) ->
+      swal("Good job!", "You will recieve notifications as soon as something will happen on your website.","success")
+      setTimeout (->
+        location.href = '/errors'
+        return
+      ), 2000
+  return
 
 PubSub.subscribe('assigned.website', (ev, website)->
   console.log gon.action
-
   switch gon.action
     when "new"
-      changeButtonValue()
-      $('#myModal').modal('show')
-      $.getJSON Routes.api_v1_website_path(website.id), (data) ->
-        $('#current-website').render data, directive
-        updatePlatform(website.id)
-        $('.tabs').hide()
+      changeButtonValues(1)
+      $('.tabs').hide()
+      chosePlatform()
 
-        replaceHtmlText(/{app_key}/g, data.app_key)
-        replaceHtmlText(/{app_id}/g, data.app_id)
-        replaceHtmlText(/{id}/g, data.id)
     when "index"
       $.getJSON Routes.api_v1_websites_url(), {member_id: $.auth.user.id}, (data) ->
         $('#websites-container').render data, directive
         console.log 'data loaded'
-
 )
 
-form = $('#example-form')
+form = $('#wizard-form')
 form.validate
   errorPlacement: (error, element) ->
     element.before error
     return
   rules: confirm: equalTo: '#password'
+
 form.children('div').steps
   headerTag: 'h3'
   bodyTag: 'section'
   transitionEffect: 'slideLeft'
   onStepChanging: (event, currentIndex, newIndex) ->
+    #TODO find why return false is trigered after going to next step
+    switch $("#wizard-form").find("[aria-selected='true']").index()
+      when 0
+        return false if createWebsite() == false
+        $(document).ajaxError (event, jqxhr, settings, exception) ->
+          if jqxhr.status == 401
+            return false
+          else
+            $('ul[role="menu"]').hide()
     form.validate().settings.ignore = ':disabled,:hidden'
     form.valid()
   onFinishing: (event, currentIndex) ->
+    updatePlatform()
     form.validate().settings.ignore = ':disabled'
     form.valid()
   onFinished: (event, currentIndex) ->
-    alert 'Submitted!'
+    swal('Plarform picked', 'We will notify you as soon as something happens on your website!', 'success')
+    setTimeout (->
+      location.href = '/errors'
+      ), 2000
     return
-goToStep = (n) ->
-  if n != 0
-    $('.stepwizard-row a').removeClass('active-step')
-    $('.stepwizard a[href="#step-'+n+'"]').tab('show')
-    $('.stepwizard-row a[href="#step-' + n + '"]').addClass('active-step')
-  return
-
-$('li').on 'click', (e) ->
-  $('.tabs').hide()
-  $(e.target).tab('show')
-  $($(e.target).attr('href')).show()
-
-$('.tab').hide()
-# $('.tab2, .tab3').addClass('disabled')
-
-$('#client-frameworks a').on 'click', (e) ->
-  goToStep(3)
-  $(this.name).show()
-  $($("a[href='"+$(this).attr('href')+"']")[1]).tab('show')
-  $($(this).attr('href')).show()
-
-$('#back, .tab2').on 'click', () ->
-  $('.tab').hide()
-  $('.tabs').hide()
-  goToStep(2)
-
-$('#platform a, .tab3').on 'click', (e) ->
-  goToStep(3)
-  $.platform = this.name
-  $('#'+this.name).show()
-  $('#'+this.name + 'tab').show()
-
-$('#addWebsite').submit (e) ->
-  e.preventDefault()
-  $.ajax
-    url: Routes.api_v1_websites_url()
-    type: 'post'
-    dataType: 'json'
-    data: $('#addWebsite').serialize()
-    success: (data) ->
-      EpicLogger.setMemberDetails(data.id)
-      goToStep(2)
-      replaceHtmlText(/{app_key}/g, data.app_key)
-      replaceHtmlText(/{app_id}/g, data.app_id)
-      replaceHtmlText(/{id}/g, data.id)
-    error: (error) ->
-      sweetAlert("Error", "Website exists!", "error") if error.status == 401
-  return
-return

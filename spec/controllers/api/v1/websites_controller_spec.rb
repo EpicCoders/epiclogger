@@ -40,19 +40,6 @@ describe Api::V1::WebsitesController, :type => :controller do
               errors: website.grouped_issues.count,
               subscribers: website.subscribers.count,
               members: website.members.count
-              owners: [
-                {
-                  id:
-                  email:
-                  name:
-                  created_at:
-                  updated_at:
-                  provider:
-                  uid:
-                  nikname:
-                  image: null
-                }
-              ]
             }
           ]
         }.to_json)
@@ -160,7 +147,20 @@ describe Api::V1::WebsitesController, :type => :controller do
             realtime: website.realtime,
             errors: website.grouped_issues.count,
             subscribers: website.subscribers.count,
-            members: website.members.count
+            members: website.members.count,
+              owners: [
+                {
+                  id: member.id,
+                  email: member.email,
+                  name: member.name,
+                  created_at: member.created_at,
+                  updated_at: member.updated_at,
+                  provider: member.provider,
+                  uid: member.uid,
+                  nickname: member.nickname,
+                  image: member.image
+                }
+              ]
           }.to_json
         )
       end

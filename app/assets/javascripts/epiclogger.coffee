@@ -68,6 +68,9 @@ window.EpicLogger = (->
     $.removeCookie('pickedWebsite', {path: '/'})
     $.auth.signOut()
 
+  hideFormUl: ->
+    $('ul[role="menu"]').hide()
+    $('#steps-uid-0-t-2').parent().removeClass('done').addClass('disabled')
 
   pickWebsite: (el, website_id)->
     # we check to see if we are calling this from a link call
