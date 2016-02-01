@@ -20,15 +20,11 @@ changeButtonValues = (step) ->
     when 1
       $.getJSON Routes.api_v1_websites_url(), {member_id: $.auth.user.id}, (data) ->
         li = $($('ul[role="menu"] li')[0])
+        debugger;
         if data.websites.length > 0
           a.text('Go Back')
-          a.removeAttr('href')
           li.removeClass('disabled')
           a.attr('onclick', 'location.href = "/websites"')
-        else
-          a.text('Logout')
-          li.removeClass('disabled')
-          a.attr('onclick', 'EpicLogger.logout()')
 
 replaceHtmlText = (selected, replace_with) ->
   $.each $('.platform-code'), (index, code) ->
@@ -111,6 +107,7 @@ PubSub.subscribe('assigned.website', (ev, website)->
   switch gon.action
     when "new"
       changeButtonValues(1)
+      $('#current-website li').css('list-style-type', 'none')
       $('.tabs').hide()
       chosePlatform()
 
@@ -131,6 +128,13 @@ form.children('div').steps
   headerTag: 'h3'
   bodyTag: 'section'
   transitionEffect: 'slideLeft'
+  onInit: (event, currentIndex) ->
+    a = $($('ul[role="menu"] li a')[0])
+    li = $($('ul[role="menu"] li')[0])
+    a.text('Logout')
+    li.removeClass('disabled')
+    a.attr('onclick', 'EpicLogger.logout()')
+
   onStepChanging: (event, currentIndex, newIndex) ->
     #TODO find why return false is trigered after going to next step
     switch $("#wizard-form").find("[aria-selected='true']").index()
