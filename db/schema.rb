@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160129121928) do
+ActiveRecord::Schema.define(version: 20160201122639) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -55,7 +55,6 @@ ActiveRecord::Schema.define(version: 20160129121928) do
     t.integer  "issue_logger"
     t.integer  "level"
     t.text     "message"
-    t.string   "view"
     t.integer  "status",           default: 3
     t.integer  "times_seen",       default: 0
     t.datetime "first_seen"

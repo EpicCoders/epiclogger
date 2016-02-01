@@ -159,22 +159,23 @@ module ErrorStore
         update_args[:time_spent_total] = issue.time_spent
         update_args[:time_spent_count] = 1
       end
-
+      # we update the counters of grouped issue like times_seen
+      # and/or time_spent_total & time_spent_count
       GroupedIssue.update_counters(group.id, update_args)
 
       is_regression
     end
 
     def _handle_regression(group, issue)
-      return unless group.is_resolved?
+      return unless group.resolved?
 
       # we now think its a regression, rely on the database to validate that
       # no one beat us to this
       date = [issue.datetime, group.last_seen].max
-      statuses = [GroupedIssue.status.find_value(:resolved).value, GroupedIssue.status.find_value(:unresolved).value]
+      statuses = [GroupedIssue::RESOLVED, GroupedIssue::UNRESOLVED]
       is_regression = GroupedIssue.where(id: group.id, status: statuses)
                       .where('active_at < ?', date - 5.seconds)
-                      .update_all(active_at: date, last_seen: date, status: :unresolved)
+                      .update_all(active_at: date, last_seen: date, status: GroupedIssue::UNRESOLVED)
 
       group.active_at = date
       group.status = :unresolved
