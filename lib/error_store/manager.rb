@@ -83,17 +83,16 @@ module ErrorStore
       group = GroupedIssue.find_by(checksum: hash)
       existing_group_id = group.try(:id)
 
-      if existing_group_id.nil?
-        # args[:score]  = ScoreClause.calculate(1, args[:last_seen])
-        args[:checksum] = hash
-        group_is_new = true
-        group = GroupedIssue.create(website: website, **args)
-      else
-        group_is_new = false
-      end
+      group_is_new = if existing_group_id.nil?
+                       # args[:score]  = ScoreClause.calculate(1, args[:last_seen])
+                       args[:checksum] = hash
+                       group = GroupedIssue.create(website: website, **args)
+                       true
+                     else
+                       false
+                     end
 
-      # XXX(dcramer): it's important this gets called **before** the aggregate
-      # is processed as otherwise values like last_seen will get mutated
+      # call this before aggregate so last_seen doesn't get changed
       can_sample = should_sample(issue.datetime, group.last_seen, group.times_seen)
 
       is_regression = if group_is_new

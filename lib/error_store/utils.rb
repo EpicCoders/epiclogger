@@ -37,9 +37,9 @@ module ErrorStore
       # Truncates a value to ```MAX_VARIABLE_SIZE```.
       # The method of truncation depends on the type of value.
       options = {
-          max_depth: max_depth,
-          max_size: max_size,
-          _depth: _depth + 1
+        max_depth: max_depth,
+        max_size: max_size,
+        _depth: _depth + 1
       }
 
       return trim(value.to_s, _size: _size, max_size: max_size) if _depth > max_depth
@@ -66,11 +66,12 @@ module ErrorStore
         end
       end
 
-      if value.is_a?(String)
-        result = value.truncate(max_size - _size)
-      else
-        result = value
-      end
+      result = if value.is_a?(String)
+                 value.truncate(max_size - _size)
+               else
+                 value
+               end
+
       return result unless block_given?
       yield(result)
     end
