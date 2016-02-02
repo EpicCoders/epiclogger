@@ -21,7 +21,7 @@ class GroupedIssue < ActiveRecord::Base
   private
 
   def check_fields
-    self.resolved_at = Time.now.utc if status_changed? && status.resolved?
+    self.resolved_at = Time.now.utc if status_changed? && resolved?
     self.last_seen = Time.now.utc if last_seen.blank?
     self.first_seen = last_seen if first_seen.blank?
     self.active_at = first_seen if active_at.blank?
