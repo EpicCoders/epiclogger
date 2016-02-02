@@ -96,11 +96,11 @@ module ErrorStore
       # is processed as otherwise values like last_seen will get mutated
       can_sample = should_sample(issue.datetime, group.last_seen, group.times_seen)
 
-      if group_is_new
-        is_regression = false
-      else
-        is_regression = _process_existing_aggregate(group, issue, args)
-      end
+      is_regression = if group_is_new
+                        false
+                      else
+                        _process_existing_aggregate(group, issue, args)
+                      end
 
       # Determine if we've sampled enough data to store this issue
       is_sample = if group_is_new || is_regression
@@ -294,13 +294,13 @@ module ErrorStore
           retried = true
           retry
         else
-          Rails.logger.info('Exception in Error._get_subscriber')
+          Rails.logger.info('Exception in Manager.db_store')
           Rails.logger.info("Message: #{exception.message}")
           Rails.logger.info("Class: #{exception.class}")
           raise exception
         end
       rescue => exception
-        Rails.logger.info('Exception in Error._get_subscriber')
+        Rails.logger.info('Exception in Manager.db_store')
         Rails.logger.info("Message: #{exception.message}")
         Rails.logger.info("Class: #{exception.class}")
         raise exception
