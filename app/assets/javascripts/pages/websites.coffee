@@ -36,11 +36,13 @@ createWebsite = () ->
     dataType: 'json'
     data: $('#wizard-form').serialize()
     success: (data) ->
-      $('#steps-uid-0-t-0').parent().addClass('disabled')
+      $('#wizard-form').children('div').steps('next', 2)
+      # $('#steps-uid-0-t-0').parent().addClass('disabled')
       $('ul[role="menu"]').hide()
       EpicLogger.setMemberDetails(data.id)
       $.website = data
     error: (error) ->
+      # debugger
       sweetAlert("Error status 401!", "Bad url or website already exists!", "error")
       return false
   return
@@ -94,62 +96,70 @@ PubSub.subscribe('assigned.website', (ev, website)->
 )
 
 form = $('#wizard-form')
-form.validate
-  errorPlacement: (error, element) ->
-    element.before error
-    return
-  rules: confirm: equalTo: '#password'
+currentStep = 0
+goToStep(currentStep)
 
-form.children('div').steps
-  headerTag: 'h3'
-  bodyTag: 'section'
-  transitionEffect: 'slideLeft'
-  onInit: (event, currentIndex) ->
-    a = $($('ul[role="menu"] li a')[0])
-    li = $($('ul[role="menu"] li')[0])
-    a.text('Logout')
-    li.removeClass('disabled')
-    a.attr('onclick', 'EpicLogger.logout()')
+# form.validate
+#   errorPlacement: (error, element) ->
+#     element.before error
+#     return
+#   rules: confirm: equalTo: '#password'
 
-  onStepChanging: (event, currentIndex, newIndex) ->
-    #TODO find why return false is trigered after going to next step
-    $('.tab').hide()
-    switch currentIndex
-      when 0
-        # createWebsite()
-        # $.when(createWebsite()).done (a1) ->
-        #   return
-        # if createWebsite() == false
-        #   return false
-        # else
-        #   return true
-        # debugger;
-        # $('#steps-uid-0-t-2').get(0).click()
-        # if !createWebsite()
-        #   return false
-        # return false if createWebsite() == false
-        # $(document).ajaxError (event, jqxhr, settings, exception) ->
-        #   if jqxhr.status == 401
-        #     return false
-    form.validate().settings.ignore = ':disabled,:hidden'
-    form.valid()
-  onStepChanged: (event, currentIndex, priorIndex) ->
-    switch currentIndex
-      when 1
-        replaceHtmlText(/{app_key}/g, $.website.app_key)
-        replaceHtmlText(/{app_id}/g, $.website.app_id)
-        replaceHtmlText(/{id}/g, $.website.id)
-      when 2
-        $($.element).show()
-        $($.element + 'tab').show()
+wizardValidate = (step)->
+  # if valid then showStep(step)
+  # else alert with error
 
-  onFinishing: (event, currentIndex) ->
-    updatePlatform()
-    form.validate().settings.ignore = ':disabled'
-    form.valid()
-  onFinished: (event, currentIndex) ->
-    swal('Plarform picked', 'We will notify you as soon as something happens on your website!', 'success')
-    setTimeout (->
-      location.href = '/errors'
-      ), 2000
-    return
+goToStep = (step) ->
+  form.children('.step').hide()
+  wizardValidate(step)
+
+showStep = (step) ->
+  form.children('.step').eq(step).show()
+
+next = ()->
+  return if currentStep == form.children('.step').length
+  goToStep(currentStep + 1)
+
+prev = ()->
+  return if currentStep == 0
+  goToStep(currentStep - 1)
+# form.children('div').steps
+#   headerTag: 'h3'
+#   bodyTag: 'section'
+#   transitionEffect: 'slideLeft'
+#   onInit: (event, currentIndex) ->
+#     a = $($('ul[role="menu"] li a')[0])
+#     li = $($('ul[role="menu"] li')[0])
+#     a.text('Logout')
+#     li.removeClass('disabled')
+#     a.attr('onclick', 'EpicLogger.logout()')
+
+#   onStepChanging: (event, currentIndex, newIndex) ->
+#     #TODO find why return false is trigered after going to next step
+#     $('.tab').hide()
+#     switch currentIndex
+#       when 0
+#         createWebsite()
+#         return false
+#     form.validate().settings.ignore = ':disabled,:hidden'
+#     form.valid()
+#   onStepChanged: (event, currentIndex, priorIndex) ->
+#     switch currentIndex
+#       when 1
+#         replaceHtmlText(/{app_key}/g, $.website.app_key)
+#         replaceHtmlText(/{app_id}/g, $.website.app_id)
+#         replaceHtmlText(/{id}/g, $.website.id)
+#       when 2
+#         $($.element).show()
+#         $($.element + 'tab').show()
+
+#   onFinishing: (event, currentIndex) ->
+#     updatePlatform()
+#     form.validate().settings.ignore = ':disabled'
+#     form.valid()
+#   onFinished: (event, currentIndex) ->
+#     swal('Plarform picked', 'We will notify you as soon as something happens on your website!', 'success')
+#     setTimeout (->
+#       location.href = '/errors'
+#       ), 2000
+#     return
