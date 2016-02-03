@@ -145,9 +145,6 @@ describe Api::V1::WebsitesController, :type => :controller do
             frequent_event: website.frequent_event,
             daily: website.daily,
             realtime: website.realtime,
-            errors: website.grouped_issues.count,
-            subscribers: website.subscribers.count,
-            members: website.members.count,
               owners: [
                 {
                   id: member.id,
