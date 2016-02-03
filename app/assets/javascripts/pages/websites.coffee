@@ -130,5 +130,6 @@ PubSub.subscribe('assigned.website', (ev, website)->
     when "index"
       $.getJSON Routes.api_v1_websites_url(), {member_id: $.auth.user.id}, (data) ->
         $('#websites-container').render data, directive
+        $('#missing-websites').hide() if data.websites.length > 0
         console.log 'data loaded'
 )
