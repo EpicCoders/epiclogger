@@ -1,13 +1,3 @@
-directive = {
-  website_members:{
-    member_row:
-      id: (params)->
-        "member_" + this.id
-    delete_member:
-      href: (params) ->
-        Routes.api_v1_website_member_path( this.id, {format: 'js', website_id: this.website_id})
-  }
-}
 replaceHtmlText = (selected, replace_with) ->
   $.each $('.platform-code'), (index, code) ->
     $(code).html($(code).html().replace( selected, replace_with))
@@ -56,7 +46,7 @@ generateApiKey = (data) ->
 
 handleEditDetails = (website_id) ->
   $.getJSON Routes.api_v1_website_path(website_id), (data) ->
-    $('#owner').render data, directive
+    $('#owner').render data
     replaceHtmlText(/{app_key}/g, data.app_key)
     replaceHtmlText(/{app_secret}/g, data.app_secret)
     replaceHtmlText(/{id}/g, data.id)
