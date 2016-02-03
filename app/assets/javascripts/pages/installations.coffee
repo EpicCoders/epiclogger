@@ -58,7 +58,7 @@ handleEditDetails = (website_id) ->
   $.getJSON Routes.api_v1_website_path(website_id), (data) ->
     $('#owner').render data, directive
     replaceHtmlText(/{app_key}/g, data.app_key)
-    replaceHtmlText(/{app_id}/g, data.app_id)
+    replaceHtmlText(/{app_secret}/g, data.app_secret)
     replaceHtmlText(/{id}/g, data.id)
 
     editWebsite(data)

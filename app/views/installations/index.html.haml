@@ -152,12 +152,17 @@
                   %label.control-label Owner*
                   %br
                   .dropdown
-                    %button.btn.btn-default.dropdown-toggle#owner{"data-toggle" => "dropdown", :type => "button"}
+                    %button.btn.btn-default.cust-dropdown.dropdown-toggle#owner{"data-toggle" => "dropdown", :type => "button"}
                       Owners
                       %span.caret
-                    %ul.dropdown-menu.owners
+                    %ul.dropdown-menu
                       %li
-                        %a.email{:href => '#'}
+                        %table.table#owners
+                          %tbody.members
+                            %tr.website_member_row{"id"=>1}
+                              %td.email
+                              %td.text-right
+                                = link_to '×', api_v1_website_members_path(), :method => :delete, :remote => "true", data: {confirm: "Are you sure?"}, :class => "delete_member"
                 / %hr
                 / .form-group
                 /   %label.control-label Slug*
@@ -172,8 +177,8 @@
           /         %span.range-value
           /     %br
           .form-group
-            %button.btn.btn-success#edit-website Edit
-            %button.btn.btn-danger Remove Project
+            %button.btn.btn-success#edit-website Save Changes
+            %button.btn.btn-warning Remove Project
         .col-lg-6
           .panel.panel-default.codeview
             .panel-heading Project Details
@@ -245,45 +250,26 @@
       #api-keys.tab
         .col-lg-12
           .panel.panel-default
-            .panel-heading Manage API Keys
+            .panel-heading.clearfix
+              %h4.panel-title.pull-left{:style => "padding-top: 7.5px;"} API Keys
+              .btn-group.pull-right
+                %button.btn.btn-primary.pull-right#generateAppKey
+                  %span.fa.fa-key
+                  Generate new key
             .panel-body
-              %button.btn.btn-primary.pull-right#generateAppKey
-                %span.fa.fa-key
-                Generate new key
-              .row
-                %a.btn.btn-link{:href => "installations"}
-                  %span.glyphicon.glyphicon-flag
-                  Get help to install libraries
-                %p
+              #current-website.row
                 .codeview
                   .codepanel
                     .col-lg-1
                       %h5 App Id:
                       %h5 App Key:
                     .col-lg-8
-                      %h5.app_id
+                      %h5.app_secret
                       %h5.app_key
                     .col-lg-3
                       %br
                       %span.btn.btn-danger.pull-right#revoke
                         Revoke
-                %p
-                %ul.nav.nav-pills
-                  %li.active
-                    .label.label-success
-                      %i.fa.fa-user
-                      Members
-                      .badge.members
-                  %li.active
-                    .label.label-success
-                      %i.fa.fa-users
-                      Subscribers
-                      .badge.subscribers
-                  %li.active
-                    .label.label-danger
-                      %i.fa.fa-wrench
-                      Errors
-                      .badge.errors
 
   .col-lg-12#client-configuration.main-tabs
     #custom-bootstrap.navbar.navbar-default{:role => "navigation"}
@@ -311,7 +297,7 @@
           %h5 To start sending events, configure your client with the following DSN value:
           %pre
             %code.language-html.platform-code
-              https://{app_key}:{app_id}@test-sentry89.herokuapp.com/{id}
+              https://{app_key}:{app_secret}@test-sentry89.herokuapp.com/{id}
           %br/
           %h5 If this is a client that only needs public access (like epiclogger-js), you can use the following public DSN:
           %pre

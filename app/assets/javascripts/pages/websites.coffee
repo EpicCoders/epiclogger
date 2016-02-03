@@ -40,7 +40,7 @@ createWebsite = () ->
       showStep(0)
       $.website = data
       replaceHtmlText(/{app_key}/g, data.app_key)
-      replaceHtmlText(/{app_id}/g, data.app_id)
+      replaceHtmlText(/{app_secret}/g, data.app_secret)
       replaceHtmlText(/{id}/g, data.id)
     error: (error) ->
       sweetAlert("Error!", "Bad url or website already exists!", "error")
