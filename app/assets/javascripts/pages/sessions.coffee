@@ -16,7 +16,7 @@ form_login.submit((e)->
       console.log resp
       swal {
         title: 'Error'
-        text: 'Email or password is invalid'
+        text: 'Unconfirmed email or invalid data'
         type: 'warning'
       }
     )

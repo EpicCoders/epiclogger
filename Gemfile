@@ -1,4 +1,4 @@
-source 'https://rubygems.org'
+  source 'https://rubygems.org'
 
 ruby '2.2.2'
 
@@ -61,6 +61,7 @@ gem 'cancancan', '~> 1.10'
 # Add sidekiq for background jobs
 gem 'sidekiq'
 
+
 group :development do
   gem 'better_errors'
   gem 'binding_of_caller'
@@ -70,6 +71,8 @@ end
 
 group :test do
   gem 'database_cleaner'
+  #Poltergeist is a driver for Capybara. It allows you to run your Capybara tests on a headless WebKit browser, provided by PhantomJS.
+  gem 'poltergeist'
   gem 'capybara'
   gem 'shoulda-matchers', require: false
   gem 'codeclimate-test-reporter', require: false
