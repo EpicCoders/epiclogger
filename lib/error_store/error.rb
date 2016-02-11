@@ -279,7 +279,7 @@
     # get the data sent via the request
     def get_data
       if request.get?
-        raw_data = request.query_parameters['sentry_data']
+        raw_data = request.params['sentry_data']
       elsif request.post?
         raw_data = request.body.read
       end

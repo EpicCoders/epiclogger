@@ -19,7 +19,7 @@ module ErrorStore
                      parse_auth_header(_error.request.headers['HTTP_AUTHORIZATION'])
                    end
       elsif _error.request.get?
-        # TODO, make get request parsing
+        auth_req = _error.request.params.select { |k| k.start_with?('sentry_') }
       end
 
       raise ErrorStore::MissingCredentials.new(self), 'Missing authentication information' unless auth_req

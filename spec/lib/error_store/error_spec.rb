@@ -83,7 +83,7 @@ RSpec.describe ErrorStore::Error do
   end
 
   xdescribe 'get_data' do
-    it 'gets all the query_parameters if get request'
+    it 'gets all the params if get request'
     it 'reads the body if post request'
     it 'does decompress_gzip if content_encoding is gzip'
     it 'does decompress_deflate if content_encoding is deflate'
