@@ -202,15 +202,16 @@ module ErrorStore
       user_data = data[:interfaces][:user]
       return if user_data.blank?
 
-      subscriber = Subscriber.new(
-        website: website,
-        identity: user_data[:id],
-        email: user_data[:email],
-        username: user_data[:username],
-        ip_address: user_data[:ip_address]
-      )
       # Serialization Failure handling
-      db_store(:subscriber) { subscriber.save }
+      subscriber = db_store(:subscriber) do
+        Subscriber.where(
+          website: website,
+          identity: user_data[:id],
+          email: user_data[:email],
+          username: user_data[:username],
+          ip_address: user_data[:ip_address]
+        ).first_or_initialize
+      end
       subscriber
     end
 
