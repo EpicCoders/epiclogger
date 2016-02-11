@@ -86,6 +86,7 @@
       data[:checksum]     = data.fetch(:checksum, nil)
       data[:environment]  = data.fetch(:environment, nil)
       data[:extra]        = data.fetch(:extra, {})
+      data.delete(:project) # remove the project attribute from data as it's not used
 
       # check if we have a message defined in our data
       if data.key?(:message)
