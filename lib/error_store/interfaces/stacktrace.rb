@@ -64,7 +64,8 @@ module ErrorStore::Interfaces
       # a stacktrace which includes a single frame and a reference that isnt
       # valuable. It would generally point to the loading page, so it's possible
       # we could improve this check using that information.
-      stack_invalid = (frames.length == 1 && frames.first[:lineno] == 1 && !frames.first[:function] && frames.first.path_url?)
+      frame_data = frames.first._data
+      stack_invalid = (frames.length == 1 && frame_data[:lineno] == 1 && !frame_data[:function] && frames.first.path_url?)
 
       return [] if stack_invalid
 
