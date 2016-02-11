@@ -223,7 +223,7 @@ module ErrorStore
       interfaces = issue.get_interfaces
       interfaces.each do |interface|
         result = interface.get_hash
-        next unless result
+        next if result.blank?
         return [interface.type, result]
       end
       [:message, [issue.message]]
