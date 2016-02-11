@@ -109,13 +109,26 @@ module ErrorStore
     end
 
     def handle_nan(value)
-      puts "doing handle #{value}"
       # "Remove nan values that can't be json encoded"
       if value.is_a?(Float)
         return '<inf>' if value == Float::INFINITY
         return '<-inf>' if value == -Float::INFINITY
         return '<nan>' if value == Float::NAN
       end
+      value
+    end
+
+    def validate_ip(value)
+      return if value.blank?
+
+      is_valid = !!(value.to_s =~ Resolv::IPv4::Regex)
+      return value if is_valid
+      raise ErrorStore::BadData.new(self), 'Invalid ip' unless is_valid
+    end
+
+    def validate_email(value)
+      return if value.blank?
+      raise ErrorStore::BadData.new(self), 'invalid email address' unless value.to_s.include?('@')
       value
     end
 
