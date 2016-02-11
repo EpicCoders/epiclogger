@@ -153,7 +153,7 @@ module ErrorStore
     def remove_function_outliers(function)
       ruby_anon_func = /_\d{2,}/i
       return 'block' if function.start_with?('block ')
-      ruby_anon_func.gsub('_<anon>', function)
+      function.gsub(ruby_anon_func, '_<anon>')
     end
   end
 end
