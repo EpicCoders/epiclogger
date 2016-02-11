@@ -95,7 +95,6 @@ describe Api::V1::ErrorsController, :type => :controller do
           times_seen: group.times_seen,
           first_seen: group.first_seen,
           last_seen: group.last_seen,
-          data: group.data,
           score: group.score,
           status: group.status,
           level: group.level,
@@ -105,7 +104,7 @@ describe Api::V1::ErrorsController, :type => :controller do
             {
               id: issue_error.id,
               platform: issue_error.platform,
-              data: JSON.parse(issue_error.data),
+              data: issue_error.error.data,
               subscriber: {
                 id: subscriber.id,
                 email: subscriber.email,

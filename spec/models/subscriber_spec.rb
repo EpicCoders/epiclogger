@@ -9,10 +9,6 @@ describe Subscriber do
   end
 
   describe "ActiveModel validations" do
-    it "is invalid without a name" do
-      expect(subscriber).to validate_presence_of :name
-    end
-
     it "is invalid without an email" do
       expect(subscriber).to validate_presence_of :email
     end
