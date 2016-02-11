@@ -269,7 +269,7 @@
         end
 
         value = interface.sanitize_data(data)
-        next unless value
+        next unless value.blank?
 
         result << value
       end

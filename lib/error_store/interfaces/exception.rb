@@ -75,7 +75,7 @@ module ErrorStore::Interfaces
         end
       end
 
-      unless output
+      unless output.blank?
         _data[:values].each do |value|
           output.concat(value.get_hash)
         end
