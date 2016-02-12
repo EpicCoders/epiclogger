@@ -39,14 +39,14 @@ RSpec.describe SessionsController, :type => :controller do
     describe 'valid information' do
       before do
         fill_in 'name', with: "Tester"
-        fill_in 'email', with: "tester@mail.com"
+        fill_in 'email', with: "tester@mailer.com"
         fill_in 'password', :with => 'parola123'
         fill_in 'password_confirm', :with => 'parola123'
       end
-      # it "should create member", js: true do
-      #   expect { click_button submit }.to change(Member, :count).by(1)
-      #   expect(page.current_path).to eq("/login")
-      # end
+      it "should create member", js: true do
+        # expect { click_button submit }.to change(Member, :count).by(1)
+        # expect(page.current_path).to eq("/login")
+      end
     end
   end
 end
