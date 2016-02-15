@@ -1,23 +1,50 @@
 require 'rails_helper'
 
 RSpec.describe ErrorStore do
-  xdescribe 'create!' do
-    it 'calls error.create!'
-    it 'returns the error id'
+  let(:member) { create :member }
+  let(:website) { create :website }
+  let!(:website_member) { create :website_member, website: website, member: member }
+  let(:group) { create :grouped_issue, website: website }
+  let(:subscriber) { create :subscriber, website: website }
+  let!(:issue_error) { create :issue, subscriber: subscriber, group: group }
+  let(:message) { 'asdada' }
+  let(:default_params) { { website_id: website.id, format: :json } }
+
+  describe 'create!' do
+    it 'calls error.create!' do
+      expect(ErrorStore::Error).to receive(:create!)
+      ErrorStore::Error.create!
+    end
+    it 'returns the error id' do
+      expect(subject).to receive(:create!).and_return(SecureRandom.hex)
+      event_id = subject.create!
+      expect(event_id).to be_kind_of(String)
+      expect(event_id.length).to eq(32)
+    end
   end
 
-  xdescribe 'find' do
-    it 'calls error.find'
-    it 'returns the error record'
+  describe 'find' do
+    it 'calls error.find' do
+      expect(subject).to receive(:find)
+      subject.find
+    end
+    it 'returns the error record' do
+      issue_error = @issue
+      expect(subject).to receive(:find).with(@issue).and_return(issue_error)
+      subject.find(@issue)
+    end
   end
 
-  xdescribe 'find_interfaces' do
+  describe 'find_interfaces' do
     it 'retuns assigns the interfaces_list'
     it 'contains all the interfaces in the folder'
   end
 
-  xdescribe 'available_interfaces' do
-    it 'returns the interfaces array'
+  describe 'available_interfaces' do
+    it 'returns the interfaces array' do
+      expect(subject).to receive(:available_interfaces).and_return(Array)
+      subject.available_interfaces
+    end
     it 'gives the interfaces with all of them if find_interfaces called'
   end
 
@@ -30,13 +57,17 @@ RSpec.describe ErrorStore do
     it 'returns the interface'
   end
 
-  xdescribe 'constants' do
+  describe 'constants' do
     it 'INTERFACES holds the interfaces'
     it 'CLIENT_RESERVED_ATTRS holds the reserved attrs'
     it 'VALID_PLATFORMS holds all platforms'
     it 'LOG_LEVELS defines the log levels'
     it 'SAMPLE_RATES all sample rates'
-    it 'MAX_SAMPLE_RATE equals max rate'
+    it 'MAX_SAMPLE_RATE equals max rate' do
+      expect(subject).to receive(MAX_SAMPLE_RATE).and_return(10000)
+      value = subject.MAX_SIMPLE_RATE
+      expect(value).to eq(10000)
+    end
     it 'SAMPLE_TIMES equals sample times'
     it 'MAX_SAMPLE_TIME equals max sample time'
     it 'CURRENT_VERSION equals to current version'

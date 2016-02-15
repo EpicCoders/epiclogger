@@ -4,8 +4,13 @@ FactoryGirl.define do
     issue_logger 'javascript'
     platform 'javascript'
     level 'error'
-    message 'Message for grouped issue'
+    times_seen 2
+    first_seen Time.now.utc - 1.day
+    last_seen Time.now.utc
+    time_spent_count 2
+    message 'ZeroDivisionError: divided by 0'
     status GroupedIssue::UNRESOLVED
-    culprit '{"headers":{"User-Agent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.93 Safari/537.36"}, "url":"http://192.168.0.103/raven-js/example/index.html"}'
+    culprit 'app/controllers/home_controller.rb in / at line 5'
+    checksum 'bba2f06a21e44216df5a1bfccda72e8e'
   end
 end
