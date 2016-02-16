@@ -5,7 +5,7 @@ FactoryGirl.define do
     platform 'javascript'
     level 'error'
     times_seen 2
-    first_seen Time.now.utc - 1.day
+    first_seen 1.day.ago
     last_seen Time.now.utc
     time_spent_count 2
     message 'ZeroDivisionError: divided by 0'
