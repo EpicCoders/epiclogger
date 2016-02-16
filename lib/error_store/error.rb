@@ -1,4 +1,4 @@
-  module ErrorStore
+module ErrorStore
   class Error
     include ErrorStore::Utils
     attr_accessor :request, :context, :data, :auth, :issue
