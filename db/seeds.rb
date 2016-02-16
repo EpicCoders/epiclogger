@@ -6,7 +6,7 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
-member = Member.create(name: 'Test Member', email: 'spiridon.alin@gmail.com', password: 'password', password_confirmation: 'password', uid: SecureRandom.hex(10), provider: :email, confirmed_at: Time.now)
+member_1 = Member.create(name: 'Test Member', email: 'misc@epicco.me', password: 'password', password_confirmation: 'password', uid: SecureRandom.hex(10), provider: :email, confirmed_at: Time.now)
 AdminUser.create!(email: 'admin@example.com', password: 'password', password_confirmation: 'password')
 if member_1.errors.blank?
   website_1 = Website.create(title: 'EpicLogger', domain: 'www.epiclogger.com', platform: 'javascript')
@@ -41,7 +41,7 @@ if member_1.errors.blank?
   Issue.create(subscriber_id: user_2_1.id, group_id: issue_3.id)
 
   WebsiteMember.create(member_id: member_1.id, website_id: website_1.id, role: 1)
-  WebsiteMember.create(member_id: member_2.id, website_id: website_2.id, role: 1)
+  # WebsiteMember.create(member_id: member_2.id, website_id: website_2.id, role: 1)
 else
   puts "Error on user #{member.errors.full_messages}"
 end
