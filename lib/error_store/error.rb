@@ -59,7 +59,7 @@ module ErrorStore
 
       begin
         # let's get the website now by app_key
-        @context.website = Website.find_by(app_key: _auth.app_key)
+        @context.website = Website.find_by!(app_key: _auth.app_key)
       rescue ActiveRecord::RecordNotFound
         raise ErrorStore::WebsiteMissing.new(self), 'The website for this api key does not exist or api key wrong.'
       end
