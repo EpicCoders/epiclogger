@@ -8,7 +8,7 @@ module ErrorRequestMock
       encoded_data = StringIO.new(Zlib::Deflate.deflate(data))
     else
       encoding_type = 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3'
-      encoded_data = StringIO.new(Zlib::Deflate.deflate(Base64.strict_encode64(data)))
+      encoded_data = StringIO.new(Base64.strict_encode64(Zlib::Deflate.deflate(data)))
     end
 
     ActionDispatch::Request.new(
@@ -27,5 +27,15 @@ module ErrorRequestMock
       # 'HTTP_ACCEPT_ENCODING' => encoding_type,
       # 'rack.input' => encoded_data
     )
+  end
+
+  def web_response_factory(path)
+    extensions = %w(json txt xml)
+    base = "#{Rails.root}/spec/factories/web_responses/#{path}"
+
+    ext = extensions.find {|ext| File.exists?("#{base}.#{ext}") }
+    raise("Count not find web response for #{path}") if ext.nil?
+
+    IO.read("#{base}.#{ext}")
   end
 end

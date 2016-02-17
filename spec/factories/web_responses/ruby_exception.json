@@ -1,0 +1,176 @@
+{
+   "event_id":"8af060b2986f5914764d49b7f39b036c",
+   "message":"ZeroDivisionError: divided by 0",
+   "timestamp":"2016-02-17T12:29:56",
+   "time_spent":2,
+   "level":40,
+   "project":null,
+   "platform":"ruby",
+   "logger":"",
+   "culprit":"app/controllers/home_controller.rb in / at line 5",
+   "server_name":"imac.local",
+   "modules":{
+      "rake":"10.4.2",
+      "i18n":"0.7.0",
+      "json":"1.8.3",
+      "minitest":"5.8.2",
+      "thread_safe":"0.3.5",
+      "tzinfo":"1.2.2",
+      "activesupport":"4.2.1",
+      "builder":"3.2.2",
+      "erubis":"2.7.0",
+      "mini_portile":"0.6.2",
+      "nokogiri":"1.6.6.2",
+      "rails-deprecated_sanitizer":"1.0.3",
+      "rails-dom-testing":"1.0.7",
+      "loofah":"2.0.3",
+      "rails-html-sanitizer":"1.0.2",
+      "actionview":"4.2.1",
+      "rack":"1.6.4",
+      "rack-test":"0.6.3",
+      "actionpack":"4.2.1",
+      "globalid":"0.3.6",
+      "activejob":"4.2.1",
+      "mime-types":"2.6.2",
+      "mail":"2.6.3",
+      "actionmailer":"4.2.1",
+      "activemodel":"4.2.1",
+      "arel":"6.0.3",
+      "activerecord":"4.2.1",
+      "debug_inspector":"0.0.2",
+      "binding_of_caller":"0.7.2",
+      "bundler":"1.9.7",
+      "coderay":"1.1.0",
+      "coffee-script-source":"1.10.0",
+      "execjs":"2.6.0",
+      "coffee-script":"2.4.1",
+      "thor":"0.19.1",
+      "railties":"4.2.1",
+      "coffee-rails":"4.1.0",
+      "multipart-post":"2.0.0",
+      "faraday":"0.9.2",
+      "multi_json":"1.11.2",
+      "jbuilder":"2.3.2",
+      "jquery-rails":"4.0.5",
+      "method_source":"0.8.2",
+      "slop":"3.6.0",
+      "pry":"0.10.3",
+      "sprockets":"3.4.0",
+      "sprockets-rails":"2.3.3",
+      "rails":"4.2.1",
+      "rdoc":"4.2.0",
+      "sass":"3.4.19",
+      "tilt":"2.0.1",
+      "sass-rails":"5.0.4",
+      "sdoc":"0.4.1",
+      "sentry-raven":"0.15.2",
+      "spring":"1.4.1",
+      "sqlite3":"1.3.11",
+      "turbolinks":"2.5.3",
+      "uglifier":"2.7.2",
+      "web-console":"2.2.1"
+   },
+   "extra":{
+
+   },
+   "tags":{
+
+   },
+   "user":{
+
+   },
+   "exception":{
+      "values":[
+         {
+            "type":"ZeroDivisionError",
+            "value":"divided by 0",
+            "module":"",
+            "stacktrace":{
+               "frames":[
+                  {
+                     "pre_context":[
+                        "module ActionController\\n",
+                        "  module ImplicitRender\\n",
+                        "    def send_action(method, *args)\\n"
+                     ],
+                     "post_context":[
+                        "      default_render unless performed?\\n",
+                        "      ret\\n",
+                        "    end\\n"
+                     ],
+                     "abs_path":"/Users/razvanciocanel/.rvm/gems/ruby-2.2.1/gems/actionpack-4.2.1/lib/action_controller/metal/implicit_render.rb",
+                     "function":"send_action",
+                     "lineno":4,
+                     "in_app":false,
+                     "context_line":"      ret = super\\n",
+                     "project_root":"/Users/razvanciocanel/Development/ravenapp",
+                     "filename":"action_controller/metal/implicit_render.rb"
+                  },
+                  {
+                     "pre_context":[
+                        "  # Prevent CSRF attacks by raising an exception.\\n",
+                        "  # For APIs, you may want to use :null_session instead.\\n",
+                        "  def index\\n"
+                     ],
+                     "post_context":[
+                        "  end\\n",
+                        "end\\n",
+                        null
+                     ],
+                     "abs_path":"/Users/razvanciocanel/Development/ravenapp/app/controllers/home_controller.rb",
+                     "function":"index",
+                     "lineno":5,
+                     "in_app":true,
+                     "context_line":"    1/0\\n",
+                     "project_root":"/Users/razvanciocanel/Development/ravenapp",
+                     "filename":"app/controllers/home_controller.rb"
+                  },
+                  {
+                     "pre_context":[
+                        "  # Prevent CSRF attacks by raising an exception.\\n",
+                        "  # For APIs, you may want to use :null_session instead.\\n",
+                        "  def index\\n"
+                     ],
+                     "post_context":[
+                        "  end\\n",
+                        "end\\n",
+                        null
+                     ],
+                     "abs_path":"/Users/razvanciocanel/Development/ravenapp/app/controllers/home_controller.rb",
+                     "function":"/",
+                     "lineno":5,
+                     "in_app":true,
+                     "context_line":"    1/0\\n",
+                     "project_root":"/Users/razvanciocanel/Development/ravenapp",
+                     "filename":"app/controllers/home_controller.rb"
+                  }
+               ]
+            }
+         }
+      ]
+   },
+   "request":{
+      "headers":{
+         "Host":"localhost:3001",
+         "Connection":"keep-alive",
+         "Cache-Control":"max-age=0",
+         "Accept":"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+         "Upgrade-Insecure-Requests":"1",
+         "User-Agent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.109 Safari/537.36",
+         "Accept-Encoding":"gzip, deflate, sdch",
+         "Accept-Language":"en-US,en;q=0.8,es;q=0.6,ro;q=0.4",
+         "Cookie":"intercom-visitor-semaphore-wqayrig5=1; auth_token=VXxa-HmSk2eBW8VM3WJM_qPcxk62bUz8tbsB3U_8MAs; notifications=hide; ahoy_visitor=e4e9e4f6-66c7-4a94-8939-d12241dcf659; _pxls_session=VVUzMTVHY2ZyQ3hURmFwUnViU0g3UkRVV09VU3lXRDU0MXJuVGxYazhndjdQMS9RSkZRaVJnSVVsYUhIVUc2b3gwN1o2K2tQeVMyUTdxaXRmcFFwbk0wMmVLSUl0bXRTRDBwWDRzWm5maEIxTkdwUHlFcU1hSlJUaVUxcmNvVnNlZytueExnc2RoY1phazZob1poRTRUTXFiL056eHNQUnJSY1FuV3RBd1IwPS0tamxYMG5KbXdiRmNYR2VBY3VDNTNHdz09--d1c977197c7ba1a7de8b2a148ba799a380fa7dfd; _hubstaff-directory_session=d2JaVDFaY09vUEZEbzAxdTZ1cDlRT1ZlaE41dXp5Q1RDNEtpd2Q3MDBjeHkxYWZaLytiVldSK21wbGIySHd2WVpzZVNkSmM0cWw3eG1yQ0E3dzE1M0FEV3NrSFJNOHhGZlR2TXB0R05CazFVUGpkQWo2WGlDWU1uNG9TeHpTeWRVTVV0dFRYcWcxckEzbi84WUl4WEF1OTJuMUkwbzdibVJQZXkvdi9yZXJGckpkdnpROW1mZkRVVWJscWRCaENTL1A1L1BrZUk5eUdra2V6Rkxma0Y3aFNWemw2Sy9COVcvZkhYcy8yWDVwcHVmUERiTDBnNjVzd3pKemhISnR2YS0tdmhZTCtOWXhVNTY0THNsaC9BZXNDUT09--558cee2639a6ecd9db1e8e5ee786ffb94120f725; ajs_anonymous_id=%22b8567c11-0a84-4970-8b57-9ef9d13d18ea%22; _hubstaff_auth_session=UUNrS2VmcWJ0dDU1TWQyeEVaL1NJK2xxVXNlZXh5RkEwTVJTUmJHNnZ4ZFRVT0lBWEYyNXJMZlVFdGE1Yzd3VzBHUVU4NU9YTi9kbVFXVG9RZmh2TlRMdGZiNTAvVTFIdldCMHRWV1puVWpMWkZnd1NIYWpQbldVUUllWHNjRFJBUGVzdG5WTWFLc1ZGLzQ3OFRnUytUR28zOGwwaDRqRFFmbSt0d2JFNkFQcElKVTZ1MzFnejU0MnU2OGM4STR6LS1kdm84UDNyOS9zYjBzTDJobUFRNml3PT0%3D--349694993786c7c1b7e6b2725146ae7d0d4a54c6; _hubstaff_session=U1NtOXRqM2NTV1NkYkN5VUUvc21lSEFVaFM0L0JXL250MlBSNTFzVmM3WEI4Skhac1E3TXFVMzlWYmhoYXVFdkVSLzVoZ25Ba2hhUEdDV25IQ1NrSzU1ZFJyTjI3dG83M2VLSzUvcEpPZGNSNEdFOWJ3Ujh6Lzc2a3JDVjVTWG85d0dGTEthbjl1bitTOWZjU0NRUGxKR2tyOUZ0Z0o1VDlyTGJaYzdWV3EyZDJMbnphUGVIRkIwMG5pV3dST1ZWeXBZTjBmdWJFL1N4ZHFZeW51V2VUYnlTU2tlOFVNcWdyQTVVUC96SzB1MEdwQlhOS0d2Y3hrNmcvcE5ZUFNvbU80dmRueDNpbEZFcTlsRlFhYS85Ly8xMklGQlpKQW5kT1dlTHpwK3NJaEZWUlVlbVdpSWFUYUVnK25MK0xVcG8tLWRkS054UHR6dVhzQ2pxVk1ZLzVRMFE9PQ%3D%3D--7008e3ff3a3d18ee74347e79d868b7d4e161ef3a; ajs_user_id=%22117%22; ajs_group_id=null; intercom-id=8e35190a-990f-4e2b-aa2b-332930d53f53",
+         "Version":"HTTP/1.1"
+      },
+      "env":{
+         "REMOTE_ADDR":"::1",
+         "SERVER_NAME":"localhost",
+         "SERVER_PORT":"3001"
+      },
+      "cookies":null,
+      "url":"http://localhost:3001/",
+      "method":"GET",
+      "query_string":"",
+      "data":""
+   }
+}
