@@ -18,9 +18,10 @@ The easiest way to install EpicLogger locally is by using the Vagrant image:
 
         git clone --recursive https://github.com/EpicCoders/epiclogger.git
         cd epiclogger/railsbox/development
+        vagrant plugin install vagrant-hostmanager
         vagrant up
 
-  3. Add an entry to your /etc/hosts file: 192.168.20.50 epiclogger.dev __OR__ just use [localhost:8080](http://localhost:8080)
+  3. Add an entry to your /etc/hosts file: 192.33.33.33 epiclogger.dev __OR__ just use [localhost:8080](http://localhost:8080)
   4. Visit [epiclogger.dev](http://epiclogger.dev) || [localhost:8080](http://localhost:8080) in a browser.
 
 If you can't use vagrant on your system then you need to follow the below Installation guide and install all the required libraries.

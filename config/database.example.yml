@@ -1,0 +1,26 @@
+# ============================== DATABASE CONFIG ===============================
+
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: 5
+
+# For usage of the vagrant box please use the configuration commented below
+
+# development:
+#  <<: *default
+#  database: epiclogger_development
+
+#  username: vagrant
+#  password: vagrant
+
+development:
+  <<: *default
+  database: epiclogger_dev
+  username: yolo
+  password:
+test:
+  <<: *default
+  database: epiclogger_test
+  username: yolo
+  password:
