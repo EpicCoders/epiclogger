@@ -13,7 +13,7 @@ RSpec.describe ErrorStore do
 
   describe 'create!', truncation: true do
     it 'calls error.create!' do
-      expect(ErrorStore::Error).to receive(:create!)
+      expect_any_instance_of(ErrorStore::Error).to receive(:create!)
       ErrorStore.create!(request)
     end
     it 'returns the error id' do
