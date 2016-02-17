@@ -30,12 +30,9 @@ module ErrorStore
       # TODO, filter sensitive data like passwords. Eventually add the option to manually define these.
       # TODO, filter data to not have the ip defined by user
       # STEP 2:
-      # default_cache.set(cache_key, data, timeout=3600)
-      # preprocess_event.delay(cache_key=cache_key, start_time=time())
-
-      # Rails.cache.write(cache_key, @data)
-      # ErrorWorker.perform_async(cache_key)
-      ErrorStore::Manager.new(@data, version: @data[:version]).store_error
+      Rails.cache.write(cache_key, @data)
+      ErrorWorker.perform_async(cache_key)
+      # ErrorStore::Manager.new(@data, version: @data[:version]).store_error
       event_id
     end
 
