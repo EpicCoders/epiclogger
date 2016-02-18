@@ -17,69 +17,59 @@ RSpec.describe ErrorStore do
       ErrorStore.create!(request)
     end
     it 'returns the error id' do
-      # event_id = ErrorStore.create!({})
-      # expect(event_id).to be_kind_of(String)
-      # expect(event_id.length).to eq(32)
+      event_id = ErrorStore.create!(request)
+      expect(event_id).to be_kind_of(String)
+      expect(event_id.length).to eq(32)
     end
   end
 
   describe 'find' do
     it 'calls error.find' do
-      expect(ErrorStore::Error).to receive(:find)
+      expect_any_instance_of(ErrorStore::Error).to receive(:find)
       subject.find(issue_error)
     end
     it 'returns the error record' do
-      expect(ErrorStore::Error).to receive(:find).with(issue_error).and_return(issue_error)
+      expect_any_instance_of(ErrorStore::Error).to receive(:find).and_return(issue_error)
       subject.find(issue_error)
     end
   end
 
   describe 'find_interfaces' do
-    it 'retuns assigns the interfaces_list' do
-      expect(ErrorStore.find_interfaces).to eq(
-        [
-          "/home/sergiu/epiclogger/lib/error_store/interfaces/query.rb",
-          "/home/sergiu/epiclogger/lib/error_store/interfaces/frame.rb",
-          "/home/sergiu/epiclogger/lib/error_store/interfaces/message.rb",
-          "/home/sergiu/epiclogger/lib/error_store/interfaces/exception.rb",
-          "/home/sergiu/epiclogger/lib/error_store/interfaces/stacktrace.rb",
-          "/home/sergiu/epiclogger/lib/error_store/interfaces/template.rb",
-          "/home/sergiu/epiclogger/lib/error_store/interfaces/user.rb",
-          "/home/sergiu/epiclogger/lib/error_store/interfaces/single_exception.rb",
-          "/home/sergiu/epiclogger/lib/error_store/interfaces/http.rb"
-        ]
-      )
-    end
     it 'contains all the interfaces in the folder' do
+      expect(ErrorStore.find_interfaces.any? { |a| a.include?('query.rb' && 'frame.rb' && 'message.rb' && 'exception.rb' && 'stacktrace.rb' && 'template.rb' && 'template.rb' && 'user.rb' && 'single_exception.rb' && 'http.rb') 
+        }).to be(true)
       expect(ErrorStore.find_interfaces.length).to eq(9)
     end
   end
 
   describe 'available_interfaces' do
+    it 'retuns assigns the interfaces_list'
     it 'returns the interfaces array' do
       expect(ErrorStore.find_interfaces).to eq(
         [
-          "/home/sergiu/epiclogger/lib/error_store/interfaces/query.rb",
-          "/home/sergiu/epiclogger/lib/error_store/interfaces/frame.rb",
-          "/home/sergiu/epiclogger/lib/error_store/interfaces/message.rb",
-          "/home/sergiu/epiclogger/lib/error_store/interfaces/exception.rb",
-          "/home/sergiu/epiclogger/lib/error_store/interfaces/stacktrace.rb",
-          "/home/sergiu/epiclogger/lib/error_store/interfaces/template.rb",
-          "/home/sergiu/epiclogger/lib/error_store/interfaces/user.rb",
-          "/home/sergiu/epiclogger/lib/error_store/interfaces/single_exception.rb",
-          "/home/sergiu/epiclogger/lib/error_store/interfaces/http.rb"
+          "#{Dir.home}/epiclogger/lib/error_store/interfaces/query.rb",
+          "#{Dir.home}/epiclogger/lib/error_store/interfaces/frame.rb",
+          "#{Dir.home}/epiclogger/lib/error_store/interfaces/message.rb",
+          "#{Dir.home}/epiclogger/lib/error_store/interfaces/exception.rb",
+          "#{Dir.home}/epiclogger/lib/error_store/interfaces/stacktrace.rb",
+          "#{Dir.home}/epiclogger/lib/error_store/interfaces/template.rb",
+          "#{Dir.home}/epiclogger/lib/error_store/interfaces/user.rb",
+          "#{Dir.home}/epiclogger/lib/error_store/interfaces/single_exception.rb",
+          "#{Dir.home}/epiclogger/lib/error_store/interfaces/http.rb"
         ]
       )
     end
-    it 'gives the interfaces with all of them if find_interfaces called'
+    xit 'gives the interfaces with all of them if find_interfaces called'
   end
 
   xdescribe 'interfaces_types' do
     it 'returns an array of interfaces types'
   end
 
-  xdescribe 'get_interface' do
-    it 'raises ErrorStore::InvalidInterface if not found'
+  describe 'get_interface' do
+    it 'raises ErrorStore::InvalidInterface if not found' do
+      expect { ErrorStore.get_interface(:random) }.to raise_exception(ErrorStore::InvalidInterface)
+    end
     it 'returns the interface'
   end
 

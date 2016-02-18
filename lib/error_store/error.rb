@@ -236,7 +236,7 @@ module ErrorStore
         # STEP 4:
         # we are calling the manager for doing the storing of error in the db
         begin
-          ErrorStore::Manager.new(data, data[:version]).store_error
+          ErrorStore::Manager.new(data).store_error
         ensure
           Rails.cache.delete(cache_key)
         end

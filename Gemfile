@@ -60,6 +60,7 @@ gem 'kaminari'
 gem 'cancancan', '~> 1.10'
 # Add sidekiq for background jobs
 gem 'sidekiq'
+gem 'redis-rails'
 
 group :development do
   gem 'better_errors'
