@@ -1,14 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe ErrorStore do
-  let(:member) { create :member }
   let(:website) { create :website }
-  let!(:website_member) { create :website_member, website: website, member: member }
   let(:group) { create :grouped_issue, website: website }
   let(:subscriber) { create :subscriber, website: website }
   let!(:issue_error) { create :issue, subscriber: subscriber, group: group }
-  let(:message) { 'asdada' }
-  let(:default_params) { { website_id: website.id, format: :json } }
   let(:request) { post_error_request(website.app_key, website.app_secret, web_response_factory('ruby_exception')) }
 
   describe 'create!', truncation: true do
