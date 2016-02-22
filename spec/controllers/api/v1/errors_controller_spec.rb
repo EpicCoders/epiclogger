@@ -25,7 +25,8 @@ describe Api::V1::ErrorsController, :type => :controller do
 
       it 'should email 2 subscribers' do
         member2 = create :member
-        create :website_member, website: website, member: member2
+        website2 = create :website, domain: 'http://epic-coders.com', title: 'EpicCoders'
+        create :website_member, website: website2, member: member2
         mailer = double('UserMailer')
         expect(mailer).to receive(:deliver_now).twice
         expect(UserMailer).to receive(:notify_subscriber).with(group, an_instance_of(Member), message).and_return(mailer).twice

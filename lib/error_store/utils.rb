@@ -86,6 +86,7 @@ module ErrorStore
     end
 
     def trim_pairs(iterable, max_items: ErrorStore::MAX_HASH_ITEMS, **args)
+      binding.pry
       max_items -= 1
       result = []
       iterable.each_with_index do |item, index|
