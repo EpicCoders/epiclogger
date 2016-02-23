@@ -1,0 +1,52 @@
+{
+  "name": "EpicLogger",
+  "description": "Error logging meets support",
+  "scripts": {
+    "postdeploy": "bundle exec rake db:setup"
+  },
+  "env": {
+    "APP_DOMAIN": {
+      "required": true
+    },
+    "GITHUB_KEY": {
+      "required": true
+    },
+    "GITHUB_SECRET": {
+      "required": true
+    },
+    "LANG": {
+      "required": true
+    },
+    "MAILER_HOST": {
+      "required": true
+    },
+    "RACK_ENV": {
+      "required": true
+    },
+    "RAILS_ENV": {
+      "required": true
+    },
+    "RAILS_SERVE_STATIC_FILES": {
+      "required": true
+    },
+    "SECRET_KEY_BASE": {
+      "required": true
+    },
+    "SMTP_PASSWORD": {
+      "required": true
+    },
+    "SMTP_SERVER": {
+      "required": true
+    },
+    "SMTP_USERNAME": {
+      "required": true
+    }
+  },
+  "addons": [
+    "heroku-postgresql",
+    "mandrill"
+  ],
+  "buildpacks": [
+
+  ]
+}
