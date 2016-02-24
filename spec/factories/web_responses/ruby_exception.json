@@ -70,84 +70,81 @@
       "uglifier":"2.7.2",
       "web-console":"2.2.1"
    },
-   "extra":{
-
-   },
-   "tags":{
-
-   },
-   "user":{
-
-   },
-   "exception":{
-      "values":[
-         {
-            "type":"ZeroDivisionError",
-            "value":"divided by 0",
-            "module":"",
-            "stacktrace":{
-               "frames":[
-                  {
-                     "pre_context":[
-                        "module ActionController\\n",
-                        "  module ImplicitRender\\n",
-                        "    def send_action(method, *args)\\n"
-                     ],
-                     "post_context":[
-                        "      default_render unless performed?\\n",
-                        "      ret\\n",
-                        "    end\\n"
-                     ],
-                     "abs_path":"/Users/razvanciocanel/.rvm/gems/ruby-2.2.1/gems/actionpack-4.2.1/lib/action_controller/metal/implicit_render.rb",
-                     "function":"send_action",
-                     "lineno":4,
-                     "in_app":false,
-                     "context_line":"      ret = super\\n",
-                     "project_root":"/Users/razvanciocanel/Development/ravenapp",
-                     "filename":"action_controller/metal/implicit_render.rb"
-                  },
-                  {
-                     "pre_context":[
-                        "  # Prevent CSRF attacks by raising an exception.\\n",
-                        "  # For APIs, you may want to use :null_session instead.\\n",
-                        "  def index\\n"
-                     ],
-                     "post_context":[
-                        "  end\\n",
-                        "end\\n",
-                        null
-                     ],
-                     "abs_path":"/Users/razvanciocanel/Development/ravenapp/app/controllers/home_controller.rb",
-                     "function":"index",
-                     "lineno":5,
-                     "in_app":true,
-                     "context_line":"    1/0\\n",
-                     "project_root":"/Users/razvanciocanel/Development/ravenapp",
-                     "filename":"app/controllers/home_controller.rb"
-                  },
-                  {
-                     "pre_context":[
-                        "  # Prevent CSRF attacks by raising an exception.\\n",
-                        "  # For APIs, you may want to use :null_session instead.\\n",
-                        "  def index\\n"
-                     ],
-                     "post_context":[
-                        "  end\\n",
-                        "end\\n",
-                        null
-                     ],
-                     "abs_path":"/Users/razvanciocanel/Development/ravenapp/app/controllers/home_controller.rb",
-                     "function":"/",
-                     "lineno":5,
-                     "in_app":true,
-                     "context_line":"    1/0\\n",
-                     "project_root":"/Users/razvanciocanel/Development/ravenapp",
-                     "filename":"app/controllers/home_controller.rb"
-                  }
-               ]
+   "extra":{},
+   "tags":{},
+   "website": 1,
+   "user":{},
+   "interfaces":{
+      "exception":{
+         "values":[
+            {
+               "type":"ZeroDivisionError",
+               "value":"divided by 0",
+               "module":"",
+               "stacktrace":{
+                  "frames":[
+                     {
+                        "pre_context":[
+                           "module ActionController\\n",
+                           "  module ImplicitRender\\n",
+                           "    def send_action(method, *args)\\n"
+                        ],
+                        "post_context":[
+                           "      default_render unless performed?\\n",
+                           "      ret\\n",
+                           "    end\\n"
+                        ],
+                        "abs_path":"/Users/razvanciocanel/.rvm/gems/ruby-2.2.1/gems/actionpack-4.2.1/lib/action_controller/metal/implicit_render.rb",
+                        "function":"send_action",
+                        "lineno":4,
+                        "in_app":false,
+                        "context_line":"      ret = super\\n",
+                        "project_root":"/Users/razvanciocanel/Development/ravenapp",
+                        "filename":"action_controller/metal/implicit_render.rb"
+                     },
+                     {
+                        "pre_context":[
+                           "  # Prevent CSRF attacks by raising an exception.\\n",
+                           "  # For APIs, you may want to use :null_session instead.\\n",
+                           "  def index\\n"
+                        ],
+                        "post_context":[
+                           "  end\\n",
+                           "end\\n",
+                           null
+                        ],
+                        "abs_path":"/Users/razvanciocanel/Development/ravenapp/app/controllers/home_controller.rb",
+                        "function":"index",
+                        "lineno":5,
+                        "in_app":true,
+                        "context_line":"    1/0\\n",
+                        "project_root":"/Users/razvanciocanel/Development/ravenapp",
+                        "filename":"app/controllers/home_controller.rb"
+                     },
+                     {
+                        "pre_context":[
+                           "  # Prevent CSRF attacks by raising an exception.\\n",
+                           "  # For APIs, you may want to use :null_session instead.\\n",
+                           "  def index\\n"
+                        ],
+                        "post_context":[
+                           "  end\\n",
+                           "end\\n",
+                           null
+                        ],
+                        "abs_path":"/Users/razvanciocanel/Development/ravenapp/app/controllers/home_controller.rb",
+                        "function":"/",
+                        "lineno":5,
+                        "in_app":true,
+                        "context_line":"    1/0\\n",
+                        "project_root":"/Users/razvanciocanel/Development/ravenapp",
+                        "filename":"app/controllers/home_controller.rb"
+                     }
+                  ]
+               }
             }
-         }
-      ]
+         ]
+      }
    },
    "request":{
       "headers":{

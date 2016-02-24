@@ -35,10 +35,9 @@ RSpec.describe ErrorStore::Utils do
       expect( ErrorStore::Error.new.decode_and_decompress(encoded_data.read) ).to eq('random_string')
     end
     it 'does base64.decode if zlib error' do
-      allow(Zlib::Inflate).to receive(:inflate).with('string').and_raise(Zlib::Error)
-      #TODO
-      # expect(Base64.decode64('string')).to eq("\xB2\xDA\xE2\x9E")
-      # expect{ Zlib::Inflate.inflate(Base64.decode64(issue_error.data)) }.to raise_exception(Zlib::Error)
+      allow(Zlib::Inflate).to receive(:inflate).and_raise(Zlib::Error)
+      expect(Base64).to receive(:decode64).twice.with('string')
+      ErrorStore::Error.new.decode_and_decompress('string')
     end
     it 'raises BadData if invalid' do
       expect{ ErrorStore::Error.new.decode_and_decompress({key: 'value'}) }.to raise_exception(ErrorStore::BadData)
@@ -74,8 +73,9 @@ RSpec.describe ErrorStore::Utils do
     end
 
     # it 'trims a hash to a max_depth of 3' do
-    #   #TODO
-    #   expect( ErrorStore::Error.new.trim(hash).length ).to eq(3)
+    #   h = {a:{b:{c:{d:'e'}}}}
+    #   ErrorStore::Error.new.trim(h)
+    #   #undefined method `encode' for :key:Symbol
     # end
 
     # it 'trims the hash value strings' do
@@ -85,12 +85,13 @@ RSpec.describe ErrorStore::Utils do
     # end
 
     # it 'trims a hash to a max_depth defined' do
-    #   ErrorStore::Error.new.trim(hash)
-    #   #_max_depth??
+    #   h = {a:{b:{c:{d:'e'}}}}
+    #   ErrorStore::Error.new.trim(h)
+    #   #undefined method `encode' for :key:Symbol
     # end
     # it 'trims a hash and stops at max_size' do
     #   expect( ErrorStore::Error.new.trim(hash, max_size: 5).length ).to eq(5)
-    #   #TODO..
+    #   #undefined method `encode' for :key:Symbol
     # end
 
     # it 'trims an array and stops at max_size' do
@@ -121,7 +122,7 @@ RSpec.describe ErrorStore::Utils do
     end
     it 'trims the array to a max_items defined' do
       array_hashes = [{:data => issue_error.data},{:host=>"localhost:3001"},{:cache_control=>"max-age=0"}]
-      expect( ErrorStore::Error.new.trim_pairs(array_hashes, max_items: 1) ).to eq(2)
+      expect( ErrorStore::Error.new.trim_pairs(array_hashes, max_items: 1).length ).to eq(2)
     end
   end
 
