@@ -13,6 +13,8 @@ module ErrorRequestMock
 
     ActionDispatch::Request.new(
       'REQUEST_METHOD' => 'POST',
+      "HTTP_USER_AGENT"=>"Faraday v0.9.2",
+      "REMOTE_ADDR"=>"127.0.0.1",
       'HTTP_X_SENTRY_AUTH' => "Sentry sentry_version=#{client_version}, sentry_client=#{client}, sentry_timestamp=1455616740, sentry_key=#{api_key}, sentry_secret=#{api_secret}",
       'HTTP_ACCEPT_ENCODING' => encoding_type,
       'rack.input' => encoded_data
