@@ -1,8 +1,21 @@
 require 'rails_helper'
 
 RSpec.describe ErrorStore::Interfaces::Frame do
-  xit 'it returns Frame for display_name'
-  xit 'it returns type :frame'
+  let(:website) { create :website }
+  let(:group) { create :grouped_issue, website: website }
+  let(:subscriber) { create :subscriber, website: website }
+  let!(:issue_error) { create :issue, subscriber: subscriber, group: group, event_id: '8af060b2986f5914764d49b7f39b036c' }
+
+  let(:request) { post_error_request(website.app_key, website.app_secret, web_response_factory('ruby_exception')) }
+  let(:data) { JSON.parse(issue_error.data, symbolize_names: true) }
+  let(:error) { ErrorStore::Error.new(request: request, issue: issue_error) }
+
+  it 'it returns Frame for display_name' do
+    expect( ErrorStore::Interfaces::Frame.display_name ).to eq("Frame")
+  end
+  it 'it returns type :frame' do
+    expect( ErrorStore::Interfaces::Frame.new(error).type ).to eq(:frame)
+  end
 
   xdescribe 'sanitize_data' do
     context 'raises ValidationError' do

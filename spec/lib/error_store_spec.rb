@@ -32,7 +32,7 @@ RSpec.describe ErrorStore do
 
   describe 'find_interfaces' do
     it 'contains all the interfaces in the folder' do
-      expect(ErrorStore.find_interfaces.any? { |a| a.include?('query.rb' && 'frame.rb' && 'message.rb' && 'exception.rb' && 'stacktrace.rb' && 'template.rb' && 'template.rb' && 'user.rb' && 'single_exception.rb' && 'http.rb') 
+      expect(ErrorStore.find_interfaces.any? { |a| a.include?('query.rb' && 'frame.rb' && 'message.rb' && 'exception.rb' && 'stacktrace.rb' && 'template.rb' && 'template.rb' && 'user.rb' && 'single_exception.rb' && 'http.rb')
         }).to be(true)
       expect(ErrorStore.find_interfaces.length).to eq(9)
     end

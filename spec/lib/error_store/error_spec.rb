@@ -1,28 +1,71 @@
 require 'rails_helper'
 
 RSpec.describe ErrorStore::Error do
-  xdescribe 'intialize' do
-    it 'assigns request and issue provided'
+  let(:website) { create :website }
+  let(:group) { create :grouped_issue, website: website }
+  let(:subscriber) { create :subscriber, website: website }
+  let!(:issue_error) { create :issue, subscriber: subscriber, group: group, event_id: '8af060b2986f5914764d49b7f39b036c' }
+
+  let(:request) { post_error_request(website.app_key, website.app_secret, web_response_factory('ruby_exception')) }
+  let(:data) { JSON.parse(issue_error.data, symbolize_names: true) }
+  let(:error) { ErrorStore::Error.new(request: ActionDispatch::Request.new('REQUEST_METHOD' => 'POST','HTTP_USER_AGENT'=>'Faraday v0.9.2','REMOTE_ADDR'=>'127.0.0.1','HTTP_X_SENTRY_AUTH' => "Sentry sentry_version='5', sentry_client='raven-ruby/0.15.2',sentry_timestamp=1455616740, sentry_key=#{website.app_key}, sentry_secret=#{website.app_secret}",'HTTP_ACCEPT_ENCOaDING' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3','rack.input' => StringIO.new(Base64.strict_encode64(Zlib::Deflate.deflate(issue_error.data))))) }
+
+  before { request.parameters.merge!("format"=>:json, "controller"=>"api/v1/store", "action"=>"create", "id"=>"1") }
+  describe 'intialize' do
+    it 'assigns request and issue provided' do
+      expect( ErrorStore::Error.new(request: request).instance_variable_get(:@request) ).to eq(request)
+      expect( ErrorStore::Error.new(issue: issue_error).instance_variable_get(:@issue) ).to eq(issue_error)
+    end
   end
 
-  xdescribe 'find' do
-    it 'assigns the data to the class'
-    it 'returns the class with data'
+  describe 'find' do
+    it 'assigns the data to the class' do
+      expect( ErrorStore::Error.new(issue: issue_error).find.instance_variable_get(:@data) ).to eq(data)
+    end
+    it 'returns the class with data' do
+      expect( ErrorStore::Error.new(request: request, issue: issue_error).find ).to be_kind_of(ErrorStore::Error)
+      expect( ErrorStore::Error.new(request: request, issue: issue_error).find.data ).to eq(data)
+    end
   end
 
-  xdescribe 'create!' do
+  describe 'create!' do
     it 'assigns context'
-    it 'gets the website'
-    it 'assigns data validated'
-    it 'returns the event_id'
-    it 'saves to cache the data with key'
-    it 'calls ErrorWorker'
+    it 'gets the website' do
+      ##TODO
+      # expect_any_instance_of(ErrorStore::Error).to receive(:get_website).and_return(website)
+      # ErrorStore::Error.new(request: request).create!
+    end
+    it 'assigns data validated' do
+      ##TODO
+      # ErrorStore::Context.new(error)
+      # expect(subject).to receive(:validate_data)
+      # ErrorStore::Error.new(request: request).create!
+    end
+    it 'returns the event_id' do
+      expect( ErrorStore::Error.new(request: request, issue: issue_error).create! ).to eq(issue_error.event_id)
+    end
+    it 'saves to cache the data with key' do
+      cache_key = "issue:#{website.id}:#{issue_error.event_id}"
+      expect( Rails.cache.write(cache_key, {}) ).to be(true)
+    end
+    it 'calls ErrorWorker', truncation: true do
+      cache_key = "issue:#{website.id}:#{issue_error.event_id}"
+      Rails.cache.write(cache_key, {})
+      ErrorStore::Error::ErrorWorker.perform_async(cache_key)
+      expect(ErrorStore::Error::ErrorWorker.jobs.size).to eq(1)
+    end
   end
 
-  xdescribe 'get_website' do
+  describe 'get_website' do
     it 'assigns auth'
-    it 'raises MissingCredentials if missing api key'
-    it 'raises MissingCredentials if missing api secret'
+    it 'raises MissingCredentials if missing api key' do
+      request.headers['HTTP_X_SENTRY_AUTH'] = "Sentry sentry_version='5', sentry_client='raven-ruby/0.15.2',sentry_timestamp=1455616740, sentry_key=#{website.app_key}"
+       expect { ErrorStore::Error.new(request: request, issue: issue_error).get_website }.to raise_exception(ErrorStore::MissingCredentials)
+    end
+    it 'raises MissingCredentials if missing api secret' do
+      request.headers['HTTP_X_SENTRY_AUTH'] = "Sentry sentry_version='5', sentry_client='raven-ruby/0.15.2',sentry_timestamp=1455616740,sentry_secret=#{website.app_secret}"
+       expect { ErrorStore::Error.new(request: request, issue: issue_error).get_website }.to raise_exception(ErrorStore::MissingCredentials)
+    end
     it 'assigns website to context'
     it 'raises WebsiteMissing if website does not exist with api key'
     it 'raises MissingCredentials if get request and api_secret is different'
@@ -68,8 +111,11 @@ RSpec.describe ErrorStore::Error do
     it 'returns the request parameters'
   end
 
-  xdescribe '_auth' do
-    it 'returns the auth assigned'
+  describe '_auth' do
+    it 'returns the auth assigned' do
+      # expect_any_instance_of(ErrorStore::Error).to receive(:_auth).and_return()
+      # ErrorStore::Error.new(request: request, issue: issue_error)._auth
+    end
   end
 
   xdescribe '_website' do
@@ -97,7 +143,7 @@ RSpec.describe ErrorStore::Error do
     it 'returns the right sections'
   end
 
-  xdescribe 'process_timestamp' do
-
+  describe 'process_timestamp' do
+    # expect(ErrorStore::Error.new(request: request, issue: issue_error).process_timestamp(data)).to eq(data)
   end
 end
