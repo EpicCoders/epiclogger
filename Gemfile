@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 ruby '2.2.2'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.2.5'
+gem 'rails', '4.2.5.2'
 # Use postgres as the database for Active Record
 gem 'pg'
 # Add enumerize gem
@@ -76,8 +76,8 @@ group :test do
 end
 
 group :development, :test do
-  # Add server puma
-  gem 'puma'
+  # Add server thin
+  gem 'thin'
 
   gem 'faker'
   gem 'pry'
