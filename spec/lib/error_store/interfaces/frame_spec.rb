@@ -7,7 +7,7 @@ RSpec.describe ErrorStore::Interfaces::Frame do
   let!(:issue_error) { create :issue, subscriber: subscriber, group: group, event_id: '8af060b2986f5914764d49b7f39b036c' }
 
   let(:request) { post_error_request(website.app_key, website.app_secret, web_response_factory('ruby_exception')) }
-  let(:data) { JSON.parse(issue_error.data, symbolize_names: true) }
+  let(:data) { JSON.parse(issue_error.data, symbolize_names: true)[:interfaces][:exception][:values][0][:stacktrace][:frames][0] }
   let(:error) { ErrorStore::Error.new(request: request, issue: issue_error) }
 
   it 'it returns Frame for display_name' do
@@ -17,13 +17,29 @@ RSpec.describe ErrorStore::Interfaces::Frame do
     expect( ErrorStore::Interfaces::Frame.new(error).type ).to eq(:frame)
   end
 
-  xdescribe 'sanitize_data' do
+  describe 'sanitize_data' do
     context 'raises ValidationError' do
-      it 'if abs_path is not string'
-      it 'if filename is not string'
-      it 'if function is not string'
-      it 'if module is not string'
-      it 'if no filename function or errmodule'
+      it 'if abs_path is not string' do
+        data[:abs_path] = {}
+        expect{ ErrorStore::Interfaces::Frame.new(error).sanitize_data(data) }.to raise_exception(ErrorStore::ValidationError)
+      end
+      it 'if filename is not string' do
+        data[:filename] = {}
+        expect{ ErrorStore::Interfaces::Frame.new(error).sanitize_data(data) }.to raise_exception(ErrorStore::ValidationError)
+      end
+      it 'if function is not string' do
+        data[:function] = {}
+        expect{ ErrorStore::Interfaces::Frame.new(error).sanitize_data(data) }.to raise_exception(ErrorStore::ValidationError)
+      end
+      it 'if module is not string' do
+        data[:module] = {}
+        expect{ ErrorStore::Interfaces::Frame.new(error).sanitize_data(data) }.to raise_exception(ErrorStore::ValidationError)
+      end
+      # it 'if no filename function or errmodule' do
+      #   data.delete :filename
+      #   data.delete :function
+      # expect{ ErrorStore::Interfaces::Frame.new(error).sanitize_data(data) }.to raise_exception(ErrorStore::ValidationError)
+      # end
     end
 
     it 'sets abs_path to filename if empty and filename to nil'

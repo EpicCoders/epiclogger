@@ -40,10 +40,13 @@ RSpec.describe ErrorStore::Interfaces::SingleException do
     it 'returns a SingleException instance'
   end
 
-  xdescribe 'to_json' do
-    it 'returns stacktrace to_json data'
+  describe 'to_json' do
+    it 'returns stacktrace to_json data' do
+    end
     it 'returns stacktrace as nil if no stacktrace'
-    it 'returns type, value, module, stacktrace'
+    it 'returns type, value, module, stacktrace' do
+      expect( ErrorStore::Interfaces::SingleException.new(error).to_json ).to eq({:type=>nil, :value=>nil, :module=>nil, :stacktrace=>nil})
+    end
   end
 
   xdescribe 'get_hash' do

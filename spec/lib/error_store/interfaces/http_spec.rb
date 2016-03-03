@@ -1,10 +1,23 @@
 require 'rails_helper'
 
 RSpec.describe ErrorStore::Interfaces::Http do
-  xit 'it returns HTTP for display_name'
-  xit 'it returns type :http'
+  let(:website) { create :website }
+  let(:group) { create :grouped_issue, website: website }
+  let(:subscriber) { create :subscriber, website: website }
+  let!(:issue_error) { create :issue, subscriber: subscriber, group: group, event_id: '8af060b2986f5914764d49b7f39b036c' }
 
-  xdescribe 'sanitize_data' do
+  let(:request) { post_error_request(website.app_key, website.app_secret, web_response_factory('ruby_exception')) }
+  let(:data) { JSON.parse(issue_error.data, symbolize_names: true) }
+  let(:error) { ErrorStore::Error.new(request: request, issue: issue_error) }
+
+  it 'it returns HTTP for display_name' do
+    expect( ErrorStore::Interfaces::Http.display_name ).to eq("HTTP")
+  end
+  it 'it returns type :http' do
+    expect( ErrorStore::Interfaces::Http.new(error).type ).to eq(:http)
+  end
+
+  describe 'sanitize_data' do
     it 'raises ValidationError if data does not have url'
     it 'raises ValidationError if it has method but not in HTTP_METHODS'
     it 'sets method to upcase'
