@@ -1,2 +1,2 @@
 <%# encoding: UTF-8 %>
-<%= JsRoutes.assert_usable_configuration! && JsRoutes.generate(default_url_options: { :host => ENV['APP_DOMAIN'] }, url_links: true, exclude: [/admin/] ) %>
+<%= JsRoutes.assert_usable_configuration! && JsRoutes.generate(default_url_options: { :host => ENV['APP_DOMAIN'] || "#{ENV['HEROKU_APP_NAME']}.herokuapp.com" }, url_links: true, exclude: [/admin/] ) %>

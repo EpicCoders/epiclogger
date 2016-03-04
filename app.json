@@ -5,9 +5,15 @@
     "postdeploy": "bundle exec rake db:setup"
   },
   "env": {
-    "APP_DOMAIN": {
+    "HEROKU_APP_NAME": {
       "required": true
     },
+    "HEROKU_PARENT_APP_NAME": {
+      "required": true
+    },
+    "RACK_ENV": "review",
+    "RAILS_ENV": "review",
+    "REDIS_URL": "REDISCLOUD_URL",
     "GITHUB_KEY": {
       "required": true
     },
@@ -18,12 +24,6 @@
       "required": true
     },
     "MAILER_HOST": {
-      "required": true
-    },
-    "RACK_ENV": {
-      "required": true
-    },
-    "RAILS_ENV": {
       "required": true
     },
     "RAILS_SERVE_STATIC_FILES": {
@@ -44,9 +44,15 @@
   },
   "addons": [
     "heroku-postgresql",
-    "mandrill"
+    "rediscloud:30",
+  ],
+  "formation": [
+    { "process": "web",         "quantity": 1},
+    { "process": "sidekiq",     "quantity": 1}
   ],
   "buildpacks": [
-
+    {
+      "url": "urn:buildpack:heroku/ruby"
+    }
   ]
 }
