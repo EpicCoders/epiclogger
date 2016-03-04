@@ -35,6 +35,7 @@ page = 1
 errors_per_page = 14
 
 PubSub.subscribe('assigned.website', (ev, website)->
+  return unless gon.controller == 'errors'
   switch gon.action
     when "index"
       request(website.id, page)

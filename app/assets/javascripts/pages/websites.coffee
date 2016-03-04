@@ -120,6 +120,7 @@ $('.prev').click(-> showStep(0))
 $('.finish').click(-> performStep(2))
 
 PubSub.subscribe('assigned.website', (ev, website)->
+  return unless gon.controller == 'websites'
   console.log gon.action
   switch gon.action
     when "new"

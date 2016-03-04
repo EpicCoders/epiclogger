@@ -86,6 +86,7 @@ handleEditDetails = (website_id) ->
 
 
 PubSub.subscribe('assigned.website', (ev, website)->
+  return unless gon.controller == 'installations'
   switch gon.action
     when "index"
       handleEditDetails(website.id)

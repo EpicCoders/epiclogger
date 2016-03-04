@@ -1,4 +1,5 @@
 PubSub.subscribe('assigned.website', (ev, website)->
+  return unless gon.controller == 'invitations'
   $('#addMember').submit (e) ->
     e.preventDefault()
     $.ajax

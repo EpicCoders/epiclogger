@@ -1,4 +1,6 @@
 PubSub.subscribe('assigned.website', (ev, website)->
+  console.log gon.controller
+  return unless gon.controller == 'website_members'
   directive = {
     website_members:{
       role:

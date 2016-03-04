@@ -82,6 +82,7 @@ directive = {
 }
 
 PubSub.subscribe('assigned.website', (ev, website)->
+  return unless gon.controller == 'members'
   console.log gon.action
   switch gon.action
     when "index"

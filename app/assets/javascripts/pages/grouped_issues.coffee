@@ -19,6 +19,7 @@ directive = {
       "Send an update to #{this.subscribers_count} subscribers"
 }
 PubSub.subscribe('assigned.website', (ev, website)->
+  return unless gon.controller == 'grouped_issues'
   switch gon.action
     when 'show'
       $.getJSON '/api/v1/errors/' + gon.error_id, { website_id: website.id }, (data) ->
