@@ -10,9 +10,12 @@
 
     = include_gon
     = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
-    = csrf_meta_tags
-  %body{:id=>"#{controller.controller_name}-#{controller.action_name}"}
-    = yield
     = javascript_include_tag 'application', 'data-turbolinks-eval' => false
-    - if Rails.application.assets.find_asset("pages/#{controller.controller_name}")
+    = csrf_meta_tags
+
+  %body{:id=>"#{controller.controller_name}-#{controller.action_name}"}
+    = include_gon
+    = yield
+
+    - if Rails.application.assets_manifest.assets["pages/#{controller.controller_name}.js"]
       = javascript_include_tag "pages/#{controller.controller_name}"
