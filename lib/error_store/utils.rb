@@ -42,35 +42,31 @@ module ErrorStore
         _depth: _depth + 1
       }
 
-      return trim(value.to_s, _size: _size, max_size: max_size) if _depth > max_depth
-
-      if value.is_a?(Hash)
+      if _depth > max_depth
+        return trim(value.to_s, _size: _size, max_size: max_size)
+      elsif value.is_a?(Hash)
         result = {}
         _size += 2
-        value.each_with_index do |v, k|
+        value.each do |k, v|
           trim_v    = trim(v, _size: _size, **options, &block)
           result[k] = trim_v
-          _size += trim_v.encode('utf-8').length + 1
+          _size += trim_v.to_s.length + 1
           break if _size >= max_size
         end
-      end
-
-      if value.is_a?(Array)
+      elsif value.is_a?(Array)
         result = []
         _size += 2
         value.each do |v|
           trim_v = trim(v, _size: _size, **options, &block)
           result << trim_v
-          _size += trim_v.encode('utf-8').length
+          _size += trim_v.to_s.length
           break if _size >= max_size
         end
+      elsif value.is_a?(String)
+        result = value.truncate(max_size - _size)
+      else
+        result = value
       end
-
-      result = if value.is_a?(String)
-                 value.truncate(max_size - _size)
-               else
-                 value
-               end
 
       return result unless block_given?
       yield(result)
@@ -111,9 +107,9 @@ module ErrorStore
     def handle_nan(value)
       # "Remove nan values that can't be json encoded"
       if value.is_a?(Float)
-        return '<inf>' if value == Float::INFINITY
-        return '<-inf>' if value == -Float::INFINITY
-        return '<nan>' if value == Float::NAN
+        return '<inf>' if value.infinite? == 1
+        return '<-inf>' if value.infinite? == -1
+        return '<nan>' if value.nan?
       end
       value
     end
@@ -137,10 +133,10 @@ module ErrorStore
     #####
     def remove_filename_outliers(filename)
       filename_version_re = /(?:
-        v?(?:\d+\.)*\d+|   # version numbers, v1, 1.0.0
-        [a-f0-9]{7,8}|     # short sha
+        v?(?:\d+\.)+\d+|   # version numbers, v1, 1.0.0
+        [a-f0-9]{40}|       # sha1
         [a-f0-9]{32}|      # md5
-        [a-f0-9]{40}       # sha1
+        [a-f0-9]{7,8}     # short sha1
       )/ix
       filename.gsub(filename_version_re, '<version>')
     end
