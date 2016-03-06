@@ -44,13 +44,14 @@ module ErrorRequestMock
     )
   end
 
-  def web_response_factory(path)
+  def web_response_factory(path, json: false)
     extensions = %w(json txt xml)
     base = "#{Rails.root}/spec/factories/web_responses/#{path}"
 
     ext = extensions.find { |extension| File.exist?("#{base}.#{extension}") }
     raise("Count not find web response for #{path}") if ext.nil?
 
+    return JSON.parse(IO.read("#{base}.#{ext}")) if json
     IO.read("#{base}.#{ext}")
   end
 end

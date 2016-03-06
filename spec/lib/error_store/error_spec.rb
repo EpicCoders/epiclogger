@@ -6,6 +6,7 @@ RSpec.describe ErrorStore::Error do
   let(:subscriber) { create :subscriber, website: website }
   let!(:issue_error) { create :issue, subscriber: subscriber, group: group, event_id: '8af060b2986f5914764d49b7f39b036c' }
 
+  let(:time_now) { Time.parse('2016-02-10') }
   let(:post_request) { post_error_request(website.app_key, website.app_secret, web_response_factory('ruby_exception')) }
   let(:get_request) { get_error_request(website.app_key, web_response_factory('js_exception')) }
   let(:data) { JSON.parse(issue_error.data, symbolize_names: true) }
@@ -95,13 +96,48 @@ RSpec.describe ErrorStore::Error do
     end
   end
 
-  xdescribe 'validate_data' do
-    it 'returns data[:message] = <no message> if message missing'
-    it 'trims culprint length if too big'
-    it 'returns data[:event_id] equal to SecureRandom.hex if missing'
-    it 'returns data[:errors] value_too_long if event_id too big'
-    it 'returns data[:timestamp] equal to Time.now.utc if missing'
-    it 'returns data[:errors] invalid_data if can not process timestamp'
+  describe 'validate_data' do
+    let(:response) { web_response_factory('ruby_exception', json: true) }
+    let(:request) { post_error_request(website.app_key, website.app_secret, response.to_json) }
+    let(:valid_error) { ErrorStore::Error.new(request: request) }
+
+    it 'returns data[:message] = <no message> if message missing' do
+      response.delete('message')
+      valid_error.create!
+      expect( valid_error.data[:message] ).to eq('<no message>')
+    end
+    it 'trims culprit length if too big' do
+      # we set a 220 string as culprit
+      response['culprit'] = '71raym9wwz3xv2zqyuve7hvpii5hxtvj5t0s6sg0rddbzq6f92hzmhmrdwma05tptvnu110bnftbt9dk0tx1d74iy02jpkzn95vrglwjb4ss4qvjko65hynxg5rtl0atyrqnjjcxcfddz1x62v3uj2x9iljjqzxolube9hweqv3py65o1h7glsmd9ng5n5pqe3y5u5vi820xsr6vfgld2wwtp4kj'
+      valid_error.create!
+      expect( valid_error.data[:culprit].length ).to eq(ErrorStore::MAX_CULPRIT_LENGTH)
+    end
+    it 'returns data[:event_id] equal to SecureRandom.hex if missing' do
+      allow(SecureRandom).to receive(:hex).and_return('b7fb6019862bc1bc51d5587a146159f8')
+      response.delete('event_id')
+      valid_error.create!
+      expect( valid_error.data[:event_id] ).to eq(SecureRandom.hex)
+    end
+    it 'returns data[:errors] value_too_long if event_id too big' do
+      response['event_id'] = '71raym9wwz3xv2zqyuve7hvpii5hxtvj5t0s6sg0rddbzq6f92hzmhmrdwma05tptvnu110bnftbt9d'
+      valid_error.create!
+      expect( valid_error.data[:errors] ).to include(
+        {
+          type: 'value_too_long', name: 'event_id',
+          value: '71raym9wwz3xv2zqyuve7hvpii5hxtvj5t0s6sg0rddbzq6f92hzmhmrdwma05tptvnu110bnftbt9d'
+        }
+      )
+    end
+    it 'returns data[:timestamp] equal to Time.now.utc if missing' do
+      Timecop.freeze(time_now) do
+        response.delete('timestamp')
+        valid_error.create!
+        expect( valid_error.data[:timestamp] ).to eq(time_now)
+      end
+    end
+    it 'returns data[:errors] invalid_data if can not process timestamp' do
+      
+    end
     it 'returns the right timestamp'
     it 'returns the processed fingerprint'
     it 'returns data[:errors] invalid_data if InvalidFingerprint'
