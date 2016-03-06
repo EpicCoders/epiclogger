@@ -13,21 +13,34 @@ module ErrorRequestMock
 
     ActionDispatch::Request.new(
       'REQUEST_METHOD' => 'POST',
-      "HTTP_USER_AGENT"=>"Faraday v0.9.2",
-      "REMOTE_ADDR"=>"127.0.0.1",
+      'HTTP_USER_AGENT' => 'Faraday v0.9.2',
+      'REMOTE_ADDR' => '127.0.0.1',
       'HTTP_X_SENTRY_AUTH' => "Sentry sentry_version=#{client_version}, sentry_client=#{client}, sentry_timestamp=1455616740, sentry_key=#{api_key}, sentry_secret=#{api_secret}",
       'HTTP_ACCEPT_ENCODING' => encoding_type,
       'rack.input' => encoded_data
     )
   end
 
-  # TODO create this method
-  def get_error_request(api_key, data, client_version: '5', client: 'raven-js/0.15.2')
+  def validated_request(request)
+    error = ErrorStore::Error.new(request: request)
+    error.context = ErrorStore::Context.new(error)
+    error.get_website
+    error.validate_data
+  end
+
+  def get_error_request(api_key, data, client_version: '4', client: 'raven-js/1.1.20')
+    query = {
+      'sentry_version' => client_version,
+      'sentry_client' => client,
+      'sentry_key' => api_key,
+      'sentry_data' => data.to_json,
+      'id' => '1'
+    }
+
     ActionDispatch::Request.new(
       'REQUEST_METHOD' => 'GET',
-      # 'HTTP_X_SENTRY_AUTH' => "Sentry sentry_version=#{client_version}, sentry_client=#{client}, sentry_timestamp=1455616740, sentry_key=#{api_key}, sentry_secret=#{api_secret}",
-      # 'HTTP_ACCEPT_ENCODING' => encoding_type,
-      # 'rack.input' => encoded_data
+      'QUERY_STRING' => query.to_param,
+      'rack.input' => StringIO.new('')
     )
   end
 
@@ -35,7 +48,7 @@ module ErrorRequestMock
     extensions = %w(json txt xml)
     base = "#{Rails.root}/spec/factories/web_responses/#{path}"
 
-    ext = extensions.find {|ext| File.exists?("#{base}.#{ext}") }
+    ext = extensions.find { |extension| File.exist?("#{base}.#{extension}") }
     raise("Count not find web response for #{path}") if ext.nil?
 
     IO.read("#{base}.#{ext}")

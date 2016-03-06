@@ -1,0 +1,37 @@
+{
+   "project":"1",
+   "logger":"javascript",
+   "platform":"javascript",
+   "request":{
+      "headers":{
+         "User-Agent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.75 Safari/537.36"
+      },
+      "url":"http://ravenjs.site/example/index.html"
+   },
+   "exception":{
+      "type":"ReferenceError",
+      "value":"fdasfds is not defined"
+   },
+   "stacktrace":{
+      "frames":[
+         {
+            "filename":"http://ravenjs.site/example/scratch.js",
+            "lineno":12,
+            "colno":51,
+            "function":"HTMLButtonElement.broken",
+            "in_app":true
+         }
+      ]
+   },
+   "culprit":"http://ravenjs.site/example/scratch.js",
+   "message":"ReferenceError: fdasfds is not defined",
+   "extra":{
+      "session:duration":1433,
+      "title":"Scratch Disk"
+   },
+   "user":{
+      "email":"email@gmail.com",
+      "id":1
+   },
+   "event_id":"7f94dd9a50bf4ba79244941ccd1c2b59"
+}
