@@ -69,7 +69,7 @@ RSpec.describe ErrorStore do
       subject.class_variable_set(:@@interfaces_list, []) # reset the interfaces list
       subject.find_interfaces
 
-      expect(subject.interfaces_types).to eq([:exception, :frame, :http, :message, :query, :single_exception, :stacktrace, :template, :user])
+      expect(subject.interfaces_types).to eq([:query, :frame, :message, :exception, :stacktrace, :template, :user, :single_exception, :http])
     end
   end
 

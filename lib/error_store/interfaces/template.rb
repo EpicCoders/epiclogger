@@ -15,9 +15,9 @@ module ErrorStore::Interfaces
         raise ErrorStore::ValidationError.new(self), 'Please provide filename, context_line and lineno'
       end
       self._data = {
-        abs_path: trim(data[:abs_path], 256),
-        filename: trim(data[:filename], 256),
-        context_line: trim(data[:context_line], 256),
+        abs_path: trim(data[:abs_path], max_size: 256),
+        filename: trim(data[:filename], max_size: 256),
+        context_line: trim(data[:context_line], max_size: 256),
         lineno: data[:lineno].to_i,
         pre_context: data[:pre_context],
         post_context: data[:post_context]

@@ -10,7 +10,6 @@
 #   let(:args) { {:message=>"ZeroDivisionError: divided by 0", :platform=>"ruby", :culprit=>"app/controllers/home_controller.rb in / at line 5", :issue_logger=>"", :level=>40, :last_seen=>"2016-02-17T12:29:56", :first_seen=>"2016-02-17T12:29:56", :time_spent_total=>2, :time_spent_count=>1} }
 #   describe 'initialize' do
 #     it 'assigns data and version' do
-#       ErrorStore::Manager.new(data).instance_variable_set(:@data, data)
 #       expect( ErrorStore::Manager.new(data).instance_variable_get(:@data) ).to eq(data)
 #       expect( ErrorStore::Manager.new(data).instance_variable_get(:@version) ).to eq("5")
 #     end
