@@ -8,22 +8,23 @@ RSpec.describe ErrorStore::Interfaces::Exception do
 
   let(:data) { JSON.parse(issue_error.data, symbolize_names: true) }
   let(:error) { ErrorStore::Error.new(request: post_error_request(website.app_key, website.app_secret, web_response_factory('ruby_exception')), issue: issue_error) }
+  let(:exception) { ErrorStore::Interfaces::Exception.new(error) }
 
   it 'it returns Exception for display_name' do
     expect( ErrorStore::Interfaces::Exception.display_name ).to eq("Exception")
   end
   it 'it returns type :exception' do
-    expect( ErrorStore::Interfaces::Exception.new(error).type ).to eq(:exception)
+    expect( exception.type ).to eq(:exception)
   end
 
   describe 'sanitize_data' do
     it 'sets _data to be a hash with values and array of data' do
-      expect( ErrorStore::Interfaces::Exception.new(error).sanitize_data(data[:interfaces][:exception]).instance_variable_get(:@_data) ).to be_kind_of(Hash)
-      expect( ErrorStore::Interfaces::Exception.new(error).sanitize_data(data[:interfaces][:exception]).instance_variable_get(:@_data)[:values] ).to be_kind_of(Array)
+      expect( exception.sanitize_data(data[:interfaces][:exception]).instance_variable_get(:@_data) ).to be_kind_of(Hash)
+      expect( exception.sanitize_data(data[:interfaces][:exception]).instance_variable_get(:@_data)[:values] ).to be_kind_of(Array)
     end
     it 'raises ValidationError if no data[:values]' do
       data[:interfaces][:exception] = {}
-      expect{ ErrorStore::Interfaces::Exception.new(error).sanitize_data(data[:interfaces][:exception]).instance_variable_get(:@_data) }.to raise_exception(ErrorStore::ValidationError)
+      expect{ exception.sanitize_data(data[:interfaces][:exception]).instance_variable_get(:@_data) }.to raise_exception(ErrorStore::ValidationError)
     end
     it 'trims values to not go with too many exceptions' do
       hash_30 = {}
@@ -58,23 +59,23 @@ RSpec.describe ErrorStore::Interfaces::Exception do
                   {:post_context=>["  end\n", "end\n", ""]},
                   {:lineno=>5}
                 ]
-      expect( ErrorStore::Interfaces::Exception.new(error).trim_exceptions(hash_30) ).to eq(12..18)
+      expect( exception.trim_exceptions(hash_30) ).to eq(12..18)
     end
     it 'checks [:values][:stacktrace] and calls SingleException with has_frames' do
       expect_any_instance_of(ErrorStore::Interfaces::SingleException).to receive(:sanitize_data).with(data[:interfaces][:exception][:values][0], true)
-      ErrorStore::Interfaces::Exception.new(error).sanitize_data(data[:interfaces][:exception])
+      exception.sanitize_data(data[:interfaces][:exception])
     end
     it 'checks [:values][:stacktrace] and calls SingleException without has_frames' do
       data[:interfaces][:exception][:values][0][:stacktrace][:frames] = []
       expect_any_instance_of(ErrorStore::Interfaces::SingleException).to receive(:sanitize_data).with(data[:interfaces][:exception][:values][0], false)
-      ErrorStore::Interfaces::Exception.new(error).sanitize_data(data[:interfaces][:exception])
+      exception.sanitize_data(data[:interfaces][:exception])
     end
     # it 'sets _data[:values] to eq SingleExceptions' do
-    #   expect( ErrorStore::Interfaces::Exception.new(error).sanitize_data(data[:interfaces][:exception]).instance_variable_get(:@_data)[:values] ).to eq(ErrorStore::Interfaces::SingleException.new(error).sanitize_data(data[:interfaces][:exception][:values][0]))
+    #   expect( exception.sanitize_data(data[:interfaces][:exception]).instance_variable_get(:@_data)[:values] ).to eq(ErrorStore::Interfaces::SingleException.new(error).sanitize_data(data[:interfaces][:exception][:values][0]))
     # end
     it 'raises ValidationError if data[:exc_omitted].length is equal to 2' do
       data[:interfaces][:exception][:exc_omitted] = { :a => 'a', :b => 'b', :c => 'c' }
-      expect{ ErrorStore::Interfaces::Exception.new(error).sanitize_data(data[:interfaces][:exception])}.to raise_exception(ErrorStore::ValidationError)
+      expect{ exception.sanitize_data(data[:interfaces][:exception])}.to raise_exception(ErrorStore::ValidationError)
     end
     it 'returns Exception instance'
   end
@@ -84,11 +85,11 @@ RSpec.describe ErrorStore::Interfaces::Exception do
 
   describe 'data_has_frames' do
     it 'returns true if it has frames' do
-      expect( ErrorStore::Interfaces::Exception.new(error).data_has_frames(data[:interfaces][:exception]) ).to be(true)
+      expect( exception.data_has_frames(data[:interfaces][:exception]) ).to be(true)
     end
     it 'returns false if it does not have frames' do
       data[:interfaces][:exception][:values][0][:stacktrace][:frames] = []
-      expect( ErrorStore::Interfaces::Exception.new(error).data_has_frames(data[:interfaces][:exception]) ).to be(false)
+      expect( exception.data_has_frames(data[:interfaces][:exception]) ).to be(false)
     end
   end
 
@@ -127,7 +128,7 @@ RSpec.describe ErrorStore::Interfaces::Exception do
       #             {:post_context=>["  end\n", "end\n", ""]},
       #             {:lineno=>5}
       #           ]
-      # expect( ErrorStore::Interfaces::Exception.new(error).trim_exceptions(hash_30).length ).to eq(25)
+      # expect( exception.trim_exceptions(hash_30).length ).to eq(25)
     end
   end
 
