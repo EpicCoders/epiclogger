@@ -13,7 +13,7 @@
     },
     "RACK_ENV": "review",
     "RAILS_ENV": "review",
-    "REDIS_URL": "REDISCLOUD_URL",
+    "REDIS_PROVIDER": "REDISCLOUD_URL",
     "GITHUB_KEY": {
       "required": true
     },
