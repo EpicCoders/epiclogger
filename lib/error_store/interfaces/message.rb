@@ -12,9 +12,9 @@ module ErrorStore::Interfaces
 
     def sanitize_data(data)
       raise ErrorStore::ValidationError.new(self), 'No "message" present' unless data[:message]
-      self._data[:message] = trim(data[:message], 2048)
+      self._data[:message] = trim(data[:message], max_size: 2048)
       self._data[:params] = if data[:params]
-                              trim(data[:params], 1024)
+                              trim(data[:params], max_size: 1024)
                             else
                               []
                             end

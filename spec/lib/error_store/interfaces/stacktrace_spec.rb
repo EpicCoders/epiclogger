@@ -63,18 +63,6 @@ RSpec.describe ErrorStore::Interfaces::Stacktrace do
     it 'returns nil if no frames' do
       expect( stack.get_culprit_string ).to be_nil
     end
-    context 'frame with in_app true' do
-      it 'returns culprit with module'
-      it 'returns culprit with filename if module blank'
-      it 'returns function as ? if blank'
-      it 'returns blank string if fileloc blank'
-    end
-    context 'no frame with in_app true then get from first frame' do
-      it 'returns culprit with module'
-      it 'returns culprit with filename if module blank'
-      it 'returns function as ? if blank'
-      it 'returns blank string if fileloc blank'
-    end
   end
 
   describe 'get_hash' do
