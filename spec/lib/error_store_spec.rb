@@ -32,31 +32,24 @@ RSpec.describe ErrorStore do
 
   describe 'find_interfaces' do
     it 'contains all the interfaces in the folder' do
-      interfaces = subject.find_interfaces
-      check = interfaces.map do |i|
-        true if i.match(/query|frame|message|exception|stacktrace|template|template|user|single_exception|http/)
+      check = subject.available_interfaces.map do |i|
+        true if %w(query frame message exception stacktrace template user single_exception http).include?(i[:type].to_s)
       end.uniq
       expect(check).to eq([true])
-      expect(interfaces.length).to eq(9)
+      expect(subject.available_interfaces.length).to eq(9)
     end
   end
 
   describe 'available_interfaces' do
-    before { allow(ErrorStore::BaseInterface).to receive(:available).and_return(true) }
-
     it 'retuns assigns the interfaces_list' do
-      # if we don't run the find_interfaces method then it's blank
-      expect(subject.available_interfaces).to eq([])
       expect(subject.available_interfaces).to eq(subject.class_variable_get(:@@interfaces_list))
     end
 
     it 'returns the interfaces array' do
       expect(subject.available_interfaces).to be_kind_of(Array)
-      expect(subject.available_interfaces.length).to eq(0)
     end
 
     it 'gives the interfaces with all of them if find_interfaces called' do
-      subject.find_interfaces # we do a find of the interfaces and we should get them set now
       expect(subject.available_interfaces).to be_kind_of(Array)
       expect(subject.available_interfaces.length).to eq(9)
       expect(subject.available_interfaces).to eq(subject.class_variable_get(:@@interfaces_list))
@@ -65,19 +58,14 @@ RSpec.describe ErrorStore do
 
   describe 'interfaces_types' do
     it 'returns an array of interfaces types' do
-      allow(ErrorStore::BaseInterface).to receive(:available).and_return(true)
       subject.class_variable_set(:@@interfaces_list, []) # reset the interfaces list
       subject.find_interfaces
 
-      expect(subject.interfaces_types).to eq([:query, :frame, :message, :exception, :stacktrace, :template, :user, :single_exception, :http])
+      expect(subject.interfaces_types).to eq([:exception, :frame, :http, :message, :query, :single_exception, :stacktrace, :template, :user])
     end
   end
 
   describe 'get_interface' do
-    before do
-      allow(ErrorStore::BaseInterface).to receive(:available).and_return(true)
-      subject.find_interfaces
-    end
     it 'raises ErrorStore::InvalidInterface if not found' do
       expect { subject.get_interface(:random) }.to raise_exception(ErrorStore::InvalidInterface)
     end

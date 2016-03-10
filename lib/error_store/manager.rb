@@ -47,7 +47,7 @@ module ErrorStore
       data[:fingerprint] = fingerprint || ['{{ default }}']
 
       hash = if !fingerprint.nil?
-               md5_from_hash(get_hash_from_fingerprint(issue, fingerprint))
+               md5_from_hash(get_hashes_from_fingerprint(issue, fingerprint))
              elsif !checksum.nil?
                checksum
              else

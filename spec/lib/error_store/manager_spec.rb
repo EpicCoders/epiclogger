@@ -1,55 +1,87 @@
-# require 'rails_helper'
+require 'rails_helper'
 
-# RSpec.describe ErrorStore::Manager do
-#   let(:website) { create :website }
-#   let(:group) { create :grouped_issue, website: website }
-#   let(:subscriber) { create :subscriber, website: website }
-#   let!(:issue_error) { create :issue, subscriber: subscriber, group: group }
-#   let(:request) { post_error_request(website.app_key, website.app_secret, web_response_factory('ruby_exception')) }
-#   let(:data) { JSON.parse(web_response_factory('ruby_exception'), symbolize_names: true) }
-#   let(:args) { {:message=>"ZeroDivisionError: divided by 0", :platform=>"ruby", :culprit=>"app/controllers/home_controller.rb in / at line 5", :issue_logger=>"", :level=>40, :last_seen=>"2016-02-17T12:29:56", :first_seen=>"2016-02-17T12:29:56", :time_spent_total=>2, :time_spent_count=>1} }
-#   describe 'initialize' do
-#     it 'assigns data and version' do
-#       expect( ErrorStore::Manager.new(data).instance_variable_get(:@data) ).to eq(data)
-#       expect( ErrorStore::Manager.new(data).instance_variable_get(:@version) ).to eq("5")
-#     end
-#   end
+RSpec.describe ErrorStore::Manager do
+  let(:website) { create :website }
+  let(:post_request) { post_error_request(website.app_key, website.app_secret, web_response_factory('ruby_exception')) }
+  let(:get_request) { get_error_request(website.app_key, web_response_factory('js_exception')) }
+  let(:validated_post_data) { validated_request(post_request) }
+  let(:post_manager) { ErrorStore::Manager.new(validated_post_data) }
 
-#   describe 'store_error' do
-#     it 'saves the provided checksum', truncation: true do
-#       optional_website = create :website, id:1, domain: "http://random-domain.com", title: "Title"
-#       expect( ErrorStore::Manager.new(data).store_error.group.checksum ).to eq((Digest::MD5.new.update issue_error.message).hexdigest)
-#     end
-#     it 'creates hash from fingerprint'
-#     it 'creates a new issue without subscriber', truncation: true do
-#       expect( ErrorStore::Manager.new(data).store_error.subscriber ).to be_nil
-#     end
-#     it 'creates a new issue with subscriber'
-#     it 'creates issue if it fails once'
-#     it 'does not save issue if it fails twice'
-#     it 'saves group_issue if new', truncation: true do
-#       data[:message] = 'new message'
-#       expect{ ErrorStore::Manager.new(data).store_error }.to change(GroupedIssue, :count).by(1)
-#     end
-#     it 'does not save group_issue if already there', truncation: true do
-#       expect{ ErrorStore::Manager.new(data).store_error }.to change(GroupedIssue, :count).by(0)
-#     end
-#     it 'creates issue with already there group_issue'
-#   end
+  describe 'initialize' do
+    it 'assigns data and version' do
+      expect( post_manager.instance_variable_get(:@data) ).to eq(validated_post_data)
+      expect( post_manager.instance_variable_get(:@version) ).to eq('5')
+    end
+  end
 
-#   describe '_save_aggregate' do
-#     it 'returns the new group' do
-#       expect( ErrorStore::Manager.new(data)._save_aggregate(issue_error, "rand", args)[0].new_record? ).to be(true)
-#     end
-#     it 'returns the existing group by hash/checksum' do
-#     end
-#     it 'returns is_sample false if group new'
-#     it 'returns is_sample false if is_regression (resolved group gone unresolved)'
-#     it 'returns is_sample true if it can_sample'
-#     it 'creates a new grouped_issue'
-#   end
+  describe 'store_error', truncation: true do
+    subject { post_manager.store_error }
+    it 'saves a new grouped_issue' do
+      expect {
+        subject
+      }.to change(GroupedIssue, :count).by(1)
+    end
+    it 'saves a new issue' do
+      expect {
+        subject
+      }.to change(Issue, :count).by(1)
+    end
+    it 'saves a new subscriber' do
+      expect {
+        subject
+      }.to change(Subscriber, :count).by(1)
+    end
+    it 'saves the provided checksum' do
+      validated_post_data[:checksum] = 'sd'
+      issue = subject
+      expect( issue.group.checksum ).to eq('sd')
+    end
+    it 'creates hash from fingerprint' do
+      validated_post_data[:fingerprint] = ['sd', 'wes']
+      issue = subject
+      expect( issue.group.checksum ).to eq(post_manager.md5_from_hash(post_manager.get_hashes_from_fingerprint(issue, ['sd', 'wes'])))
+    end
+    it 'creates a new issue without subscriber' do
+      validated_post_data[:interfaces].delete(:user)
+      expect {
+        subject
+      }.to change(Subscriber, :count).by(0)
+    end
+    it 'does not save issue if it fails twice' do
+      allow(Issue).to receive(:transaction).and_raise(PG::TRSerializationFailure).twice
+      allow(ErrorStore::Manager).to receive(:retry).once
+      expect {
+        subject
+      }.to raise_error(PG::TRSerializationFailure)
+    end
+    it 'does not save group_issue if already there' do
+      req = post_error_request(website.app_key, website.app_secret, web_response_factory('ruby_exception'))
+      data = validated_request(req)
+      ErrorStore::Manager.new(data).store_error
+      expect {
+        subject
+      }.to change(GroupedIssue, :count).by(0)
+    end
+    it 'creates issue with already there group_issue' do
+      req = post_error_request(website.app_key, website.app_secret, web_response_factory('ruby_exception'))
+      data = validated_request(req)
+      ErrorStore::Manager.new(data).store_error
+      expect {
+        subject
+      }.to change(Issue, :count).by(1)
+    end
+  end
 
-#   xdescribe 'should_sample' do
-#     it 'returns false if '
-#   end
-# end
+  describe '_save_aggregate' do
+    it 'returns the new group'
+    it 'returns the existing group by hash/checksum'
+    it 'returns is_sample false if group new'
+    it 'returns is_sample false if is_regression (resolved group gone unresolved)'
+    it 'returns is_sample true if it can_sample'
+    it 'creates a new grouped_issue'
+  end
+
+  xdescribe 'should_sample' do
+    it 'returns false if '
+  end
+end
