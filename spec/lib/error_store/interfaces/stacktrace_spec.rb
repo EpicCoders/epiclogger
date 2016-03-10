@@ -23,7 +23,6 @@ RSpec.describe ErrorStore::Interfaces::Stacktrace do
       data.delete :frames
       expect{ stack.sanitize_data(data) }.to raise_exception(ErrorStore::ValidationError)
     end
-    it 'sets to each frame in_app to false if no has_system_frames'
 
     it 'sets _data[:frames] to frame_list'
 

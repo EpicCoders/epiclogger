@@ -7,7 +7,7 @@ RSpec.describe ErrorStore::Interfaces::Message do
   let!(:issue_error) { create :issue, subscriber: subscriber, group: group, event_id: '8af060b2986f5914764d49b7f39b036c' }
 
   let(:request) { post_error_request(website.app_key, website.app_secret, web_response_factory('ruby_exception')) }
-  let(:data) { JSON.parse(issue_error.data, symbolize_names: true)[:interfaces][:exception] }
+  let(:data) { JSON.parse(web_response_factory('ruby_exception'), symbolize_names: true)}
   let(:error) { ErrorStore::Error.new(request: request, issue: issue_error) }
   let(:message) { ErrorStore::Interfaces::Message.new(error) }
 
@@ -19,8 +19,6 @@ RSpec.describe ErrorStore::Interfaces::Message do
   end
 
   describe 'sanitize_data' do
-    before{ data[:message] = "example for message" }
-
     it 'raises ValidationError if message is blank' do
       data.delete :message
       expect{ message.sanitize_data(data) }.to raise_exception(ErrorStore::ValidationError)
