@@ -24,6 +24,7 @@ module ErrorStore
         Rails.logger.error("Could not load class #{base}")
       end
     end
+    @@interfaces_list.sort! { |a, b| a[:name].casecmp(b[:name]) }
   end
 
   def self.interface_class(type)
