@@ -17,8 +17,7 @@ module ErrorStore
     end
 
     def self.available
-      # driver available if not rails test
-      !Rails.env.test?
+      true
     end
 
     def to_json
