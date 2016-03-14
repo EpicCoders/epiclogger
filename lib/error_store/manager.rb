@@ -241,7 +241,7 @@ module ErrorStore
     def get_hashes_from_fingerprint(issue, fingerprint)
       default_values = ['{{ default }}', '{{default}}']
       if default_values.any? { |i| fingerprint.include?(i) }
-        default_hashes = get_hashes_for_issue(issue)
+        default_hashes = get_hash_for_issue(issue)
         hash_count = default_hashes.length
       else
         hash_count = 1
@@ -251,11 +251,11 @@ module ErrorStore
       (0..hash_count).each do |i|
         result = []
         fingerprint.each do |bit|
-          if default_values.include?(bit)
-            result.concat(default_hashes[i])
-          else
-            result << bit
-          end
+          result << if default_values.include?(bit)
+                      default_hashes[i]
+                    else
+                      bit
+                    end
         end
         hashes << result
       end
@@ -265,7 +265,7 @@ module ErrorStore
     def get_hashes_from_fingerprint_with_reason(issue, fingerprint)
       default_values = ['{{ default }}', '{{default}}']
       if default_values.any? { |i| fingerprint.include?(i) }
-        default_hashes = get_hashes_for_issue_with_reason(issue)
+        default_hashes = get_hash_for_issue_with_reason(issue)
         hash_count = default_hashes[1].length
       else
         hash_count = 1

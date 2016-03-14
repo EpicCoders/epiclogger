@@ -6,6 +6,9 @@ RSpec.describe ErrorStore::Manager do
   let(:get_request) { get_error_request(website.app_key, web_response_factory('js_exception')) }
   let(:validated_post_data) { validated_request(post_request) }
   let(:post_manager) { ErrorStore::Manager.new(validated_post_data) }
+  let(:interface_hash) {
+    ["action_controller/metal/implicit_render.rb", "      ret = super\\n", "app/controllers/home_controller.rb", "    1/0\\n", "app/controllers/home_controller.rb", "    1/0\\n", :single_exception, "action_controller/metal/implicit_render.rb", "      ret = super\\n", "app/controllers/home_controller.rb", "    1/0\\n", "app/controllers/home_controller.rb", "    1/0\\n", "ZeroDivisionError"]
+  }
 
   describe 'initialize' do
     it 'assigns data and version' do
@@ -250,19 +253,50 @@ RSpec.describe ErrorStore::Manager do
     end
   end
 
-  xdescribe 'get_hash_for_issue', truncation: true do
+  describe 'get_hash_for_issue', truncation: true do
     let(:issue) { post_manager.store_error }
     subject { post_manager.get_hash_for_issue(issue) }
-    it 'returns the first hash' do
-      expect(subject).to eq(['ZeroDivisionError: divided by 0'])
+    it 'returns the first hash data' do
+      expect(subject).to eq(interface_hash)
     end
   end
 
-  xdescribe 'get_hash_for_issue_with_reason', truncation: true do
+  describe 'get_hash_for_issue_with_reason', truncation: true do
     let(:issue) { post_manager.store_error }
     subject { post_manager.get_hash_for_issue_with_reason(issue) }
-    it 'returns the first hash' do
-      expect(subject).to eq('')
+    it 'returns the first interface' do
+      expect(subject).to eq([:exception, interface_hash])
+    end
+    it 'returns message if no exception' do
+      # the other interfaces return blank so in our test spec only exception has it
+      validated_post_data[:interfaces].delete(:exception)
+      expect(subject).to eq([:message, ['ZeroDivisionError: divided by 0']])
+    end
+  end
+
+  describe 'get_hashes_from_fingerprint', truncation: true do
+    let(:issue) { post_manager.store_error }
+    let(:fingerprint) { ['{{ default }}'] }
+    subject { post_manager.get_hashes_from_fingerprint(issue, fingerprint) }
+    it 'should return hash by fingerprint' do
+      expect(subject).to eq(interface_hash.map { |d| [d] } + [[nil]])
+    end
+    it 'returns the hash from fingerprint if not default' do
+      fingerprint[0] = 'fingerprint'
+      expect(subject).to eq([fingerprint, fingerprint])
+    end
+  end
+
+  xdescribe 'get_hashes_from_fingerprint_with_reason', truncation: true do
+    let(:issue) { post_manager.store_error }
+    let(:fingerprint) { ['{{ default }}'] }
+    subject { post_manager.get_hashes_from_fingerprint_with_reason(issue, fingerprint) }
+    it 'should return hash by fingerprint' do
+      expect(subject).to eq(interface_hash.map { |d| [d] } + [[nil]])
+    end
+    it 'returns the hash from fingerprint if not default' do
+      fingerprint[0] = 'fingerprint'
+      expect(subject).to eq([fingerprint, fingerprint])
     end
   end
 end
