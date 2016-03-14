@@ -12,8 +12,6 @@ RSpec.describe ErrorStore::Error do
   let(:data) { JSON.parse(issue_error.data, symbolize_names: true) }
   let(:error) { ErrorStore::Error.new(request: post_request) }
 
-  # before { request.parameters.merge!("format"=>:json, "controller"=>"api/v1/store", "action"=>"create", "id"=>"1") }
-
   describe 'intialize' do
     it 'assigns request and issue provided' do
       expect( ErrorStore::Error.new(request: post_request).instance_variable_get(:@request) ).to eq(post_request)
@@ -100,6 +98,7 @@ RSpec.describe ErrorStore::Error do
     let(:response) { web_response_factory('ruby_exception', json: true) }
     let(:request) { post_error_request(website.app_key, website.app_secret, response.to_json) }
     let(:valid_error) { ErrorStore::Error.new(request: request) }
+    let(:string_io) { StringIO.new(Base64.strict_encode64(Zlib::Deflate.deflate(web_response_factory('ruby_exception')))) }
 
     it 'returns data[:message] = <no message> if message missing' do
       response.delete('message')
@@ -135,75 +134,208 @@ RSpec.describe ErrorStore::Error do
         expect( valid_error.data[:timestamp] ).to eq(time_now)
       end
     end
-    it 'returns data[:errors] invalid_data if can not process timestamp' do
-      
-    end
+    it 'returns data[:errors] invalid_data if can not process timestamp'
     it 'returns the right timestamp'
     it 'returns the processed fingerprint'
     it 'returns data[:errors] invalid_data if InvalidFingerprint'
-    it 'returns data[:platform] as other if is not in VALID_PLATFORMS'
-    it 'returns data[:platform] trimed at 64 event if in VALID_PLATFORMS'
-    it 'returns data[:errors] invalid_data if modules is not a Hash and is set'
-    it 'returns data[:errors] invalid data if extra is not a Hash and is set'
-    it 'removes extra if error'
-    it 'trims data[:extra] to max_size of MAX_VARIABLE_SIZE'
-    it 'removes all the CLIENT_RESERVED_ATTRS'
+    it 'returns data[:platform] as other if is not in VALID_PLATFORMS' do
+      error.create!
+      _data = JSON.parse(web_response_factory('ruby_exception'), symbolize_names: true)
+      _data[:platform] = "shagaron"
+      error.request.headers["rack.input"] = StringIO.new(Base64.strict_encode64(Zlib::Deflate.deflate(_data.to_json)))
+      expect( error.validate_data[:platform] ).to eq("other")
+    end
+    it 'returns data[:platform] trimed at 64 event if in VALID_PLATFORMS' do
+      error.create!
+      error.request.headers["rack.input"] = string_io
+      expect( error.validate_data[:platform] ).to eq("ruby")
+    end
+    # it 'returns data[:errors] invalid_data if modules is not a Hash and is set' do
+    #   error.create!
+    #   _data = JSON.parse(web_response_factory('ruby_exception'), symbolize_names: true)
+    #   _data[:modules] = "string"
+    #   error.request.headers["rack.input"] = StringIO.new(Base64.strict_encode64(Zlib::Deflate.deflate(_data.to_json)))
+    #   error.validate_data
+    #   Rails.logger.error -> true????
+    # end
+    # it 'returns data[:errors] invalid data if extra is not a Hash and is set' do
+    #   error.create!
+    #   _data = JSON.parse(web_response_factory('ruby_exception'), symbolize_names: true)
+    #   _data[:extra] = "string"
+    #   error.request.headers["rack.input"] = StringIO.new(Base64.strict_encode64(Zlib::Deflate.deflate(_data.to_json)))
+    #   error.validate_data
+    #   Rails.logger.error -> true????
+    # end
+    it 'removes extra if error' do
+      error.create!
+      _data = JSON.parse(web_response_factory('ruby_exception'), symbolize_names: true)
+      _data[:extra] = "string"
+      error.request.headers["rack.input"] = StringIO.new(Base64.strict_encode64(Zlib::Deflate.deflate(_data.to_json)))
+      expect( error.validate_data[:extra] ).to be_nil
+    end
+    it 'trims data[:extra] to max_size of MAX_VARIABLE_SIZE' do
+      error.create!
+      _data = JSON.parse(web_response_factory('ruby_exception'), symbolize_names: true)
+      _data[:extra][:param] = issue_error.data
+      error.request.headers["rack.input"] = StringIO.new(Base64.strict_encode64(Zlib::Deflate.deflate(_data.to_json)))
+      expect( error.validate_data[:extra][:param].length ).to eq(512)
+    end
+    # it 'removes all the CLIENT_RESERVED_ATTRS' do
+    #   error.create!
+    #   error.request.headers["rack.input"] = string_io
+    #   expect(  error.validate_data.keys.to_set ).to eq(ErrorStore::CLIENT_RESERVED_ATTRS.to_set)
+    #   ????
+    # end
     it 'adds data[:errors] invalid_attribute if InvalidInterface'
     it 'adds data[:errors] if invalid_data and value is not a hash or an array'
     it 'adds the right interface to data[:interfaces]'
-    it 'adds data[:errors] invalid_data if error on sanitize_data or to_json'
-    it 'sets DEFAULT_LOG_LEVEL if level is empty'
-    it 'sets DEFAULT_LOG_LEVEL if level is not numeric'
+    it 'adds data[:errors] invalid_data if error on sanitize_data or to_json' do
+      # error.data["description"] = "iPhone\xAE"
+    end
+    it 'sets DEFAULT_LOG_LEVEL if level is empty' do
+      error.create!
+      error.request.headers["rack.input"] = string_io
+      error.data[:level] = nil
+      expect( error.validate_data[:level] ).to eq(ErrorStore::DEFAULT_LOG_LEVEL)
+    end
+    it 'sets DEFAULT_LOG_LEVEL if level is not numeric' do
+      error.create!
+      error.request.headers["rack.input"] = string_io
+      error.data[:level] = "string"
+      expect( error.validate_data[:level] ).to eq(ErrorStore::DEFAULT_LOG_LEVEL)
+    end
     it 'adds data[:errors] invalid_data if level does not exist'
-    it 'encodes release to utf-8'
-    it 'adds data[:errors] value_too_long if release bigger than 64'
-    it 'returns the right release'
-    it 'returns the data[:version] from auth'
-    it 'returns the expected validated data'
+    it 'encodes release to utf-8' do
+      error.create!
+      _data = JSON.parse(web_response_factory('ruby_exception'), symbolize_names: true)
+      _data[:release] = "some string"
+      error.request.headers["rack.input"] = StringIO.new(Base64.strict_encode64(Zlib::Deflate.deflate(_data.to_json)))
+      binding.pry
+      # expect( error.validate_data[:release].encoding ).to eq(#<Encoding:UTF-8>)
+    end
+    it 'adds data[:errors] value_too_long if release bigger than 64' do
+      error.create!
+      _data = JSON.parse(web_response_factory('ruby_exception'), symbolize_names: true)
+      error.request.headers["rack.input"] = string_io
+      _data[:release] = "Ruby was conceived on February 24, 1993. In a 1999 post to the ruby-talk mailing list, Ruby author Yukihiro Matsumoto describes some of his early ideas about the language"
+      error.request.headers["rack.input"] = StringIO.new(Base64.strict_encode64(Zlib::Deflate.deflate(_data.to_json)))
+      expect( error.validate_data[:release] ).to be_nil
+      # expect( error.validate_data[:release][:errors][0][:type] ).to eq("value_too_long")
+    end
+    it 'returns the right release' do
+      error.create!
+      _data = JSON.parse(web_response_factory('ruby_exception'), symbolize_names: true)
+      _data[:release] = "some string"
+      error.request.headers["rack.input"] = StringIO.new(Base64.strict_encode64(Zlib::Deflate.deflate(_data.to_json)))
+      expect( error.validate_data[:release] ).to eq("some string")
+    end
+    it 'returns the data[:version] from auth' do
+      error.create!
+      error.request.headers["rack.input"] = string_io
+      expect( error.validate_data[:version] ).to eq("5")
+    end
+    # it 'returns the expected validated data' do
+    #   error.create!
+    #   error.request.headers["rack.input"] = string_io
+    #   error.validate_data
+    # end
   end
 
-  xdescribe 'ErrorWorker' do
-    it 'removes cache key after doing store'
-    it 'returns and sets logger if cache not set'
+  describe 'ErrorWorker' do
+    let(:data_with_website) { JSON.parse(web_response_factory('ruby_exception'), symbolize_names: true) }
+    # it 'removes cache key after doing store' do
+    #   cache_key = "issue:#{website.id}:#{issue_error.event_id}"
+    #   Rails.cache.write(cache_key, data_with_website)
+    #   ErrorStore::Error::ErrorWorker.new.perform(cache_key)
+    #   expect( Rails.cache.read(cache_key) ).to be_nil
+    # end
+    # it 'returns and sets logger if cache not set', truncation: true do
+    #   cache_key = "issue:#{website.id}:#{issue_error.event_id}"
+    #   Rails.cache.delete(cache_key)
+    #   expect(Rails.logger).to receive(:info).with("Data is not available for #{cache_key} in ErrorWorker.perform")
+    #   ErrorStore::Error::ErrorWorker.new.perform(cache_key)
+    # end
   end
 
-  xdescribe '_params' do
-    it 'returns the request parameters'
+  describe '_params' do
+    let(:params) { {"param" => "some params here"} }
+
+    it 'returns the request parameters' do
+      error.request.parameters.merge!(params)
+      expect( error._params ).to eq(params)
+    end
   end
 
   describe '_auth' do
     it 'returns the auth assigned' do
-      # expect_any_instance_of(ErrorStore::Error).to receive(:_auth).and_return()
-      # ErrorStore::Error.new(request: request, issue: issue_error)._auth
+      error.create!
+      expect( error._auth.kind_of?(ErrorStore::Auth) ).to be(true)
     end
   end
 
-  xdescribe '_website' do
-    it 'returns the context website'
-    it 'returns nil if website not set on context'
+  describe '_website' do
+    it 'returns the context website' do
+      error.create!
+      expect( error._website ).to eq(website)
+    end
+    it 'returns nil if website not set on context' do
+      error.create!
+      error.context.remove_instance_variable(:@website)
+      expect( error._website ).to be_nil
+    end
   end
 
-  xdescribe '_get_interfaces' do
-    it 'returns [] if no interfaces in data'
+  describe '_get_interfaces' do
+    it 'returns [] if no interfaces in data' do
+      expect( issue_error.get_interfaces ).to eq([])
+    end
     it 'returns all interfaces'
   end
 
-  xdescribe 'get_data' do
-    it 'gets all the params if get request'
-    it 'reads the body if post request'
-    it 'does decompress_gzip if content_encoding is gzip'
-    it 'does decompress_deflate if content_encoding is deflate'
-    it 'does decode_and_decompress if data starts with {'
-    it 'returns decoded json data'
+  describe 'get_data' do
+    let(:get_error_example) { ErrorStore::Error.new(request: get_request) }
+    it 'gets all the params if get request' do
+      expect( get_error_example.request.params[:sentry_data].blank? ).to be(false)
+    end
+    # it 'reads the body if post request' do
+    #   ???
+    #   expect(error.request.body).to receive(:read)
+    #   error.get_data
+    # end
+    # it 'does decompress_gzip if content_encoding is gzip' do
+    #   error.request.headers['HTTP_ACCEPT_ENCODING'] = 'gzip'
+    #   error.request.headers["rack.input"] = ActiveSupport::Gzip.compress("random string")
+    #   allow_any_instance_of(ErrorStore::Utils).to receive(:decompress_gzip)
+    #   error.get_data
+    # end
+    # it 'does decompress_deflate if content_encoding is deflate' do
+    #   error.request.headers['HTTP_ACCEPT_ENCODING'] = 'deflate'
+    #   error.request.headers["rack.input"] = StringIO.new(Zlib::Deflate.deflate("random string"))
+    #   allow_any_instance_of(ErrorStore::Utils).to receive(:decompress_deflate)
+    #   error.get_data
+    # end
+    # it 'does decode_and_decompress if data starts with {' do
+    #   allow_any_instance_of(ErrorStore::Utils).to receive(:decode_and_decompress)
+    #   error.get_data
+    # end
+    it 'returns decoded json data' do
+      expect( error.get_data ).to eq(JSON.parse(web_response_factory('ruby_exception'), symbolize_names: true))
+    end
   end
 
-  xdescribe 'process_fingerprint' do
-    it 'raises InvalidFingerprint if it is not an array'
-    it 'raises InvalidFingerprint if section is not numeric'
-    it 'returns the right sections'
+  describe 'process_fingerprint' do
+    it 'raises InvalidFingerprint if it is not an array' do
+      expect{ error.process_fingerprint(data) }.to raise_exception(ErrorStore::InvalidFingerprint)
+    end
+    it 'raises InvalidFingerprint if section is not numeric' do
+      data[:fingerprint] = ['not numeric']
+      expect{ error.process_fingerprint(data) }.to raise_exception(ErrorStore::InvalidFingerprint)
+    end
+    it 'returns the right sections' do
+      data[:fingerprint] = ["2"]
+      expect( error.process_fingerprint(data) ).to eq(["2"])
+    end
   end
 
-  describe 'process_timestamp' do
-    # expect(ErrorStore::Error.new(request: request, issue: issue_error).process_timestamp(data)).to eq(data)
-  end
+  xdescribe 'process_timestamp'
 end
