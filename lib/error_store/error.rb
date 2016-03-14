@@ -266,7 +266,7 @@ module ErrorStore
         end
 
         value = interface.sanitize_data(data)
-        next unless value.blank?
+        next if value.blank?
 
         result << value
       end

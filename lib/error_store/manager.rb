@@ -28,6 +28,15 @@ module ErrorStore
 
       culprit = generate_culprit(data) if culprit.blank?
 
+      # TODO implement tags
+      # tags = data[:tags] || []
+      # tags['level'] = LOG_LEVELS[level]
+      # tags['logger'] = logger_name
+      # tags['server_name'] = server_name
+      # tags['site'] = site
+      # tags['release'] = release
+      # tags['environment'] = environment
+
       # TODO, here the timestamp
       # date = datetime.fromtimestamp(data.pop('timestamp'))
       # date = date.replace(tzinfo=timezone.utc)
@@ -120,9 +129,9 @@ module ErrorStore
       true
     end
 
-    def time_limit(silence) # ~ 3600 per hour
-      ErrorStore::SAMPLE_TIMES.map do |amount, sample_rate|
-        return sample_rate if silence >= amount
+    def time_limit(silence)
+      ErrorStore::SAMPLE_TIMES.map do |interval, sample_rate|
+        return sample_rate if silence >= interval
       end
       ErrorStore::MAX_SAMPLE_TIME
     end
@@ -157,6 +166,7 @@ module ErrorStore
       # we update the counters of grouped issue like times_seen
       # and/or time_spent_total & time_spent_count
       GroupedIssue.update_counters(group.id, update_args)
+      group.update_attributes(extra) # we set the new attributes if they changed
 
       is_regression
     end
@@ -164,8 +174,7 @@ module ErrorStore
     def _handle_regression(group, issue)
       return unless group.resolved?
 
-      # we now think its a regression, rely on the database to validate that
-      # no one beat us to this
+      # we now think its a regression so we are updating the status of the grouped issue
       date = [issue.datetime, group.last_seen].max
       statuses = [GroupedIssue::RESOLVED, GroupedIssue::UNRESOLVED]
       is_regression = GroupedIssue.where(id: group.id, status: statuses)
@@ -195,7 +204,7 @@ module ErrorStore
         culprit = ErrorStore::Interfaces::Stacktrace.new(self).sanitize_data(stacktraces[-1]).get_culprit_string
       end
 
-      truncate(culprit, ErrorStore::MAX_CULPRIT_LENGTH)
+      culprit.try(:truncate, ErrorStore::MAX_CULPRIT_LENGTH)
     end
 
     def _get_subscriber(website, data)
