@@ -98,7 +98,6 @@ RSpec.describe ErrorStore::Error do
     let(:response) { web_response_factory('ruby_exception', json: true) }
     let(:request) { post_error_request(website.app_key, website.app_secret, response.to_json) }
     let(:valid_error) { ErrorStore::Error.new(request: request) }
-    let(:string_io) { StringIO.new(Base64.strict_encode64(Zlib::Deflate.deflate(web_response_factory('ruby_exception')))) }
 
     it 'returns data[:message] = <no message> if message missing' do
       response.delete('message')
@@ -134,10 +133,24 @@ RSpec.describe ErrorStore::Error do
         expect( valid_error.data[:timestamp] ).to eq(time_now)
       end
     end
-    it 'returns data[:errors] invalid_data if can not process timestamp'
-    it 'returns the right timestamp'
+    it 'returns data[:errors] invalid_data if can not process timestamp' do
+      response['timestamp'] = 'jj'
+      valid_error.create!
+      expect( valid_error.data[:errors] ).to include({:type=>"invalid_data", :name=>"timestamp", :value=>"jj"})
+    end
+    it 'returns the right timestamp' do
+      valid_error.create!
+      expect( valid_error.data[:timestamp] ).to eq("2016-02-17T12:29:56")
+    end
+
     it 'returns the processed fingerprint'
-    it 'returns data[:errors] invalid_data if InvalidFingerprint'
+
+    it 'returns data[:errors] invalid_data if InvalidFingerprint' do
+      data[:fingerprint] = {}
+      expect{ valid_error.process_fingerprint(data) }.to raise_exception(ErrorStore::InvalidFingerprint)
+      data[:fingerprint] = ["1", "some string"]
+      expect{ valid_error.process_fingerprint(data) }.to raise_exception(ErrorStore::InvalidFingerprint)
+    end
     it 'returns data[:platform] as other if is not in VALID_PLATFORMS' do
       response['platform'] = "shagaron"
       valid_error.create!
@@ -169,9 +182,7 @@ RSpec.describe ErrorStore::Error do
       expect( valid_error.data[:extra][:param].length ).to eq(512)
     end
     # it 'removes all the CLIENT_RESERVED_ATTRS' do
-    #   error.create!
-    #   error.request.headers["rack.input"] = string_io
-    #   expect(  error.validate_data.keys.to_set ).to eq(ErrorStore::CLIENT_RESERVED_ATTRS.to_set)
+    #   expect(  valid_error.data.keys.to_set ).to eq(ErrorStore::CLIENT_RESERVED_ATTRS.to_set)
     #   ????
     # end
     it 'adds data[:errors] invalid_attribute if InvalidInterface'
@@ -190,7 +201,9 @@ RSpec.describe ErrorStore::Error do
       valid_error.create!
       expect( valid_error.data[:level] ).to eq(ErrorStore::DEFAULT_LOG_LEVEL)
     end
+
     it 'adds data[:errors] invalid_data if level does not exist'
+
     it 'encodes release to utf-8' do
       response['release'] = "some string"
       valid_error.create!
@@ -208,22 +221,15 @@ RSpec.describe ErrorStore::Error do
       expect( valid_error.data[:release] ).to be_nil
     end
     it 'returns the right release' do
-      error.create!
-      _data = JSON.parse(web_response_factory('ruby_exception'), symbolize_names: true)
-      _data[:release] = "some string"
-      error.request.headers["rack.input"] = StringIO.new(Base64.strict_encode64(Zlib::Deflate.deflate(_data.to_json)))
-      expect( error.validate_data[:release] ).to eq("some string")
+      response['release'] = "some string"
+      valid_error.create!
+      expect( valid_error.data[:release] ).to eq("some string")
     end
     it 'returns the data[:version] from auth' do
-      error.create!
-      error.request.headers["rack.input"] = string_io
-      expect( error.validate_data[:version] ).to eq("5")
+      valid_error.create!
+      expect( valid_error.data[:version] ).to eq("5")
     end
-    # it 'returns the expected validated data' do
-    #   error.create!
-    #   error.request.headers["rack.input"] = string_io
-    #   error.validate_data
-    # end
+    it 'returns the expected validated data'
   end
 
   describe 'ErrorWorker' do
@@ -272,7 +278,10 @@ RSpec.describe ErrorStore::Error do
 
   describe '_get_interfaces' do
     it 'returns [] if no interfaces in data' do
-      # expect( issue_error.get_interfaces ).to eq([])
+      parsed = JSON.parse(issue_error.data)
+      parsed['interfaces'] = {}
+      issue_error.data = parsed.to_json
+      expect( issue_error.get_interfaces ).to eq([])
     end
     it 'returns all interfaces'
   end
@@ -291,17 +300,17 @@ RSpec.describe ErrorStore::Error do
     #   error.request.headers['HTTP_ACCEPT_ENCODING'] = 'gzip'
     #   error.request.headers["rack.input"] = ActiveSupport::Gzip.compress("random string")
     #   allow_any_instance_of(ErrorStore::Utils).to receive(:decompress_gzip)
-    #   error.get_data
+    #   error.create!
     # end
     # it 'does decompress_deflate if content_encoding is deflate' do
     #   error.request.headers['HTTP_ACCEPT_ENCODING'] = 'deflate'
     #   error.request.headers["rack.input"] = StringIO.new(Zlib::Deflate.deflate("random string"))
     #   allow_any_instance_of(ErrorStore::Utils).to receive(:decompress_deflate)
-    #   error.get_data
+    #   error.create!
     # end
     # it 'does decode_and_decompress if data starts with {' do
     #   allow_any_instance_of(ErrorStore::Utils).to receive(:decode_and_decompress)
-    #   error.get_data
+    #   error.create!
     # end
     it 'returns decoded json data' do
       expect( error.get_data ).to eq(JSON.parse(web_response_factory('ruby_exception'), symbolize_names: true))
