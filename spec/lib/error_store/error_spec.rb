@@ -208,7 +208,7 @@ RSpec.describe ErrorStore::Error do
     it 'encodes release to utf-8' do
       response['release'] = "some string"
       valid_error.create!
-      # expect( valid_error.data[:release].encoding ).to eq(#<Encoding:UTF-8>)
+      expect( valid_error.data[:release].encoding ).to eq(Encoding.find('UTF-8'))
     end
     it 'adds data[:errors] value_too_long if release bigger than 64' do
       response['release'] = "Ruby was conceived on February 24, 1993. In a 1999 post to the ruby-talk mailing list, Ruby author Yukihiro Matsumoto describes some of his early ideas about the language"
