@@ -111,16 +111,12 @@ module ErrorStore
       end
 
       # process timestamp data
-      if data.include?(:timestamp)
-        begin
-          process_timestamp(data)
-        rescue ErrorStore::InvalidTimestamp => e
-          Rails.logger.error("Timestamp had an issue while processing #{e.message}")
-          data[:errors] << { type: 'invalid_data', name: 'timestamp', value: data[:timestamp] }
-          data.delete(:timestamp)
-        end
-      else
-        data[:timestamp] = Time.now.utc
+      begin
+        process_timestamp!(data)
+      rescue ErrorStore::InvalidTimestamp => e
+        Rails.logger.error("Timestamp had an issue while processing #{e.message}")
+        data[:errors] << { type: 'invalid_data', name: 'timestamp', value: data[:timestamp] }
+        data[:timestamp] = Time.now.utc.to_i
       end
 
       if data.include?(:fingerprint)
@@ -312,11 +308,12 @@ module ErrorStore
       result
     end
 
-    def process_timestamp(data)
+    def process_timestamp!(data)
       timestamp = data[:timestamp]
 
+      # This will happen everytime when coming from clients like raven-js
       if timestamp.blank?
-        data.delete(:timestamp)
+        data[:timestamp] = Time.now.to_i
         return data
       end
 

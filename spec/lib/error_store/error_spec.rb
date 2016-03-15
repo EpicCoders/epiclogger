@@ -332,9 +332,9 @@ RSpec.describe ErrorStore::Error do
     end
   end
 
-  describe 'process_timestamp' do
+  describe 'process_timestamp!' do
     let(:current_datetime) { '2015-07-15T11:40:30Z' }
-    subject { error.process_timestamp(data) }
+    subject { error.process_timestamp!(data) }
 
     it 'converts the iso timestamp' do
       Timecop.freeze(current_datetime) do
@@ -388,9 +388,11 @@ RSpec.describe ErrorStore::Error do
       end
     end
 
-    it 'returns nil when no timestamp provided' do
+    it 'returns the current timestamp when nil provided' do
+      Timecop.freeze(current_datetime) do
       data[:timestamp] = nil
-      expect( subject ).not_to include(:timestamp)
+        expect( subject[:timestamp] ).to eq(1436960430)
+      end
     end
 
     it 'returns unix timestamp of given date' do
