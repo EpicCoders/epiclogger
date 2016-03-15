@@ -51,14 +51,14 @@ module ErrorStore::Interfaces
 
       body = trim(body, max_size: ErrorStore::MAX_HTTP_BODY_SIZE) if body
 
-      self._data = {
+      self._data.merge(
         cookies:   trim_pairs(format_cookies(cookies)),
         env:       trim_hash(data[:env] || {}),
         headers:   trim_pairs(headers),
         data:      body,
         url:       "#{url_uri.scheme}://#{url_uri.host}/#{url_uri.path}",
         fragment:  trim(fragment, max_size: 1024)
-      }
+      )
       self
     end
 
