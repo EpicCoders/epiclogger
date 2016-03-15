@@ -36,11 +36,7 @@ module ErrorStore
       # tags['site'] = site
       # tags['release'] = release
       # tags['environment'] = environment
-
-      # TODO, here the timestamp
-      # date = datetime.fromtimestamp(data.pop('timestamp'))
-      # date = date.replace(tzinfo=timezone.utc)
-      date = data.delete(:timestamp) # ?? not done TODO fix
+      date = data.delete(:timestamp)
 
       issue = Issue.new(
         website: website,

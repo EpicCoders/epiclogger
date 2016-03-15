@@ -331,5 +331,30 @@ RSpec.describe ErrorStore::Error do
     end
   end
 
-  xdescribe 'process_timestamp'
+  describe 'process_timestamp' do
+    subject { error.process_timestamp(data) }
+
+    it 'raises InvalidTimestamp if timestamp is in the future' do
+      data[:timestamp] = DateTime.now() + 10.minutes
+      expect { subject }.to raise_exception(ErrorStore::InvalidTimestamp)
+    end
+
+    it 'raises InvalidTimestamp if timestamp is in the past' do
+      data[:timestamp] = DateTime.now() - 31.days
+      expect { subject }.to raise_exception(ErrorStore::InvalidTimestamp)
+    end
+
+    it 'returns nil when no timestamp provided' do
+      data[:timestamp] = nil
+      expect( subject ).not_to include(:timestamp)
+    end
+
+    it 'returns unix timestamp of given date' do
+      Timecop.freeze('2015-07-15 11:40') do
+        data[:timestamp] = '2015-07-15T11:39:37.0341297Z'
+        value = DateTime.strptime('2015-07-15T11:39:37', '%Y-%m-%dT%H:%M:%S')
+        expect( subject[:timestamp] ).to eq(value.strftime('%s').to_i)
+      end
+    end
+  end
 end

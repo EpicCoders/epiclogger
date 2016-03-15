@@ -312,24 +312,18 @@ module ErrorStore
     end
 
     def process_timestamp(data)
-      # if timestamp.is_a?(DateTime)
-      #   # convert time to utc
-      #   if settings.TIME_ZONE:
-      #     if not timezone.is_aware(timestamp):
-      #       timestamp = timestamp.replace(tzinfo=timezone.utc)
-      #   elif timezone.is_aware(timestamp):
-      #       timestamp = timestamp.replace(tzinfo=None)
-      #   timestamp = float(timestamp.strftime('%s'))
-      # end
       timestamp = data[:timestamp]
+
       if !timestamp
         data.delete(:timestamp)
         return data
-      elsif is_numeric? timestamp
+      end
+
+      if is_numeric? timestamp
         timestamp = Time.at(timestamp.to_i).to_datetime
       elsif !timestamp.is_a?(DateTime)
         timestamp = timestamp.chomp('Z') if timestamp.end_with?('Z')
-        timestamp = DateTime.strptime(value, '%Y-%m-%dT%H:%M:%S')
+        timestamp = DateTime.strptime(timestamp, '%Y-%m-%dT%H:%M:%S')
       end
 
       today = DateTime.now()
