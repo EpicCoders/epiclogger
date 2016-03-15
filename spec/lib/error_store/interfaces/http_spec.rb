@@ -27,29 +27,30 @@ RSpec.describe ErrorStore::Interfaces::Http do
       data[:method] = ""
       expect{ http.sanitize_data(data) }.to raise_exception(ErrorStore::ValidationError)
     end
-    # it 'sets method to upcase' do
-    #   data[:method] = "post"
-    #   http.sanitize_data(data)
-    #   expect( http._data[:method] ).to eq("POST")
-    # end
-    # it 'sets method to nil if blank' do
-    #   expect( http.sanitize_data(data)[:method] ).to be_nil
-    # end
-    # it 'sets query_string to blank string if ?' do
-    #   data[:url] = "http://localhost:3000??name=epiclogger"
-    #   http.sanitize_data(data)
-    #   expect( http._data[:query_string] ).to eq("")
-    # end
-    # it 'sets query_string to query from an url' do
-    #   data[:url] = "http://localhost:3000?name=epiclogger"
-    #   http.sanitize_data(data)
-    #   expect( http._data[:query_string] ).to eq("name=epiclogger")
-    # end
-    # it 'sets query_string to blank string if no query on url' do
-    #   data[:url] = "http://localhost:3000"
-    #   http.sanitize_data(data)
-    #   expect( http._data[:query_string] ).to eq("")
-    # end
+    it 'sets method to upcase' do
+      data[:method] = "post"
+      http.sanitize_data(data)
+      expect( http._data[:method] ).to eq("POST")
+    end
+    it 'sets method to nil if blank' do
+      http.sanitize_data(data)
+      expect( http._data[:method] ).to be_nil
+    end
+    it 'sets query_string to blank string if ?' do
+      data[:url] = "http://localhost:3000??name=epiclogger"
+      http.sanitize_data(data)
+      expect( http._data[:query_string] ).to eq("name=epiclogger")
+    end
+    it 'sets query_string to query from an url' do
+      data[:url] = "http://localhost:3000?name=epiclogger"
+      http.sanitize_data(data)
+      expect( http._data[:query_string] ).to eq("name=epiclogger")
+    end
+    it 'sets query_string to blank string if no query on url' do
+      data[:url] = "http://localhost:3000"
+      http.sanitize_data(data)
+      expect( http._data[:query_string] ).to eq("")
+    end
     it 'sets _data[:fragment] from url' do
       data[:url] = 'http://localhost:3000#fragment'
       http.sanitize_data(data)
