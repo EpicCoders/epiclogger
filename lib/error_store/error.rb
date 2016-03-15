@@ -115,8 +115,9 @@ module ErrorStore
         begin
           process_timestamp(data)
         rescue ErrorStore::InvalidTimestamp => e
-          Rails.logger.error("Timestamp had an issue while processing  #{e.message}")
+          Rails.logger.error("Timestamp had an issue while processing #{e.message}")
           data[:errors] << { type: 'invalid_data', name: 'timestamp', value: data[:timestamp] }
+          data.delete(:timestamp)
         end
       else
         data[:timestamp] = Time.now.utc
@@ -314,31 +315,33 @@ module ErrorStore
     def process_timestamp(data)
       timestamp = data[:timestamp]
 
-      if !timestamp
+      if timestamp.blank?
         data.delete(:timestamp)
         return data
       end
 
-      if is_numeric? timestamp
-        timestamp = Time.at(timestamp.to_i).to_datetime
-      elsif !timestamp.is_a?(DateTime)
-        timestamp = timestamp.chomp('Z') if timestamp.end_with?('Z')
-        timestamp = DateTime.strptime(timestamp, '%Y-%m-%dT%H:%M:%S')
+      begin
+        if is_numeric? timestamp
+          timestamp = Time.at(timestamp.to_i).to_datetime
+        elsif !timestamp.is_a?(DateTime)
+          timestamp = timestamp.chomp('Z') if timestamp.end_with?('Z')
+          timestamp = DateTime.strptime(timestamp, '%Y-%m-%dT%H:%M:%S')
+        end
+      rescue
+        raise ErrorStore::InvalidTimestamp.new(self), "We could not process timestamp #{data[:timestamp]}"
       end
 
-      today = DateTime.now()
+      today = Time.zone.now
       if timestamp > today + 1.minute
-        raise ErrorStore::InvalidTimestamp.new(self), 'We could not process timestamp is in the future'
+        raise ErrorStore::InvalidTimestamp.new(self), "We could not process timestamp is in the future #{data[:timestamp]}"
       end
 
       if timestamp < today - 30.days
-        raise ErrorStore::InvalidTimestamp.new(self), 'We could not process timestamp is too old'
+        raise ErrorStore::InvalidTimestamp.new(self), "We could not process timestamp is too old #{data[:timestamp]}"
       end
 
       data[:timestamp] = timestamp.strftime('%s').to_i
-      return data
-    rescue => e
-      raise ErrorStore::InvalidTimestamp.new(self), 'We could not process timestamp'
+      data
     end
 
     def get_origin

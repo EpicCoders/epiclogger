@@ -140,7 +140,8 @@ RSpec.describe ErrorStore::Error do
     end
     it 'returns the right timestamp' do
       valid_error.create!
-      expect( valid_error.data[:timestamp] ).to eq("2016-02-17T12:29:56")
+      value = DateTime.strptime('2016-02-17T12:29:56', '%Y-%m-%dT%H:%M:%S')
+      expect( valid_error.data[:timestamp] ).to eq(value.strftime('%s').to_i)
     end
 
     it 'returns the processed fingerprint'
@@ -332,16 +333,59 @@ RSpec.describe ErrorStore::Error do
   end
 
   describe 'process_timestamp' do
+    let(:current_datetime) { '2015-07-15T11:40:30Z' }
     subject { error.process_timestamp(data) }
 
+    it 'converts the iso timestamp' do
+      Timecop.freeze(current_datetime) do
+        data[:timestamp] = '2015-07-15T11:40:30'
+        value = DateTime.strptime('2015-07-15T11:40:30', '%Y-%m-%dT%H:%M:%S')
+        expect( subject ).to include(:timestamp)
+        expect( subject[:timestamp] ).to eq(value.strftime('%s').to_i)
+      end
+    end
+
+    it 'converts the iso timestamp with Z' do
+      Timecop.freeze(current_datetime) do
+        data[:timestamp] = current_datetime
+        value = DateTime.strptime(current_datetime, '%Y-%m-%dT%H:%M:%S')
+        expect( subject ).to include(:timestamp)
+        expect( subject[:timestamp] ).to eq(value.strftime('%s').to_i)
+      end
+    end
+
+    it 'raises InvalidTimestamp if invalid data' do
+      data[:timestamp] = 'giberish'
+      expect { subject }.to raise_exception(ErrorStore::InvalidTimestamp, 'We could not process timestamp giberish')
+    end
+
+
     it 'raises InvalidTimestamp if timestamp is in the future' do
-      data[:timestamp] = DateTime.now() + 10.minutes
-      expect { subject }.to raise_exception(ErrorStore::InvalidTimestamp)
+      Timecop.freeze(current_datetime) do
+        data[:timestamp] = (Time.zone.now + 10.minutes).strftime('%Y-%m-%dT%H:%M:%S')
+        expect { subject }.to raise_exception(ErrorStore::InvalidTimestamp, 'We could not process timestamp is in the future 2015-07-15T11:50:30')
+      end
     end
 
     it 'raises InvalidTimestamp if timestamp is in the past' do
-      data[:timestamp] = DateTime.now() - 31.days
-      expect { subject }.to raise_exception(ErrorStore::InvalidTimestamp)
+      Timecop.freeze(current_datetime) do
+        data[:timestamp] = (Time.zone.now - 31.days).strftime('%Y-%m-%dT%H:%M:%S')
+        expect { subject }.to raise_exception(ErrorStore::InvalidTimestamp, 'We could not process timestamp is too old 2015-06-14T11:40:30')
+      end
+    end
+
+    it 'raises InvalidTimestamp if invalid numeric timestamp' do
+      Timecop.freeze(current_datetime) do
+        data[:timestamp] = 100000000000000000000.0
+        expect { subject }.to raise_exception(ErrorStore::InvalidTimestamp, 'We could not process timestamp 1.0e+20')
+      end
+    end
+
+    it 'returns the right timestamp when numeric' do
+      Timecop.freeze(current_datetime) do
+        data[:timestamp] = Time.parse(current_datetime).to_i
+        expect( subject[:timestamp] ).to eq(1436960430)
+      end
     end
 
     it 'returns nil when no timestamp provided' do
@@ -350,7 +394,7 @@ RSpec.describe ErrorStore::Error do
     end
 
     it 'returns unix timestamp of given date' do
-      Timecop.freeze('2015-07-15 11:40') do
+      Timecop.freeze('2015-07-15T11:40Z') do
         data[:timestamp] = '2015-07-15T11:39:37.0341297Z'
         value = DateTime.strptime('2015-07-15T11:39:37', '%Y-%m-%dT%H:%M:%S')
         expect( subject[:timestamp] ).to eq(value.strftime('%s').to_i)
