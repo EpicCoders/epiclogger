@@ -258,28 +258,6 @@ module ErrorStore
       hashes
     end
 
-    def get_hashes_from_fingerprint_with_reason(issue, fingerprint)
-      default_values = ['{{ default }}', '{{default}}']
-      if default_values.any? { |i| fingerprint.include?(i) }
-        default_hashes = get_hash_for_issue_with_reason(issue)
-        hash_count = default_hashes[1].length
-      else
-        hash_count = 1
-      end
-
-      hashes = fingerprint
-      (0..hash_count).each do
-        fingerprint.each do |bit|
-          if default_values.include?(bit)
-            hashes[bit].concat(default_hashes)
-          else
-            hashes[bit] = bit
-          end
-        end
-      end
-      hashes.items
-    end
-
     def md5_from_hash(hash_chunks)
       result = Digest::MD5.new
       hash_chunks.each do |chunk|

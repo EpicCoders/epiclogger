@@ -286,17 +286,4 @@ RSpec.describe ErrorStore::Manager do
       expect(subject).to eq([fingerprint, fingerprint])
     end
   end
-
-  describe 'get_hashes_from_fingerprint_with_reason', truncation: true do
-    let(:issue) { post_manager.store_error }
-    let(:fingerprint) { ['{{ default }}'] }
-    subject { post_manager.get_hashes_from_fingerprint_with_reason(issue, fingerprint) }
-    it 'should return hash by fingerprint' do
-      expect(subject).to eq(interface_hash.map { |d| [d] } + [[nil]])
-    end
-    it 'returns the hash from fingerprint if not default' do
-      fingerprint[0] = 'fingerprint'
-      expect(subject).to eq([fingerprint, fingerprint])
-    end
-  end
 end
