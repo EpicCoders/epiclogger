@@ -13,16 +13,16 @@ module ErrorStore
           raise ErrorStore::MissingCredentials.new(self), 'Missing authentication header'
         end
 
-        auth_req = if _error.request.headers['HTTP_X_SENTRY_AUTH'].include?('Sentry')
-                     parse_auth_header(_error.request.headers['HTTP_X_SENTRY_AUTH'])
-                   elsif _error.request.headers['HTTP_AUTHORIZATION'].include?('Sentry')
-                     parse_auth_header(_error.request.headers['HTTP_AUTHORIZATION'])
+        auth_req = if sentry_header && sentry_header.include?('Sentry')
+                     parse_auth_header(sentry_header)
+                   elsif auth_header && auth_header.include?('Sentry')
+                     parse_auth_header(auth_header)
                    end
       elsif _error.request.get?
         auth_req = _error.request.params.select { |k| k.start_with?('sentry_') }
       end
 
-      raise ErrorStore::MissingCredentials.new(self), 'Missing authentication information' unless auth_req
+      raise ErrorStore::MissingCredentials.new(self), 'Missing authentication information' if auth_req.blank?
       # we set the client as the agent if we don't receive it
       auth_req['sentry_client'] = _error.request.headers['HTTP_USER_AGENT'] unless auth_req['sentry_client']
 
@@ -38,6 +38,16 @@ module ErrorStore
 
     def _error
       @error
+    end
+
+    private
+
+    def sentry_header
+      _error.request.headers['HTTP_X_SENTRY_AUTH']
+    end
+
+    def auth_header
+      _error.request.headers['HTTP_AUTHORIZATION']
     end
   end
 end
