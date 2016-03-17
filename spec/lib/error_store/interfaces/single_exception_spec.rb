@@ -7,7 +7,7 @@ RSpec.describe ErrorStore::Interfaces::SingleException do
   let!(:issue_error) { create :issue, subscriber: subscriber, group: group, event_id: '8af060b2986f5914764d49b7f39b036c' }
 
   let(:data) { JSON.parse(issue_error.data, symbolize_names: true)[:interfaces][:exception][:values][0] }
-  let(:error) { ErrorStore::Error.new(request: post_error_request(website.app_key, website.app_secret, web_response_factory('ruby_exception')), issue: issue_error) }
+  let(:error) { ErrorStore::Error.new(request: post_error_request(web_response_factory('ruby_exception'), website), issue: issue_error) }
   let(:single_exception) { ErrorStore::Interfaces::SingleException.new(error) }
 
   it 'it returns Single Exception for display_name' do

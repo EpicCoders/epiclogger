@@ -6,8 +6,8 @@ RSpec.describe ErrorStore::Auth do
   let(:subscriber) { create :subscriber, website: website }
   let!(:issue_error) { create :issue, subscriber: subscriber, group: group, event_id: '8af060b2986f5914764d49b7f39b036c' }
 
-  let(:post_request) { post_error_request(website.app_key, website.app_secret, web_response_factory('ruby_exception')) }
-  let(:get_request) { get_error_request(website.app_key, web_response_factory('js_exception')) }
+  let(:post_request) { post_error_request(web_response_factory('ruby_exception'), website) }
+  let(:get_request) { get_error_request(web_response_factory('js_exception'), website) }
   let(:post_error) { ErrorStore::Error.new(request: post_request) }
   let(:get_error) { ErrorStore::Error.new(request: get_request) }
   let(:post_auth) { ErrorStore::Auth.new(post_error) }

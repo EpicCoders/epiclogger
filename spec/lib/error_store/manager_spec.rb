@@ -2,8 +2,8 @@ require 'rails_helper'
 
 RSpec.describe ErrorStore::Manager do
   let(:website) { create :website }
-  let(:post_request) { post_error_request(website.app_key, website.app_secret, web_response_factory('ruby_exception')) }
-  let(:get_request) { get_error_request(website.app_key, web_response_factory('js_exception')) }
+  let(:post_request) { post_error_request(web_response_factory('ruby_exception'), website) }
+  let(:get_request) { get_error_request(web_response_factory('js_exception'), website) }
   let(:validated_post_data) { validated_request(post_request) }
   let(:post_manager) { ErrorStore::Manager.new(validated_post_data) }
   let(:interface_hash) {
@@ -58,7 +58,7 @@ RSpec.describe ErrorStore::Manager do
       }.to raise_error(PG::TRSerializationFailure)
     end
     it 'does not save group_issue if already there' do
-      req = post_error_request(website.app_key, website.app_secret, web_response_factory('ruby_exception'))
+      req = post_error_request(web_response_factory('ruby_exception'), website)
       data = validated_request(req)
       ErrorStore::Manager.new(data).store_error
       expect {
@@ -66,7 +66,7 @@ RSpec.describe ErrorStore::Manager do
       }.to change(GroupedIssue, :count).by(0)
     end
     it 'creates issue with already there group_issue' do
-      req = post_error_request(website.app_key, website.app_secret, web_response_factory('ruby_exception'))
+      req = post_error_request(web_response_factory('ruby_exception'), website)
       data = validated_request(req)
       ErrorStore::Manager.new(data).store_error
       expect {
@@ -287,7 +287,7 @@ RSpec.describe ErrorStore::Manager do
     end
   end
 
-  xdescribe 'get_hashes_from_fingerprint_with_reason', truncation: true do
+  describe 'get_hashes_from_fingerprint_with_reason', truncation: true do
     let(:issue) { post_manager.store_error }
     let(:fingerprint) { ['{{ default }}'] }
     subject { post_manager.get_hashes_from_fingerprint_with_reason(issue, fingerprint) }

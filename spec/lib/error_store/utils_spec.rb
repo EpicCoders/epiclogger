@@ -5,7 +5,7 @@ RSpec.describe ErrorStore::Utils do
   let(:group) { create :grouped_issue, website: website }
   let(:subscriber) { create :subscriber, website: website }
   let!(:issue_error) { create :issue, subscriber: subscriber, group: group }
-  let(:request) { post_error_request(website.app_key, website.app_secret, web_response_factory('ruby_exception')) }
+  let(:request) { post_error_request(web_response_factory('ruby_exception'), website) }
   let(:first_hash) {
     {
       sec: 're',

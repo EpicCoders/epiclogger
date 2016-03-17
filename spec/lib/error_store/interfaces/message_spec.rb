@@ -6,7 +6,7 @@ RSpec.describe ErrorStore::Interfaces::Message do
   let(:subscriber) { create :subscriber, website: website }
   let!(:issue_error) { create :issue, subscriber: subscriber, group: group, event_id: '8af060b2986f5914764d49b7f39b036c' }
 
-  let(:request) { post_error_request(website.app_key, website.app_secret, web_response_factory('ruby_exception')) }
+  let(:request) { post_error_request(web_response_factory('ruby_exception'), website) }
   let(:data) { JSON.parse(web_response_factory('ruby_exception'), symbolize_names: true)}
   let(:error) { ErrorStore::Error.new(request: request, issue: issue_error) }
   let(:message) { ErrorStore::Interfaces::Message.new(error) }

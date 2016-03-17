@@ -7,8 +7,8 @@ RSpec.describe ErrorStore::Error do
   let!(:issue_error) { create :issue, subscriber: subscriber, group: group, event_id: '8af060b2986f5914764d49b7f39b036c' }
 
   let(:time_now) { Time.parse('2016-02-10') }
-  let(:post_request) { post_error_request(website.app_key, website.app_secret, web_response_factory('ruby_exception')) }
-  let(:get_request) { get_error_request(website.app_key, web_response_factory('js_exception')) }
+  let(:post_request) { post_error_request(web_response_factory('ruby_exception'), website) }
+  let(:get_request) { get_error_request(web_response_factory('js_exception'), website) }
   let(:data) { JSON.parse(issue_error.data, symbolize_names: true) }
   let(:error) { ErrorStore::Error.new(request: post_request) }
 
@@ -33,7 +33,7 @@ RSpec.describe ErrorStore::Error do
   describe 'create!' do
     # i need this new request because we do body.read on the initial one so using the above
     # would result in an error
-    let(:new_request) { post_error_request(website.app_key, website.app_secret, web_response_factory('ruby_exception')) }
+    let(:new_request) { post_error_request(web_response_factory('ruby_exception'), website) }
     let!(:event_id) { error.create! }
     let(:cache_key) { "issue:#{website.id}:#{event_id}" }
 
@@ -96,7 +96,7 @@ RSpec.describe ErrorStore::Error do
 
   describe 'validate_data' do
     let(:response) { web_response_factory('ruby_exception', json: true) }
-    let(:request) { post_error_request(website.app_key, website.app_secret, response.to_json) }
+    let(:request) { post_error_request(response.to_json, website) }
     let(:valid_error) { ErrorStore::Error.new(request: request) }
 
     it 'returns data[:message] = <no message> if message missing' do
@@ -130,7 +130,7 @@ RSpec.describe ErrorStore::Error do
       Timecop.freeze(time_now) do
         response.delete('timestamp')
         valid_error.create!
-        expect( valid_error.data[:timestamp] ).to eq(time_now)
+        expect( valid_error.data[:timestamp] ).to eq(time_now.to_i)
       end
     end
     it 'returns data[:errors] invalid_data if can not process timestamp' do

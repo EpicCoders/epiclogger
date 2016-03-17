@@ -6,7 +6,7 @@ RSpec.describe ErrorStore::Interfaces::Http do
   let(:subscriber) { create :subscriber, website: website }
   let!(:issue_error) { create :issue, subscriber: subscriber, group: group, event_id: '8af060b2986f5914764d49b7f39b036c' }
 
-  let(:request) { post_error_request(website.app_key, website.app_secret, web_response_factory('ruby_exception')) }
+  let(:request) { post_error_request(web_response_factory('ruby_exception'), website) }
   let(:data) { JSON.parse(issue_error.data, symbolize_names: true)[:interfaces][:http] }
   let(:error) { ErrorStore::Error.new(request: request) }
   let(:http) { ErrorStore::Interfaces::Http.new(error) }

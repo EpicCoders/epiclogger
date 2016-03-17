@@ -2,8 +2,8 @@ require 'rails_helper'
 
 RSpec.describe ErrorStore::Interfaces::User do
   let(:website) { create :website }
-  let(:post_request) { post_error_request(website.app_key, website.app_secret, web_response_factory('ruby_exception')) }
-  let(:get_request) { get_error_request(website.app_key, web_response_factory('js_exception')) }
+  let(:post_request) { post_error_request(web_response_factory('ruby_exception'), website) }
+  let(:get_request) { get_error_request(web_response_factory('js_exception'), website) }
   let(:post_data) { validated_request(post_request)[:interfaces][:user] }
   let(:user) { ErrorStore::Interfaces::User.new(post_data) }
 

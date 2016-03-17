@@ -1,5 +1,5 @@
 module ErrorRequestMock
-  def post_error_request(api_key, api_secret, data, client_version: '5', client: 'raven-ruby/0.15.2', encoding: 'other')
+  def post_error_request(data, website, client_version: '5', client: 'raven-ruby/0.15.2', encoding: 'other')
     if encoding == 'gzip'
       encoding_type = 'gzip'
       encoded_data = ActiveSupport::Gzip.compress(data)
@@ -15,7 +15,7 @@ module ErrorRequestMock
       'REQUEST_METHOD' => 'POST',
       'HTTP_USER_AGENT' => 'Faraday v0.9.2',
       'REMOTE_ADDR' => '127.0.0.1',
-      'HTTP_X_SENTRY_AUTH' => "Sentry sentry_version=#{client_version}, sentry_client=#{client}, sentry_timestamp=1455616740, sentry_key=#{api_key}, sentry_secret=#{api_secret}",
+      'HTTP_X_SENTRY_AUTH' => "Sentry sentry_version=#{client_version}, sentry_client=#{client}, sentry_timestamp=1455616740, sentry_key=#{website.app_key}, sentry_secret=#{website.app_secret}",
       'HTTP_ACCEPT_ENCODING' => encoding_type,
       'rack.input' => encoded_data
     )
@@ -28,13 +28,13 @@ module ErrorRequestMock
     error.validate_data
   end
 
-  def get_error_request(api_key, data, client_version: '4', client: 'raven-js/1.1.20')
+  def get_error_request(data, website, client_version: '4', client: 'raven-js/1.1.20')
     query = {
       'sentry_version' => client_version,
       'sentry_client' => client,
-      'sentry_key' => api_key,
+      'sentry_key' => website.app_key,
       'sentry_data' => data.to_json,
-      'id' => '1'
+      'id' => website.id
     }
 
     ActionDispatch::Request.new(
