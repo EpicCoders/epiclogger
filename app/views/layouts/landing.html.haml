@@ -17,5 +17,5 @@
     = include_gon
     = yield
 
-    - if Rails.application.assets_manifest.assets["pages/#{controller.controller_name}.js"]
+    - if asset?("pages/#{controller.controller_name}.js")
       = javascript_include_tag "pages/#{controller.controller_name}"

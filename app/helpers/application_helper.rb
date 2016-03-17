@@ -11,4 +11,12 @@ module ApplicationHelper
       end
     end
   end
+
+  def asset?(file)
+    if Rails.env.development?
+      Rails.application.assets.find_asset(file)
+    else
+      Rails.application.assets_manifest.assets[file]
+    end
+  end
 end
