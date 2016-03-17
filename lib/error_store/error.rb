@@ -116,7 +116,7 @@ module ErrorStore
       rescue ErrorStore::InvalidTimestamp => e
         Rails.logger.error("Timestamp had an issue while processing #{e.message}")
         data[:errors] << { type: 'invalid_data', name: 'timestamp', value: data[:timestamp] }
-        data[:timestamp] = Time.now.utc.to_i
+        data[:timestamp] = Time.zone.now.to_i
       end
 
       if data.include?(:fingerprint)
@@ -313,13 +313,13 @@ module ErrorStore
 
       # This will happen everytime when coming from clients like raven-js
       if timestamp.blank?
-        data[:timestamp] = Time.now.to_i
+        data[:timestamp] = Time.zone.now.to_i
         return data
       end
 
       begin
         if is_numeric? timestamp
-          timestamp = Time.at(timestamp.to_i).to_datetime
+          timestamp = Time.zone.at(timestamp.to_i).to_datetime
         elsif !timestamp.is_a?(DateTime)
           timestamp = timestamp.chomp('Z') if timestamp.end_with?('Z')
           timestamp = DateTime.strptime(timestamp, '%Y-%m-%dT%H:%M:%S')

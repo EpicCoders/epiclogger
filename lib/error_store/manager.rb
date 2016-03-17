@@ -36,7 +36,7 @@ module ErrorStore
       # tags['site'] = site
       # tags['release'] = release
       # tags['environment'] = environment
-      date = data.delete(:timestamp)
+      date = Time.zone.at(data.delete(:timestamp))
 
       issue = Issue.new(
         website: website,
