@@ -2,7 +2,7 @@ module ErrorRequestMock
   def post_error_request(data, website, client_version: '5', client: 'raven-ruby/0.15.2', encoding: 'other')
     if encoding == 'gzip'
       encoding_type = 'gzip'
-      encoded_data = ActiveSupport::Gzip.compress(data)
+      encoded_data = StringIO.new(ActiveSupport::Gzip.compress(data))
     elsif encoding == 'deflate'
       encoding_type = 'deflate'
       encoded_data = StringIO.new(Zlib::Deflate.deflate(data))
@@ -17,6 +17,7 @@ module ErrorRequestMock
       'REMOTE_ADDR' => '127.0.0.1',
       'HTTP_X_SENTRY_AUTH' => "Sentry sentry_version=#{client_version}, sentry_client=#{client}, sentry_timestamp=1455616740, sentry_key=#{website.app_key}, sentry_secret=#{website.app_secret}",
       'HTTP_ACCEPT_ENCODING' => encoding_type,
+      'HTTP_CONTENT_ENCODING' => encoding_type,
       'rack.input' => encoded_data
     )
   end

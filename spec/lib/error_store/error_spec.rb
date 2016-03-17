@@ -8,7 +8,7 @@ RSpec.describe ErrorStore::Error do
 
   let(:time_now) { Time.parse('2016-02-10') }
   let(:post_request) { post_error_request(web_response_factory('ruby_exception'), website) }
-  let(:get_request) { get_error_request(web_response_factory('js_exception'), website) }
+  let(:get_request) { get_error_request(web_response_factory('js_exception', json: true), website) }
   let(:data) { JSON.parse(issue_error.data, symbolize_names: true) }
   let(:error) { ErrorStore::Error.new(request: post_request) }
 
@@ -98,27 +98,28 @@ RSpec.describe ErrorStore::Error do
     let(:response) { web_response_factory('ruby_exception', json: true) }
     let(:request) { post_error_request(response.to_json, website) }
     let(:valid_error) { ErrorStore::Error.new(request: request) }
+    subject { valid_error.create! }
 
     it 'returns data[:message] = <no message> if message missing' do
       response.delete('message')
-      valid_error.create!
+      subject
       expect( valid_error.data[:message] ).to eq('<no message>')
     end
     it 'trims culprit length if too big' do
       # we set a 220 string as culprit
       response['culprit'] = '71raym9wwz3xv2zqyuve7hvpii5hxtvj5t0s6sg0rddbzq6f92hzmhmrdwma05tptvnu110bnftbt9dk0tx1d74iy02jpkzn95vrglwjb4ss4qvjko65hynxg5rtl0atyrqnjjcxcfddz1x62v3uj2x9iljjqzxolube9hweqv3py65o1h7glsmd9ng5n5pqe3y5u5vi820xsr6vfgld2wwtp4kj'
-      valid_error.create!
+      subject
       expect( valid_error.data[:culprit].length ).to eq(ErrorStore::MAX_CULPRIT_LENGTH)
     end
     it 'returns data[:event_id] equal to SecureRandom.hex if missing' do
       allow(SecureRandom).to receive(:hex).and_return('b7fb6019862bc1bc51d5587a146159f8')
       response.delete('event_id')
-      valid_error.create!
+      subject
       expect( valid_error.data[:event_id] ).to eq(SecureRandom.hex)
     end
     it 'returns data[:errors] value_too_long if event_id too big' do
       response['event_id'] = '71raym9wwz3xv2zqyuve7hvpii5hxtvj5t0s6sg0rddbzq6f92hzmhmrdwma05tptvnu110bnftbt9d'
-      valid_error.create!
+      subject
       expect( valid_error.data[:errors] ).to include(
         {
           type: 'value_too_long', name: 'event_id',
@@ -129,90 +130,113 @@ RSpec.describe ErrorStore::Error do
     it 'returns data[:timestamp] equal to Time.now.utc if missing' do
       Timecop.freeze(time_now) do
         response.delete('timestamp')
-        valid_error.create!
+        subject
         expect( valid_error.data[:timestamp] ).to eq(time_now.to_i)
       end
     end
     it 'returns data[:errors] invalid_data if can not process timestamp' do
       response['timestamp'] = 'jj'
-      valid_error.create!
+      subject
       expect( valid_error.data[:errors] ).to include({:type=>"invalid_data", :name=>"timestamp", :value=>"jj"})
     end
     it 'returns the right timestamp' do
-      valid_error.create!
+      subject
       value = DateTime.strptime('2016-02-17T12:29:56', '%Y-%m-%dT%H:%M:%S')
       expect( valid_error.data[:timestamp] ).to eq(value.strftime('%s').to_i)
     end
 
-    it 'returns the processed fingerprint'
+    it 'returns the processed fingerprint' do
+      response['fingerprint'] = 'qweqwe'
+      subject
+      expect( valid_error.data[:fingerprint] ).to be_nil
+    end
 
     it 'returns data[:errors] invalid_data if InvalidFingerprint' do
-      data[:fingerprint] = {}
-      expect{ valid_error.process_fingerprint(data) }.to raise_exception(ErrorStore::InvalidFingerprint)
-      data[:fingerprint] = ["1", "some string"]
-      expect{ valid_error.process_fingerprint(data) }.to raise_exception(ErrorStore::InvalidFingerprint)
+      response[:fingerprint] = {}
+      subject
+      expect( valid_error.data[:fingerprint] ).to be_nil
+      expect( valid_error.data[:errors] ).to include({:type=>"invalid_data", :name=>"fingerprint", :value=>{}})
     end
     it 'returns data[:platform] as other if is not in VALID_PLATFORMS' do
       response['platform'] = "shagaron"
-      valid_error.create!
+      subject
       expect( valid_error.data[:platform] ).to eq("other")
     end
     it 'returns data[:platform] trimed at 64 event if in VALID_PLATFORMS' do
-      valid_error.create!
+      subject
       expect( valid_error.data[:platform] ).to eq("ruby")
     end
     it 'returns data[:errors] invalid_data if modules is not a Hash and is set' do
       response['modules'] = "string"
-      valid_error.create!
+      subject
       expect( valid_error.data[:errors] ).to include({:type=>"invalid_data", :name=>"modules", :value=>"string"})
     end
     it 'returns data[:errors] invalid data if extra is not a Hash and is set' do
       response['extra'] = "string"
-      valid_error.create!
+      subject
       expect( valid_error.data[:errors] ).to include({:type=>"invalid_data", :name=>"extra", :value=>"string"})
     end
     it 'removes extra if error' do
       response['extra'] = "string"
-      valid_error.create!
-      error.create!
+      subject
       expect( valid_error.data[:extra] ).to be_nil
     end
     it 'trims data[:extra] to max_size of MAX_VARIABLE_SIZE' do
       response['extra']['param'] = issue_error.data
-      valid_error.create!
+      subject
       expect( valid_error.data[:extra][:param].length ).to eq(512)
     end
-    # it 'removes all the CLIENT_RESERVED_ATTRS' do
-    #   expect(  valid_error.data.keys.to_set ).to eq(ErrorStore::CLIENT_RESERVED_ATTRS.to_set)
-    #   ????
-    # end
-    it 'adds data[:errors] invalid_attribute if InvalidInterface'
-    it 'adds data[:errors] if invalid_data and value is not a hash or an array'
-    it 'adds the right interface to data[:interfaces]'
+    it 'removes all attrs that are not in CLIENT_RESERVED_ATTRS' do
+      response[:cacamaca] = ''
+      subject
+      expect( valid_error.data[:cacamaca] ).to be_nil
+    end
+    it 'adds data[:errors] invalid_attribute if InvalidInterface' do
+      response['cacamaca'] = 'here is some weird stuff'
+      subject
+      expect( valid_error.data[:errors] ).to include({ :type=>"invalid_attribute", :name=>:cacamaca })
+    end
+    it 'adds data[:errors] if invalid_data and value is not a hash or an array' do
+      response['cacamaca'] = 'here is some weird stuff'
+      subject
+      expect( valid_error.data[:errors] ).to include({ :type=>"invalid_data", :name=>:cacamaca, :value=>"here is some weird stuff" })
+    end
+    it 'adds the right interface to data[:interfaces]' do
+      subject
+      expect( valid_error.data[:interfaces][:exception] ).not_to be_nil
+    end
     it 'adds data[:errors] invalid_data if error on sanitize_data or to_json' do
-      # error.data["description"] = "iPhone\xAE"
+      exception_data = JSON.parse(response.to_json, symbolize_names: true)
+      allow_any_instance_of(ErrorStore::Interfaces::Exception).to receive(:sanitize_data).and_raise(ErrorStore::ValidationError)
+      subject
+      expect( valid_error.data[:errors] ).to include({ :type=>"invalid_data", :name=>:exception, :value=> exception_data[:exception] })
     end
     it 'sets DEFAULT_LOG_LEVEL if level is empty' do
       response['level'] = nil
-      valid_error.create!
+      subject
       expect( valid_error.data[:level] ).to eq(ErrorStore::DEFAULT_LOG_LEVEL)
     end
     it 'sets DEFAULT_LOG_LEVEL if level is not numeric' do
       response['level'] = "string"
-      valid_error.create!
+      subject
       expect( valid_error.data[:level] ).to eq(ErrorStore::DEFAULT_LOG_LEVEL)
     end
 
-    it 'adds data[:errors] invalid_data if level does not exist'
+    it 'adds data[:errors] invalid_data if level does not exist' do
+      response[:level] = 60
+      subject
+      expect( valid_error.data[:errors] ).to include({ :type=>"invalid_data", :name=>'level', :value=> 60 })
+      expect( valid_error.data[:level] ).to eq(ErrorStore::DEFAULT_LOG_LEVEL)
+    end
 
     it 'encodes release to utf-8' do
       response['release'] = "some string"
-      valid_error.create!
+      subject
       expect( valid_error.data[:release].encoding ).to eq(Encoding.find('UTF-8'))
     end
     it 'adds data[:errors] value_too_long if release bigger than 64' do
       response['release'] = "Ruby was conceived on February 24, 1993. In a 1999 post to the ruby-talk mailing list, Ruby author Yukihiro Matsumoto describes some of his early ideas about the language"
-      valid_error.create!
+      subject
       expect( valid_error.data[:errors] ).to include(
         {
           type: 'value_too_long', name: 'release',
@@ -223,30 +247,33 @@ RSpec.describe ErrorStore::Error do
     end
     it 'returns the right release' do
       response['release'] = "some string"
-      valid_error.create!
+      subject
       expect( valid_error.data[:release] ).to eq("some string")
     end
     it 'returns the data[:version] from auth' do
-      valid_error.create!
+      subject
       expect( valid_error.data[:version] ).to eq("5")
     end
-    it 'returns the expected validated data'
+    it 'returns the expected validated data' do
+      post_request = post_error_request(web_response_factory('ruby_exception'), website)
+      subject
+      expect( valid_error.data ).to eq(validated_request(post_request))
+    end
   end
 
-  describe 'ErrorWorker' do
-    let(:data_with_website) { JSON.parse(web_response_factory('ruby_exception'), symbolize_names: true) }
-    # it 'removes cache key after doing store' do
-    #   cache_key = "issue:#{website.id}:#{issue_error.event_id}"
-    #   Rails.cache.write(cache_key, data_with_website)
-    #   ErrorStore::Error::ErrorWorker.new.perform(cache_key)
-    #   expect( Rails.cache.read(cache_key) ).to be_nil
-    # end
-    # it 'returns and sets logger if cache not set', truncation: true do
-    #   cache_key = "issue:#{website.id}:#{issue_error.event_id}"
-    #   Rails.cache.delete(cache_key)
-    #   expect(Rails.logger).to receive(:info).with("Data is not available for #{cache_key} in ErrorWorker.perform")
-    #   ErrorStore::Error::ErrorWorker.new.perform(cache_key)
-    # end
+  describe 'ErrorWorker', truncation: true do
+    let(:post_request) { post_error_request(web_response_factory('ruby_exception'), website) }
+    let(:validated_post_data) { validated_request(post_request) }
+    let(:cache_key) { "issue:#{website.id}:#{validated_post_data[:event_id]}" }
+    it 'removes cache key after doing store' do
+      Rails.cache.write(cache_key, validated_post_data)
+      ErrorStore::Error::ErrorWorker.new.perform(cache_key)
+      expect( Rails.cache.read(cache_key) ).to be_nil
+    end
+    it 'returns and sets logger if cache not set' do
+      expect(Rails.logger).to receive(:error).with('Data is not available for sexy in ErrorWorker.perform')
+      ErrorStore::Error::ErrorWorker.new.perform('sexy')
+    end
   end
 
   describe '_params' do
@@ -278,43 +305,56 @@ RSpec.describe ErrorStore::Error do
   end
 
   describe '_get_interfaces' do
+    let(:response) { web_response_factory('ruby_exception', json: true) }
+    let(:request) { post_error_request(response.to_json, website) }
+    let(:valid_error) { ErrorStore::Error.new(request: request) }
     it 'returns [] if no interfaces in data' do
-      parsed = JSON.parse(issue_error.data)
-      parsed['interfaces'] = {}
-      issue_error.data = parsed.to_json
-      expect( issue_error.get_interfaces ).to eq([])
+      response['exception'] = ''
+      response['user'] = ''
+      response['request'] = ''
+      valid_error.create!
+      expect( valid_error._get_interfaces ).to eq([])
     end
-    it 'returns all interfaces'
+    it 'returns all interfaces' do
+      valid_error.create!
+      expect( valid_error._get_interfaces ).to include(an_instance_of(ErrorStore::Interfaces::Exception))
+      expect( valid_error._get_interfaces ).to include(an_instance_of(ErrorStore::Interfaces::Http))
+      expect( valid_error._get_interfaces ).to include(an_instance_of(ErrorStore::Interfaces::User))
+      expect( valid_error._get_interfaces.length ).to eq(3)
+    end
   end
 
   describe 'get_data' do
-    let(:get_error_example) { ErrorStore::Error.new(request: get_request) }
+    let(:post_error) { ErrorStore::Error.new(request: post_request) }
+    let(:get_error) { ErrorStore::Error.new(request: get_request) }
+    let(:get_data) { JSON.parse(web_response_factory('js_exception'), symbolize_names: true) }
+    let(:post_data) { JSON.parse(web_response_factory('ruby_exception'), symbolize_names: true) }
+
     it 'gets all the params if get request' do
-      expect( get_error_example.request.params[:sentry_data].blank? ).to be(false)
+      expect( get_error.get_data ).to eq(get_data)
     end
-    # it 'reads the body if post request' do
-    #   ???
-    #   expect(error.request.body).to receive(:read)
-    #   error.get_data
-    # end
-    # it 'does decompress_gzip if content_encoding is gzip' do
-    #   error.request.headers['HTTP_ACCEPT_ENCODING'] = 'gzip'
-    #   error.request.headers["rack.input"] = ActiveSupport::Gzip.compress("random string")
-    #   allow_any_instance_of(ErrorStore::Utils).to receive(:decompress_gzip)
-    #   error.create!
-    # end
-    # it 'does decompress_deflate if content_encoding is deflate' do
-    #   error.request.headers['HTTP_ACCEPT_ENCODING'] = 'deflate'
-    #   error.request.headers["rack.input"] = StringIO.new(Zlib::Deflate.deflate("random string"))
-    #   allow_any_instance_of(ErrorStore::Utils).to receive(:decompress_deflate)
-    #   error.create!
-    # end
-    # it 'does decode_and_decompress if data starts with {' do
-    #   allow_any_instance_of(ErrorStore::Utils).to receive(:decode_and_decompress)
-    #   error.create!
-    # end
+    it 'reads the body if post request' do
+      expect( post_error.get_data ).to eq(post_data)
+    end
+    it 'does decompress_gzip if content_encoding is gzip' do
+      gzip_request = post_error_request(web_response_factory('ruby_exception'), website, encoding: 'gzip')
+      post_error = ErrorStore::Error.new(request: gzip_request)
+      expect( post_error ).to receive(:decompress_gzip).and_return(web_response_factory('ruby_exception'))
+      expect( post_error.get_data ).to eq(post_data)
+    end
+    it 'does decompress_deflate if content_encoding is deflate' do
+      deflate_request = post_error_request(web_response_factory('ruby_exception'), website, encoding: 'deflate')
+      post_error = ErrorStore::Error.new(request: deflate_request)
+      expect( post_error ).to receive(:decompress_deflate).and_return(web_response_factory('ruby_exception'))
+      expect( post_error.get_data ).to eq(post_data)
+    end
+    it 'does decode_and_decompress if data does not start with {' do
+      expect( post_error ).to receive(:decode_and_decompress).and_return(web_response_factory('ruby_exception'))
+      expect( post_error.get_data ).to eq(post_data)
+    end
     it 'returns decoded json data' do
-      expect( error.get_data ).to eq(JSON.parse(web_response_factory('ruby_exception'), symbolize_names: true))
+      expect( post_error.get_data ).to be_a(Hash)
+      expect( get_error.get_data ).to be_a(Hash)
     end
   end
 

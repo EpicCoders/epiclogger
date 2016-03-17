@@ -125,9 +125,8 @@ module ErrorStore
         rescue ErrorStore::InvalidFingerprint => e
           Rails.logger.error("Invalid fingerprint with error #{e.message}")
           data[:errors] << { type: 'invalid_data', name: 'fingerprint', value: data[:fingerprint] }
+          data.delete(:fingerprint)
         end
-      else
-        data[:fingerprint] = nil
       end
 
       if data.key?(:platform)
@@ -192,12 +191,12 @@ module ErrorStore
       # set the error level
       level = data[:level] || DEFAULT_LOG_LEVEL
       if is_numeric?(level)
-        begin
-          data[:level] = LOG_LEVELS[level]
-        rescue => e
-          data[:errors] << { type: 'invalid_data', name: 'level', value: level }
-          data[:level] = DEFAULT_LOG_LEVEL
-        end
+        data[:level] = if LOG_LEVELS[level]
+                         LOG_LEVELS[level]
+                       else
+                        data[:errors] << { type: 'invalid_data', name: 'level', value: level }
+                        DEFAULT_LOG_LEVEL
+                       end
       elsif !LOG_LEVELS.include?(data[:level])
         data[:level] = DEFAULT_LOG_LEVEL
       end
@@ -226,7 +225,7 @@ module ErrorStore
         # STEP 3:
         data = Rails.cache.read(cache_key)
         if data.blank?
-          logger.error("Data is not available for #{cache_key} in ErrorWorker.perform")
+          Rails.logger.error("Data is not available for #{cache_key} in ErrorWorker.perform")
           return
         end
 
