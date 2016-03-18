@@ -24,9 +24,6 @@ directive = {
   subscribers_count:
     html: ()->
       "Send an update to #{this.subscribers_count} subscribers"
-  # issue_subscriber:
-  #   html: ()->
-  #     "Id: #{this.issues[0].subscriber.id}<br/><br/>IP Adress: 10.156.45.154.. <br/><br/>Email: #{this.issues[0].subscriber.email}<br/><br/>Data: ()"
 }
 #default starting page
 page = 1
@@ -108,10 +105,8 @@ sidebar_request = (website_id, page, error_count, current_issue) ->
 
 getAvatars = (data) ->
   $.src = []
-  $.each data.issues, (index, data) ->
-    $.src.push(data.subscriber.avatar_url)
-  # $.each $.src, (index, avatar_url) ->
-  #   $('img').attr('src', avatar_url)
+  $.each data.subscribers, (index, data) ->
+    $.src.push(data.avatar_url)
   return $.src
 
 countSubscribers = (data) ->
@@ -248,7 +243,6 @@ manipulateShowElements = (data) ->
     $('.notify').attr('disabled', 'disabled')
   else
     $('.resolved').hide()
-    $('.resolved_at').hide()
   data.avatars = getAvatars(data).slice(0,2)
   data.subscribers_count = countSubscribers(data)
   if data.subscribers_count > 2
