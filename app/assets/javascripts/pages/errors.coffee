@@ -18,12 +18,12 @@ directive = {
   resolved_at:
     html: ()->
       moment(this.resolved_at).calendar()
-  error_title:
+  event_id_with_message:
     html: ()->
-      this.message
-  subscribers_count:
+      "<h4>Event #{this.error.event_id}</h4>"
+  method_and_url:
     html: ()->
-      "Send an update to #{this.subscribers_count} subscribers"
+      "<strong>#{this.error.data.interfaces.http.method}/</strong> &nbsp&nbsp&nbsp#{this.error.data.interfaces.http.url}"
 }
 #default starting page
 page = 1
@@ -49,6 +49,8 @@ PubSub.subscribe('assigned.website', (ev, website)->
         $.current_issue = data.id
         firsttime_sidebar_request(website.id,page,errors_per_page,data.last_seen)
         manipulateShowElements(data)
+        data.error = data.issues[data.issues.length-1]
+        debugger;
         $('#grouped-issuedetails').render data, directive
         populateSidebar(data)
         sidebar_request(website.id,page,$.current_issue,13)
