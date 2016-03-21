@@ -50,7 +50,6 @@ PubSub.subscribe('assigned.website', (ev, website)->
         firsttime_sidebar_request(website.id,page,errors_per_page,data.last_seen)
         manipulateShowElements(data)
         data.error = data.issues[data.issues.length-1]
-        debugger;
         $('#grouped-issuedetails').render data, directive
         populateSidebar(data)
         sidebar_request(website.id,page,$.current_issue,13)
