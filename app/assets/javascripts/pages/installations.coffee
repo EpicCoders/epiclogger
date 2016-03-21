@@ -58,13 +58,13 @@ handleEditDetails = (website_id) ->
     $('input[name=realtime]').attr('checked', true) if data.realtime
     $('input[name=new_event]').attr('checked', true) if data.new_event
     $('input[name=frequent_event]').attr('checked',true) if data.frequent_event
-    $('#save').prop('disabled', true)
+    $('#save, #edit-website').prop('disabled', true)
     $('#current-website').render data
     $('#platform').html(data.platform + ' <span class="caret"></span>')
     $('#owner').html(data.owners[0].email+ ' <span class="caret"></span>')
 
   $('input').change ->
-    $('#save').prop('disabled', false)
+    $('#save, #edit-website').prop('disabled', false)
 
   $('#save').on 'click', (e) ->
     e.preventDefault()

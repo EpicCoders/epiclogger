@@ -57,7 +57,6 @@ PubSub.subscribe('assigned.website', (ev, website)->
         e.preventDefault();
         $('#solve').hide()
         $('.resolved').show()
-        $('.notify').attr('disabled', 'disabled')
         $.ajax
           data: {error: {status: 'resolved'}}
           url: Routes.api_v1_error_url(gon.error_id)
@@ -65,17 +64,6 @@ PubSub.subscribe('assigned.website', (ev, website)->
           success: (result)->
             swal("Status updated", "Great job!", "success")
         return
-
-      $('form#notify').submit ->
-        dataString = $('.messageTextarea').val()
-        $.ajax
-          url: Routes.notify_subscribers_api_v1_error_url(gon.error_id)
-          type: 'POST'
-          data: {website_id: website.id, group_id: gon.error_id, message: dataString}
-          success: (data) ->
-            $('.messageTextarea').val('')
-            return
-        false
 
       $('.next').on 'click', () ->
         page = page + 1
@@ -109,11 +97,11 @@ getAvatars = (data) ->
     $.src.push(data.avatar_url)
   return $.src
 
-countSubscribers = (data) ->
-  subscribers_count = 0
-  $.each data.issues, (index, issue) ->
-    subscribers_count += issue.subscribers_count
-  return subscribers_count
+# countSubscribers = (data) ->
+#   subscribers_count = 0
+#   $.each data.issues, (index, issue) ->
+#     subscribers_count += issue.subscribers_count
+#   return subscribers_count
 
 
 manipulateIndexElements = (data) ->
@@ -221,34 +209,17 @@ populateSidebar = (data) ->
     $('.sidebar-container').click ->
       changeError(this)
 
-errorStacktrace = (data) ->
-  issue_nr =0
-  if data.issues.length > 0
-    $.each data.issues[0].description, (index, issue) ->
-      issue_nr+=1
-      button = ' <button class="btn btn-warning btn-xs glyphicon glyphicon-plus" data-target="#expand_'+issue_nr+'"+ data-toggle="collapse" title="Click to expand"> View source</button>'
-      $('<p>' + issue.filename + ' ? in ' + issue.function + ' at line ' + issue.lineno + '/' + issue.colno + '</p>' + button).prependTo '.stacktrace'
-    object_nr =0
-    $.each data.issues[0].data, (index, object) ->
-      object_nr+=1
-      $('.stacktrace_error').append("<div class=collapse id='expand_"+object_nr+"'></div>")
-      $.each object, (key, value) ->
-        $('#expand_' + object_nr).text value
-
-
 manipulateShowElements = (data) ->
-  # errorStacktrace(data)
   if data.status == 'resolved'
     $('#solve').hide()
-    $('.notify').attr('disabled', 'disabled')
   else
     $('.resolved').hide()
   data.avatars = getAvatars(data).slice(0,2)
-  data.subscribers_count = countSubscribers(data)
-  if data.subscribers_count > 2
-    $('#truncate').show()
-  else
-    $('#truncate').hide()
+  # data.subscribers_count = countSubscribers(data)
+  # if data.subscribers_count > 2
+  #   $('#truncate').show()
+  # else
+  #   $('#truncate').hide()
   $('#truncate').on 'click', (e) ->
     if $('#truncate').text() == "...show more"
       data.avatars = getAvatars(data)
@@ -257,10 +228,10 @@ manipulateShowElements = (data) ->
       $('#truncate').text("...show more")
       data.avatars = getAvatars(data).slice(0,2)
 
-SortByUsersSubscribed = (a, b) ->
-  aError = a.users_count
-  bError = b.users_count
-  if aError < bError then 1 else if aError > bError then -1 else 0
+# SortByUsersSubscribed = (a, b) ->
+#   aError = a.users_count
+#   bError = b.users_count
+#   if aError < bError then 1 else if aError > bError then -1 else 0
 
 SortByLastOccurrence = (a, b) ->
   aTime = a.last_occurrence
@@ -271,65 +242,6 @@ $('select#sortinput').change ->
   theValue = $('option:selected').text()
   if theValue == "Last occurrence"
     $('#grouped-issues').render $.obj.grouped_issues.sort(SortByLastOccurrence), directive
-  else if theValue == "Users subscribed"
-    $('#grouped-issues').render $.obj.grouped_issues.sort(SortByUsersSubscribed), directive
+  # else if theValue == "Users subscribed"
+  #   $('#grouped-issues').render $.obj.grouped_issues.sort(SortByUsersSubscribed), directive
   return
-
-$('.messageTextarea').keydown((event) ->
-  if event.keyCode == 13
-    $('#notify').submit()
-    return false
-  return
-).focus(->
-  if @value == ''
-    @value = ''
-  return
-).blur ->
-  if @value == ''
-    @value = ''
-  return
-
-PubSub.subscribe('assigned.website', (ev, website)->
-  $.getJSON Routes.api_v1_website_path(website.id), (data) ->
-    $('#current-website').render data
-)
-
-$('.tab').hide()
-$('.tab2, .tab3').addClass('disabled')
-
-$('#back').on 'click', () ->
-  $('.tab').hide()
-  manipulateWizard(2)
-
-$('#finish').on 'click', () ->
-  location.href = '/errors'
-
-$('#platform a').on 'click', (e) ->
-  $('.tab').hide()
-  $('#'+this.name).show()
-  manipulateWizard(3)
-
-manipulateWizard = (n) ->
-  if n != 0
-    $('.stepwizard-row a').removeClass('btn-primary')
-    $('.stepwizard-row a').addClass('btn-default')
-    $('.stepwizard a[href="#step-' + n + '"]').tab 'show'
-    $('.stepwizard-row a[href="#step-' + n + '"]').removeClass 'btn-default'
-    $('.stepwizard-row a[href="#step-' + n + '"]').addClass 'btn-primary'
-  return
-
-$('#modalWebsite').submit (e) ->
-  e.preventDefault()
-  form = $('#modalWebsite')
-  $.ajax
-    url: Routes.api_v1_websites_url()
-    type: 'post'
-    dataType: 'json'
-    data: { website: { domain: form.find('#domain').val(), title: form.find('#title').val() } }
-    success: (data) ->
-      EpicLogger.setMemberDetails(data.id)
-      manipulateWizard(2)
-      $('.tab1').addClass('disabled')
-      $('.tab2').removeClass('disabled')
-  return
-return
