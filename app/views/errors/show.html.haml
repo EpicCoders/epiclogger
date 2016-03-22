@@ -1,13 +1,18 @@
 #grouped-issuedetails.row.issues.error_content
   .col-lg-12.col-md-12.pagecontainer.error
+    %form{:role => "form", :style => "width:800px"}
+      .form-group
+        %label{:for => "comment"} Norify Subscribers:
+        %textarea#notifysub.form-control{:rows => "5"}
+      %button.btn.btn-default#notify Send
     %h3.message Error #24601
     .alert.alert-danger
       %span.glyphicon.glyphicon-exclamation-sign{"aria-hidden" => "true"}
       %span.culprit
-    %button.btn.btn-primary.pull-right#solve
+    %button.btn.btn-primary#solve
       %span.fa.fa-check
       Mark resolved
-    %button.btn.btn-success.pull-right.resolved
+    %button.btn.btn-success.resolved
       %span.fa.fa-check
       Resolved
     %br/

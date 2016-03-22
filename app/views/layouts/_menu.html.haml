@@ -18,8 +18,8 @@
               %ul.dropdown-menu
                 %li
                   %a{:href => "#{websites_url()}"} Websites
-                %li
-                  %a{:href => "#"} Account
+                / %li
+                /   %a{:href => "#"} Account
                 %li
                   %a{:href => "#", :onclick => 'EpicLogger.logout()'} Logout
       .error_sidebar
@@ -69,7 +69,7 @@
             %ul.dropdown-menu
               %li
                 %a{:href => "#{websites_url()}"} Websites
-              %li
-                %a{:href => "#"} Account
+              / %li
+              /   %a{:href => "#"} Account
               %li
                 %a{:href => "#", :onclick => 'EpicLogger.logout()'} Logout
