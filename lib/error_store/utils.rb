@@ -151,5 +151,27 @@ module ErrorStore
       return 'block' if function.start_with?('block ')
       function.gsub(ruby_anon_func, '_<anon>')
     end
+
+    #####
+    # Force UTF-8 encoding on strings
+    # - checks if utf-8 is the encoding of the string
+    # - fixes it if it's windows-1252
+    # - replaces the invalid chars and convers to utf-8 if fail
+    #####
+    def fix_encoding(value)
+      return unless value.is_a? String
+      begin
+        # Try it as UTF-8 directly
+        cleaned = value.dup.force_encoding('UTF-8')
+        unless cleaned.valid_encoding?
+          # Some of it might be old Windows code page
+          cleaned = value.encode('UTF-8', 'Windows-1252')
+        end
+        value = cleaned
+      rescue EncodingError
+        # Force it to UTF-8, throwing out invalid bits
+        value.encode!('UTF-8', invalid: :replace, undef: :replace)
+      end
+    end
   end
 end

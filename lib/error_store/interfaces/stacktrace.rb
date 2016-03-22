@@ -35,9 +35,9 @@ module ErrorStore::Interfaces
       }
     end
 
-    def slim_frame_data(stacktrace, frame_allowance = ErrorStore::MAX_STACKTRACE_FRAMES)
+    def slim_frame_data(data, frame_allowance = ErrorStore::MAX_STACKTRACE_FRAMES)
       # Removes various excess metadata from middle frames which go beyond ``frame_allowance``.
-      frames = stacktrace[:frames]
+      frames = data[:frames]
       frames_len = frames.length
 
       return if frames_len <= frame_allowance
@@ -50,15 +50,16 @@ module ErrorStore::Interfaces
         frames[n].delete(:pre_context)
         frames[n].delete(:post_context)
       end
+      data
     end
 
     def get_culprit_string
-      _data[:frames].last.try(:get_culprit_string)
+      _data[:frames].try(:last).try(:get_culprit_string)
     end
 
     def get_hash
       frames = _data[:frames]
-
+      return [] unless _data[:has_frames]
       # TODO(dcramer): this should apply only to JS
       # In a common case (I believe from window.onerror) we can end up with
       # a stacktrace which includes a single frame and a reference that isnt

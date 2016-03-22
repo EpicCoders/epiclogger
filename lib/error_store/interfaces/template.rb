@@ -10,7 +10,7 @@ module ErrorStore::Interfaces
       :template
     end
 
-    def santize_data(data)
+    def sanitize_data(data)
       if [data[:filename], data[:context_line], data[:lineno]].any?(&:blank?)
         raise ErrorStore::ValidationError.new(self), 'Please provide filename, context_line and lineno'
       end

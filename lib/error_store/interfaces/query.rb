@@ -13,8 +13,8 @@ module ErrorStore::Interfaces
     def sanitize_data(data)
       raise ErrorStore::ValidationError.new(self), 'No "query" present' unless data[:query]
       self._data = {
-        query: trim(data[:query], 1024),
-        engine: trim(data[:engine], 128)
+        query: trim(data[:query], max_size: 1024),
+        engine: trim(data[:engine], max_size: 128)
       }
       self
     end

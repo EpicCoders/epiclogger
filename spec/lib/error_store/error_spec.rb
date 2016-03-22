@@ -140,9 +140,12 @@ RSpec.describe ErrorStore::Error do
       expect( valid_error.data[:errors] ).to include({:type=>"invalid_data", :name=>"timestamp", :value=>"jj"})
     end
     it 'returns the right timestamp' do
-      subject
-      value = DateTime.strptime('2016-02-17T12:29:56', '%Y-%m-%dT%H:%M:%S')
-      expect( valid_error.data[:timestamp] ).to eq(value.strftime('%s').to_i)
+      current_datetime = '2016-02-17T12:29:56Z'
+      Timecop.freeze(current_datetime) do
+        subject
+        value = DateTime.strptime(current_datetime, '%Y-%m-%dT%H:%M:%S')
+        expect( valid_error.data[:timestamp] ).to eq(value.strftime('%s').to_i)
+      end
     end
 
     it 'returns the processed fingerprint' do

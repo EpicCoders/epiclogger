@@ -81,7 +81,29 @@
       "email": "some@email.com",
       "id": 1
    },
-   "exception":{
+   "template": {
+      "abs_path": "/real/file/name.html",
+      "filename": "file/name.html",
+      "pre_context": [
+          "line1",
+          "line2"
+      ],
+      "context_line": "line3",
+      "lineno": 3,
+      "post_context": [
+          "line4",
+          "line5"
+      ]
+   },
+   "query": {
+      "query": "SELECT new FROM 1;slwkl;",
+      "engine": "postgresql"
+    },
+    "logentry": {
+      "message": "Message with %s",
+      "params": ["this"]
+    },
+    "exception":{
       "values":[
          {
             "type":"ZeroDivisionError",

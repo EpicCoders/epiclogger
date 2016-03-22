@@ -24,7 +24,7 @@ module ErrorStore::Interfaces
         value = value.strip
       end
 
-      value = value.to_json unless value.blank? && value.is_a?(String)
+      value = value.to_json unless value.blank? || value.is_a?(String)
 
       self._data = {
         type:        trim(type, max_size: 128),

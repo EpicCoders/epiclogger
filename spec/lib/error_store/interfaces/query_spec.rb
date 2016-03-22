@@ -2,29 +2,43 @@ require 'rails_helper'
 
 RSpec.describe ErrorStore::Interfaces::Query do
   let(:website) { create :website }
-  let(:group) { create :grouped_issue, website: website }
-  let(:subscriber) { create :subscriber, website: website }
-  let!(:issue_error) { create :issue, subscriber: subscriber, group: group, event_id: '8af060b2986f5914764d49b7f39b036c' }
-  let(:request) { post_error_request(web_response_factory('ruby_exception'), website) }
-
-  let(:error) { ErrorStore::Error.new(request: request, issue: issue_error) }
+  let(:post_request) { post_error_request(web_response_factory('ruby_exception'), website) }
+  let(:post_data) { validated_request(post_request)[:interfaces][:query] }
+  let(:query) { ErrorStore::Interfaces::Query.new(post_data) }
 
   it 'it returns Query for display_name' do
     expect( ErrorStore::Interfaces::Query.display_name ).to eq("Query")
   end
   it 'it returns type :query' do
-    expect( ErrorStore::Interfaces::Query.new(error).type ).to eq(:query)
+    expect( query.type ).to eq(:query)
   end
 
   describe 'sanitize_data' do
-    it 'raises ValidationError if query is blank'
-    it 'trims query to 1024'
-    it 'trims engine to 128'
-    it 'assigns the right _data attributes'
-    it 'returns Query instance'
+    subject { query.sanitize_data(post_data) }
+    it 'raises ValidationError if query is blank' do
+      post_data[:query] = nil
+      expect { subject }.to raise_error(ErrorStore::ValidationError, 'No "query" present')
+    end
+    it 'trims query to 1024' do
+      post_data[:query] = 'SELECT 1' * 1000
+      expect( subject._data[:query].length ).to eq(1024)
+    end
+    it 'trims engine to 128' do
+      post_data[:engine] = 'postgresql' * 200
+      expect( subject._data[:engine].length ).to eq(128)
+    end
+    it 'assigns the right _data attributes' do
+      expect( subject._data.keys ).to eq([:query, :engine])
+    end
+    it 'returns Query instance' do
+      expect( subject ).to be_kind_of(ErrorStore::Interfaces::Query)
+    end
   end
 
-  xdescribe 'get_hash' do
-    it 'returns array with query'
+  describe 'get_hash' do
+    it 'returns array with query' do
+      query.sanitize_data(post_data)
+      expect( query.get_hash ).to eq([post_data[:query]])
+    end
   end
 end

@@ -184,7 +184,7 @@ module ErrorStore
           data[:interfaces][interface.type] = interface.to_json
         rescue => e
           Rails.logger.error("Invalid interface processing #{key}:#{value} with error #{e.message}")
-          data[:errors] << { type: 'invalid_data', name: key, value: value }
+          data[:errors] << { type: 'invalid_data', name: key, value: value, error: e.message }
         end
       end
 

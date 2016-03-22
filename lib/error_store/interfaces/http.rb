@@ -42,7 +42,7 @@ module ErrorStore::Interfaces
       headers = data[:headers]
       if headers
         headers, cookie_header = format_headers(headers)
-        cookies = cookie_header if !cookies && cookie_header
+        cookies = cookie_header if cookies.blank? && !cookie_header.blank?
       else
         headers = []
       end
@@ -71,12 +71,13 @@ module ErrorStore::Interfaces
         k, v = k.first if k.is_a?(Hash)
         v = v.join(', ') if v.is_a?(Array)
 
-        if k.downcase == 'cookie'
+        if k.casecmp(:cookie) == 0
           cookie_header = v
         else
           result << { k.to_s.parameterize.underscore.to_sym => v }
         end
       end
+
       return result, cookie_header
     end
 
@@ -85,7 +86,10 @@ module ErrorStore::Interfaces
 
       value = Rack::Utils.parse_nested_query(value) if value.is_a?(String)
 
-      value.map { |k, v| { k.encode('utf-8').strip => v } }
+      value.map do |k, v|
+        k, v = k.first if k.is_a?(Hash)
+        { fix_encoding(k) => fix_encoding(v) }
+      end
     end
   end
 end
