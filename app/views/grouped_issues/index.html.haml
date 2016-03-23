@@ -1,66 +1,44 @@
-.row
-  #grouped-issuescontainer.col-lg-9.col-md-8.pagecontainer
-    #grouped-issues.groups
-      %a.warning{:href => errors_url()}
-        .left
-          %span.message Homepage
-        .right
-          %span.last Last occurrence
-          %span.last_occurrence Today, 21:34
-        .main
-          / %span.type Level
-          / %span.level Bug
-          %span.language Language
-          %span.issue_logger Javascript - app.js 149:12
-    #pagination
-      .row
-        .col-xs-4.side
-        .col-xs-5.buttons
-          %a.btn.btn-default.previous.disabled{:href => "#"}
-            %span.fa.fa-chevron-left
-          %span.pagination-text
-          %a.btn.btn-default.next{:href => "#"}
-            %span.fa.fa-chevron-right
-      %br/
-    #missing-errors
-      %h5 &nbsp &nbsp &nbsp There are no errors. They will appear here as soon as something happens to your website.
-  #filterpanel.col-lg-3.col-md-4.sidepanel
-    %h4 Order by
-    .panelbox
-      .form-group
-        %select#sortinput.form-control{:name => "sortinput"}
-          %option Last occurrence
-          %option Users subscribed
-          %option Page
-    %h4 Filter
-    #filterbox.panelbox
-      %form.panel.panel-default
-        %h5{"data-target" => "#collapse_page", "data-toggle" => "collapse"}
-          Page
-          %span.fa.fa-chevron-down
-        #collapse_page.collapse
-          .checkbox
-            %label
-              %input{:type => "checkbox", :value => ""}/
-              Homepage
-          .checkbox
-            %label
-              %input{:type => "checkbox", :value => ""}/
-              Dashboard
-          .checkbox
-            %label
-              %input{:type => "checkbox", :value => ""}/
-              Settings
-      %form.panel.panel-default
-        %h5{"data-target" => "#collapse_os", "data-toggle" => "collapse"}
-          Operating Systems
-          %span.open.fa.fa-chevron-down
-        #collapse_os.collapse
-          .checkbox
-            %label
-              %input{:type => "checkbox", :value => ""}/
-              Windows 8
-          .checkbox
-            %label
-              %input{:type => "checkbox", :value => ""}/
-              Windows 7
+.list_errors
+  .current_id
+    %p 22
+  .dashed_line
+  .error_location
+    %strong Dashboard
+  .error_subscribers
+    %small 20 users
+  .error_platform
+    %small Javascript
+  .error_message
+    %p WrongBackend incorrect authentication service: * split(*
+  %button.btn.btn-xs.btn-warning.glyphicon.glyphicon-star.errors_star
+  .error_datetime
+    %p Today, 14:31 PM
+  .form-group.error_switch
+    %button.btn.btn-xs.btn-default.glyphicon.glyphicon-menu-left
+    %button.btn.btn-xs.btn-default.glyphicon.glyphicon-menu-right
+.col-lg-12
+  %h3 Activity grapth #TODO
+  .col-md-8
+    .panel.panel-default
+      .panel-heading Exception
+      .panel-body
+  .col-md-4
+    .panel.panel-default
+      .panel-heading Actions
+      .panel-body
+  .col-md-8
+    .panel.panel-default
+      .panel-heading Broadcast
+      .panel-body
+        %form{:role => "form", :style => "width:800px"}
+          .form-group
+            %label{:for => "comment"} Norify Subscribers:
+            %textarea#notifysub.form-control{:rows => "5"}
+          .form-group.pull-right
+            %input{:type => 'checkbox'}
+            %span email users &nbsp&nbsp
+            %button.btn.btn-primary#notify Send
+  .col-md-4
+    .panel.panel-default
+      .panel-heading Details
+      .panel-body

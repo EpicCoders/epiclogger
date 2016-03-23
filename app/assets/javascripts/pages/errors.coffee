@@ -18,12 +18,15 @@ directive = {
   resolved_at:
     html: ()->
       moment(this.resolved_at).calendar()
-  event_id_with_message:
+  error_url:
     html: ()->
-      "<h4>Event #{this.error.event_id}</h4>"
-  method_and_url:
+      this.error.data.interfaces.http.url
+  error_remote_addr:
     html: ()->
-      "<strong>#{this.error.data.interfaces.http.method}/</strong> &nbsp&nbsp&nbsp#{this.error.data.interfaces.http.url}"
+      this.error.data.interfaces.http.env.REMOTE_ADDR
+  # error_user_agent:
+  #   html: ()->
+  #     this.error.data.interfaces.http.headers.user_agent
 }
 #default starting page
 page = 1
@@ -66,22 +69,6 @@ PubSub.subscribe('assigned.website', (ev, website)->
             swal("Status updated", "Great job!", "success")
         return
 
-      $('#notify').on 'click', () ->
-        dataString = $('#notifysub').val()
-        if dataString.length == 0
-          sweetAlert("Noty", "You can't submit a blank form!", "warning")
-          return false
-        else
-          $.ajax
-            url: Routes.notify_subscribers_api_v1_error_url(gon.error_id)
-            type: 'POST'
-            data: {website_id: website.id, group_id: gon.error_id, message: dataString}
-            success: (data) ->
-              swal("Success", "Message sent", "success")
-              $('#notifysub').val('')
-              return
-          false
-
       $('.next').on 'click', () ->
         page = page + 1
         sidebar_request(website.id, page, errors_per_page)
@@ -89,6 +76,14 @@ PubSub.subscribe('assigned.website', (ev, website)->
         page = page - 1
         sidebar_request(website.id, page, errors_per_page)
 )
+
+$(".nav-tabs").on 'click', (e)->
+  if $(e.target).is('i')
+    $(e.target.closest('a')).tab('show')
+  else
+    $(e.target).tab('show')
+  $('.col-lg-12').hide()
+  $($(e.target).attr('href')).show()
 
 request = (website_id, page) ->
   $.getJSON Routes.api_v1_errors_path(), { website_id: website_id, page: page }, (data) ->

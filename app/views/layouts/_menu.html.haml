@@ -45,7 +45,7 @@
       .sidebar-content
         %ul.icon-list
           = nav_link "Errors", errors_url(), {'title' => 'Errors', :id => "errornav"}, 'exclamation-triangle'
-          / # = nav_link "Installation", installations_url(), {'title' => 'Installation'}, 'code'
+          = nav_link "Tasks", grouped_issues_url(), {'title' => 'Tasks'}, 'glyphicon glyphicon-hourglass'
           / # = nav_link "User", edit_member_url(1), {'title' => 'Users'}, 'user'
         .project-details
           %h5 PROJECT DETAILS

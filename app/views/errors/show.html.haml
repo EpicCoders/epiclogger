@@ -1,667 +1,760 @@
 #grouped-issuedetails.row.issues.error_content
-  .col-lg-12.col-md-12.pagecontainer.error
-    %form{:role => "form", :style => "width:800px"}
-      .form-group
-        %label{:for => "comment"} Norify Subscribers:
-        %textarea#notifysub.form-control{:rows => "5"}
-      %button.btn.btn-default#notify Send
-    %h3.message Error #24601
-    .alert.alert-danger
-      %span.glyphicon.glyphicon-exclamation-sign{"aria-hidden" => "true"}
-      %span.culprit
-    %button.btn.btn-primary#solve
-      %span.fa.fa-check
-      Mark resolved
-    %button.btn.btn-success.resolved
-      %span.fa.fa-check
-      Resolved
-    %br/
-    .event_id_with_message
-    .datetime
-    %br
-    .panel.panel-default.codeview
-      .panel-heading Message
-      .panel-body
-        .message
-    .panel.panel-default.codeview
-      .panel-heading Exception
-      .panel-body
-        .data
-          .interfaces
-            .exception
-              .values
-                %h4.type
-                %p.value
-                .stacktrace
-                  .frames
-        / %p
-        /   %strong.message
-        / .codepanel
-        /   %span.line.error
-        /     .stacktrace
-        /   %span.line
-        /     .stacktrace_error
-    .panel.panel-default.codeview
+  %ul.nav.nav-tabs
+    %li.active
+      %a{:href => "#overview"} Overview
+    %li
+      %a{:href => "#backtrace"} Backtrace
+    %li
+      %a{:href => "#params"} Params
+    %li
+      %a{:href => "#env"} Env
+    %li
+      %a{:href => "#context"} Context
+    %li
+      %a{:href => "#bugs"}
+        %i.glyphicon.glyphicon-alert
+    %li
+      %a{:href => "#conversations"}
+        %i.glyphicon.glyphicon-envelope
+  .col-lg-12.col-md-12.pagecontainer.error#overview
+    .panel.panel-default
       .panel-heading
-        .method_and_url
       .panel-body
-        %p
-          .col-lg-1
-            %h4 Cookies
-        %p
-          .col-lg-2
-          .col-lg-10
-            .data
-              .interfaces
-                .http
-                  .headers
-                    .cookie
-      %hr
-        %p
-          .col-lg-1
-            %h4 Headers
-        %p
-        %p
-          .col-lg-2
-            %h5 Accept
-          .col-lg-10
-            .data
-              .interfaces
-                .http
-                  .headers
-                    .accept
-        %p
-          .col-lg-2
-            %h5 Accept-Enconding
-          .col-lg-10
-            .data
-              .interfaces
-                .http
-                  .headers
-                    .accept_encoding
-        %p
-          .col-lg-2
-            %h5 Accept-Language
-          .col-lg-10
-            .data
-              .interfaces
-                .http
-                  .headers
-                    .accept_language
-        %p
-          .col-lg-2
-            %h5 Cache-control
-          .col-lg-10
-            .data
-              .interfaces
-                .http
-                  .headers
-                    .cache_control
-        %p
-          .col-lg-2
-            %h5 Connection
-          .col-lg-10
-            .data
-              .interfaces
-                .http
-                  .headers
-                    .connection
-        %p
-          .col-lg-2
-            %h5 Host
-          .col-lg-10
-            .data
-              .interfaces
-                .http
-                  .headers
-                    .host
-        %p
-          .col-lg-2
-            %h5 Upgrade Insecure Requests
-          .col-lg-10
-            .data
-              .interfaces
-                .http
-                  .headers
-                    .upgrade_insecure_requests
-        %p
-          .col-lg-2
-            %h5 User-Agent
-          .col-lg-10
+        .col-lg-2
+          %p Occured at
+        .col-lf-10
+          %p.datetime
+        .col-lg-2
+          %p First seen at
+        .col-lf-10
+          %p.first_seen
+        .col-lg-2
+          %p Occurences
+        .col-lf-10
+          %p.times_seen
+        .col-lg-2
+          %p Url
+        .col-lf-10
+          %p.error_url
+        .col-lg-2
+          %p File
+        .col-lf-10
+          %p.culprit
+        .col-lg-2
+          %p Hostname
+        .col-lf-10
+          %p ????????
+        .col-lg-2
+          %p Error type
+        .col-lf-10
+          %p ????????
+        .col-lg-2
+          %p Error message
+        .col-lf-10
+          %p.message
+        .col-lg-2
+          %p Where
+        .col-lf-10
+          %p ????????
+        .col-lg-2
+          %p Remote address
+        .col-lf-10
+          %p.error_remote_addr
+        .col-lg-2
+          %p User agent
+        .col-lf-10
+          %p
             .data
               .interfaces
                 .http
                   .headers
                     .user_agent
-        / %p
-        /   .col-lg-2
-        /     %h5 Version
-        /   .col-lg-10
-        /     .data
-        /       .interfaces
-        /         .http
-        /           .headers
-        /             .version
-        %br
         %hr
-        %p
-          .col-lg-1
-            %h4 Environment
-        %p
-        %p
-          .col-lg-2
-            %h5 REMOTE_ADDR
-          .col-lg-10
-            .data
-              .interfaces
-                .http
-                  .env
-                    .REMOTE_ADDR
-        %p
-          .col-lg-2
-            %h5 SERVER_NAME
-          .col-lg-10
-            .data
-              .interfaces
-                .http
-                  .env
-                    .SERVER_NAME
-        %p
-          .col-lg-2
-            %h5 SERVER_PORT
-          .col-lg-10
-            .data
-              .interfaces
-                .http
-                  .env
-                    .SERVER_PORT
-        %p
-    .panel.panel-default.codeview
-      .panel-heading Packages
+        .col-lg-2
+          %p Github
+        .col-lf-10
+          %strong{:style => "display:inline"} Auth:
+          %p{:style => "display:inline"} You have not authorized Airbrake to create Github issues on your behalf.
+          %br
+          %a{:href => "#", :style => "text-decoration:none"} Check your settings
+        %br
+        .col-lg-2
+          %p Pivotal Tracker
+        .col-lg-10
+          %a{:href => "#", :style => "text-decoration:none"} View on PivotalTracker
+          %br
+          %button.btn.btn-warning.btn-xs Remove
+        .col-lg-2
+          %p Integrations
+        .col-lg-10
+          %a{:href => "#", :style => "text-decoration:none"} Integration Settings
+
+  .col-lg-12.col-md-12.pagecontainer.error#conversations
+    .panel.panel-default
+      .panel-heading
       .panel-body
-        %p
-          .col-lg-2
-            %h5 actionmailer
-          .col-lg-10
-            .data
-              .modules
-                .actionmailer
-        %p
-          .col-lg-2
-            %h5 actionpack
-          .col-lg-10
-            .data
-              .modules
-                .actionpack
-        %p
-          .col-lg-2
-            %h5 actionview
-          .col-lg-10
-            .data
-              .modules
-                .actionview
-        %p
-          .col-lg-2
-            %h5 activejob
-          .col-lg-10
-            .data
-              .modules
-                .activejob
-        %p
-          .col-lg-2
-            %h5 activemodel
-          .col-lg-10
-            .data
-              .modules
-                .activemodel
-        %p
-          .col-lg-2
-            %h5 activerecord
-          .col-lg-10
-            .data
-              .modules
-                .activerecord
-        %p
-          .col-lg-2
-            %h5 activesupport
-          .col-lg-10
-            .data
-              .modules
-                .activesupport
-        %p
-          .col-lg-2
-            %h5 arel
-          .col-lg-10
-            .data
-              .modules
-                .arel
-        %p
-          .col-lg-2
-            %h5 binding_of_caller
-          .col-lg-10
-            .data
-              .modules
-                .binding_of_caller
-        %p
-          .col-lg-2
-            %h5 builder
-          .col-lg-10
-            .data
-              .modules
-                .builder
-        %p
-          .col-lg-2
-            %h5 bundler
-          .col-lg-10
-            .data
-              .modules
-                .bundler
-        %p
-          .col-lg-2
-            %h5 coderay
-          .col-lg-10
-            .data
-              .modules
-                .coderay
-        %p
-          .col-lg-2
-            %h5 coffee-rails
-          .col-lg-10
-            .data
-              .modules
-                .coffee-rails
-        %p
-          .col-lg-2
-            %h5 coffee-script
-          .col-lg-10
-            .data
-              .modules
-                .coffee-script
-        %p
-          .col-lg-2
-            %h5 coffee-script-source
-          .col-lg-10
-            .data
-              .modules
-                .coffee-script-source
-        %p
-          .col-lg-2
-            %h5 debug_inspector
-          .col-lg-10
-            .data
-              .modules
-                .debug_inspector
-        %p
-          .col-lg-2
-            %h5 erubis
-          .col-lg-10
-            .data
-              .modules
-                .erubis
-        %p
-          .col-lg-2
-            %h5 execjs
-          .col-lg-10
-            .data
-              .modules
-                .execjs
-        %p
-          .col-lg-2
-            %h5 faraday
-          .col-lg-10
-            .data
-              .modules
-                .faraday
-        %p
-          .col-lg-2
-            %h5 globalid
-          .col-lg-10
-            .data
-              .modules
-                .globalid
-        %p
-          .col-lg-2
-            %h5 i18n
-          .col-lg-10
-            .data
-              .modules
-                .i18n
-        %p
-          .col-lg-2
-            %h5 jbuilder
-          .col-lg-10
-            .data
-              .modules
-                .jbuilder
-        %p
-          .col-lg-2
-            %h5 jquery-rails
-          .col-lg-10
-            .data
-              .modules
-                .jquery-rails
-        %p
-          .col-lg-2
-            %h5 json
-          .col-lg-10
-            .data
-              .modules
-                .json
-        %p
-          .col-lg-2
-            %h5 loofah
-          .col-lg-10
-            .data
-              .modules
-                .loofah
-        %p
-          .col-lg-2
-            %h5 mail
-          .col-lg-10
-            .data
-              .modules
-                .mail
-        %p
-          .col-lg-2
-            %h5 method_source
-          .col-lg-10
-            .data
-              .modules
-                .method_source
-        %p
-          .col-lg-2
-            %h5 mime-types
-          .col-lg-10
-            .data
-              .modules
-                .mime-types
-        %p
-          .col-lg-2
-            %h5 mini_portile
-          .col-lg-10
-            .data
-              .modules
-                .mini_portile
-        %p
-          .col-lg-2
-            %h5 minitest
-          .col-lg-10
-            .data
-              .modules
-                .minitest
-        %p
-          .col-lg-2
-            %h5 multi_json
-          .col-lg-10
-            .data
-              .modules
-                .multi_json
-        %p
-          .col-lg-2
-            %h5 multipart-post
-          .col-lg-10
-            .data
-              .modules
-                .multipart-post
-        %p
-          .col-lg-2
-            %h5 nokogiri
-          .col-lg-10
-            .data
-              .modules
-                .nokogiri
-        %p
-          .col-lg-2
-            %h5 pry
-          .col-lg-10
-            .data
-              .modules
-                .pry
-        %p
-          .col-lg-2
-            %h5 rack
-          .col-lg-10
-            .data
-              .modules
-                .rack
-        %p
-          .col-lg-2
-            %h5 rack-test
-          .col-lg-10
-            .data
-              .modules
-                .rack-test
-        %p
-          .col-lg-2
-            %h5 rails
-          .col-lg-10
-            .data
-              .modules
-                .rails
-        %p
-          .col-lg-2
-            %h5 rails-deprecated_sanitizer
-          .col-lg-10
-            .data
-              .modules
-                .rails-deprecated_sanitizer
-        %p
-          .col-lg-2
-            %h5 rails-dom-testing
-          .col-lg-10
-            .data
-              .modules
-                .rails-dom-testing
-        %p
-          .col-lg-2
-            %h5 rails-html-sanitizer
-          .col-lg-10
-            .data
-              .modules
-                .rails-html-sanitizer
-        %p
-          .col-lg-2
-            %h5 railties
-          .col-lg-10
-            .data
-              .modules
-                .railties
-        %p
-          .col-lg-2
-            %h5 rake
-          .col-lg-10
-            .data
-              .modules
-                .rake
-        %p
-          .col-lg-2
-            %h5 rdoc
-          .col-lg-10
-            .data
-              .modules
-                .rdoc
-        %p
-          .col-lg-2
-            %h5 sass
-          .col-lg-10
-            .data
-              .modules
-                .sass
-        %p
-          .col-lg-2
-            %h5 sass-rails
-          .col-lg-10
-            .data
-              .modules
-                .sass-rails
-        %p
-          .col-lg-2
-            %h5 sdoc
-          .col-lg-10
-            .data
-              .modules
-                .sdoc
-        %p
-          .col-lg-2
-            %h5 sentry-raven
-          .col-lg-10
-            .data
-              .modules
-                .sentry-raven
-        %p
-          .col-lg-2
-            %h5 slop
-          .col-lg-10
-            .data
-              .modules
-                .slop
-        %p
-          .col-lg-2
-            %h5 spring
-          .col-lg-10
-            .data
-              .modules
-                .spring
-        %p
-          .col-lg-2
-            %h5 sprockets
-          .col-lg-10
-            .data
-              .modules
-                .sprockets
-        %p
-          .col-lg-2
-            %h5 sprockets-rails
-          .col-lg-10
-            .data
-              .modules
-                .sprockets-rails
-        %p
-          .col-lg-2
-            %h5 sqlite3
-          .col-lg-10
-            .data
-              .modules
-                .sqlite3
-        %p
-          .col-lg-2
-            %h5 thor
-          .col-lg-10
-            .data
-              .modules
-                .thor
-        %p
-          .col-lg-2
-            %h5 thread_safe
-          .col-lg-10
-            .data
-              .modules
-                .thread_safe
-        %p
-          .col-lg-2
-            %h5 tilt
-          .col-lg-10
-            .data
-              .modules
-                .tilt
-        %p
-          .col-lg-2
-            %h5 turbolinks
-          .col-lg-10
-            .data
-              .modules
-                .turbolinks
-        %p
-          .col-lg-2
-            %h5 tzinfo
-          .col-lg-10
-            .data
-              .modules
-                .tzinfo
-        %p
-          .col-lg-2
-            %h5 uglifier
-          .col-lg-10
-            .data
-              .modules
-                .uglifier
-        %p
-          .col-lg-2
-            %h5 web-console
-          .col-lg-10
-            .data
-              .modules
-                .web-console
-    .container-fluid.multiplepanel
-      .container-fluid.col-lg-8
-        .panel.panel-default
-          .panel-heading Stream
-          #activitystream
-            %p.resolved
-              %span.time 14:12
-              %span.activity
-                Error marked resolved by
-                %strong woubuc
-            %p.user
-              %span.time 12:52
-              %span.activity Anonymous user subscribed to this error
-            %p.error
-              %span.time 12:52
-              %span.activity
-                Error occured on
-                %strong Homepage
-            %p.error
-              %span.time 12:37
-              %span.activity
-                Error occured on
-                %strong Homepage
-            %p.user
-              %span.time 11:15
-              %span.activity User woubuc subscribed to this error
-            %p.error
-              %span.time 11:14
-              %span.activity
-                Error occured on
-                %strong Homepage
-      .container-fluid.col-lg-3.pull-right
-        .panel.panel-default.codeview
-          .panel-heading Details
-          .panel-body
-            .panelbox.propertybox
-              %p
-                %strong Status:
-                %small.status unresolved
-              %p
-                %strong First occurrence:
-                %small.created_at 21/04 (two weeks ago)
-              %p
-                %strong Last occurrence:
-                %small.last_occurrence 11:18 (one hour ago)
-              %p.resolved
-                %strong Resolved at:
-                %small.resolved_at
-            .panelbox.propertybox
-              %p
-                %strong Level:
-                %small.level Error
-              %p
-                %strong Logger:
-                %small.issue_logger Javascript
-              %p
-                %strong Url:
-                %small http://localhost/raven/raven-js/example/
-              %p
-                %strong OS:
-                %small Windows
-            .panelbox.propertybox.faces
-              %p
-                %strong Subscribed users:
-                %p
-                .avatars
-                  %img{:src => "http://lorempixel.com/48/48/people/1"}
-                %p
-                  #truncate ...show more
-              %br/
+        %form{:role => "form", :style => "width:800px"}
+          .form-group
+            %label{:for => "comment"} Norify Subscribers:
+            %textarea#notifysub.form-control{:rows => "5"}
+          %button.btn.btn-default#notify Send
+/     %h3.message Error #24601
+/     .alert.alert-danger
+/       %span.glyphicon.glyphicon-exclamation-sign{"aria-hidden" => "true"}
+/       %span.culprit
+/     %button.btn.btn-primary#solve
+/       %span.fa.fa-check
+/       Mark resolved
+/     %button.btn.btn-success.resolved
+/       %span.fa.fa-check
+/       Resolved
+/     %br/
+/     .event_id_with_message
+/     .datetime
+/     %br
+/     .panel.panel-default.codeview
+/       .panel-heading Message
+/       .panel-body
+/         .message
+/     .panel.panel-default.codeview
+/       .panel-heading Exception
+/       .panel-body
+/         .data
+/           .interfaces
+/             .exception
+/               .values
+/                 %h4.type
+/                 %p.value
+/                 .stacktrace
+/                   .frames
+/         / %p
+/         /   %strong.message
+/         / .codepanel
+/         /   %span.line.error
+/         /     .stacktrace
+/         /   %span.line
+/         /     .stacktrace_error
+/     .panel.panel-default.codeview
+/       .panel-heading
+/         .method_and_url
+/       .panel-body
+/         %p
+/           .col-lg-1
+/             %h4 Cookies
+/         %p
+/           .col-lg-2
+/           .col-lg-10
+/             .data
+/               .interfaces
+/                 .http
+/                   .headers
+/                     .cookie
+/       %hr
+/         %p
+/           .col-lg-1
+/             %h4 Headers
+/         %p
+/         %p
+/           .col-lg-2
+/             %h5 Accept
+/           .col-lg-10
+/             .data
+/               .interfaces
+/                 .http
+/                   .headers
+/                     .accept
+/         %p
+/           .col-lg-2
+/             %h5 Accept-Enconding
+/           .col-lg-10
+/             .data
+/               .interfaces
+/                 .http
+/                   .headers
+/                     .accept_encoding
+/         %p
+/           .col-lg-2
+/             %h5 Accept-Language
+/           .col-lg-10
+/             .data
+/               .interfaces
+/                 .http
+/                   .headers
+/                     .accept_language
+/         %p
+/           .col-lg-2
+/             %h5 Cache-control
+/           .col-lg-10
+/             .data
+/               .interfaces
+/                 .http
+/                   .headers
+/                     .cache_control
+/         %p
+/           .col-lg-2
+/             %h5 Connection
+/           .col-lg-10
+/             .data
+/               .interfaces
+/                 .http
+/                   .headers
+/                     .connection
+/         %p
+/           .col-lg-2
+/             %h5 Host
+/           .col-lg-10
+/             .data
+/               .interfaces
+/                 .http
+/                   .headers
+/                     .host
+/         %p
+/           .col-lg-2
+/             %h5 Upgrade Insecure Requests
+/           .col-lg-10
+/             .data
+/               .interfaces
+/                 .http
+/                   .headers
+/                     .upgrade_insecure_requests
+/         %p
+/           .col-lg-2
+/             %h5 User-Agent
+/           .col-lg-10
+/             .data
+/               .interfaces
+/                 .http
+/                   .headers
+/                     .user_agent
+/         / %p
+/         /   .col-lg-2
+/         /     %h5 Version
+/         /   .col-lg-10
+/         /     .data
+/         /       .interfaces
+/         /         .http
+/         /           .headers
+/         /             .version
+/         %br
+/         %hr
+/         %p
+/           .col-lg-1
+/             %h4 Environment
+/         %p
+/         %p
+/           .col-lg-2
+/             %h5 REMOTE_ADDR
+/           .col-lg-10
+/             .data
+/               .interfaces
+/                 .http
+/                   .env
+/                     .REMOTE_ADDR
+/         %p
+/           .col-lg-2
+/             %h5 SERVER_NAME
+/           .col-lg-10
+/             .data
+/               .interfaces
+/                 .http
+/                   .env
+/                     .SERVER_NAME
+/         %p
+/           .col-lg-2
+/             %h5 SERVER_PORT
+/           .col-lg-10
+/             .data
+/               .interfaces
+/                 .http
+/                   .env
+/                     .SERVER_PORT
+/         %p
+/     .panel.panel-default.codeview
+/       .panel-heading Packages
+/       .panel-body
+/         %p
+/           .col-lg-2
+/             %h5 actionmailer
+/           .col-lg-10
+/             .data
+/               .modules
+/                 .actionmailer
+/         %p
+/           .col-lg-2
+/             %h5 actionpack
+/           .col-lg-10
+/             .data
+/               .modules
+/                 .actionpack
+/         %p
+/           .col-lg-2
+/             %h5 actionview
+/           .col-lg-10
+/             .data
+/               .modules
+/                 .actionview
+/         %p
+/           .col-lg-2
+/             %h5 activejob
+/           .col-lg-10
+/             .data
+/               .modules
+/                 .activejob
+/         %p
+/           .col-lg-2
+/             %h5 activemodel
+/           .col-lg-10
+/             .data
+/               .modules
+/                 .activemodel
+/         %p
+/           .col-lg-2
+/             %h5 activerecord
+/           .col-lg-10
+/             .data
+/               .modules
+/                 .activerecord
+/         %p
+/           .col-lg-2
+/             %h5 activesupport
+/           .col-lg-10
+/             .data
+/               .modules
+/                 .activesupport
+/         %p
+/           .col-lg-2
+/             %h5 arel
+/           .col-lg-10
+/             .data
+/               .modules
+/                 .arel
+/         %p
+/           .col-lg-2
+/             %h5 binding_of_caller
+/           .col-lg-10
+/             .data
+/               .modules
+/                 .binding_of_caller
+/         %p
+/           .col-lg-2
+/             %h5 builder
+/           .col-lg-10
+/             .data
+/               .modules
+/                 .builder
+/         %p
+/           .col-lg-2
+/             %h5 bundler
+/           .col-lg-10
+/             .data
+/               .modules
+/                 .bundler
+/         %p
+/           .col-lg-2
+/             %h5 coderay
+/           .col-lg-10
+/             .data
+/               .modules
+/                 .coderay
+/         %p
+/           .col-lg-2
+/             %h5 coffee-rails
+/           .col-lg-10
+/             .data
+/               .modules
+/                 .coffee-rails
+/         %p
+/           .col-lg-2
+/             %h5 coffee-script
+/           .col-lg-10
+/             .data
+/               .modules
+/                 .coffee-script
+/         %p
+/           .col-lg-2
+/             %h5 coffee-script-source
+/           .col-lg-10
+/             .data
+/               .modules
+/                 .coffee-script-source
+/         %p
+/           .col-lg-2
+/             %h5 debug_inspector
+/           .col-lg-10
+/             .data
+/               .modules
+/                 .debug_inspector
+/         %p
+/           .col-lg-2
+/             %h5 erubis
+/           .col-lg-10
+/             .data
+/               .modules
+/                 .erubis
+/         %p
+/           .col-lg-2
+/             %h5 execjs
+/           .col-lg-10
+/             .data
+/               .modules
+/                 .execjs
+/         %p
+/           .col-lg-2
+/             %h5 faraday
+/           .col-lg-10
+/             .data
+/               .modules
+/                 .faraday
+/         %p
+/           .col-lg-2
+/             %h5 globalid
+/           .col-lg-10
+/             .data
+/               .modules
+/                 .globalid
+/         %p
+/           .col-lg-2
+/             %h5 i18n
+/           .col-lg-10
+/             .data
+/               .modules
+/                 .i18n
+/         %p
+/           .col-lg-2
+/             %h5 jbuilder
+/           .col-lg-10
+/             .data
+/               .modules
+/                 .jbuilder
+/         %p
+/           .col-lg-2
+/             %h5 jquery-rails
+/           .col-lg-10
+/             .data
+/               .modules
+/                 .jquery-rails
+/         %p
+/           .col-lg-2
+/             %h5 json
+/           .col-lg-10
+/             .data
+/               .modules
+/                 .json
+/         %p
+/           .col-lg-2
+/             %h5 loofah
+/           .col-lg-10
+/             .data
+/               .modules
+/                 .loofah
+/         %p
+/           .col-lg-2
+/             %h5 mail
+/           .col-lg-10
+/             .data
+/               .modules
+/                 .mail
+/         %p
+/           .col-lg-2
+/             %h5 method_source
+/           .col-lg-10
+/             .data
+/               .modules
+/                 .method_source
+/         %p
+/           .col-lg-2
+/             %h5 mime-types
+/           .col-lg-10
+/             .data
+/               .modules
+/                 .mime-types
+/         %p
+/           .col-lg-2
+/             %h5 mini_portile
+/           .col-lg-10
+/             .data
+/               .modules
+/                 .mini_portile
+/         %p
+/           .col-lg-2
+/             %h5 minitest
+/           .col-lg-10
+/             .data
+/               .modules
+/                 .minitest
+/         %p
+/           .col-lg-2
+/             %h5 multi_json
+/           .col-lg-10
+/             .data
+/               .modules
+/                 .multi_json
+/         %p
+/           .col-lg-2
+/             %h5 multipart-post
+/           .col-lg-10
+/             .data
+/               .modules
+/                 .multipart-post
+/         %p
+/           .col-lg-2
+/             %h5 nokogiri
+/           .col-lg-10
+/             .data
+/               .modules
+/                 .nokogiri
+/         %p
+/           .col-lg-2
+/             %h5 pry
+/           .col-lg-10
+/             .data
+/               .modules
+/                 .pry
+/         %p
+/           .col-lg-2
+/             %h5 rack
+/           .col-lg-10
+/             .data
+/               .modules
+/                 .rack
+/         %p
+/           .col-lg-2
+/             %h5 rack-test
+/           .col-lg-10
+/             .data
+/               .modules
+/                 .rack-test
+/         %p
+/           .col-lg-2
+/             %h5 rails
+/           .col-lg-10
+/             .data
+/               .modules
+/                 .rails
+/         %p
+/           .col-lg-2
+/             %h5 rails-deprecated_sanitizer
+/           .col-lg-10
+/             .data
+/               .modules
+/                 .rails-deprecated_sanitizer
+/         %p
+/           .col-lg-2
+/             %h5 rails-dom-testing
+/           .col-lg-10
+/             .data
+/               .modules
+/                 .rails-dom-testing
+/         %p
+/           .col-lg-2
+/             %h5 rails-html-sanitizer
+/           .col-lg-10
+/             .data
+/               .modules
+/                 .rails-html-sanitizer
+/         %p
+/           .col-lg-2
+/             %h5 railties
+/           .col-lg-10
+/             .data
+/               .modules
+/                 .railties
+/         %p
+/           .col-lg-2
+/             %h5 rake
+/           .col-lg-10
+/             .data
+/               .modules
+/                 .rake
+/         %p
+/           .col-lg-2
+/             %h5 rdoc
+/           .col-lg-10
+/             .data
+/               .modules
+/                 .rdoc
+/         %p
+/           .col-lg-2
+/             %h5 sass
+/           .col-lg-10
+/             .data
+/               .modules
+/                 .sass
+/         %p
+/           .col-lg-2
+/             %h5 sass-rails
+/           .col-lg-10
+/             .data
+/               .modules
+/                 .sass-rails
+/         %p
+/           .col-lg-2
+/             %h5 sdoc
+/           .col-lg-10
+/             .data
+/               .modules
+/                 .sdoc
+/         %p
+/           .col-lg-2
+/             %h5 sentry-raven
+/           .col-lg-10
+/             .data
+/               .modules
+/                 .sentry-raven
+/         %p
+/           .col-lg-2
+/             %h5 slop
+/           .col-lg-10
+/             .data
+/               .modules
+/                 .slop
+/         %p
+/           .col-lg-2
+/             %h5 spring
+/           .col-lg-10
+/             .data
+/               .modules
+/                 .spring
+/         %p
+/           .col-lg-2
+/             %h5 sprockets
+/           .col-lg-10
+/             .data
+/               .modules
+/                 .sprockets
+/         %p
+/           .col-lg-2
+/             %h5 sprockets-rails
+/           .col-lg-10
+/             .data
+/               .modules
+/                 .sprockets-rails
+/         %p
+/           .col-lg-2
+/             %h5 sqlite3
+/           .col-lg-10
+/             .data
+/               .modules
+/                 .sqlite3
+/         %p
+/           .col-lg-2
+/             %h5 thor
+/           .col-lg-10
+/             .data
+/               .modules
+/                 .thor
+/         %p
+/           .col-lg-2
+/             %h5 thread_safe
+/           .col-lg-10
+/             .data
+/               .modules
+/                 .thread_safe
+/         %p
+/           .col-lg-2
+/             %h5 tilt
+/           .col-lg-10
+/             .data
+/               .modules
+/                 .tilt
+/         %p
+/           .col-lg-2
+/             %h5 turbolinks
+/           .col-lg-10
+/             .data
+/               .modules
+/                 .turbolinks
+/         %p
+/           .col-lg-2
+/             %h5 tzinfo
+/           .col-lg-10
+/             .data
+/               .modules
+/                 .tzinfo
+/         %p
+/           .col-lg-2
+/             %h5 uglifier
+/           .col-lg-10
+/             .data
+/               .modules
+/                 .uglifier
+/         %p
+/           .col-lg-2
+/             %h5 web-console
+/           .col-lg-10
+/             .data
+/               .modules
+/                 .web-console
+/     .container-fluid.multiplepanel
+/       .container-fluid.col-lg-8
+/         .panel.panel-default
+/           .panel-heading Stream
+/           #activitystream
+/             %p.resolved
+/               %span.time 14:12
+/               %span.activity
+/                 Error marked resolved by
+/                 %strong woubuc
+/             %p.user
+/               %span.time 12:52
+/               %span.activity Anonymous user subscribed to this error
+/             %p.error
+/               %span.time 12:52
+/               %span.activity
+/                 Error occured on
+/                 %strong Homepage
+/             %p.error
+/               %span.time 12:37
+/               %span.activity
+/                 Error occured on
+/                 %strong Homepage
+/             %p.user
+/               %span.time 11:15
+/               %span.activity User woubuc subscribed to this error
+/             %p.error
+/               %span.time 11:14
+/               %span.activity
+/                 Error occured on
+/                 %strong Homepage
+/       .container-fluid.col-lg-3.pull-right
+/         .panel.panel-default.codeview
+/           .panel-heading Details
+/           .panel-body
+/             .panelbox.propertybox
+/               %p
+/                 %strong Status:
+/                 %small.status unresolved
+/               %p
+/                 %strong First occurrence:
+/                 %small.created_at 21/04 (two weeks ago)
+/               %p
+/                 %strong Last occurrence:
+/                 %small.last_occurrence 11:18 (one hour ago)
+/               %p.resolved
+/                 %strong Resolved at:
+/                 %small.resolved_at
+/             .panelbox.propertybox
+/               %p
+/                 %strong Level:
+/                 %small.level Error
+/               %p
+/                 %strong Logger:
+/                 %small.issue_logger Javascript
+/               %p
+/                 %strong Url:
+/                 %small http://localhost/raven/raven-js/example/
+/               %p
+/                 %strong OS:
+/                 %small Windows
+/             .panelbox.propertybox.faces
+/               %p
+/                 %strong Subscribed users:
+/                 %p
+/                 .avatars
+/                   %img{:src => "http://lorempixel.com/48/48/people/1"}
+/                 %p
+/                   #truncate ...show more
+/               %br/
 
 :javascript
   $('#permalink').on('focus', function() {
