@@ -212,7 +212,7 @@ RSpec.describe ErrorStore::Error do
       exception_data = JSON.parse(response.to_json, symbolize_names: true)
       allow_any_instance_of(ErrorStore::Interfaces::Exception).to receive(:sanitize_data).and_raise(ErrorStore::ValidationError)
       subject
-      expect( valid_error.data[:errors] ).to include({ :type=>"invalid_data", :name=>:exception, :value=> exception_data[:exception] })
+      expect( valid_error.data[:errors] ).to include(include({ :type=>"invalid_data", :name=>:exception, :value=> exception_data[:exception] }))
     end
     it 'sets DEFAULT_LOG_LEVEL if level is empty' do
       response['level'] = nil
@@ -315,6 +315,9 @@ RSpec.describe ErrorStore::Error do
       response['exception'] = ''
       response['user'] = ''
       response['request'] = ''
+      response['template'] = ''
+      response['query'] = ''
+
       valid_error.create!
       expect( valid_error._get_interfaces ).to eq([])
     end
@@ -323,7 +326,9 @@ RSpec.describe ErrorStore::Error do
       expect( valid_error._get_interfaces ).to include(an_instance_of(ErrorStore::Interfaces::Exception))
       expect( valid_error._get_interfaces ).to include(an_instance_of(ErrorStore::Interfaces::Http))
       expect( valid_error._get_interfaces ).to include(an_instance_of(ErrorStore::Interfaces::User))
-      expect( valid_error._get_interfaces.length ).to eq(3)
+      expect( valid_error._get_interfaces ).to include(an_instance_of(ErrorStore::Interfaces::Template))
+      expect( valid_error._get_interfaces ).to include(an_instance_of(ErrorStore::Interfaces::Query))
+      expect( valid_error._get_interfaces.length ).to eq(5)
     end
   end
 
