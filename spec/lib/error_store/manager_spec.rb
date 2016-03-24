@@ -210,6 +210,7 @@ RSpec.describe ErrorStore::Manager do
     let(:group) { create :grouped_issue, message: 'ZeroDivisionError: divided by 0', status: :resolved, website: website }
     let(:issue) { build :issue, message: 'New message', event_id: '8af060b2986f5914764d49b7f39b036c' }
     subject { post_manager._handle_regression(group, issue) }
+
     it 'returns nil if group unresolved' do
       group.update_attribute(:status, :unresolved)
       expect(subject).to be_nil
@@ -222,8 +223,8 @@ RSpec.describe ErrorStore::Manager do
     it 'updates the active_at and last_seen dates to the issue datetime' do
       subject
       group.reload
-      expect(group.active_at).to eq(issue.datetime)
-      expect(group.last_seen).to eq(issue.datetime)
+      expect(group.active_at.to_i).to eq(issue.datetime.to_i)
+      expect(group.last_seen.to_i).to eq(issue.datetime.to_i)
     end
     it 'returns true if it is a regression' do
       expect(subject).to be_truthy
