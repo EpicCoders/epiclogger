@@ -24,7 +24,6 @@ gem 'coffee-rails', '~> 4.1.0'
 # gem 'therubyracer', platforms: :ruby
 gem 'haml-rails'
 
-gem 'devise_token_auth'
 gem 'omniauth-github'
 
 # jquery form validation plugin
@@ -37,7 +36,6 @@ gem 'jquery-rails'
 gem 'turbolinks'
 gem 'gon'
 gem 'jquery-turbolinks'
-gem 'js-routes' # access rails routes in js
 gem 'momentjs-rails'
 gem 'nprogress-rails' # loading for turbolinks
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
