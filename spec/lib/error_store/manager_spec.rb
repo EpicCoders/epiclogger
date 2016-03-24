@@ -7,8 +7,19 @@ RSpec.describe ErrorStore::Manager do
   let(:validated_post_data) { validated_request(post_request) }
   let(:post_manager) { ErrorStore::Manager.new(validated_post_data) }
   let(:interface_hash) {
-    ["action_controller/metal/implicit_render.rb", "      ret = super\\n", "app/controllers/home_controller.rb", "    1/0\\n", "app/controllers/home_controller.rb", "    1/0\\n", :single_exception, "action_controller/metal/implicit_render.rb", "      ret = super\\n", "app/controllers/home_controller.rb", "    1/0\\n", "app/controllers/home_controller.rb", "    1/0\\n", "ZeroDivisionError"]
-  }
+    {"abs_path": "/real/file/name.html",
+      "filename": "file/name.html",
+      "pre_context": [
+          "line1",
+          "line2"
+      ],
+      "context_line": "line3",
+      "lineno": 3,
+      "post_context": [
+          "line4",
+          "line5"
+      ]}
+    }
 
   describe 'initialize' do
     it 'assigns data and version' do
@@ -256,20 +267,24 @@ RSpec.describe ErrorStore::Manager do
   describe 'get_hash_for_issue', truncation: true do
     let(:issue) { post_manager.store_error }
     subject { post_manager.get_hash_for_issue(issue) }
+
     it 'returns the first hash data' do
-      expect(subject).to eq(interface_hash)
+      expect(subject).to eq([interface_hash[:filename], interface_hash[:context_line]])
     end
   end
 
   describe 'get_hash_for_issue_with_reason', truncation: true do
     let(:issue) { post_manager.store_error }
     subject { post_manager.get_hash_for_issue_with_reason(issue) }
+
     it 'returns the first interface' do
-      expect(subject).to eq([:exception, interface_hash])
+      expect(subject).to eq([:template, [interface_hash[:filename], interface_hash[:context_line]]])
     end
     it 'returns message if no exception' do
-      # the other interfaces return blank so in our test spec only exception has it
-      validated_post_data[:interfaces].delete(:exception)
+      ErrorStore::INTERFACES.each do |interface|
+        validated_post_data[:interfaces].delete interface[0]
+      end
+
       expect(subject).to eq([:message, ['ZeroDivisionError: divided by 0']])
     end
   end
@@ -278,8 +293,9 @@ RSpec.describe ErrorStore::Manager do
     let(:issue) { post_manager.store_error }
     let(:fingerprint) { ['{{ default }}'] }
     subject { post_manager.get_hashes_from_fingerprint(issue, fingerprint) }
+
     it 'should return hash by fingerprint' do
-      expect(subject).to eq(interface_hash.map { |d| [d] } + [[nil]])
+      expect(subject).to eq([[interface_hash[:filename]], [interface_hash[:context_line]], [nil]])
     end
     it 'returns the hash from fingerprint if not default' do
       fingerprint[0] = 'fingerprint'
