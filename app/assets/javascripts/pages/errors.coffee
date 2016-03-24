@@ -24,9 +24,9 @@ directive = {
   error_remote_addr:
     html: ()->
       this.error.data.interfaces.http.env.REMOTE_ADDR
-  # error_user_agent:
-  #   html: ()->
-  #     this.error.data.interfaces.http.headers.user_agent
+  error_server_name:
+    html: ()->
+      ' Create Github issue on "' +this.error.data.server_name+'"'
 }
 #default starting page
 page = 1
@@ -46,13 +46,21 @@ PubSub.subscribe('assigned.website', (ev, website)->
         page = page - 1
         request(website.id, page)
     when 'show'
+      $('.col-lg-12').hide()
       individualErrorSidebar()
       setUpErrorSidebar($(window).width())
       $.getJSON '/api/v1/errors/' + gon.error_id, { website_id: website.id }, (data) ->
         $.current_issue = data.id
         firsttime_sidebar_request(website.id,page,errors_per_page,data.last_seen)
         manipulateShowElements(data)
+
+        $($('li.active a').attr('href')).show()
         data.error = data.issues[data.issues.length-1]
+        data.error.backtrace = []
+        $.each data.error.data.interfaces.exception.values, (index, value) ->
+          $.each value.stacktrace.frames, (index, frame) ->
+            data.error.backtrace.push({ frame: frame.abs_path+':'+frame.lineno+' in '+frame.function })
+
         $('#grouped-issuedetails').render data, directive
         populateSidebar(data)
         sidebar_request(website.id,page,$.current_issue,13)
