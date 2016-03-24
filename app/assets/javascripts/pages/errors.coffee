@@ -27,6 +27,9 @@ directive = {
   error_server_name:
     html: ()->
       ' Create Github issue on "' +this.error.data.server_name+'"'
+  error_context:
+    html: ()->
+      JSON.stringify(this.error.data.interfaces.http, null, '\t')
 }
 #default starting page
 page = 1
@@ -76,6 +79,22 @@ PubSub.subscribe('assigned.website', (ev, website)->
           success: (result)->
             swal("Status updated", "Great job!", "success")
         return
+
+      $('#notify').on 'click', () ->
+        dataString = $('#notifysub').val()
+        if dataString.length == 0
+          sweetAlert("Noty", "You can't submit a blank form!", "warning")
+          return false
+        else
+          $.ajax
+            url: Routes.notify_subscribers_api_v1_error_url(gon.error_id)
+            type: 'POST'
+            data: {website_id: website.id, group_id: gon.error_id, message: dataString}
+            success: (data) ->
+              swal("Success", "Message sent", "success")
+              $('#notifysub').val('')
+              return
+            false
 
       $('.next').on 'click', () ->
         page = page + 1

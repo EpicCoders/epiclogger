@@ -83,76 +83,128 @@
       .data
         .backtrace
           %p.frame
-/     .container-fluid.multiplepanel
-/       .container-fluid.col-lg-8
-/         .panel.panel-default
-/           .panel-heading Stream
-/           #activitystream
-/             %p.resolved
-/               %span.time 14:12
-/               %span.activity
-/                 Error marked resolved by
-/                 %strong woubuc
-/             %p.user
-/               %span.time 12:52
-/               %span.activity Anonymous user subscribed to this error
-/             %p.error
-/               %span.time 12:52
-/               %span.activity
-/                 Error occured on
-/                 %strong Homepage
-/             %p.error
-/               %span.time 12:37
-/               %span.activity
-/                 Error occured on
-/                 %strong Homepage
-/             %p.user
-/               %span.time 11:15
-/               %span.activity User woubuc subscribed to this error
-/             %p.error
-/               %span.time 11:14
-/               %span.activity
-/                 Error occured on
-/                 %strong Homepage
-/       .container-fluid.col-lg-3.pull-right
-/         .panel.panel-default.codeview
-/           .panel-heading Details
-/           .panel-body
-/             .panelbox.propertybox
-/               %p
-/                 %strong Status:
-/                 %small.status unresolved
-/               %p
-/                 %strong First occurrence:
-/                 %small.created_at 21/04 (two weeks ago)
-/               %p
-/                 %strong Last occurrence:
-/                 %small.last_occurrence 11:18 (one hour ago)
-/               %p.resolved
-/                 %strong Resolved at:
-/                 %small.resolved_at
-/             .panelbox.propertybox
-/               %p
-/                 %strong Level:
-/                 %small.level Error
-/               %p
-/                 %strong Logger:
-/                 %small.issue_logger Javascript
-/               %p
-/                 %strong Url:
-/                 %small http://localhost/raven/raven-js/example/
-/               %p
-/                 %strong OS:
-/                 %small Windows
-/             .panelbox.propertybox.faces
-/               %p
-/                 %strong Subscribed users:
-/                 %p
-/                 .avatars
-/                   %img{:src => "http://lorempixel.com/48/48/people/1"}
-/                 %p
-/                   #truncate ...show more
-/               %br/
+  .col-lg-12.pagecontainer#context
+    %pre
+      %code.language-html
+        .error_context
+  .col-lg-12.pagecontainer.error#bugs
+    %h3 Activity grapth #TODO
+    .col-md-8
+      .panel.panel-default
+        .panel-heading Exception
+        .panel-body
+    .col-md-4
+      .panel.panel-default
+        .panel-heading Actions
+        .panel-body
+          %button.btn.btn-primary.btn-xs.fa.fa-check#solve &nbspMark as resolved
+          %button.btn.btn-success.btn-xs.fa.fa-check.resolved &nbspResolved
+    .col-md-8
+      .panel.panel-default
+        .panel-heading Broadcast
+        .panel-body
+          %form{:role => "form", :style => "width:800px"}
+            .form-group
+              %label{:for => "comment"} Norify Subscribers:
+              %textarea#notifysub.form-control{:rows => "5"}
+            .form-group.pull-right
+              %input{:type => 'checkbox'}
+              %span email users &nbsp&nbsp
+              %button.btn.btn-primary#notify Send
+    .col-md-4
+      .panel.panel-default
+        .panel-heading Details
+        .panel-body
+          .panelbox.propertybox
+            %p
+              %strong Date:
+              %small.created_at 21/04 (two weeks ago)
+              %hr
+            %p
+              %strong Id:
+              %small.event_id
+              %hr
+            %p
+              %strong Level:
+              %small.level Error
+              %hr
+            %p
+              %strong IP Adress:
+              %small.error_remote_addr
+              %hr
+            %p
+              %strong Logger:
+              %small.platform
+  /     .container-fluid.multiplepanel
+  /       .container-fluid.col-lg-8
+  /         .panel.panel-default
+  /           .panel-heading Stream
+  /           #activitystream
+  /             %p.resolved
+  /               %span.time 14:12
+  /               %span.activity
+  /                 Error marked resolved by
+  /                 %strong woubuc
+  /             %p.user
+  /               %span.time 12:52
+  /               %span.activity Anonymous user subscribed to this error
+  /             %p.error
+  /               %span.time 12:52
+  /               %span.activity
+  /                 Error occured on
+  /                 %strong Homepage
+  /             %p.error
+  /               %span.time 12:37
+  /               %span.activity
+  /                 Error occured on
+  /                 %strong Homepage
+  /             %p.user
+  /               %span.time 11:15
+  /               %span.activity User woubuc subscribed to this error
+  /             %p.error
+  /               %span.time 11:14
+  /               %span.activity
+  /                 Error occured on
+  /                 %strong Homepage
+  /       .container-fluid.col-lg-3.pull-right
+  /         .panel.panel-default.codeview
+  /           .panel-heading Details
+  /           .panel-body
+  /             .panelbox.propertybox
+  /               %p
+  /                 %strong Status:
+  /                 %small.status unresolved
+  /               %p
+  /                 %strong First occurrence:
+  /                 %small.created_at 21/04 (two weeks ago)
+  /               %p
+  /                 %strong Last occurrence:
+  /                 %small.last_occurrence 11:18 (one hour ago)
+  /               %p.resolved
+  /                 %strong Resolved at:
+  /                 %small.resolved_at
+  /             .panelbox.propertybox
+  /               %p
+  /                 %strong Level:
+  /                 %small.level Error
+  /               %p
+  /                 %strong Logger:
+  /                 %small.issue_logger Javascript
+  /               %p
+  /                 %strong Url:
+  /                 %small http://localhost/raven/raven-js/example/
+  /               %p
+  /                 %strong OS:
+  /                 %small Windows
+  /             .panelbox.propertybox.faces
+  /               %p
+  /                 %strong Subscribed users:
+  /                 %p
+  /                 .avatars
+  /                   %img{:src => "http://lorempixel.com/48/48/people/1"}
+  /                 %p
+  /                   #truncate ...show more
+  /               %br/
 
 :javascript
   $('#permalink').on('focus', function() {

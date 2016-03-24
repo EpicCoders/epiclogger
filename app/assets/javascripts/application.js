@@ -19,6 +19,8 @@
 //= require jquery.deparam
 //= require pubsub
 //= require bootstrap
+//= require bar-chart
+//= require line-chart
 //= require jquery.j-toker
 //= require turbolinks
 //= require routes
