@@ -25,7 +25,7 @@ class Api::V1::ErrorsController < Api::V1::ApiController
   def notify_subscribers
     @message = params[:message]
     @error.website.members.each do |member|
-      UserMailer.notify_subscriber(@error, member, @message).deliver_now
+      UserMailer.notify_subscriber(@error, member, @message).deliver_later
     end
   end
 

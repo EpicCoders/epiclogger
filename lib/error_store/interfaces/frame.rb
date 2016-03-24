@@ -16,7 +16,7 @@ module ErrorStore::Interfaces
 
       [:abs_path, :filename, :function, :module].each do |name|
         unless data[name].is_a?(String) || data[name].nil?
-          raise ErrorStore::ValidationError.new(self), "Invalid value for '#{name}"
+          raise ErrorStore::ValidationError.new(self), "Invalid value for '#{name}'"
         end
       end
 

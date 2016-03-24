@@ -7,6 +7,7 @@ class Website < ActiveRecord::Base
   validates :title, presence: true
   validates :domain, presence: true
   validates_associated :website_members
+  validate :unique_domain, on: :create
 
   attr_accessor :generate
 
@@ -16,6 +17,14 @@ class Website < ActiveRecord::Base
 
   def website_dependent
     website_members.each(&:delete)
+  end
+
+  def unique_domain
+    domain = URI.parse(self.domain)
+    website_cases = ["http://#{domain.host}", "https://#{domain.host}", "ftp://#{domain.host}", self.domain]
+    return true unless Website.exists?(domain: website_cases)
+    errors.add :website, 'This website already exists for you'
+    false
   end
 
   def self.daily_report

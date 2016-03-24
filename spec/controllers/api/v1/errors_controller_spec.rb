@@ -17,7 +17,7 @@ describe Api::V1::ErrorsController, :type => :controller do
 
       it 'should email subscribers' do
         mailer = double('UserMailer')
-        expect(mailer).to receive(:deliver_now)
+        expect(mailer).to receive(:deliver_later)
         expect(UserMailer).to receive(:notify_subscriber).with(group, member, message).and_return(mailer).once
 
         post :notify_subscribers, params
@@ -25,10 +25,9 @@ describe Api::V1::ErrorsController, :type => :controller do
 
       it 'should email 2 subscribers' do
         member2 = create :member
-        website2 = create :website, domain: 'http://epic-coders.com', title: 'EpicCoders'
-        create :website_member, website: website2, member: member2
+        create :website_member, website: website, member_id: member2.id
         mailer = double('UserMailer')
-        expect(mailer).to receive(:deliver_now).twice
+        expect(mailer).to receive(:deliver_later).twice
         expect(UserMailer).to receive(:notify_subscriber).with(group, an_instance_of(Member), message).and_return(mailer).twice
         post :notify_subscribers, params
       end
@@ -101,17 +100,23 @@ describe Api::V1::ErrorsController, :type => :controller do
           level: group.level,
           issue_logger: group.issue_logger,
           resolved_at: group.resolved_at,
+          subscribers: [
+            {
+              id: subscriber.id,
+              email: subscriber.email,
+              avatar_url: "http://www.gravatar.com/avatar/#{Digest::MD5.hexdigest(subscriber.email)}"
+            }
+          ],
+          subscribers_count: group.subscribers.count,
           issues: [
             {
               id: issue_error.id,
               platform: issue_error.platform,
+              event_id: issue_error.event_id,
               data: issue_error.error.data,
-              subscriber: {
-                id: subscriber.id,
-                email: subscriber.email,
-                avatar_url: "http://www.gravatar.com/avatar/#{Digest::MD5.hexdigest(subscriber.email)}"
-              },
-              subscribers_count: group.subscribers.count
+              message: issue_error.message,
+              datetime: issue_error.datetime,
+              time_spent: issue_error.time_spent,
             }
           ]
         }.to_json)

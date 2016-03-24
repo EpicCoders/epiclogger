@@ -11,9 +11,8 @@ module ErrorStore::Interfaces
     def sanitize_data(data)
       data = { values: [data] } unless data.key?(:values)
 
-      raise ErrorStore::ValidationError.new(self), 'No "values" present' unless data[:values]
+      raise ErrorStore::ValidationError.new(self), 'No "values" present' if data[:values].blank?
 
-      trim_exceptions(data)
       has_frames = data_has_frames(data)
       self._data[:values] = data[:values].map { |v| SingleException.new(@error).sanitize_data(v, has_frames) }
 
@@ -43,23 +42,6 @@ module ErrorStore::Interfaces
       # check if frames are 0 or not
       # true if not zero
       !nr_frames.zero?
-    end
-
-    def trim_exceptions(data)
-      # TODO: this doesnt account for cases where the client has already omitted
-      # exceptions
-      values      = data[:values]
-      val_length  = values.length
-      max_values  = ErrorStore::MAX_EXCEPTIONS
-
-      return if val_length <= max_values
-
-      half_max = max_values / 2
-      data[:exc_omitted] = [max_values, val_length - half_max]
-
-      (half_max..(val_length - half_max)).each do
-        values.delete(half_max)
-      end
     end
 
     def get_hash

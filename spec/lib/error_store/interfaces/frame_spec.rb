@@ -2,14 +2,9 @@ require 'rails_helper'
 
 RSpec.describe ErrorStore::Interfaces::Frame do
   let(:website) { create :website }
-  let(:group) { create :grouped_issue, website: website }
-  let(:subscriber) { create :subscriber, website: website }
-  let!(:issue_error) { create :issue, subscriber: subscriber, group: group, event_id: '8af060b2986f5914764d49b7f39b036c' }
-
-  let(:request) { post_error_request(web_response_factory('ruby_exception'), website) }
-  let(:data) { JSON.parse(issue_error.data, symbolize_names: true)[:interfaces][:exception][:values][0][:stacktrace][:frames][0] }
-  let(:error) { ErrorStore::Error.new(request: request, issue: issue_error) }
-  let(:frame) { ErrorStore::Interfaces::Frame.new(error) }
+  let(:post_request) { post_error_request(web_response_factory('ruby_exception'), website) }
+  let(:post_data) { validated_request(post_request)[:interfaces][:exception][:values][0][:stacktrace][:frames][0] }
+  let(:frame) { ErrorStore::Interfaces::Frame.new(post_data) }
 
   it 'it returns Frame for display_name' do
     expect( ErrorStore::Interfaces::Frame.display_name ).to eq("Frame")
@@ -19,227 +14,233 @@ RSpec.describe ErrorStore::Interfaces::Frame do
   end
 
   describe 'sanitize_data' do
+    subject { frame.sanitize_data(post_data) }
     context 'raises ValidationError' do
       it 'if abs_path is not string' do
-        data[:abs_path] = {}
-        expect{ frame.sanitize_data(data) }.to raise_exception(ErrorStore::ValidationError)
+        post_data[:abs_path] = {}
+        expect{ subject }.to raise_exception(ErrorStore::ValidationError, "Invalid value for 'abs_path'")
       end
       it 'if filename is not string' do
-        data[:filename] = {}
-        expect{ frame.sanitize_data(data) }.to raise_exception(ErrorStore::ValidationError)
+        post_data[:filename] = {}
+        expect{ subject }.to raise_exception(ErrorStore::ValidationError, "Invalid value for 'filename'")
       end
       it 'if function is not string' do
-        data[:function] = {}
-        expect{ frame.sanitize_data(data) }.to raise_exception(ErrorStore::ValidationError)
+        post_data[:function] = {}
+        expect{ subject }.to raise_exception(ErrorStore::ValidationError, "Invalid value for 'function'")
       end
       it 'if module is not string' do
-        data[:module] = {}
-        expect{ frame.sanitize_data(data) }.to raise_exception(ErrorStore::ValidationError)
+        post_data[:module] = {}
+        expect{ subject }.to raise_exception(ErrorStore::ValidationError, "Invalid value for 'module'")
       end
 
-      it 'if no filename function or errmodule' do
-        data.delete :abs_path
-        data.delete :filename
-        data.delete :function
-        expect{ frame.sanitize_data(data) }.to raise_exception(ErrorStore::ValidationError)
+      it 'if no filename function or module' do
+        post_data.delete :abs_path
+        post_data.delete :filename
+        post_data.delete :function
+        post_data.delete :module
+        expect{ subject }.to raise_exception(ErrorStore::ValidationError, "No 'filename' or 'function' or 'module'")
       end
     end
 
-    it 'sets abs_path to filename if empty and filename to nil' do
-      data.delete :abs_path
-      expect( frame.sanitize_data(data).instance_variable_get(:@_data)[:abs_path] ).to eq(data[:filename])
+    it 'sets abs_path to filename if empty' do
+      post_data.delete :abs_path
+      expect( subject._data[:abs_path] ).to eq(post_data[:filename])
     end
     it 'sets filename to abs_path.path if url' do
-      data[:abs_path] = "http://content-url/example.com"
-      data.delete :filename
-      expect( frame.sanitize_data(data).instance_variable_get(:@_data)[:filename] ).to eq("/example.com")
+      post_data[:abs_path] = 'http://content-url/example.com'
+      post_data.delete :filename
+      expect( subject._data[:filename] ).to eq('/example.com')
     end
 
     it 'sets function to nil if function equals ?' do
-      data[:function] = "?"
-      expect( frame.sanitize_data(data).instance_variable_get(:@_data)[:function] ).to be_nil
+      post_data[:function] = '?'
+      expect( subject._data[:function] ).to be_nil
     end
 
     it 'sets context_locals to hash if array' do
-      data[:vars] = [["unu", "doi"], ["trei", 4], ["cinci"]]
-      expect( frame.sanitize_data(data).instance_variable_get(:@_data)[:vars] ).to eq({"unu"=>"doi", "trei"=>4, "cinci"=>nil})
+      post_data[:vars] = [["unu", "doi"], ["trei", 4], ["cinci"]]
+      expect( subject._data[:vars] ).to eq({'unu'=>'doi', 'trei'=>4, 'cinci'=>nil})
     end
 
-    xit 'sets context_locals to empty hash if not Hash'
+    it 'sets context_locals to empty hash if not Hash' do
+      post_data[:vars] = 'some stuff'
+      expect( subject._data[:vars] ).to eq({})
+    end
 
-    # it 'trimps hash of context_locals' do
-    #   data[:vars] = {[["unu", "doi"], ["trei", 4], ["cinci"]]}
-    #   expect(frame).to receive(:trim).with({"unu"=>"doi", "trei"=>4, "cinci"=>nil}).and_return({"unu"=>"doi", "trei"=>4, "cinci"=>nil})
-    #   frame.sanitize_data(data)
-    # end
+    it 'trimps hash of context_locals' do
+      post_data[:vars] = generate_array(100)
+      expect( subject._data[:vars].length ).to eq(ErrorStore::MAX_HASH_ITEMS)
+    end
 
     it 'sets data to a hash of data[:data]' do
-      data[:data] = "some data"
-      expect( frame.sanitize_data(data).instance_variable_get(:@_data)[:data] ).to eq("some data")
+      post_data[:data] = [["lols", 'wess']]
+      expect( subject._data[:data] ).to eq({'lols' => 'wess'})
     end
 
     it 'trims context_line to max_size 256' do
-      data[:context_line] = issue_error.data
-      expect( frame.sanitize_data(data).instance_variable_get(:@_data)[:context_line].length ).to be(256)
+      post_data[:context_line] = 'some text' * 300
+      expect( subject._data[:context_line].length ).to be(256)
     end
 
     it 'sets pre_context elements to empty string instead of nil' do
-      data[:pre_context] = ["some data", nil]
-      expect( frame.sanitize_data(data).instance_variable_get(:@_data)[:pre_context] ).to eq(["some data", ""])
+      post_data[:pre_context] = ['some data', nil]
+      expect( subject._data[:pre_context] ).to eq(['some data', ''])
     end
     it 'sets post_context elements to empty string instead of nil' do
-      data[:post_context] = [nil, "some data"]
-      expect( frame.sanitize_data(data).instance_variable_get(:@_data)[:post_context] ).to eq(["", "some data"])
+      post_data[:post_context] = [nil, 'some data']
+      expect( subject._data[:post_context] ).to eq(['', 'some data'])
     end
     it 'sets pre_context and post_context to nil if context_line is blank' do
-      data.delete :pre_context
-      data.delete :post_context
-      expect( frame.sanitize_data(data).instance_variable_get(:@_data)[:pre_context] ).to be_nil
-      expect( frame.sanitize_data(data).instance_variable_get(:@_data)[:post_context] ).to be_nil
+      post_data.delete :pre_context
+      post_data.delete :post_context
+      expect( subject._data[:pre_context] ).to be_nil
+      expect( subject._data[:post_context] ).to be_nil
     end
 
     it 'sets lineno to number' do
-      expect( frame.sanitize_data(data).instance_variable_get(:@_data)[:lineno] ).to eq(data[:lineno])
+      post_data[:lineno] = '60'
+      expect( subject._data[:lineno] ).to eq(60)
     end
     it 'sets lineno to nil if lower than 0' do
-      data[:lineno] = -4
-      expect( frame.sanitize_data(data).instance_variable_get(:@_data)[:lineno] ).to be_nil
-      data.delete :lineno
-      expect( frame.sanitize_data(data).instance_variable_get(:@_data)[:lineno] ).to be_nil
+      post_data[:lineno] = -4
+      expect( subject._data[:lineno] ).to be_nil
     end
 
     it 'sets colno to number' do
-      data[:colno] = 4
-      expect( frame.sanitize_data(data).instance_variable_get(:@_data)[:lineno] ).to eq(4)
+      post_data[:colno] = '4'
+      expect( subject._data[:colno] ).to eq(4)
     end
     it 'returns a Frame instance' do
-      expect( frame.kind_of?(ErrorStore::Interfaces::Frame) ).to be(true)
+      expect( subject ).to be_kind_of(ErrorStore::Interfaces::Frame)
     end
   end
 
   describe 'get_culprit_string' do
-    before{ frame._data = data }
+    subject { frame.sanitize_data(post_data); frame.get_culprit_string }
     it 'returns culprit with module' do
-      frame._data[:module] = "example for module"
-      frame._data.delete :filename
-      expect( frame.get_culprit_string ).to eq("example for module in block in start_thread")
+      post_data[:module] = 'module me'
+      expect( subject ).to eq('module me in send_action')
     end
     it 'returns culprit with filename if module blank' do
-      expect( frame.get_culprit_string ).to eq("webrick/server.rb in block in start_thread")
+      expect( subject ).to eq('action_controller/metal/implicit_render.rb in send_action')
     end
     it 'returns function as ? if blank' do
-      frame._data.delete :function
-      expect( frame.get_culprit_string ).to eq("webrick/server.rb in ?")
+      post_data[:function] = '?' # we set this to ? as sanitize_data will set function to nil
+      expect( subject ).to eq('action_controller/metal/implicit_render.rb in ?')
     end
     it 'returns blank string if fileloc blank' do
-      frame._data.delete :filename
-      expect( frame.get_culprit_string ).to eq("")
+      post_data.delete :filename
+      post_data.delete :abs_path
+      expect( subject ).to eq('')
     end
   end
 
   describe 'get_hash' do
-    before{ frame._data = data }
+    subject { frame.sanitize_data(post_data); frame.get_hash }
     it 'contains the module' do
-      frame._data[:module] = "example for module"
-      expect( frame.get_hash.include?("example for module") ).to be(true)
+      post_data[:module] = 'some_module'
+      expect( subject ).to include(post_data[:module])
     end
     it 'has filename' do
-      expect( frame._data.has_key?(:filename) ).to be(true)
+      expect( subject ).to include(post_data[:filename])
     end
     it 'has filename without outliers' do
-      frame._data[:filename] = Digest::MD5.hexdigest("random_string")
-      expect( frame.get_hash.include?("<version>") ).to be(true)
+      post_data[:filename] = Digest::MD5.hexdigest("random_string")
+      expect( subject ).to include('<version>')
     end
     it 'does not have context_line if context_line nil' do
-      frame._data[:context_line] = nil
-      expect( frame.get_hash.include?(frame._data[:context_line]) ).to be(false)
+      post_data[:context_line] = nil
+      expect( subject ).not_to include(nil)
     end
     it 'does not have context_line if context_line length > 120' do
-      frame._data[:context_line] = issue_error.data
-      expect( frame.get_hash.include?(frame._data[:context_line]) ).to be(false)
+      post_data[:context_line] = 'sometext' * 120
+      expect( subject ).not_to include(post_data[:context_line])
     end
     it 'does not have context_line if no function and path_url?' do
-      frame._data[:abs_path] = "http://content/url/example.com"
-      frame._data.delete :function
-      expect( frame.get_hash.include?(frame._data[:context_line]) ).to be(false)
+      post_data[:abs_path] = 'http://content/url/example.com'
+      post_data.delete :function
+      expect( subject ).not_to include(post_data[:context_line])
     end
     it 'has context_line if function provided' do
-      frame._data[:function] = "lambda$ " + data[:function]
-      expect( frame.get_hash.include?(frame._data[:context_line]) ).to be(true)
+      post_data[:function] = 'lambda$ ' + post_data[:function]
+      expect( subject ).to include(post_data[:context_line])
     end
     it 'has context_line if no function' do
-      frame._data.delete :function
-      expect( frame.get_hash.include?(frame._data[:context_line]) ).to be(true)
+      post_data.delete :function
+      expect( subject ).to include(post_data[:context_line])
     end
     it 'returns output if no !output and !can_use_context' do
-      frame._data.delete :context_line
-      frame._data.delete :filename
-      expect( frame.get_hash ).to eq(["block"])
+      post_data.delete :context_line
+      post_data.delete :filename
+      expect( subject ).to eq(['/Users/razvanciocanel/.rvm/gems/ruby-<version>/gems/actionpack-<version>/lib/action_controller/metal/implicit_render.rb', 'send_action'])
     end
     it 'has function if function is_unhashable_function' do
-      frame._data.delete :context_line
-      frame._data[:function] = "lambda$"
-      expect( frame.get_hash.include?("<function>") ).to be(true)
+      post_data.delete :context_line
+      post_data[:function] = 'lambda$'
+      expect( subject ).to include('<function>')
     end
     it 'has function if function' do
-      frame._data.delete :context_line
-      expect( frame.get_hash.include?("block") ).to be(true)
+      post_data.delete :context_line
+      expect( subject ).to include(post_data[:function])
     end
     it 'has lineno' do
-      expect( frame._data.has_key?(:lineno) ).to be(true)
+      post_data[:lineno] = '5'
+      post_data.delete :context_line
+      post_data.delete :function
+      expect( subject ).to include(5)
     end
   end
 
   describe 'is_unhashable_module' do
-    before{ frame._data = data }
+    subject { frame.sanitize_data(post_data); frame.is_unhashable_module? }
     it 'returns true if module include Lambda' do
-      frame._data[:module] = "$$Lambda$ example for module"
-      expect( frame.is_unhashable_module? ).to be(true)
+      post_data[:module] = '$$Lambda$ example for module'
+      expect( subject ).to be(true)
     end
     it 'returns false if module does not include Lambda' do
-      frame._data[:module] = "example for module"
-      expect( frame.is_unhashable_module? ).to be(false)
+      post_data[:module] = 'example for module'
+      expect( subject ).to be(false)
     end
   end
 
   describe 'is_unhashable_function' do
-    before{ frame._data = data }
+    subject { frame.sanitize_data(post_data); frame.is_unhashable_function? }
     it 'returns true if function starts with lambda' do
-      frame._data[:function] = "lambda$ " + data[:function]
-      expect( frame.is_unhashable_function? ).to be(true)
+      post_data[:function] = 'lambda$ ' + post_data[:function]
+      expect( subject ).to be(true)
     end
     it 'returns true if function starts with Anonymous' do
-      frame._data[:function] = '[Anonymous' + data[:function] + "]"
-      expect( frame.is_unhashable_function? ).to be(true)
+      post_data[:function] = '[Anonymous' + post_data[:function] + ']'
+      expect( subject ).to be(true)
     end
     it 'returns false if function does not have lambda or Anonymous' do
-      expect( frame.is_unhashable_function? ).to be(false)
+      expect( subject ).to be(false)
     end
   end
 
   describe 'is_caused_by?' do
-    before{ frame._data = data }
+    subject { frame.sanitize_data(post_data); frame.is_caused_by? }
     it 'returns true if filename starts with Caused by:' do
-      frame._data[:filename] = "Caused by: Cristii!"
-      expect( frame.is_caused_by? ).to be(true)
+      post_data[:filename] = 'Caused by: Cristii!'
+      expect( subject ).to be(true)
     end
     it 'returns false if filename it does not start with Caused by:' do
-      expect( frame.is_caused_by? ).to be(false)
+      expect( subject ).to be(false)
     end
   end
 
   describe 'path_url?' do
-    before{ frame._data = data }
+    subject { frame.sanitize_data(post_data); frame.path_url? }
     it 'returns true if abs_path is an url' do
-      frame._data[:abs_path] = "file://home-dir"
-      expect( frame.path_url? ).to be(true)
+      post_data[:abs_path] = 'file://home-dir'
+      expect( subject ).to be(true)
     end
     it 'returns false if no abs_path' do
-      frame._data.delete :abs_path
-      expect( frame.path_url? ).to be(false)
+      post_data.delete :abs_path
+      expect( subject ).to be(false)
     end
     it 'returns false if abs_path is not an url' do
-      expect( frame.path_url? ).to be(false)
+      expect( subject ).to be(false)
     end
   end
 end

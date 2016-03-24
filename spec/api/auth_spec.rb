@@ -19,12 +19,11 @@ describe "Auth API" do
     post '/api/v1/auth/sign_in', {email: member.email, password: "hello123"}
     expect(response).to be_success
 
-
     get '/api/v1/errors',{website_id: website.id}, {"client" => response.headers["client"], "uid" => response.headers["uid"], "access-token"=> response.headers["access-token"], "expiry" => response.headers["expiry"], "token-type" => response.headers["token-type"]}
     expect(response).to be_success
 
     json = JSON.parse(response.body)
-    expect(json).to eq({'groups'=> [], 'page' => 1, 'pages' => 0})
+    expect(json).to eq({'groups'=> [], 'page' => 0, 'pages' => 0})
   end
 
 end
