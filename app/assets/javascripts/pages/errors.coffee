@@ -37,6 +37,47 @@ page = 1
 #the number of errors displayed in one sidebar page
 errors_per_page = 14
 
+timesSeenGraph = () ->
+  n = 0
+  labels_array = []
+  date = new Date()
+  months = [" Jan", " Feb", " Mar", " Apr", " May", " Jun", " Jul", " Aug", " Sep", " Oct", " Nov", " Dec"]
+  while n < 30
+    date = new Date()
+    day = date.getDate()
+    month = months[date.getMonth()]
+    if n > 0
+      date.setDate(date.getDate() + n)
+      day = date.getDate()
+      month = months[date.getMonth()]
+    labels_array.push(day+month)
+    n+=1
+
+  barData =
+    labels: labels_array,
+    datasets: [
+        {
+            label: "Times seen",
+            fillColor: "rgba(220,220,220,0.5)",
+            strokeColor: "rgba(220,220,220,0.8)",
+            highlightFill: "rgba(220,220,220,0.75)",
+            highlightStroke: "rgba(220,220,220,1)",
+            data: [65, 59, 80, 81, 56, 55, 40]
+        }
+        {
+            label: "Occurrence date",
+            fillColor: "rgba(151,187,205,0.5)",
+            strokeColor: "rgba(151,187,205,0.8)",
+            highlightFill: "rgba(151,187,205,0.75)",
+            highlightStroke: "rgba(151,187,205,1)",
+            data: [28, 48, 40, 19, 86, 27, 90]
+        }
+      ]
+
+  context = $('#times_chart').get(0).getContext('2d')
+  timesChart = new Chart(context).Bar(barData)
+  return
+
 PubSub.subscribe('assigned.website', (ev, website)->
   return unless gon.controller == 'errors'
   switch gon.action
@@ -56,6 +97,7 @@ PubSub.subscribe('assigned.website', (ev, website)->
         $.current_issue = data.id
         firsttime_sidebar_request(website.id,page,errors_per_page,data.last_seen)
         manipulateShowElements(data)
+        timesSeenGraph()
 
         $($('li.active a').attr('href')).show()
         data.error = data.issues[data.issues.length-1]
@@ -103,29 +145,8 @@ PubSub.subscribe('assigned.website', (ev, website)->
         page = page - 1
         sidebar_request(website.id, page, errors_per_page)
 
-  barData =
-    labels: ["January", "February", "March", "April", "May", "June", "July"],
-    datasets: [
-        {
-            label: "My First dataset",
-            fillColor: "rgba(220,220,220,0.5)",
-            strokeColor: "rgba(220,220,220,0.8)",
-            highlightFill: "rgba(220,220,220,0.75)",
-            highlightStroke: "rgba(220,220,220,1)",
-            data: [65, 59, 80, 81, 56, 55, 40]
-        }
-        {
-            label: "My Second dataset",
-            fillColor: "rgba(151,187,205,0.5)",
-            strokeColor: "rgba(151,187,205,0.8)",
-            highlightFill: "rgba(151,187,205,0.75)",
-            highlightStroke: "rgba(151,187,205,1)",
-            data: [28, 48, 40, 19, 86, 27, 90]
-        }
-      ]
-  context = $('#times_chart').getContext('2d')
-  timesChart = new Chart(context).Bar(barData)
 )
+
 
 $(".nav-tabs").on 'click', (e)->
   if $(e.target).is('i')
