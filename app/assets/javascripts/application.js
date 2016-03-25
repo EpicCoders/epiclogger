@@ -19,6 +19,7 @@
 //= require jquery.deparam
 //= require pubsub
 //= require bootstrap
+//= require chart-core.js
 //= require bar-chart
 //= require line-chart
 //= require jquery.j-toker
