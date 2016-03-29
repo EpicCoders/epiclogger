@@ -24,8 +24,6 @@ gem 'coffee-rails', '~> 4.1.0'
 # gem 'therubyracer', platforms: :ruby
 gem 'haml-rails'
 
-gem 'omniauth-github'
-
 # jquery form validation plugin
 gem 'jquery-validation-rails'
 gem 'activeadmin', '~> 1.0.0.pre2'
@@ -55,6 +53,12 @@ gem 'sweet-alert'
 # Add Kaminari for pagination.
 gem 'kaminari'
 
+# Authentication
+# gem 'warden'
+# gem 'rails_warden'
+# gem 'warden_omniauth'
+# gem 'cancancan'
+# gem 'omniauth-github'
 gem 'cancancan', '~> 1.10'
 # Add sidekiq for background jobs
 gem 'sidekiq'
