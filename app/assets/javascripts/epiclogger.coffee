@@ -190,7 +190,7 @@ window.EpicLogger = (->
     )
     $(document).ready ->
       EpicLogger.setSidebar()
-      EpicLogger.authInitialization()
+      # EpicLogger.authInitialization()
       return
     return
 

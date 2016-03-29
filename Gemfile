@@ -54,11 +54,9 @@ gem 'sweet-alert'
 gem 'kaminari'
 
 # Authentication
-# gem 'warden'
-# gem 'rails_warden'
+gem 'rails_warden'
 # gem 'warden_omniauth'
-# gem 'cancancan'
-# gem 'omniauth-github'
+gem 'omniauth-github'
 gem 'cancancan', '~> 1.10'
 # Add sidekiq for background jobs
 gem 'sidekiq'

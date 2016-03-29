@@ -21,14 +21,11 @@
 //= require bootstrap
 //= require bar-chart
 //= require line-chart
-//= require jquery.j-toker
 //= require turbolinks
-//= require routes
 //= require moment
 //= require nprogress
 //= require nprogress-turbolinks
 //= require jquery.validate
 //= require jquery.validate.additional-methods
 //= require sweet-alert/sweet-alert
-
 //= require epiclogger
