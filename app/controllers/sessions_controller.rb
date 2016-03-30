@@ -1,13 +1,13 @@
 class SessionsController < ApplicationController
   layout "landing"
-  skip_before_action :authenticate!
+  skip_before_action :authenticate_user
 
-  def new 
+  def new
+    @user = User.new
   end
 
   def create
     user = authenticate!
-    session[:user_id] = user.id
     redirect_to websites_url, notice: "Logged in"
   end
 
