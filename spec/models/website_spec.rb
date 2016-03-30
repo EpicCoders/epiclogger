@@ -26,7 +26,7 @@ describe Website do
     end
 
     it "has many members" do
-      expect(website).to have_many(:members)
+      expect(website).to have_many(:users)
     end
 
     it "has many members" do

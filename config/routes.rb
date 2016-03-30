@@ -9,7 +9,11 @@ Rails.application.routes.draw do
   post 'signup' => 'users#create'
   delete 'logout' => 'sessions#destroy', :as => :logout
 
-  resources :errors, only: [:show, :index]
+  resources :errors, only: [:show, :index] do
+    member do
+      post :notify_subscribers
+    end
+  end
   resources :grouped_issues, only: [:index, :show]
   resources :websites, only: [:index, :create, :new, :show] do
     member do
