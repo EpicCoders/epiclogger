@@ -61,19 +61,6 @@
                   .http
                     .headers
                       .user_agent
-          %hr
-          .col-lg-2
-            %p Github
-          .col-lf-10
-            %button.btn.btn-default.fa.fa-github.error_server_name
-          %hr
-          %p{:style => "display:inline"} &nbsp&nbsp&nbsp&nbspPivotal Tracker
-          %button.btn.btn-default{:style => "margin-left: 122px"}
-            %i.glyphicon.glyphicon-record
-            Create Pivotal Tracker ticket
-          %hr
-          %p{:style => "display:inline"} &nbsp&nbsp&nbsp&nbspIntegrations
-          %a{:href => "#", :style => "text-decoration:none;margin-left: 145px"} Integration Settings
         .col-lg-3
           %button.btn.btn-primary.btn-xs.fa.fa-check#solve &nbspMark as resolved
           %button.btn.btn-success.btn-xs.fa.fa-check.resolved &nbspResolved
@@ -104,9 +91,9 @@
               %label{:for => "comment"} Norify Subscribers:
               %textarea#notifysub.form-control{:rows => "5"}
             .form-group.pull-right
-              %input{:type => 'checkbox'}
-              %span email users &nbsp&nbsp
-              %button.btn.btn-primary#notify Send
+              / %input{:type => 'checkbox'}
+              / %span email users &nbsp&nbsp
+              %button.btn.btn-primary#notify Send message
   .col-lg-12.pagecontainer#backtrace
     .error
       .data
