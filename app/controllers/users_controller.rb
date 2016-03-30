@@ -1,7 +1,7 @@
-class MembersController < ApplicationController
+class UsersController < ApplicationController
   layout "landing", only: [:new, :create]
   # what why??
-  skip_before_action :authenticate_member!
+  skip_authorization_check :only => [:new, :create]
 
   def index; end
 

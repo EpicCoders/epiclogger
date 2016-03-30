@@ -1,8 +1,8 @@
 class Ability
   include CanCan::Ability
 
-  def initialize(member)
-    if member
+  def initialize(user)
+    if user
       can :manage, :all
     end
   end

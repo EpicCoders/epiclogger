@@ -1,5 +1,7 @@
 class WebsitesController < ApplicationController
-  def index; end
+  def index 
+    binding.pry
+  end
   def show; end
   def new; end
   def edit; end

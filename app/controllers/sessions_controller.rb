@@ -1,18 +1,22 @@
 class SessionsController < ApplicationController
   layout "landing"
-  skip_before_action :authenticate_member!
+  skip_before_action :authenticate!
 
   def new 
-    
   end
 
   def create
-    user = warden.authenticate!
+    user = authenticate!
+    session[:user_id] = user.id
     redirect_to websites_url, notice: "Logged in"
   end
 
   def destroy
-    warden.logout
+    logout
+    redirect_to login_url
+  end
+
+  def unauthorized
     redirect_to login_url
   end
 end
