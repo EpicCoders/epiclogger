@@ -3,7 +3,7 @@ class ApplicationController < ActionController::Base
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :null_session
-  # before_action :authenticate_member!
+  before_action :authenticate_member!
   before_filter :set_gon
 
   protected
@@ -15,5 +15,9 @@ class ApplicationController < ActionController::Base
     info[:controller] = controller_name
     info[:action] = action_name
     gon.push(info)
+  end
+
+  def warden
+    env['warden']
   end
 end

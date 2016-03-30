@@ -1,8 +1,7 @@
 Rails.application.config.middleware.use Warden::Manager do |manager|
   manager.default_strategies :password
   manager.intercept_401 = false
-  # failure_app e required dar trebuie asignat la controllerul principal
-  # manager.failure_app = lambda{|env| Api::V1::ApiController.action(:_not_authorized).call(env) }
+  manager.failure_app = lambda{ |env| SessionsController.action(:new).call(env) }
 end
 
 Warden::Manager.serialize_into_session do |member|

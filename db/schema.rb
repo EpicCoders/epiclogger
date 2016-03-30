@@ -125,6 +125,7 @@ ActiveRecord::Schema.define(version: 20160404093349) do
     t.string   "nickname"
     t.string   "image"
     t.text     "tokens"
+    t.string   "password_digest"
   end
 
   add_index "members", ["email"], name: "index_members_on_email", unique: true, using: :btree
