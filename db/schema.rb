@@ -154,14 +154,14 @@ ActiveRecord::Schema.define(version: 20160404093349) do
   add_index "users", ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true, using: :btree
 
   create_table "website_members", force: :cascade do |t|
-    t.integer "member_id"
+    t.integer "user_id"
     t.integer "website_id"
     t.integer "role",               default: 1
     t.string  "invitation_token"
     t.string  "invitation_sent_at"
   end
 
-  add_index "website_members", ["member_id"], name: "index_website_members_on_member_id", using: :btree
+  add_index "website_members", ["user_id"], name: "index_website_members_on_user_id", using: :btree
   add_index "website_members", ["website_id"], name: "index_website_members_on_website_id", using: :btree
 
   create_table "websites", force: :cascade do |t|
