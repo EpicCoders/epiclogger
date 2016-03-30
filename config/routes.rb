@@ -5,13 +5,13 @@ Rails.application.routes.draw do
 
   get 'login' => 'sessions#new', :as => :login
   post 'login' => 'sessions#create'
-  get 'signup' => 'members#new', :as => :signup
+  get 'signup' => 'users#new', :as => :signup
   delete 'logout' => 'sessions#destroy', :as => :logout
 
   resources :errors, only: [:show, :index]
   resources :grouped_issues, only: [:index, :show]
   resources :websites, only: [:index, :new, :show]
-  resources :members, only: [:index, :edit]
+  resources :users, only: [:index, :edit]
   resources :invitations, only: [:new, :show]
   resources :subscribers, only: [:index]
   resources :accounts, only: [:show]

@@ -1,9 +1,4 @@
 class User < ActiveRecord::Base
-  # Include default devise modules.
-  # devise :database_authenticatable, :registerable,
-  #        :recoverable, :rememberable, :trackable, :validatable,
-  #        :confirmable
-  # include DeviseTokenAuth::Concerns::User
   has_many :website_members, -> { uniq }, dependent: :destroy, autosave: true
   has_many :websites, through: :website_members
 
@@ -13,6 +8,6 @@ class User < ActiveRecord::Base
   has_secure_password
 
   def is_owner_of?(website)
-    website.website_members.with_role(:owner).where(website: website).map(&:member_id).include?(self.id)
+    website.website_members.with_role(:owner).where(website: website).map(&:user_id).include?(self.id)
   end
 end
