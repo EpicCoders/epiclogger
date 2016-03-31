@@ -1,17 +1,21 @@
 %nav.cbp-spmenu.cbp-spmenu-vertical.cbp-spmenu-left.regular-menu-vertical
   .sidebar-header
     .website-container
-      = image_tag("logo_transparent_light.png")
-      .pick_wrapper
-        %a.picked-website{:href => "#"}= current_website.title
-        %ul#websites-sidebar
+      .row
+        .col-xs-3
+          = image_tag "logo_transparent_light.png", class: 'brand'
+        .col-xs-9
+          %button.picked-website.collapsed.btn-link.btn-block{"aria-expanded" => "false", "data-target" => "#websites-sidebar", "data-toggle" => "collapse", :type => "button"}
+            = current_website.title
+      #websites-sidebar.collapse
+        %ul.nav.nav-stacked
           - current_user.websites.each do |website|
             = nav_link website.title, change_current_website_url(website), {class: 'title picked', method: :post}
-        .border
-        .add-new
-          = link_to new_website_path, class: 'title' do
-            %i.fa.fa-plus
-            Add new Website
+      .clearfix
+      .separator
+      = link_to new_website_path, class: 'title add-new' do
+        %i.fa.fa-plus
+        Add new Website
   .sidebar-content
     %ul.icon-list
       = nav_link "Errors", errors_url(), {'title' => 'Errors', :id => "errornav"}, 'exclamation-triangle'
