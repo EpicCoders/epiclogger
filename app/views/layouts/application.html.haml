@@ -16,10 +16,14 @@
     = include_gon
     .loading
     .main-wrapper
-      = render partial: 'layouts/menu'
-      - unless params[:controller] == 'websites' && params[:action] == 'new'
+      - if regular_sidebar?
+        = render partial: 'layouts/full_sidebar'
+      - elsif error_sidebar?
+        = render partial: 'layouts/error_sidebar'
+
+      - if no_sidebar?
+        = yield
+      - else
         .main-container.container-fluid.cbp-spcontent
           %i.fa.fa-bars.toggle-left-sidebar
           = yield
-      - else
-        = yield

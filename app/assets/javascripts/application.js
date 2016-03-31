@@ -13,20 +13,22 @@
 //= require jquery
 //= require jquery.turbolinks
 //= require jquery_ujs
-//= require transparency
-//= require prism
-//= require jquery.cookie
-//= require jquery.deparam
-//= require pubsub
-//= require bootstrap
-//= require bar-chart
-//= require line-chart
 //= require turbolinks
-//= require moment
 //= require nprogress
 //= require nprogress-turbolinks
+
+//= require bootstrap
+//= require moment
+
 //= require jquery.validate
 //= require jquery.validate.additional-methods
 //= require sweet-alert/sweet-alert
+//= require jquery.cookie
+//= require jquery.deparam
+
+//= require prism
+//= require bar-chart
+//= require line-chart
+
 
 //= require epiclogger
