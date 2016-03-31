@@ -28,4 +28,5 @@
 //= require jquery.validate
 //= require jquery.validate.additional-methods
 //= require sweet-alert/sweet-alert
+
 //= require epiclogger

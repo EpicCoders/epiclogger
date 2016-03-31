@@ -8,7 +8,12 @@ class SessionsController < ApplicationController
 
   def create
     user = authenticate!
-    redirect_to websites_url, notice: "Logged in"
+    set_website(user.default_website)
+    if current_website
+      redirect_to websites_url, notice: "Logged in"
+    else
+      redirect_to create_website_url, notice: 'Logged in'
+    end
   end
 
   def destroy

@@ -24,4 +24,15 @@ class ApplicationController < ActionController::Base
     info[:action] = action_name
     gon.push(info)
   end
+
+  def current_website
+    return unless logged_in?
+    @website ||= Website.find(session[:epiclogger_website_id])
+  end
+
+  def set_website(website)
+    return unless logged_in?
+    @website = website
+    session[:epiclogger_website_id] = @website.id
+  end
 end

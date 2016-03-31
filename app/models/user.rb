@@ -10,4 +10,8 @@ class User < ActiveRecord::Base
   def is_owner_of?(website)
     website.website_members.with_role(:owner).where(website: website).map(&:user_id).include?(self.id)
   end
+
+  def default_website
+    websites.try(:first)
+  end
 end

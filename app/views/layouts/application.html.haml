@@ -14,7 +14,7 @@
     = csrf_meta_tags
   %body{:id=>"#{controller.controller_name}-#{controller.action_name}"}
     = include_gon
-    .loading.j-cloak
+    .loading
     .main-wrapper
       = render partial: 'layouts/menu'
       - unless params[:controller] == 'websites' && params[:action] == 'new'
@@ -23,5 +23,3 @@
           = yield
       - else
         = yield
-      - if asset?("pages/#{controller.controller_name}.js")
-        = javascript_include_tag "pages/#{controller.controller_name}"
