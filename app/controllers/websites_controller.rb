@@ -1,6 +1,7 @@
 class WebsitesController < ApplicationController
+  load_and_authorize_resource
   def index
-    # binding.pry
+    @websites = current_user.websites
   end
   def show; end
   def new; end

@@ -10,9 +10,9 @@ class SessionsController < ApplicationController
     user = authenticate!
     set_website(user.default_website)
     if current_website
-      redirect_to websites_url, notice: "Logged in"
+      redirect_to errors_url, notice: "Logged in"
     else
-      redirect_to create_website_url, notice: 'Logged in'
+      redirect_to new_website_url, notice: 'Logged in'
     end
   end
 
