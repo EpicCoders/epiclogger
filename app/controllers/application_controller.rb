@@ -29,6 +29,7 @@ class ApplicationController < ActionController::Base
     return unless logged_in?
     @website ||= Website.find(session[:epiclogger_website_id])
   end
+  helper_method :current_website
 
   def set_website(website)
     return unless logged_in?
