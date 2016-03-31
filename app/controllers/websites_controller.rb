@@ -6,4 +6,8 @@ class WebsitesController < ApplicationController
   def show; end
   def new; end
   def edit; end
+  def change_current
+    set_website(@website)
+    redirect_to errors_url, notice: 'Website changed'
+  end
 end

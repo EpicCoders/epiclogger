@@ -6,7 +6,7 @@
         %a.picked-website{:href => "#"}= current_website.title
         %ul#websites-sidebar
           - current_user.websites.each do |website|
-            = nav_link website.title, '#', {:class=>'title picked', 'data-id'=>website.id, 'onclick'=>'EpicLogger.pickWebsite(this)'}
+            = nav_link website.title, change_current_website_url(website), {class: 'title picked', method: :post}
         .border
         .add-new
           = link_to new_website_path, class: 'title' do
