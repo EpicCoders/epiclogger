@@ -15,15 +15,18 @@
   %body{:id=>"#{controller.controller_name}-#{controller.action_name}"}
     = include_gon
     .loading
-    .main-wrapper
+    #wrapper.main-wrapper
       - if regular_sidebar?
         = render partial: 'layouts/full_sidebar'
       - elsif error_sidebar?
         = render partial: 'layouts/error_sidebar'
 
+      -# page content
       - if no_sidebar?
         = yield
       - else
-        .main-container.container-fluid.cbp-spcontent
-          %i.fa.fa-bars.toggle-left-sidebar
-          = yield
+        #page-content-wrapper
+          %a#menu-toggle.btn.btn-link{:href => "#menu-toggle"}
+            %i.fa.fa-bars.toggle-left-sidebar
+          .container-fluid
+            = yield

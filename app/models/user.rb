@@ -14,4 +14,9 @@ class User < ActiveRecord::Base
   def default_website
     websites.try(:first)
   end
+
+  def avatar_url(size = 40)
+    gravatar = Digest::MD5.hexdigest(email).downcase
+    "http://gravatar.com/avatar/#{gravatar}.png?s=#{size}"
+  end
 end

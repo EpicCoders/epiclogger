@@ -1,49 +1,40 @@
-%nav.cbp-spmenu.cbp-spmenu-vertical.cbp-spmenu-left.regular-menu-vertical
-  .sidebar-header
-    .website-container
-      .row
-        .col-xs-3
-          = image_tag "logo_transparent_light.png", class: 'brand'
-        .col-xs-9
-          %button.picked-website.collapsed.btn-link.btn-block{"aria-expanded" => "false", "data-target" => "#websites-sidebar", "data-toggle" => "collapse", :type => "button"}
-            = current_website.title
+#sidebar-wrapper
+  %ul.sidebar-nav
+    %li.sidebar-brand
+      %button.picked-website.collapsed.btn-link.btn-block{"aria-expanded" => "false", "data-target" => "#websites-sidebar", "data-toggle" => "collapse", :type => "button"}
+        = image_tag "logo_transparent_light.png", class: 'brand'
+        = current_website.title
+        %span.caret
       #websites-sidebar.collapse
         %ul.nav.nav-stacked
           - current_user.websites.each do |website|
-            = nav_link website.title, change_current_website_url(website), {class: 'title picked', method: :post}
-      .clearfix
-      .separator
-      = link_to new_website_path, class: 'title add-new' do
-        %i.fa.fa-plus
-        Add new Website
-  .sidebar-content
-    %ul.icon-list
-      = nav_link "Errors", errors_url(), {'title' => 'Errors', :id => "errornav"}, 'exclamation-triangle'
-      -# = nav_link "Tasks", grouped_issues_url(), {'title' => 'Tasks'}, 'glyphicon glyphicon-hourglass'
-      / # = nav_link "User", edit_member_url(1), {'title' => 'Users'}, 'user'
-    .project-details
-      %h5 PROJECT DETAILS
-      %a{:href => "#{installations_url()}"} Installation
-      %a{:href => "#{website_members_url()}"} Members
+            = nav_link website.title, change_current_website_url(website), { method: :post }
+          = nav_link 'Add new website', new_website_path, { class: 'add-new' }, 'plus'
+    = nav_link 'Errors', errors_url, { title: 'Errors', id: 'errornav'}, 'exclamation-triangle'
+  .project-details
+    %h5 PROJECT DETAILS
+    %ul.sidebar-nav
+      = nav_link 'Installation', installations_path
+      = nav_link 'Members', website_members_path
 
-  .footer-help
-    %a{:title => 'Help', :href => 'mailto:info@epiclogger.com', :target =>"_top"}
-      %i.glyphicon.glyphicon-bullhorn
-      %strong Need help?
-      %br
-      %small Write us an email we will answer fast
-    %button.btn.btn-default.btn-link.btn-xs
   .sidebar-footer
-    %ul.icon-list
-    .footer-content
-      %img.profileimg.pull-left{:src => "http://0.gravatar.com/avatar/59b762ebf3d116bf806bcfa3fa12e65f"}/
-      .dropup.btn-group
-        %a.btn.dropdown-toggle{"data-toggle" => "dropdown", :href => "#"}
-          %i.fa.fa-cog
+    .footer-help
+      %a{:title => 'Help', :href => 'mailto:info@epiclogger.com', :target =>"_top"}
+        %i.glyphicon.glyphicon-bullhorn
+        %strong Need help?
+        %br
+        %small Write us an email, we will answer fast
+    .account-details
+      .dropup
+        %button.btn.btn-link.dropdown-toggle.btn-block{"aria-expanded" => "false", "aria-haspopup" => "true", "data-toggle" => "dropdown", :type => "button"}
+          = image_tag current_user.avatar_url, class: 'avatar'
+          My Account
+          %span.caret
         %ul.dropdown-menu
           %li
             %a{:href => "#{websites_url()}"} Websites
-          / %li
-          /   %a{:href => "#"} Account
+          %li
+            %a{:href => "#"} Account
+          %li.divider{:role => "separator"}
           %li
             = link_to 'Logout', logout_url, method: :delete
