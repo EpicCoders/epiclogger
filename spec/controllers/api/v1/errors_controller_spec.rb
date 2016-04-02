@@ -1,9 +1,9 @@
 require 'rails_helper'
 
 describe Api::V1::ErrorsController, :type => :controller do
-  let(:member) { create :member }
+  let(:user) { create :user }
   let(:website) { create :website }
-  let!(:website_member) { create :website_member, website: website, member: member }
+  let!(:website_member) { create :website_member, website: website, user: user }
   let(:group) { create :grouped_issue, website: website }
   let(:subscriber) { create :subscriber, website: website }
   let!(:issue_error) { create :issue, subscriber: subscriber, group: group }
@@ -12,20 +12,20 @@ describe Api::V1::ErrorsController, :type => :controller do
 
   describe 'POST #notify_subscribers' do
     context 'if logged in' do
-      before { auth_member(member) }
+      before { auth_user(user) }
       let(:params) { default_params.merge(message: message, id: group.id) }
 
       it 'should email subscribers' do
         mailer = double('UserMailer')
         expect(mailer).to receive(:deliver_later)
-        expect(UserMailer).to receive(:notify_subscriber).with(group, member, message).and_return(mailer).once
+        expect(UserMailer).to receive(:notify_subscriber).with(group, user, message).and_return(mailer).once
 
         post :notify_subscribers, params
       end
 
       it 'should email 2 subscribers' do
-        member2 = create :member
-        create :website_member, website: website, member_id: member2.id
+        user2 = create :user
+        create :website_member, website: website, user_id: user2.id
         mailer = double('UserMailer')
         expect(mailer).to receive(:deliver_later).twice
         expect(UserMailer).to receive(:notify_subscriber).with(group, an_instance_of(Member), message).and_return(mailer).twice
@@ -42,7 +42,7 @@ describe Api::V1::ErrorsController, :type => :controller do
       let(:params) { default_params.merge(website_id: website.id) }
 
       context 'if logged in' do
-        before { auth_member(member) }
+        before { auth_user(user) }
 
         it 'renders json' do
           get :index, params
@@ -51,7 +51,7 @@ describe Api::V1::ErrorsController, :type => :controller do
         end
 
         it 'assigns current_site errors' do
-          auth_member(member)
+          auth_user(user)
           get :index, params
           expect(assigns(:errors)).to eq([group])
         end
@@ -77,7 +77,7 @@ describe Api::V1::ErrorsController, :type => :controller do
     let(:params) { default_params.merge(status: 'resolved', id: group.id, website_id: website.id) }
     render_views
     context 'if logged in' do
-      before { auth_member(member) }
+      before { auth_user(user) }
 
       it 'renders json' do
         get :show, params
@@ -133,7 +133,7 @@ describe Api::V1::ErrorsController, :type => :controller do
   describe 'PUT #update' do
     let(:params) { default_params.merge(error: { status: 'resolved' }, id: group.id, website_id: website.id) }
     context 'if logged in' do
-      before { auth_member(member) }
+      before { auth_user(user) }
       it 'assigns error' do
         put :update, params
         expect(assigns(:error)).to eq(group)

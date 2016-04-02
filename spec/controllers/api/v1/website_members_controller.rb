@@ -1,16 +1,16 @@
 require 'rails_helper'
 
 describe Api::V1::WebsiteMembersController, :type => :controller do
-  let(:member) { create :member }
+  let(:user) { create :user }
   let(:website) {create :website}
-  let!(:website_member) { create :website_member, member_id: member.id, website_id: website.id, invitation_sent_at: Time.now.utc, role: 1 }
+  let!(:website_member) { create :website_member, user_id: user.id, website_id: website.id, invitation_sent_at: Time.now.utc, role: 1 }
   let(:default_params) { {website_id: website.id, format: :json} }
 
   render_views # this is used so we can check the json response from the controller
   describe 'GET #index' do
-    let(:params) { default_params.merge({ website_id: website.id, member_id: member.id}) }
+    let(:params) { default_params.merge({ website_id: website.id, user_id: user.id}) }
     context 'is logged in' do
-      before { auth_member(member) }
+      before { auth_user(user) }
 
       it 'should render json' do
         get :index, params
@@ -26,8 +26,8 @@ describe Api::V1::WebsiteMembersController, :type => :controller do
               {
                 id: website_member.id,
                 role: website_member.role,
-                name: member.name,
-                email: member.email
+                name: user.name,
+                email: user.email
               }
             ]
           }.to_json)
@@ -41,13 +41,13 @@ describe Api::V1::WebsiteMembersController, :type => :controller do
   end
 
   describe 'DELETE #destroy' do
-    let!(:member2) {create :member}
-    let!(:website_member2) { create :website_member, member_id: member2.id, website_id: website.id, role: 2 }
+    let!(:user2) {create :user}
+    let!(:website_member2) { create :website_member, user_id: user2.id, website_id: website.id, role: 2 }
     let(:params) { default_params.merge({ id: website_member2.id, format: :js }) }
     context 'is logged in' do
-      before { auth_member(member) }
+      before { auth_user(user) }
 
-      it 'should delete website member' do
+      it 'should delete website user' do
         expect{
           delete :destroy, params
         }.to change(WebsiteMember, :count).by(-1)

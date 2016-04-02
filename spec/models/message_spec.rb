@@ -1,9 +1,9 @@
 require 'rails_helper'
 
 describe Message do
-  let(:member) { create(:member) }
+  let(:user) { create(:user) }
   let(:website) { create(:website) }
-  let!(:website_member) { create :website_member, website: website, member: member }
+  let!(:website_member) { create :website_member, website: website, user: user }
   let(:grouped_issue) { build(:grouped_issue, website: website) }
   let!(:issue) { create(:issue, group: grouped_issue) }
   let(:message) { build(:message, issue: issue) }

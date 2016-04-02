@@ -2,9 +2,9 @@ require 'rails_helper'
 
 describe Website do
 
-  let(:member) { create :member }
+  let(:user) { create :user }
   let(:website) { create :website }
-  let!(:website_member) { create :website_member, website: website, member: member }
+  let!(:website_member) { create :website_member, website: website, user: user }
 
   it "has a valid factory" do
     expect(build(:website)).to be_valid

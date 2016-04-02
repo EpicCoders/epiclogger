@@ -1,27 +1,27 @@
 require 'rails_helper'
 
 
-describe Member do
+RSpec.describe User, type: :model do
 
-  let(:member) { build(:member) }
+  let(:user) { build(:user) }
 
   it "has a valid factory" do
-    expect(build(:member)).to be_valid
+    expect(build(:user)).to be_valid
   end
 
   describe "ActiveModel validations" do
     it "is invalid without a name" do
-      expect(member).to validate_presence_of :name
+      expect(user).to validate_presence_of :name
     end
 
     it "is invalid without an email" do
-      expect(member).to validate_presence_of :email
+      expect(user).to validate_presence_of :email
     end
   end
 
    describe "ActiveRecord associations" do
      it "has many websites" do
-      expect(member).to have_many(:websites)
+      expect(user).to have_many(:websites)
      end
    end
 
