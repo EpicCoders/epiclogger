@@ -14,4 +14,10 @@ class Issue < ActiveRecord::Base
   def get_interfaces
     error._get_interfaces
   end
+
+  def stacktrace_frames
+    exception = get_interfaces.first
+    return 'Missing stacktrace' if exception.blank?
+    get_interfaces.first._data[:values].first._data[:stacktrace]._data[:frames].reverse!
+  end
 end

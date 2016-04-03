@@ -14,8 +14,12 @@ class GroupedIssue < ActiveRecord::Base
     # UserMailer.event_occurred(self.website_id, self.id).deliver_now
   end
 
-  def error
-    ErrorStore.find(self)
+  def first_issue
+    issues.first
+  end
+
+  def environment
+    first_issue.error.data[:environment]
   end
 
   private
