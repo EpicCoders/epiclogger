@@ -15,18 +15,18 @@
   %body{:id=>"#{controller.controller_name}-#{controller.action_name}"}
     = include_gon
     .loading
-    #wrapper.main-wrapper{ class: no_sidebar? ? 'no-sidebar' : '' }
-      - if regular_sidebar?
-        = render partial: 'layouts/full_sidebar'
-      - elsif error_sidebar?
+    #wrapper.main-wrapper{ class: "#{no_sidebar? ? 'no-sidebar' : ''} #{error_sidebar? ? 'error-sidebar' : ''}" }
+      - if error_sidebar?
         = render partial: 'layouts/error_sidebar'
+      - elsif regular_sidebar?
+        = render partial: 'layouts/sidebar'
 
       -# page content
       - if no_sidebar?
         = yield
       - else
         #page-content-wrapper
-          %a#menu-toggle.btn.btn-link{:href => "#menu-toggle"}
-            %i.fa.fa-bars.toggle-left-sidebar
+          %a#menu-toggle.btn.btn-link.visible-xs{:href => "#menu-toggle"}
+            %i.fa.fa-bars
           .container-fluid
             = yield

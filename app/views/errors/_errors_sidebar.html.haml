@@ -1,0 +1,13 @@
+.errors-sidebar-list.no-margin
+  .header
+    .row
+      .col-sm-6
+        .btn.btn-default.btn-sm{'data-toggle'=>'button','aria-pressed'=>"false"}
+          %input.all{:title => "toggle all", :type => "checkbox"}/
+      .col-sm-6.error_pagination.text-right
+        %span.sidebar_pagination_text= page_entries_info @errors, entry_name: 'error'
+        .btn-group
+          = paginate @errors, theme: 'next_prev_theme'
+  #errors-sidebar-elements
+    %ul.list-group
+      = render partial: 'sidebar_elements', collection: @errors, as: :error

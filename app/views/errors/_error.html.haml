@@ -1,0 +1,15 @@
+#grouped-issues.groups
+  = link_to error_url(error), class: 'warning' do
+    .left
+      %span.message= error.message
+    .right
+      %span.last Last occurrence
+      %span.last_occurrence= distance_of_time_in_words_to_now error.last_seen
+    .main
+      %span.language Language
+      %span.issue_logger= "#{error.platform} - #{error.culprit}"
+    .group-right
+      .issues
+        %span.page_title
+        %span.description
+        %span.users_count= error.times_seen

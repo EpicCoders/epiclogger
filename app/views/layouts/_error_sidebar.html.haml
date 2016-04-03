@@ -1,28 +1,16 @@
- %nav.error-menu.error-menu-vertical
-  .icon_sidebar
-    .header
-      = image_tag("logo_transparent_light.png")
-    .content
-      %ul.icon-list
-        = nav_link  "", new_website_path(), {'title' => 'Add new website'}, 'plus'
-        = nav_link "", errors_url(), {'title' => 'Errors'}, 'exclamation-triangle'
-        = nav_link "", installations_url(), {'title' => 'Installation'}, 'code'
-        = nav_link "", website_members_url(), {'title' => 'Members'}, 'users'
-        = nav_link "", 'mailto:info@epiclogger.com', {'data-helpful'=>'epiclogger','data-helpful-modal'=>"on", :class=>'helpful-link', 'title' => 'Help'}, 'question'
-    .footer
-      .inner
-        .dropdown.btn-group
-          %img.dropdown-toggle.profileimg.pull-left{:src => "http://0.gravatar.com/avatar/59b762ebf3d116bf806bcfa3fa12e65f","data-toggle" => "dropdown"}/
-          %ul.dropdown-menu
-            %li
-              %a{:href => "#{websites_url()}"} Websites
-            / %li
-            /   %a{:href => "#"} Account
-            %li
-              %a{:href => "#", :onclick => 'EpicLogger.logout()'} Logout
-  .error_sidebar
-    .sidebar_header
-      %button{:class=>"fa fa-arrow-left btn previous"}
-      %span{:class=>"sidebar_pagination_text"}
-      %button{:class=>"fa fa-arrow-right btn next"}
-    .sidebar_elements
+#sidebar-wrapper
+  %ul.icon-sidebar
+    %li.sidebar-brand
+      = image_tag "logo_transparent_light.png", class: 'brand'
+    = nav_link '', errors_url, {'title' => 'Errors'}, 'exclamation-triangle'
+    %li.separator
+    = nav_link '', installations_url(), {'title' => 'Installation'}, 'code'
+    = nav_link '', website_members_url(), {'title' => 'Members'}, 'users'
+    = nav_link '', 'mailto:info@epiclogger.com', {'title' => 'Help'}, 'question'
+  .sidebar-footer
+    %ul.icon-sidebar
+      = nav_link '', websites_url, {'title' => 'Websites'}, 'list'
+      = nav_link '', logout_url, { method: :delete }, 'sign-out'
+      %li
+        %a{:href => ""}
+          = image_tag current_user.avatar_url, class: 'avatar'
