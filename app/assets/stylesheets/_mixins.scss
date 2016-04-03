@@ -1,0 +1,35 @@
+/*!
+ * Error page mixins
+ */
+
+@mixin error-header() {
+  padding: 15px 0;
+  background: $header-background;
+  // margin-bottom: 20px;
+}
+
+/*!
+ * Sidebar menu
+ */
+
+/* Toggle Styles */
+@mixin btn-hover(){
+  text-decoration: none;
+  color: #fff;
+  background: rgba(255,255,255,0.2);
+}
+
+@mixin sidebar-nav-links(){
+  width: $sidebar-width;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  li {
+    text-indent: 20px;
+    line-height: 40px;
+  }
+  i {
+    text-indent: 0px;
+    padding-right: 8px;
+  }
+}

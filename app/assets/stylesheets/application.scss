@@ -26,15 +26,17 @@
 @import "bootstrap";
 @import "font-awesome";
 
+/* Custom mixins */
+@import 'mixins';
+
 /* Components*/
 @import "components/*";
+/*Pages*/
+@import "pages/*";
 
 /*Sweet-Alert*/
 @import "sweet-alert/sweet-alert";
 @import "font-mfizz";
-
-/*Pages*/
-@import "pages/*";
 
 @import "nprogress";
 @import "nprogress-bootstrap";

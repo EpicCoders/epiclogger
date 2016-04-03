@@ -27,8 +27,7 @@
 //= require jquery.deparam
 
 //= require prism
-//= require bar-chart
-//= require line-chart
-
+// require bar-chart
+// require line-chart
 
 //= require epiclogger
