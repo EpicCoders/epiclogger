@@ -8,7 +8,7 @@ Rails.application.configure do
   # config.assets.paths << Rails.root.join("app", "assets", "pages")
   # Precompile additional assets.
   # application.js, application.css, and all non-JS/CSS in app/assets folder are already added.
-  config.assets.precompile += %w( pages/*.* fontmizz/*.*)
+  config.assets.precompile += %w(fontmizz/*.*)
 
   config.assets.precompile << lambda do |filename, path|
     path =~ /vendor\/assets/ && %w(.png .gif .jpg .eot .svg .ttf .woff).include?(File.extname(filename))
