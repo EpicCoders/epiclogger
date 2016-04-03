@@ -20,4 +20,17 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  views:
+    pagination:
+      next: '<i class="fa fa-chevron-right"></i>'
+      previous: '<i class="fa fa-chevron-left"></i>'
+  helpers:
+    page_entries_info:
+      one_page:
+        display_entries:
+          zero: "no %{entry_name} found"
+          one: "<b>1</b> %{entry_name}"
+          other: "<b>all %{count}</b> %{entry_name}"
+      more_pages:
+        display_entries: "<b>%{first}&nbsp;-&nbsp;%{last}</b> of <b>%{total}</b>"
+
