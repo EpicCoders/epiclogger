@@ -3,8 +3,10 @@
  */
 
 @mixin error-header() {
-  padding: 15px 0;
+  padding: 0 15px;
   background: $header-background;
+  height: $header-height;
+  // line-height: 75px;
   // margin-bottom: 20px;
 }
 

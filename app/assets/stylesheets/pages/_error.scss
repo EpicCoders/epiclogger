@@ -1,6 +1,22 @@
 #error-details {
   .header {
     @include error-header();
+    .times_seen{
+      font-size: 30px;
+      height: $header-height;
+      text-align: center;
+      border-right: 1px dashed #ccc;
+      line-height: $header-height;
+      padding: 0;
+    }
+    .message{
+      padding: 14px 0 0;
+      font-size: $font-size-large;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      // float:left;
+    }
   }
   .panel-body {
     height: 200px;

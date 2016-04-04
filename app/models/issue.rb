@@ -20,4 +20,8 @@ class Issue < ActiveRecord::Base
     return 'Missing stacktrace' if exception.blank?
     get_interfaces.first._data[:values].first._data[:stacktrace]._data[:frames].reverse!
   end
+
+  def environment
+    error.data[:environment]
+  end
 end

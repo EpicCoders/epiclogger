@@ -1,7 +1,8 @@
-$list-error-height: 80px;
+$list-error-height: 100%;
 .errors-sidebar-list{
   .header {
     @include error-header();
+    padding-top: 15px;
     .pagination{ margin: 0; }
     // .list-check{
     //   height: $list-error-height - 10px;

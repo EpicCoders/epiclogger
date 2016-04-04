@@ -15,8 +15,10 @@ class ErrorsController < ApplicationController
 
   def show
     @page = params[:page]
-    @errors = current_website.grouped_issues.order('last_seen DESC').page(@page).per(2)
-    @issue = @error.first_issue # this will have to be paginated and selected
+    page_issue = params[:page_issue] || 1
+    @errors = current_website.grouped_issues.order('last_seen DESC').page(@page).per(5)
+    @issues = @error.issues.page(page_issue).per(1)
+    @issue = @issues.first
   end
 
   def update

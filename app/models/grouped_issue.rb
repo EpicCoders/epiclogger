@@ -19,7 +19,11 @@ class GroupedIssue < ActiveRecord::Base
   end
 
   def environment
-    first_issue.error.data[:environment]
+    first_issue.environment
+  end
+
+  def users_affected
+    subscribers.count
   end
 
   private

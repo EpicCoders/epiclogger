@@ -4,7 +4,21 @@
   .col-sm-9
     #error-details
       .header.no-margin
-        %h3= @error.message
+        .row
+          .col-xs-1.times_seen
+            = @error.times_seen
+          .col-xs-9
+            %div.message= @error.message
+            %ul.list-inline
+              %li
+                %span.label.label-primary
+                  = icon('users')
+                  = @error.users_affected
+              %li
+                %span.label.label-primary= @error.environment
+          .col-xs-2
+            .btn-group
+              = paginate @issues, theme: 'next_prev_theme', param_name: :page_issue
       / Nav tabs
       -# %ul.nav.nav-tabs{:role => "tablist"}
       -#   %li.active{:role => "presentation"}
