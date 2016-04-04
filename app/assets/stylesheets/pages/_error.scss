@@ -19,10 +19,20 @@
     }
   }
   .panel-body {
-    height: 200px;
+    max-height: 200px;
     overflow: hidden;
-    &:after{
-      @include gradient-vertical(#fff, #fff);
+    position: relative;
+    .read-more{
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      margin: 0; padding: 15px 0;
+      @include gradient-vertical(rgba(255,255,255,0), #fff);
     }
+  }
+  .error-content{
+    padding: 15px 0;
   }
 }

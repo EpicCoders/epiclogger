@@ -1,4 +1,9 @@
 $list-error-height: 100%;
+#error-sidebar{
+  border-right: 1px solid #ccc;
+  height: 100vh;
+  bottom: 0;
+}
 .errors-sidebar-list{
   .header {
     @include error-header();
@@ -19,6 +24,8 @@ $list-error-height: 100%;
   .list-group-item{
     border-radius: 0;
     height: $list-error-height;
+    border-left: none;
+    border-right: none;
   }
   .list-check{
     height: $list-error-height;
@@ -33,6 +40,9 @@ $list-error-height: 100%;
   .list-group-item:hover, .checked, .active{
     background: #F5F5F5;
     a { text-decoration: none; }
+  }
+  .message{
+    overflow: hidden;
   }
   // input[type="checkbox"]{ display: none; }
 }
