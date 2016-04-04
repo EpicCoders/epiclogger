@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160211113020) do
+ActiveRecord::Schema.define(version: 20160404093349) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -56,7 +56,7 @@ ActiveRecord::Schema.define(version: 20160211113020) do
     t.integer  "level"
     t.text     "message"
     t.integer  "status",                      default: 3
-    t.integer  "times_seen",                  default: 0
+    t.integer  "times_seen",                  default: 1
     t.datetime "first_seen"
     t.datetime "last_seen"
     t.integer  "score"
