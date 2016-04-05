@@ -4,7 +4,8 @@ class User < ActiveRecord::Base
 
   validates :name, presence: true
   validates :email, presence: true, uniqueness: true
-  validates :password, presence: true, on: :create
+  validates :password, presence: true, confirmation: true, on: :create
+  validates :password_confirmation, presence: true
   has_secure_password
 
   def is_owner_of?(website)
