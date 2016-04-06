@@ -20,6 +20,7 @@ class UsersController < ApplicationController
     after_login_redirect
   end
 
+  private
   def user_params
     params[:uid] = SecureRandom.hex(10)
     params[:provider] = 'email'
