@@ -1,4 +1,4 @@
-.panel-body.tabs#sinatra
+.panel-body
   %div
     %h5{:style => 'display:inline'} Start by installing
     %a{:href => 'https://github.com/EpicCoders/epiclogger-ruby'}epiclogger-ruby.
@@ -14,7 +14,7 @@
       %p gem "sentry-epiclogger", :git => "https://github.com/getsentry/epiclogger-ruby.git"
   %h5 Configure the client and install the Rack middleware:
   %pre
-    %code.language-html.platform-code
+    %code.language-html
       =preserve do
         :escaped
           require 'sinatra'

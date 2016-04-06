@@ -1,4 +1,4 @@
-.panel-body.tabs#pythontab
+.panel-body
   %div
     %h5{:style => 'display:inline'} Start by installing
     %a{:href => 'https://github.com/EpicCoders/epiclogger-python'}epiclogger-python.
@@ -7,7 +7,7 @@
       %h5 pip install epiclogger
   %h5 Create an instance of the client:
   %pre
-    %code.language-html.platform-code
+    %code.language-html
       =preserve do
         :escaped
           from raven import Client
@@ -36,7 +36,7 @@
           application = Sentry(application, client=client)
   %h5 If you wish to test your connection to the server, you can use the epiclogger test command:
   %pre
-    %code.language-html.platform-code
+    %code.language-html
       raven test https://#{@website.app_key}:#{@website.app_key}@test-sentry89.herokuapp.com/#{@website.id}
   %hr
   %div

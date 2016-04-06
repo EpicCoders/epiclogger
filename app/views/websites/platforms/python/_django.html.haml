@@ -1,4 +1,4 @@
-.panel-body.tabs#django
+.panel-body
   %div
     %h5{:style => 'display:inline'} Start by installing
     %a{:href => 'https://github.com/EpicCoders/epiclogger-python'}epiclogger-python.
@@ -7,7 +7,7 @@
       %h5 pip install epiclogger
   %h5 Then simply modify your Django configuration:
   %pre
-    %code.language-html.platform-code
+    %code.language-html
       =preserve do
         :escaped
           # Set your DSN value
