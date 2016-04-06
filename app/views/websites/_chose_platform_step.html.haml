@@ -1,0 +1,56 @@
+%h3#steps-uid-0-h-1.title{:tabindex => "-1"} Chose Platform
+%section#steps-uid-0-p-1.body.step{"aria-hidden" => "false", "aria-labelledby" => "steps-uid-0-h-1", :role => "tabpanel"}
+  .col-md-12.pagecontainer
+    .pagetitle.text-center
+      %h3 Installation and configuration
+    .panel.panel-default.codeview
+      .panel-heading Client Configuration
+      .panel-body
+        %h5 To start sending events, configure your client with the following DSN value:
+        %pre
+          %code
+            %h5.platform-code https://#{@website.app_key}:#{@website.app_secret}@test-sentry89.herokuapp.com/#{@website.id}
+        %br
+          %h5 If this is a client that only needs public access (like epiclogger-js), you can use the following public DSN:
+          %pre
+            %code
+              %h5.platform-code https://#{@website.app_key}@test-sentry89.herokuapp.com/#{@website.id}
+    .panel.panel-default.tileview
+      .panel-heading Platforms
+      .panel-body#platform{:style => 'cursor: pointer'}
+        %a.tile.text-center.resize-a{:name => "#javascript"}
+          %img.resize-img{:src => image_path("icon_javascript.png")}/
+          %span Javascript
+        %a.tile.text-center.resize-a{:name => "#node-js"}
+          %img.resize-img{:src => image_path("icon_nodejs.png")}/
+          %span Node Js
+        %a.tile.text-center.resize-a{:name => "#ruby"}
+          %img.resize-img{:src => image_path("icon_ruby.png")}/
+          %span Ruby
+        %a.tile.text-center.resize-a{:name => "#python"}
+          %img.resize-img{:src => image_path("icon_python.png")}/
+          %span Python
+        %a.tile.text-center.resize-a{:name => "#ios"}
+          %img.resize-img{:src => image_path("icon_ios.png")}/
+          %span IOS
+        %a.tile.text-center.resize-a{:name => "#php"}
+          %img.resize-img{:src => image_path("icon_php.png")}/
+          %span PHP
+        %a.tile.text-center.resize-a{:name => "#java"}
+          %img.resize-img{:src => image_path("icon_java.png")}/
+          %span Java
+    .panel.panel-default.tileview#client-frameworks
+      .panel-heading Frameworks
+      .panel-body{:style => 'cursor: pointer'}
+        %a.tile.text-center.resize-a{:name => '#rails-3', :href => "#ruby"}
+          %img.resize-img{:src => image_path("icon_rails.png")}/
+          %span Rails 3
+        %a.tile.text-center.resize-a{:name => '#rails-4', :href => "#ruby"}
+          %img.resize-img{:src => image_path("icon_rails.png")}/
+          %span Rails 4
+        %a.tile.text-center.resize-a{:name => '#django', :href => "#python"}
+          %img.resize-img{:src => image_path("icon_django.png")}/
+          %span Django
+    %div
+      %h5{:style => "display:inline"} For more information on developing clients and the Sentry API, see the
+      %a{:href => "#"} documentation.
