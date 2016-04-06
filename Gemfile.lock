@@ -367,6 +367,9 @@ GEM
       json (>= 1.8.0)
     warden (1.2.6)
       rack (>= 1.0)
+    warden_omniauth (0.1.0)
+      omniauth
+      warden (>= 0.9)
     xpath (2.0.0)
       nokogiri (~> 1.3)
 
@@ -422,6 +425,7 @@ DEPENDENCIES
   timecop
   turbolinks
   uglifier (>= 1.3.0)
+  warden_omniauth
 
 BUNDLED WITH
    1.11.2
