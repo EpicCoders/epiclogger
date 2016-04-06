@@ -5,18 +5,8 @@ class WebsitesController < ApplicationController
     @websites = current_user.websites
   end
 
-  def next_step
-    @current_step = steps[@step + 1]
-  end
-
-  def previous_step
-    @current_step = steps[@step -1]
-  end
-
   def new
-    @key = "dasdaio209123me83n3u8"
-    @step = steps.index(steps.first) + 1
-    @fist_step = steps.first
+    @step = steps.index(steps.first) + 2
     @current_step = steps[@step]
     render "new"
   end
@@ -25,7 +15,7 @@ class WebsitesController < ApplicationController
     url = URI.parse(website_params[:domain])
     @website = current_user.websites.create!(domain: "#{url.scheme}://#{url.host}", title: website_params[:title])
     if @website.persisted?
-      @step = steps.index(steps.second)
+      @step += 1
       @current_step = steps[@step]
     end
   end
@@ -50,6 +40,11 @@ class WebsitesController < ApplicationController
   def steps
     ["add_website_step", "chose_platform_step", "configuration_step"]
   end
+
+  def platforms
+    ["javascript", "node_js", "python", "php", "ruby", "java", "ios"]
+  end
+
   def change_current
     set_website(@website)
     redirect_to errors_url, notice: 'Website changed'
