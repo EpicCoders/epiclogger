@@ -1,0 +1,40 @@
+.panel-body
+  %div
+    %h5{:style => 'display:inline'} Start by installing
+    %a{:href => 'https://github.com/EpicCoders/epiclogger-node'}epiclogger-node.
+  %br
+  %pre
+    %code.language-html
+      %p npm install epiclogger
+  %h5 Create an instance of the client:
+  %pre
+    %code.language-html
+      =preserve do
+        :escaped
+          from raven import Client
+
+          client = Client('https://#{@website.app_key}:#{@website.app_key}@test-sentry89.herokuapp.com/#{@website.id}')
+  %h5 You can also optionally install a default error handler to catch all exceptions:
+  %pre
+    %code.language-html
+      %p client.patchGlobal();
+  %div
+    %h5{:style => 'display:inline'} Ensure Node is run with
+    %code NODE_ENV=production:
+  %pre
+    %code.language-html
+      %p NODE_ENV=production node script.js
+  %h5 Now call out to the epiclogger client to capture events:
+  %pre
+    %code.language-html
+      =preserve do
+        :escaped
+          //record a simple message
+          client.captureMessage('hello world!')
+
+          //capture an exception
+          client.captureError(new Error('Uh oh!!'));
+  %hr
+  %div
+    %h5{:style => 'display:inline'}For more information on other uses of Epiclogger with Node.js, please see the
+    %a{:href => 'https://github.com/EpicCoders/epiclogger-node'}official documentation for epiclogger-node.

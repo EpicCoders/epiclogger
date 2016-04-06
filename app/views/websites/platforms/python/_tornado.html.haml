@@ -1,0 +1,40 @@
+.panel-body.tabs#tornado
+  %div
+    %h5{:style => 'display:inline'} Start by installing
+    %a{:href => 'https://github.com/EpicCoders/epiclogger-python'}epiclogger-python.
+  %pre
+    %code.language-html
+      %h5 pip install epiclogger
+  %h5 Add the required configuration in your application setup:
+  %pre
+    %code.language-html.platform-code
+      =preserve do
+        :escaped
+          import tornado.web
+          from raven.contrib.tornado import AsyncSentryClient
+
+          class MainHandler(tornado.web.RequestHandler):
+              def get(self):
+                  self.write("Hello, world")
+
+          application = tornado.web.Application([
+              (r"/", MainHandler),
+          ])
+          application.sentry_client = AsyncSentryClient(
+              "https://#{@website.app_key}:#{@website.app_key}@test-sentry89.herokuapp.com/#{@website.id}"
+          )
+  %h5 Once the sentry client is attached to the application, request handlers can automatically capture uncaught exceptions by inheriting the SentryMixin class.
+  %pre
+    %code.language-html
+      =preserve do
+        :escaped
+          import tornado.web
+          from epiclogger.contrib.tornado import SentryMixin
+
+          class UncaughtExceptionExampleHandler(SentryMixin, tornado.web.RequestHandler):
+              def get(self):
+                  1 / 0
+  %hr
+  %div
+    %h5{:style => 'display:inline'}For more information on other uses of Epiclogger with Python, please see the
+    %a{:href => 'https://github.com/EpicCoders/epiclogger-python'}official documentation for epiclogger-python.
