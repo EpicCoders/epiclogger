@@ -11,7 +11,7 @@ Rails.application.routes.draw do
 
   resources :errors, only: [:show, :index]
   resources :grouped_issues, only: [:index, :show]
-  resources :websites, only: [:index, :new, :show] do
+  resources :websites, only: [:index, :create, :new, :show] do
     member do
       post :change_current
     end
