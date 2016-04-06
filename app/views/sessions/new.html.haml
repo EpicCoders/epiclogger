@@ -11,7 +11,7 @@
               %span
               Log in with Github
           %span.or or
-          = form_for @user, url: login_path do |f|
+          = simple_form_for @user, url: login_path do |f|
             .input-group.username
               .input-group-addon
                 %span.glyphicon.glyphicon-user

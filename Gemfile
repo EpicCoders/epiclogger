@@ -62,6 +62,9 @@ gem 'cancancan', '~> 1.10'
 gem 'sidekiq'
 gem 'redis-rails'
 
+# add gem for forms
+gem 'simple_form'
+
 group :development do
   gem 'better_errors'
   gem 'binding_of_caller'
