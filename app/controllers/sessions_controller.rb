@@ -23,12 +23,4 @@ class SessionsController < ApplicationController
   end
 
   protected
-
-  def after_login_redirect
-    if current_website
-      redirect_to errors_url, notice: "Logged in"
-    else
-      redirect_to new_website_url, notice: 'Logged in'
-    end
-  end
 end

@@ -27,7 +27,8 @@ class ApplicationController < ActionController::Base
 
   def current_website
     return unless logged_in?
-    @website ||= Website.find(session[:epiclogger_website_id])
+
+    @website ||= Website.find(session[:epiclogger_website_id]) if session[:epiclogger_website_id]
   end
   helper_method :current_website
 
@@ -36,4 +37,13 @@ class ApplicationController < ActionController::Base
     @website = website
     session[:epiclogger_website_id] = @website.id
   end
+
+  def after_login_redirect
+    if current_website
+      redirect_to errors_url, notice: "Logged in"
+    else
+      redirect_to new_website_url, notice: 'Logged in'
+    end
+  end
+  helper_method :after_login_redirect
 end

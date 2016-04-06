@@ -5,7 +5,7 @@ class UsersController < ApplicationController
   def index; end
 
   def new
-    redirect_to websites_url if logged_in?
+    after_login_redirect if logged_in?
 
     @user = User.new
     gon.token = params[:id]
@@ -17,7 +17,7 @@ class UsersController < ApplicationController
     user.save
 
     authenticate!(:password)
-    redirect_to new_website_url
+    after_login_redirect
   end
 
   def user_params
