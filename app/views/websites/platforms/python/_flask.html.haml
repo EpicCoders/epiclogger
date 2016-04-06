@@ -1,4 +1,4 @@
-.panel-body.tabs#flask
+.panel-body
   %div
     %h5{:style => 'display:inline'} Start by installing
     %a{:href => 'https://github.com/EpicCoders/epiclogger-python'}epiclogger-python.
@@ -12,7 +12,7 @@
   %i Blinker is required for signals to work within Flask.
   %h5 Add the required configuration in your application setup:
   %pre
-    %code.language-html.platform-code
+    %code.language-html
       =preserve do
         :escaped
           from raven.contrib.flask import Sentry

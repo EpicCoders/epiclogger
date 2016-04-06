@@ -1,4 +1,4 @@
-.panel-body.tabs#rubytab
+.panel-body
   %div
     %h5{:style => 'display:inline'} Start by installing
     %a{:href => 'https://github.com/EpicCoders/epiclogger-ruby'}epiclogger-ruby.
@@ -14,7 +14,7 @@
       %p gem "sentry-epiclogger", :git => "https://github.com/getsentry/epiclogger-ruby.git"
   %h5 Create an instance of the client:
   %pre
-    %code.language-html.platform-code
+    %code.language-htmls
       =preserve do
         :escaped
           require 'epiclogger'
