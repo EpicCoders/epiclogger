@@ -6,8 +6,8 @@ class WebsitesController < ApplicationController
   end
 
   def new
-    @matched_platform = "python"
-    @matched_tab = "django"
+    gon.platform = "node_js"
+    @rendered = platform_tabs[3]
     @step = steps.index(steps.first) + 2
     @current_step = steps[@step]
     render "new"
@@ -23,21 +23,16 @@ class WebsitesController < ApplicationController
   end
 
   def wizard_install
-    if params[:platform] == 'rails_3' || params[:platform] == 'rails_4'
-      #change the above if you change the view
+    if params[:picked] == 'rails_3' || params[:picked] == 'rails_4'
       ##TODO we can find a better approach here
       @platform = "ruby"
-      @tab = params[:platform]
-    elsif params[:platform] == 'django'
-      #same here
+      @tab = params[:picked]
+    elsif params[:picked] == 'django'
       @platform = "python"
-      @tab = params[:platform]
+      @tab = params[:picked]
     else
-      @platform, @tab = params[:platform]
+      @platform, @tab = params[:picked]
     end
-    #find tabs array
-    @platforms = tabs.find { |arr| arr.index(@tab) }
-    # @tab_index = @platforms.index(@tab)
   end
 
   def update
@@ -54,17 +49,12 @@ class WebsitesController < ApplicationController
 
   def show; end
 
-  # def steps
-  #   ["add_website_step", "chose_platform_step", "configuration_step"]
-  # end
-
-  def platforms
-    ["javascript", "node_js", "python", "php", "ruby", "java", "ios"]
+  def steps
+    ["add_website_step", "chose_platform_step", "configuration_step"]
   end
 
-  def tabs
-    array =  [["ios"], ["java", "java_util_logging", "java_4_j", "java_4_j_2", "logback"], ["javascript"], ["connect", "express", "node_js"], ["php"], ["django", "flask", "python", "tornado"], ["rails_3", "rails_4", "ruby", "sidekiq", "sinatra"]]
-    return array
+  def platform_tabs
+    ["ios_tab", "java_tab", "javascript_tab", "node_js_tab", "php_tab", "python_tab", "ruby_tab"]
   end
 
   def change_current
