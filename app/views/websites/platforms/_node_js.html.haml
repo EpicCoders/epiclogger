@@ -11,3 +11,4 @@
         %a{:name =>"Connect(Node.js)",:href => "#connect"} Connect
   .panel.panel-default.codeview
     .panel-heading
+    = render partial: 'websites/platforms/' + @matched_platform + '/' + @matched_tab

@@ -3,7 +3,7 @@
     %h3 Configurating Python
   #custom-bootstrap.navbar.navbar-default{:role => "navigation"}
     %ul.nav.navbar-nav.navbar-left
-      %li.active
+      %li{:class => ("active" if @matched_tab == "django")}
         %a{:name =>"Python", :href => "#pythontab"} Python
       %li
         %a{:name =>"Django(Python)", :href => "#django"} Django
@@ -11,3 +11,6 @@
         %a{:name =>"Flask(Python)", :href => "#flask"} Flask
       %li
         %a{:name =>"Tornado(Python)", :href => "#tornado"} Tornado
+  .panel.panel-default.codeview
+    .panel-heading
+    = render partial: 'websites/platforms/' + @matched_platform + '/' + @matched_tab
