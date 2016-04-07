@@ -13,3 +13,6 @@
         %a{:name =>"Log4j2(Java)", :href => "#log4j2"} log4j2
       %li
         %a{:name =>"Logback(Java)", :href => "#logback"} logback
+  .panel.panel-default
+    .panel-heading
+    = render partial: 'websites/platforms/' + @matched_platform + '/' + @matched_tab
