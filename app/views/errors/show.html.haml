@@ -15,12 +15,18 @@
                 = @error.users_affected
             %li
               %span.label.label-primary= @error.environment
+            %li
+              %span.label.label-default= @error.checksum
         .col-xs-2.text-right
           .btn-group
             = paginate @issues, theme: 'next_prev_theme', param_name: :page_issue
     .error-content
       .row
-        .col-sm-9
+        .col-sm-12
+          %h4 Error Message
+          %p.lead= @error.message
+      .row
+        .col-sm-7.col-md-8
           -# exception display
           .panel.panel-default.exception
             .panel-heading Exception
@@ -30,7 +36,7 @@
               %p.read-more.text-center
                 %a.btn.btn-default{:href => "#"} View full backtrace
 
-        .col-sm-3
+        .col-sm-5.col-md-4
           .panel.panel-default
             .panel-heading Details
             .panel-body
@@ -39,3 +45,16 @@
                 %dd= @issue.created_at
                 %dt First seen at
                 %dd= @error.first_seen
+                %dt File
+                %dd= @error.culprit
+                %dt ID
+                %dd= @issue.event_id
+                %dt Level
+                %dd= @error.level
+                %dt Logger
+                %dd= @error.platform
+    .broadcast
+      .row
+        .col-sm-12
+          = @error.subscribers.each do |subscriber|
+            = subscriber.name

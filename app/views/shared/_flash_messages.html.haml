@@ -1,0 +1,15 @@
+- if defined? model
+  - if model.errors.any?
+    %ul.list-group
+      - model.errors.full_messages.each do |msg|
+        %li.list-group-item.list-group-item-danger= msg
+- if flash.any?
+  %ul.list-group
+    - flash.each do |name, msg|
+      - case name.to_sym
+      - when :error, :alert
+        %li.list-group-item.list-group-item-danger= msg
+      - when :notice
+        %li.list-group-item.list-group-item-info= msg
+      - when :success
+        %li.list-group-item.list-group-item-success= msg

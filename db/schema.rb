@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160404093349) do
+ActiveRecord::Schema.define(version: 20160407084023) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -53,7 +53,7 @@ ActiveRecord::Schema.define(version: 20160404093349) do
   create_table "grouped_issues", force: :cascade do |t|
     t.integer  "website_id"
     t.string   "issue_logger",     limit: 64
-    t.integer  "level"
+    t.string   "level",                       default: "error"
     t.text     "message"
     t.integer  "status",                      default: 3
     t.integer  "times_seen",                  default: 1
@@ -64,8 +64,8 @@ ActiveRecord::Schema.define(version: 20160404093349) do
     t.datetime "resolved_at"
     t.datetime "active_at"
     t.string   "platform",         limit: 64
-    t.datetime "created_at",                              null: false
-    t.datetime "updated_at",                              null: false
+    t.datetime "created_at",                                    null: false
+    t.datetime "updated_at",                                    null: false
     t.string   "culprit"
     t.string   "checksum",         limit: 32
     t.integer  "time_spent_total",            default: 0

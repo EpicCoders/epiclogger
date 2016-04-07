@@ -11,7 +11,8 @@
               %span
               Log in with Github
           %span.or or
-          = simple_form_for @user, url: login_path do |f|
+          = form_for @user, url: login_path do |f|
+            = render 'shared/flash_messages'
             .input-group.username
               .input-group-addon
                 %span.glyphicon.glyphicon-user
@@ -22,10 +23,10 @@
               = f.password_field :password, :placeholder => 'Password', class: 'form-control input-lg'
             .row
               .col-md-6
-                .checkbox
-                  %label
-                    %input#remember{:name => "remember", :type => "checkbox"}/
-                    Remember me
+                -# .checkbox
+                -#   %label
+                -#     %input#remember{:name => "remember", :type => "checkbox"}/
+                -#     Remember me
               .col-md-6
                 %button.btn.btn-default.btn-block{:type => "submit"} Sign In
                 %a.forgotpassword{:href => "#"} Forgot your password?

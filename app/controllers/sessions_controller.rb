@@ -19,7 +19,7 @@ class SessionsController < ApplicationController
   end
 
   def unauthorized
-    redirect_to login_url
+    redirect_to login_url, alert: 'Your credentials are wrong'
   end
 
   protected
