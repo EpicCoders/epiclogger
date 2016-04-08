@@ -6,33 +6,33 @@ class WebsitesController < ApplicationController
   end
 
   def new
-    gon.platform = "node_js"
-    @rendered = platform_tabs[3]
-    @step = steps.index(steps.first) + 2
-    @current_step = steps[@step]
-    render "new"
+    got_to_step(0)
   end
 
   def create
     url = URI.parse(website_params[:domain])
     @website = current_user.websites.create!(domain: "#{url.scheme}://#{url.host}", title: website_params[:title])
     if @website.persisted?
-      @step += 1
-      @current_step = steps[@step]
+      set_website(@website)
+      got_to_step(1)
     end
   end
 
   def wizard_install
-    if params[:picked] == 'rails_3' || params[:picked] == 'rails_4'
-      ##TODO we can find a better approach here
-      @platform = "ruby"
-      @tab = params[:picked]
-    elsif params[:picked] == 'django'
-      @platform = "python"
-      @tab = params[:picked]
-    else
-      @platform, @tab = params[:picked]
+    if params[:back].present?
+      got_to_step(1)
+      return
     end
+    if params[:tab].present?
+      attribute = "#{params[:platform].humanize}(#{params[:tab].humanize})"
+      @tab, gon.platform = params[:tab], params[:tab]
+    else
+      attribute = params[:platform].humanize
+      @tab, gon.platform = params[:platform], params[:platform]
+    end
+    @rendered = "#{params[:platform]}_tab"
+    current_website.update_attributes(platform: attribute)
+    got_to_step(2)
   end
 
   def update
@@ -48,6 +48,12 @@ class WebsitesController < ApplicationController
   end
 
   def show; end
+
+  def got_to_step(step)
+    @current_step = steps[step]
+    @step = steps.index(@current_step)
+    render "new"
+  end
 
   def steps
     ["add_website_step", "chose_platform_step", "configuration_step"]

@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   resources :websites, only: [:index, :create, :new, :show] do
     member do
       post :change_current
+      get :wizard_install
     end
   end
   resources :users, only: [:index, :edit]

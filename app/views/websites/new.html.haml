@@ -25,13 +25,13 @@
               - if @step == 0
                 %li
                   - if current_user.websites.count > 0
-                    %button.btn.step-button.prev{:href => "/errors", :role => "menuitem"} Back
+                    = link_to "Back", errors_path, :class => 'step-button btn'
                   - else
-                    = link_to 'Logout', logout_url, method: :delete
+                    = link_to 'Logout', logout_url, :class => 'step-button btn', method: :delete
                 %li.next
                   %button.btn.step-button{:name => "next", :type => "submit", :value => "Next"} Next
               - if @step == 2
                 %li.pull-right
-                  %button.btn.step-button.finish{:href => "#finish", :role => "menuitem"} Finish
+                  = link_to "Finish", errors_path, :class => 'step-button btn'
                 %li
-                  %button.btn.step-button.prev{:name => "previous", :role => "menuitem"} Back
+                  %a.btn.step-button{:href => "/websites/#{@website.id}/wizard_install?back=true"} Back
