@@ -8,4 +8,5 @@ json.subscribers_count @error.website.subscribers.count
 json.issues @error.issues do |issue|
   json.(issue, :id, :platform, :event_id, :data, :message, :datetime, :time_spent)
   json.data issue.error.data
+  json.messages issue.messages.count
 end

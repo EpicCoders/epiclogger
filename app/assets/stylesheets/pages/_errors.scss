@@ -49,8 +49,9 @@
 
   .sidebar_elements{
     .current_issue{
-      background-color: #858ba3 !important;
+      background-color: #5F9EA0 !important;
       color:white !important;
+      border-right: 4px solid #42C0FB;
 
       .sidebar-container-content{
         .error-title{
@@ -73,6 +74,18 @@
           font-size:28px;
           padding:5px;
           margin-left:20px;
+        }
+
+        .errors_count{
+          position: fixed;
+          margin-top: 5px;
+          margin-left: 40px;
+        }
+
+        .errors_comment{
+          position: fixed;
+          margin-top: 5px;
+          margin-left: 97px;
         }
 
         span{
@@ -150,7 +163,7 @@
   }
 
   .error_sidebar{
-    width:300px;
+    width:400px;
   }
 }
 .error-menu-partial{
@@ -166,11 +179,11 @@
 }
 
 .content-partial{
-  left:300px;
+  left:400px;
 }
 
 .content-fullwidth{
-  left:350px;
+  left:450px;
 }
 
 .content-mobile{

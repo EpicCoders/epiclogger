@@ -30,6 +30,9 @@ directive = {
   error_context:
     html: ()->
       JSON.stringify(this.error.data.interfaces.http, null, '\t')
+  error_frame:
+    html: ()->
+      JSON.stringify(this.error.data.interfaces.exception.values[0].stacktrace, null, '\t')
 }
 #default starting page
 page = 1
@@ -37,8 +40,41 @@ page = 1
 #the number of errors displayed in one sidebar page
 errors_per_page = 14
 
+timesSeenGraph = (data, nr, id) ->
+  n = -nr
+  times_seen = []
+  labels_array = []
+  months = [" Jan", " Feb", " Mar", " Apr", " May", " Jun", " Jul", " Aug", " Sep", " Oct", " Nov", " Dec"]
+  while n < nr
+    date = new Date()
+    date.setDate(date.getDate() + n)
+    day = date.getDate()
+    times = $.grep(data, (element, index) ->
+      new Date(Date.parse(element.datetime)).getDate() == day
+    )
+    month = months[date.getMonth()]
+    times_seen.push(times.length)
+    labels_array.push(day+month)
+    n+=1
+
+  barData =
+    labels: labels_array,
+    datasets: [
+        {
+            label: "Occurrence date",
+            fillColor: "rgba(151,187,205,0.5)",
+            strokeColor: "rgba(151,187,205,0.8)",
+            highlightFill: "rgba(151,187,205,0.75)",
+            highlightStroke: "rgba(151,187,205,1)",
+            data: times_seen
+        }
+      ]
+
+  context = $(id).get(0).getContext('2d')
+  timesChart = new Chart(context).Bar(barData)
+  return
+
 PubSub.subscribe('assigned.website', (ev, website)->
-  return unless gon.controller == 'errors'
   switch gon.action
     when "index"
       request(website.id, page)
@@ -56,6 +92,7 @@ PubSub.subscribe('assigned.website', (ev, website)->
         $.current_issue = data.id
         firsttime_sidebar_request(website.id,page,errors_per_page,data.last_seen)
         manipulateShowElements(data)
+        timesSeenGraph(data.issues, 15, '#times_chart')
 
         $($('li.active a').attr('href')).show()
         data.error = data.issues[data.issues.length-1]
@@ -102,7 +139,9 @@ PubSub.subscribe('assigned.website', (ev, website)->
       $('.previous').on 'click', () ->
         page = page - 1
         sidebar_request(website.id, page, errors_per_page)
+
 )
+
 
 $(".nav-tabs").on 'click', (e)->
   if $(e.target).is('i')
@@ -227,23 +266,28 @@ errorSidebarPagination = (data) ->
 
 populateSidebar = (data) ->
   $('.sidebar_elements').empty()
-  $.each data.groups , (index, issue) ->
+  $.each data.groups , (index, error) ->
     message = {}
-    message.type = issue.message.split(":")[0]
-    message.content = issue.message.split(":")[1]
-    website_domain = issue.website_domain.split("http://")[1]
+    message.type = error.message.split(":")[0]
+    message.content = error.message.split(":")[1]
+    website_domain = error.website_domain.split("http://")[1]
+    messages_length = 0
+    $.each error.issues, (index, issue) ->
+      messages_length+=issue.messages.length
     container = "<div class='sidebar-container'>
-                  <input value='" + issue.id + "' type='hidden'>
+                  <input value='" + error.id + "' type='hidden'>
                   <div class='sidebar-container-header'>
-                    <i class='icon-" + issue.platform + " header-icon'></i>
-                    <span class='pull-right muted'>" + moment(issue.last_seen,"YYYY-MM-DDTHH:mm:ssZ").format("HH:mm MMM D YYYY") + " </span>
+                    <i class='icon-" + error.platform + " header-icon'></i>
+                    <small class='label label-default fa fa-bug errors_count'> &nbsp"+error.issues.length+"</small>
+                    <small class='label label-default fa fa-comment-o errors_comment'> &nbsp"+messages_length+"</small>
+                    <span class='pull-right muted'>" + moment(error.last_seen).calendar() + " </span>
                   </div>
                   <div class='sidebar-container-content panelbox'>
                     <p class='error-title'>" + "<b>" + message.type + "</b>" + "<span class='website-content pull-right'>  (" + website_domain + ")</span>" + "</p>
                   </div>
                 </div>"
     $('.sidebar_elements').append(container)
-    if issue.id == $.current_issue
+    if error.id == $.current_issue
       $('.sidebar-container').last().addClass("current_issue")
     $('.sidebar-container').click ->
       changeError(this)

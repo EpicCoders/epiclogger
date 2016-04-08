@@ -6,78 +6,94 @@
       %a{:href => "#backtrace"} Backtrace
     %li
       %a{:href => "#context"} Context
-    %li
-      %a{:href => "#bugs"}
-        %i.glyphicon.glyphicon-alert
-    %li
-      %a{:href => "#aggregations"} Aggregations
-    %li
-      %a{:href => "#conversations"}
-        %i.glyphicon.glyphicon-envelope
   .col-lg-12.pagecontainer.error#overview
-    .col-lg-2
-      %p Occured at
-    .col-lf-10
-      %p.datetime
-    .col-lg-2
-      %p First seen at
-    .col-lf-10
-      %p.first_seen
-    .col-lg-2
-      %p Occurences
-    .col-lf-10
-      %p.times_seen
-    .col-lg-2
-      %p Url
-    .col-lf-10
-      %p.error_url
-    .col-lg-2
-      %p File
-    .col-lf-10
-      %p.culprit
-    .col-lg-2
-      %p Hostname
-    .col-lf-10
-      %p ????????
-    .col-lg-2
-      %p Error type
-    .col-lf-10
-      %p ????????
-    .col-lg-2
-      %p Error message
-    .col-lf-10
-      %p.message
-    .col-lg-2
-      %p Where
-    .col-lf-10
-      %p ????????
-    .col-lg-2
-      %p Remote address
-    .col-lf-10
-      %p.error_remote_addr
-    .col-lg-2
-      %p User agent
-    .col-lf-10
-      %p
-        .data
-          .interfaces
-            .http
-              .headers
-                .user_agent
-    %hr
-    .col-lg-2
-      %p Github
-    .col-lf-10
-      %button.btn.btn-default.fa.fa-github.error_server_name
-    %hr
-    %p{:style => "display:inline"} &nbsp&nbsp&nbsp&nbspPivotal Tracker
-    %button.btn.btn-default{:style => "margin-left: 122px"}
-      %i.glyphicon.glyphicon-record
-      Create Pivotal Tracker ticket
-    %hr
-    %p{:style => "display:inline"} &nbsp&nbsp&nbsp&nbspIntegrations
-    %a{:href => "#", :style => "text-decoration:none;margin-left: 145px"} Integration Settings
-
+    %canvas#times_chart{:height => "200", :width => "1500"}
+    .panel.panel-default
+      .panel-heading
+      .panel-body
+        .col-lg-8
+          .col-lg-2
+            %p Occured at
+          .col-lf-10
+            %p.datetime
+          .col-lg-2
+            %p First seen at
+          .col-lf-10
+            %p.first_seen
+          .col-lg-2
+            %p Occurences
+          .col-lf-10
+            %p.times_seen
+          .col-lg-2
+            %p Url
+          .col-lf-10
+            %p.error_url
+          .col-lg-2
+            %p File
+          .col-lf-10
+            %p.culprit
+          / .col-lg-2
+          /   %p Hostname
+          / .col-lf-10
+          /   %p ????????
+          / .col-lg-2
+          /   %p Error type
+          / .col-lf-10
+          /   %p ????????
+          .col-lg-2
+            %p Error message
+          .col-lf-10
+            %p.message
+          / .col-lg-2
+          /   %p Where
+          / .col-lf-10
+          /   %p ????????
+          .col-lg-2
+            %p Remote address
+          .col-lf-10
+            %p.error_remote_addr
+          .col-lg-2
+            %p User agent
+          .col-lf-10
+            %p
+              .data
+                .interfaces
+                  .http
+                    .headers
+                      .user_agent
+        .col-lg-3
+          %button.btn.btn-primary.btn-xs.fa.fa-check#solve &nbspMark as resolved
+          %button.btn.btn-success.btn-xs.fa.fa-check.resolved &nbspResolved
+          %p
+            %strong Date:
+            %small.created_at 21/04 (two weeks ago)
+            %hr
+          %p
+            %strong Id:
+            %small.event_id
+            %hr
+          %p
+            %strong Level:
+            %small.level Error
+            %hr
+          %p
+            %strong IP Adress:
+            %small.error_remote_addr
+            %hr
+          %p
+            %strong Logger:
+            %small.platform
+      .panel.panel-default
+        .panel-heading
+        .panel-body
+          %form{:role => "form", :style => "width:800px"}
+            .form-group
+              %label{:for => "comment"} Norify Subscribers:
+              %textarea#notifysub.form-control{:rows => "5"}
+            .form-group.pull-right
+              / %input{:type => 'checkbox'}
+              / %span email users &nbsp&nbsp
+              %button.btn.btn-primary#notify Send message
   .col-lg-12.pagecontainer#backtrace
     .error
       .data
@@ -87,54 +103,6 @@
     %pre
       %code.language-html
         .error_context
-  .col-lg-12.pagecontainer.error#bugs
-    %h3 Activity grapth #TODO
-    .col-md-8
-      .panel.panel-default
-        .panel-heading Exception
-        .panel-body
-    .col-md-4
-      .panel.panel-default
-        .panel-heading Actions
-        .panel-body
-          %button.btn.btn-primary.btn-xs.fa.fa-check#solve &nbspMark as resolved
-          %button.btn.btn-success.btn-xs.fa.fa-check.resolved &nbspResolved
-    .col-md-8
-      .panel.panel-default
-        .panel-heading Broadcast
-        .panel-body
-          %form{:role => "form", :style => "width:800px"}
-            .form-group
-              %label{:for => "comment"} Norify Subscribers:
-              %textarea#notifysub.form-control{:rows => "5"}
-            .form-group.pull-right
-              %input{:type => 'checkbox'}
-              %span email users &nbsp&nbsp
-              %button.btn.btn-primary#notify Send
-    .col-md-4
-      .panel.panel-default
-        .panel-heading Details
-        .panel-body
-          .panelbox.propertybox
-            %p
-              %strong Date:
-              %small.created_at 21/04 (two weeks ago)
-              %hr
-            %p
-              %strong Id:
-              %small.event_id
-              %hr
-            %p
-              %strong Level:
-              %small.level Error
-              %hr
-            %p
-              %strong IP Adress:
-              %small.error_remote_addr
-              %hr
-            %p
-              %strong Logger:
-              %small.platform
   /     .container-fluid.multiplepanel
   /       .container-fluid.col-lg-8
   /         .panel.panel-default

@@ -117,6 +117,7 @@ describe Api::V1::ErrorsController, :type => :controller do
               message: issue_error.message,
               datetime: issue_error.datetime,
               time_spent: issue_error.time_spent,
+              messages: issue_error.messages.count
             }
           ]
         }.to_json)
