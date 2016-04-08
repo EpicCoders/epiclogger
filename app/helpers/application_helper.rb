@@ -17,7 +17,7 @@ module ApplicationHelper
   end
 
   def no_sidebar?
-    controller_name == 'websites' && action_name == 'new'
+    controller_name == 'websites' && (action_name == 'new' || action_name == "create" || action_name == "wizard_install")
   end
 
   def regular_sidebar?
