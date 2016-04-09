@@ -56,5 +56,5 @@
     .broadcast
       .row
         .col-sm-12
-          = @error.subscribers.each do |subscriber|
-            = subscriber.name
+          - @error.subscribers.each do |subscriber|
+            = image_tag subscriber.avatar_url

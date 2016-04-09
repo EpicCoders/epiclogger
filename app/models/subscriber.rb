@@ -9,4 +9,9 @@ class Subscriber < ActiveRecord::Base
   def check_fields
     self.name = email.partition('@').first if name.blank?
   end
+
+  def avatar_url(size = 40)
+    gravatar = Digest::MD5.hexdigest(email).downcase
+    "http://gravatar.com/avatar/#{gravatar}.png?s=#{size}"
+  end
 end
