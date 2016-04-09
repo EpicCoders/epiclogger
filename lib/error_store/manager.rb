@@ -78,6 +78,7 @@ module ErrorStore
 
       # save the issue unless its been sampled
       db_store(:issue) { issue.save } unless is_sample
+
       issue
     end
 
@@ -209,14 +210,13 @@ module ErrorStore
 
       # Serialization Failure handling
       subscriber = db_store(:subscriber) do
-        Subscriber.where(
-          website: website,
-          identity: user_data[:id],
-          email: user_data[:email],
-          username: user_data[:username],
-          ip_address: user_data[:ip_address]
-        ).first_or_initialize
+        Subscriber.where(website: website, identity: user_data[:id], email: user_data[:email])
+          .first_or_initialize(
+            username: user_data[:username],
+            ip_address: user_data[:ip_address]
+          )
       end
+
       subscriber
     end
 
