@@ -56,9 +56,9 @@ ActiveAdmin.register User do
 
       row :member_confirmed do
         if member.confirmed_at.blank?
-          'Member not confirmed'
+          'User not confirmed'
         else
-          'Member confirmed'
+          'User confirmed'
         end
       end
     end
@@ -75,13 +75,13 @@ ActiveAdmin.register User do
   end
 
   member_action :confirm, method: :put do
-    member = Member.find(params[:id])
+    member = User.find(params[:id])
     member.confirm
     redirect_to [:admin, member], notice: 'member confirmed'
   end
 
   member_action :unconfirm, method: :put do
-    member = Member.find(params[:id])
+    member = User.find(params[:id])
     member.unconfirm
     redirect_to [:admin, member], notice: 'member unconfirmed'
   end
