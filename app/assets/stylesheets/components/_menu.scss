@@ -1,0 +1,207 @@
+/*!
+ * Sidebar menu
+ */
+
+/* Toggle Styles */
+#wrapper {
+  padding-left: 0;
+  -webkit-transition: all 0.5s ease;
+  -moz-transition: all 0.5s ease;
+  -o-transition: all 0.5s ease;
+  transition: all 0.5s ease;
+}
+
+#wrapper.toggled {
+  padding-left: $sidebar-width;
+}
+
+#sidebar-wrapper {
+  z-index: 1000;
+  position: fixed;
+  left: $sidebar-width;
+  width: 0;
+  height: 100%;
+  margin-left: -$sidebar-width;
+  overflow-y: auto;
+  background: #000;
+  -webkit-transition: all 0.5s ease;
+  -moz-transition: all 0.5s ease;
+  -o-transition: all 0.5s ease;
+  transition: all 0.5s ease;
+}
+
+#wrapper.toggled #sidebar-wrapper {
+  width: $sidebar-width;
+}
+
+#page-content-wrapper {
+  width: 100%;
+  position: absolute;
+}
+
+.padding-top-15 {
+  padding-top: 15px;
+}
+
+.padding-left-15{
+  padding-left: 15px;
+}
+
+#wrapper.toggled #page-content-wrapper {
+  position: absolute;
+  margin-right: -$sidebar-width;
+}
+
+/* Sidebar Styles */
+.sidebar-nav {
+  top: 0;
+  @include sidebar-nav-links();
+}
+
+.project-details{
+  @include sidebar-nav-links();
+  margin-top: 40px;
+  h5 {
+    font-size: 12px;
+    text-indent: 15px;
+  }
+}
+
+.sidebar-nav li a {
+  display: block;
+  text-decoration: none;
+  color: $sidebar-button-color;
+  &:hover { @include btn-hover(); }
+  &:active, &:focus {
+    text-decoration: none;
+  }
+}
+.sidebar-nav > .sidebar-brand {
+  font-size: 18px;
+  line-height: 60px;
+  border-bottom: 1px solid $sidebar-separator-color;
+  margin-bottom: 30px;
+  a {
+    color: $sidebar-button-color;
+    &:hover { @include btn-hover(); }
+  }
+  .brand {
+    width: 30px;
+    height: 30px;
+  }
+  .picked-website {
+    text-align: left;
+    color: $sidebar-button-color;
+    outline: none;
+    padding-left: 10px;
+    &:active, &:focus, &:hover{ @include btn-hover(); }
+  }
+  #websites-sidebar{
+    font-size: $font-size-base;
+    border-top: 1px solid $sidebar-separator-color;
+    li { line-height: 20px; }
+  }
+  .add-new {
+    border-top: 1px solid $sidebar-separator-color;
+    background: #222;
+  }
+}
+
+.sidebar-footer {
+  width:100%;
+  position:absolute;
+  bottom:0;
+  left:0;
+  .footer-help a {
+    display: block;
+    background: #fff;
+    margin: 10px;
+    padding: 10px;
+    border-radius: 3px;
+    &:hover{
+      text-decoration: none;
+      background: #eee;
+    }
+  }
+  .account-details{
+    border-top: 1px solid $sidebar-separator-color;
+    margin: 20px 0;
+    padding: 20px 0;
+    button {
+      text-decoration: none;
+      color: $sidebar-button-color;
+      outline: none;
+      &:hover { @include btn-hover(); }
+      &:active, &:focus {
+        text-decoration: none;
+      }
+    }
+    .dropdown-menu { left: 40px; }
+  }
+}
+// code a small sidebar that is shown when viewing an individual error
+#wrapper.error-sidebar {
+  &.toggled {
+    padding-left: $sidebar-error-width;
+    #sidebar-wrapper {width: $sidebar-error-width; }
+  }
+  #sidebar-wrapper {
+    left: $sidebar-error-width;
+    margin-left: -$sidebar-error-width;
+  }
+  .icon-sidebar {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0;
+    line-height: 60px;
+    width: $sidebar-error-width;
+    .sidebar-brand img{
+      width: 100%;
+      height: auto;
+      margin-bottom: 20px;
+    }
+    li.separator{
+      width: 100%;
+      border-top: 1px solid $sidebar-separator-color;
+      margin: 20px 0;
+    }
+    li a {
+      font-size: 30px;
+      text-align: center;
+      width: 100%;
+      color: $sidebar-button-color;
+      display: block;
+      &:hover{
+        @include btn-hover();
+      }
+    }
+  }
+  .sidebar-footer{
+    margin-bottom: 20px;
+    .btn{ margin: 0; padding: 0; }
+  }
+}
+// toggle menu styles
+#menu-toggle {
+  font-size:35px;
+  color: #1d1e22;
+}
+@media(min-width:768px) {
+  #wrapper.error-sidebar {
+    padding-left: $sidebar-error-width;
+    #sidebar-wrapper{ width: $sidebar-error-width; }
+  }
+  #wrapper { padding-left: $sidebar-width; }
+  #wrapper.no-sidebar { padding-left: 0; }
+  #wrapper.toggled { padding-left: 0; }
+  #sidebar-wrapper { width: $sidebar-width; }
+  #wrapper.toggled #sidebar-wrapper { width: 0; }
+  #page-content-wrapper {
+    // padding: 0 20px 20px;
+    position: relative;
+  }
+  #wrapper.toggled #page-content-wrapper {
+    position: relative;
+    margin-right: 0;
+  }
+}

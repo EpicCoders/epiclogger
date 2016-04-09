@@ -1,7 +1,6 @@
 class HomeController < ApplicationController
   layout "landing"
-  # is this skip really needed here?
-  skip_before_action :authenticate_member!
+  skip_before_action :authenticate!
 
   def index; end
 end

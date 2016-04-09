@@ -3,15 +3,18 @@ class ApplicationController < ActionController::Base
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :null_session
-  # before_action :authenticate_member!
   before_filter :set_gon
-  before_action :configure_permitted_parameters, if: :devise_controller?
+  before_action :authenticate!
+
+  rescue_from CanCan::AccessDenied do |exception|
+    redirect_to root_url, :alert => exception.message
+  end
+
+  rescue_from CanCan::AuthorizationNotPerformed do |exception|
+    redirect_to login_url, :alert => exception.message
+  end
 
   protected
-
-  def configure_permitted_parameters
-    devise_parameter_sanitizer.for(:sign_up) << :name
-  end
 
   def set_gon
     info = { env: Rails.env }
@@ -21,4 +24,26 @@ class ApplicationController < ActionController::Base
     info[:action] = action_name
     gon.push(info)
   end
+
+  def current_website
+    return unless logged_in?
+
+    @website ||= Website.find_by_id(session[:epiclogger_website_id])
+  end
+  helper_method :current_website
+
+  def set_website(website)
+    return unless logged_in?
+    @website = website
+    session[:epiclogger_website_id] = @website.id
+  end
+
+  def after_login_redirect
+    if current_website
+      redirect_to errors_url, notice: "Logged in"
+    else
+      redirect_to new_website_url, notice: 'Logged in'
+    end
+  end
+  helper_method :after_login_redirect
 end

@@ -39,7 +39,6 @@ RSpec.configure do |config|
   # explicitly tag your specs with their type, e.g.:
 
   config.include ErrorRequestMock
-  config.include Devise::TestHelpers, :type => :controller
 
   #     RSpec.describe UsersController, :type => :controller do
   #       # ...

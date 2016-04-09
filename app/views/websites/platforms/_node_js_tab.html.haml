@@ -1,0 +1,110 @@
+.col-md-12.pagecontainer.tab#node_js_tab
+  .pagetitle.text-center
+    %h3 Configuring Node.js
+  #custom-bootstrap.navbar.navbar-default{:role => "navigation"}
+    %ul.nav.navbar-nav.navbar-left
+      %li.active
+        %a{:name =>"node_js",:href => "#node_js"} Node.js
+      %li
+        %a{:name =>"express", :href => "#express"} Express
+      %li
+        %a{:name =>"connect",:href => "#connect"} Connect
+  .panel.panel-default.codeview
+    .panel-heading
+    .panel-body.tabs#node_js
+      %div
+        %h5{:style => 'display:inline'} Start by installing
+        %a{:href => 'https://github.com/EpicCoders/epiclogger-node'}epiclogger-node.
+      %br
+      %pre
+        %code.language-html
+          %p npm install epiclogger
+      %h5 Create an instance of the client:
+      %pre
+        %code.language-html
+          =preserve do
+            :escaped
+              from raven import Client
+
+              client = Client('https://#{@website.app_key}:#{@website.app_key}@test-sentry89.herokuapp.com/#{@website.id}')
+      %h5 You can also optionally install a default error handler to catch all exceptions:
+      %pre
+        %code.language-html
+          %p client.patchGlobal();
+      %div
+        %h5{:style => 'display:inline'} Ensure Node is run with
+        %code NODE_ENV=production:
+      %pre
+        %code.language-html
+          %p NODE_ENV=production node script.js
+      %h5 Now call out to the epiclogger client to capture events:
+      %pre
+        %code.language-html
+          =preserve do
+            :escaped
+              //record a simple message
+              client.captureMessage('hello world!')
+
+              //capture an exception
+              client.captureError(new Error('Uh oh!!'));
+      %hr
+      %div
+        %h5{:style => 'display:inline'}For more information on other uses of Epiclogger with Node.js, please see the
+        %a{:href => 'https://github.com/EpicCoders/epiclogger-node'}official documentation for epiclogger-node.
+    .panel-body.tabs#express
+      %div
+        %h5{:style => 'display:inline'} Start by installing
+        %a{:href => 'https://github.com/EpicCoders/epiclogger-node'}epiclogger-node.
+      %br
+      %pre
+        %code.language-html
+          %p npm install epiclogger
+      %h5 Register an instance of the Express middleware:
+      %pre
+        %code.language-html
+          =preserve do
+            :escaped
+              var app = require('express').createServer();
+
+              app.error(raven.middleware.express('https://#{@website.app_key}:#{@website.app_key}@test-sentry89.herokuapp.com/#{@website.id}'));
+      %div
+        %h5{:style => 'display:inline'} Ensure Node is run with
+        %code NODE_ENV=production:
+      %pre
+        %code.language-html
+          %p NODE_ENV=production node script.js
+      %hr
+      %h5 That's it! Epiclogger automatically installs an error handling hook to pipe all uncaught exceptions to Epiclogger.
+      %div
+        %h5{:style => 'display:inline'}For more information on other uses of Epiclogger with Node.js, please see the
+        %a{:href => 'https://github.com/EpicCoders/epiclogger-node'}official documentation for epiclogger-node.
+    .panel-body.tabs#connect
+      %div
+        %h5{:style => 'display:inline'} Start by installing
+        %a{:href => 'https://github.com/EpicCoders/epiclogger-node'}epiclogger-node.
+      %br
+      %pre
+        %code.language-html
+          %p npm install epiclogger
+      %h5 Register an instance of the Connect middleware after your main application handler:
+      %pre
+        %code.language-html
+          =preserve do
+            :escaped
+              connect(
+                connect.bodyParser(),
+                connect.cookieParser(),
+                mainHandler,
+                raven.middleware.connect('https://#{@website.app_key}:#{@website.app_secret}@test-sentry89.herokuapp.com/#{@website.id}'),
+              ).listen(3000);
+      %div
+        %h5{:style => 'display:inline'} Ensure Node is run with
+        %code NODE_ENV=production:
+      %pre
+        %code.language-html
+          %p NODE_ENV=production node script.js
+      %hr
+      %h5 That's it! Epiclogger automatically installs an error handling hook to pipe all uncaught exceptions to Epiclogger.
+      %div
+        %h5{:style => 'display:inline'}For more information on other uses of Epiclogger with Node.js, please see the
+        %a{:href => 'https://github.com/EpicCoders/epiclogger-node'}official documentation for epiclogger-node.

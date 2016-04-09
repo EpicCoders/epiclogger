@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160404093349) do
+ActiveRecord::Schema.define(version: 20160407084023) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -53,7 +53,7 @@ ActiveRecord::Schema.define(version: 20160404093349) do
   create_table "grouped_issues", force: :cascade do |t|
     t.integer  "website_id"
     t.string   "issue_logger",     limit: 64
-    t.integer  "level"
+    t.string   "level",                       default: "error"
     t.text     "message"
     t.integer  "status",                      default: 3
     t.integer  "times_seen",                  default: 1
@@ -64,8 +64,8 @@ ActiveRecord::Schema.define(version: 20160404093349) do
     t.datetime "resolved_at"
     t.datetime "active_at"
     t.string   "platform",         limit: 64
-    t.datetime "created_at",                              null: false
-    t.datetime "updated_at",                              null: false
+    t.datetime "created_at",                                    null: false
+    t.datetime "updated_at",                                    null: false
     t.string   "culprit"
     t.string   "checksum",         limit: 32
     t.integer  "time_spent_total",            default: 0
@@ -153,15 +153,44 @@ ActiveRecord::Schema.define(version: 20160404093349) do
 
   add_index "subscribers", ["email"], name: "index_subscribers_on_email", unique: true, using: :btree
 
+  create_table "users", force: :cascade do |t|
+    t.string   "email",                               null: false
+    t.string   "name",                                null: false
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
+    t.string   "provider",                            null: false
+    t.string   "uid",                    default: "", null: false
+    t.string   "password_digest",        default: "", null: false
+    t.string   "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.integer  "sign_in_count",          default: 0,  null: false
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.string   "current_sign_in_ip"
+    t.string   "last_sign_in_ip"
+    t.string   "confirmation_token"
+    t.datetime "confirmed_at"
+    t.datetime "confirmation_sent_at"
+    t.string   "unconfirmed_email"
+    t.string   "nickname"
+    t.string   "image"
+    t.text     "tokens"
+  end
+
+  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
+  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
+  add_index "users", ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true, using: :btree
+
   create_table "website_members", force: :cascade do |t|
-    t.integer "member_id"
+    t.integer "user_id"
     t.integer "website_id"
     t.integer "role",               default: 1
     t.string  "invitation_token"
     t.string  "invitation_sent_at"
   end
 
-  add_index "website_members", ["member_id"], name: "index_website_members_on_member_id", using: :btree
+  add_index "website_members", ["user_id"], name: "index_website_members_on_user_id", using: :btree
   add_index "website_members", ["website_id"], name: "index_website_members_on_website_id", using: :btree
 
   create_table "websites", force: :cascade do |t|

@@ -1,95 +1,37 @@
 #page-background
   .col-lg-8.align-wizard
-    %form#wizard-form{:action => "#", :novalidate => "novalidate"}
+    = form_for :websites, url: websites_path do |f|
       #steps-uid-0.steps.wizard.clearfix{:role => "application"}
         .steps.clearfix
           %ul{:role => "tablist"}
-            %li.first.current{"aria-selected" => "true", :role => "tab"}
+            %li.first{:class => (@step == 0) ? 'current' : 'disabled', "aria-selected" => "true", :role => "tab"}
               %a#steps-uid-0-t-0{"aria-controls" => "steps-uid-0-p-0"}
                 %span.current-info.audible current step:
                 %span.number 1.
                 Add Website
-            %li.disabled{:role => "tab"}
+            %li{:class => (@step == 1) ? 'current' : 'disabled', :role => "tab"}
               %a#steps-uid-0-t-1{"aria-controls" => "steps-uid-0-p-1"}
                 %span.number 2.
                 Chose Platform
-            %li.disabled.last{:role => "tab"}
+            %li.last{:class => (@step == 2) ? 'current' : 'disabled', :role => "tab"}
               %a#steps-uid-0-t-2{"aria-controls" => "steps-uid-0-p-2"}
                 %span.number 3.
                 Configuration
         .content.clearfix
-          %h3#steps-uid-0-h-0.title.current{:tabindex => "-1"} Add Website
-          %section#steps-uid-0-p-0.body.current.step{"aria-hidden" => "false", "aria-labelledby" => "steps-uid-0-h-0", :role => "tabpanel"}
-            .form-group
-              %label.control-label Name
-              %input#title.form-control.required{"aria-required" => "true", :name => "website[title]", :placeholder => "Website name", :type => "text"}
-            .form-group
-              %label.control-label Domain
-              %input#domain.form-control.required{"aria-required" => "true", :name => "website[domain]", :placeholder => "http://www.domain.com", :type => "url"}
-          %h3#steps-uid-0-h-1.title{:tabindex => "-1"} Chose Platform
-          %section#steps-uid-0-p-1.body.step{"aria-hidden" => "true", "aria-labelledby" => "steps-uid-0-h-1", :role => "tabpanel", :style => "display: none;"}
-            .col-md-12.pagecontainer
-              .pagetitle.text-center
-                %h3 Installation and configuration
-              .panel.panel-default.codeview
-                .panel-heading Client Configuration
-                .panel-body
-                  %h5 To start sending events, configure your client with the following DSN value:
-                  %pre
-                    %code
-                      %h5.platform-code https://{app_key}:{app_secret}@test-sentry89.herokuapp.com/{id}
-                  %br
-                    %h5 If this is a client that only needs public access (like epiclogger-js), you can use the following public DSN:
-                    %pre
-                      %code
-                        %h5.platform-code https://{app_key}@test-sentry89.herokuapp.com/{id}
-              .panel.panel-default.tileview
-                .panel-heading Platforms
-                .panel-body#platform{:style => 'cursor: pointer'}
-                  %a.tile.text-center.resize-a{:name => "#javascript"}
-                    %img.resize-img{:src => image_path("icon_javascript.png")}/
-                    %span Javascript
-                  %a.tile.text-center.resize-a{:name => "#node-js"}
-                    %img.resize-img{:src => image_path("icon_nodejs.png")}/
-                    %span Node Js
-                  %a.tile.text-center.resize-a{:name => "#ruby"}
-                    %img.resize-img{:src => image_path("icon_ruby.png")}/
-                    %span Ruby
-                  %a.tile.text-center.resize-a{:name => "#python"}
-                    %img.resize-img{:src => image_path("icon_python.png")}/
-                    %span Python
-                  %a.tile.text-center.resize-a{:name => "#ios"}
-                    %img.resize-img{:src => image_path("icon_ios.png")}/
-                    %span IOS
-                  %a.tile.text-center.resize-a{:name => "#php"}
-                    %img.resize-img{:src => image_path("icon_php.png")}/
-                    %span PHP
-                  %a.tile.text-center.resize-a{:name => "#java"}
-                    %img.resize-img{:src => image_path("icon_java.png")}/
-                    %span Java
-              .panel.panel-default.tileview#client-frameworks
-                .panel-heading Frameworks
-                .panel-body{:style => 'cursor: pointer'}
-                  %a.tile.text-center.resize-a{:name => '#rails-3', :href => "#ruby"}
-                    %img.resize-img{:src => image_path("icon_rails.png")}/
-                    %span Rails 3
-                  %a.tile.text-center.resize-a{:name => '#rails-4', :href => "#ruby"}
-                    %img.resize-img{:src => image_path("icon_rails.png")}/
-                    %span Rails 4
-                  %a.tile.text-center.resize-a{:name => '#django', :href => "#python"}
-                    %img.resize-img{:src => image_path("icon_django.png")}/
-                    %span Django
-              %div
-                %h5{:style => "display:inline"} For more information on developing clients and the Sentry API, see the
-                %a{:href => "#"} documentation.
-          %h3#steps-uid-0-h-2.title{:tabindex => "-1"} Configuration
-          %section#steps-uid-0-p-2.body.step{"aria-hidden" => "true", "aria-labelledby" => "steps-uid-0-h-2", :role => "tabpanel", :style => "display: none;"}
-            = render partial: 'websites/configuration'
-        .actions.clearfix
-          %ul{"aria-label" => "Pagination", :role => "menu"}
-            %li{"aria-disabled" => "true"}
-              %a.prev{:href => "#previous", :role => "menuitem"} Prev
-            %li.next{"aria-disabled" => "false", "aria-hidden" => "false"}
-              %a{:href => "#next", :role => "menuitem"} Next
-            %li{"aria-hidden" => "true"}
-              %a.finish{:href => "#finish", :role => "menuitem", :style => "display: none;"} Finish
+          = render partial: 'websites/'+@current_step
+        - if @step == 0 || @step == 2
+          .actions.clearfix
+            %ul{"aria-label" => "Pagination", :role => "menu"}
+              - if @step == 0
+                %li
+                  - if current_user.websites.count > 0
+                    = link_to "Back", errors_path, :class => 'step-button btn'
+                  - else
+                    = link_to 'Logout', logout_url, :class => 'step-button btn', method: :delete
+                %li.next
+                  %button.btn.step-button{:name => "next", :type => "submit", :value => "Next"} Next
+              - if @step == 2
+                %li.pull-right
+                  = link_to "Finish", errors_path, :class => 'step-button btn'
+                %li
+                  %a.btn.step-button{:href => "/websites/#{@website.id}/wizard_install?back=true"} Back

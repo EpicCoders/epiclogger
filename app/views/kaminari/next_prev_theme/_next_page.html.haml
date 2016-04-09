@@ -1,0 +1,2 @@
+%li{class: (current_page.last? ? 'disabled' : '') }
+  = link_to raw(t 'views.pagination.next'), (current_page.last? ? '#' : url), :rel => 'next', :remote => remote

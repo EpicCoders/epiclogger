@@ -1,7 +1,7 @@
 class WebsiteMember < ActiveRecord::Base
   extend Enumerize
   belongs_to :website
-  belongs_to :member
+  belongs_to :user
   enumerize :role, in: { owner: 1, user: 2 }, default: :user, scope: true
   before_create :generate_token
 

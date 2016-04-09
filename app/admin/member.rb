@@ -1,4 +1,4 @@
-ActiveAdmin.register Member do
+ActiveAdmin.register User do
   permit_params :email, :name, :password, :password_confirmation
   actions :all, :except => [:new]
 

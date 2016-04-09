@@ -14,14 +14,19 @@
     = csrf_meta_tags
   %body{:id=>"#{controller.controller_name}-#{controller.action_name}"}
     = include_gon
-    .loading.j-cloak
-    .main-wrapper
-      = render partial: 'layouts/menu'
-      - unless params[:controller] == 'websites' && params[:action] == 'new'
-        .main-container.container-fluid.cbp-spcontent
-          %i.fa.fa-bars.toggle-left-sidebar
-          = yield
-      - else
+    .loading
+    #wrapper.main-wrapper{ class: "#{no_sidebar? ? 'no-sidebar' : ''} #{error_sidebar? ? 'error-sidebar' : ''}" }
+      - if error_sidebar?
+        = render partial: 'layouts/error_sidebar'
+      - elsif regular_sidebar?
+        = render partial: 'layouts/sidebar'
+
+      -# page content
+      - if no_sidebar?
         = yield
-      - if asset?("pages/#{controller.controller_name}.js")
-        = javascript_include_tag "pages/#{controller.controller_name}"
+      - else
+        #page-content-wrapper
+          %a#menu-toggle.btn.btn-link.visible-xs{:href => "#menu-toggle"}
+            %i.fa.fa-bars
+          .container-fluid
+            = yield

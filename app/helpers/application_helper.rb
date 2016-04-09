@@ -12,11 +12,15 @@ module ApplicationHelper
     end
   end
 
-  def asset?(file)
-    if Rails.env.development?
-      Rails.application.assets.find_asset(file)
-    else
-      Rails.application.assets_manifest.assets[file]
-    end
+  def error_sidebar?
+    controller_name == 'errors' && action_name == 'show'
+  end
+
+  def no_sidebar?
+    controller_name == 'websites' && (action_name == 'new' || action_name == "create" || action_name == "wizard_install")
+  end
+
+  def regular_sidebar?
+    !error_sidebar? && !no_sidebar?
   end
 end

@@ -99,10 +99,11 @@ module ErrorStore::Interfaces
       self
     end
 
-    def get_culprit_string
+    def get_culprit_string(with_lineno: false)
       fileloc = _data[:module] || _data[:filename]
       return '' if fileloc.blank?
-      "#{fileloc} in #{_data[:function] || '?'}"
+      lineno = ":#{_data[:lineno]}" if with_lineno && !_data[:lineno].nil?
+      "#{fileloc}#{lineno} in #{_data[:function] || '?'}"
     end
 
     #####

@@ -11,21 +11,22 @@
               %span
               Log in with Github
           %span.or or
-          %form#login{:action => "", :method => "post"}
+          = form_for @user, url: login_path do |f|
+            = render 'shared/flash_messages'
             .input-group.username
               .input-group-addon
                 %span.glyphicon.glyphicon-user
-              %input#email.form-control.input-lg{:placeholder => "Email", :type => "email", :name => 'member_email'}/
+              = f.text_field :email, :placeholder => 'Email', class: 'form-control input-lg'
             .input-group.password
               .input-group-addon
                 %span.glyphicon.glyphicon-lock
-              %input#password.form-control.input-lg{:placeholder => "Password", :type => "password"}/
+              = f.password_field :password, :placeholder => 'Password', class: 'form-control input-lg'
             .row
               .col-md-6
-                .checkbox
-                  %label
-                    %input#remember{:name => "remember", :type => "checkbox"}/
-                    Remember me
+                -# .checkbox
+                -#   %label
+                -#     %input#remember{:name => "remember", :type => "checkbox"}/
+                -#     Remember me
               .col-md-6
                 %button.btn.btn-default.btn-block{:type => "submit"} Sign In
                 %a.forgotpassword{:href => "#"} Forgot your password?

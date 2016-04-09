@@ -1,20 +1,20 @@
 class UserMailer < ApplicationMailer
   default from: "Epic Logger <admin@epiclogger.com>"
 
-  def notify_subscriber(group, member, message)
+  def notify_subscriber(group, user, message)
     @group = group
     @message = message
     @website = @group.website
-    @member = member
-    mail(to: @member.email, subject: 'Epic Logger Subscriber notification')
+    @user = user
+    mail(to: @user.email, subject: 'Epic Logger Subscriber notification')
   end
 
   def member_invitation(website_id, email, website_member_id, inviter_id)
-    @member = Member.find(inviter_id)
+    @user = User.find(inviter_id)
     @website = Website.find(website_id)
     @token = WebsiteMember.find(website_member_id).invitation_token
     @email = email
-    mail(to: @email, subject: 'Epic Logger Invite Members')
+    mail(to: @email, subject: 'Epic Logger Invite Users')
   end
 
   def error_occurred(website_id, message_id)

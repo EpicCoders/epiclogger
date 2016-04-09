@@ -24,9 +24,6 @@ gem 'coffee-rails', '~> 4.1.0'
 # gem 'therubyracer', platforms: :ruby
 gem 'haml-rails'
 
-gem 'devise_token_auth'
-gem 'omniauth-github'
-
 # jquery form validation plugin
 gem 'jquery-validation-rails'
 gem 'activeadmin', '~> 1.0.0.pre2'
@@ -37,7 +34,6 @@ gem 'jquery-rails'
 gem 'turbolinks'
 gem 'gon'
 gem 'jquery-turbolinks'
-gem 'js-routes' # access rails routes in js
 gem 'momentjs-rails'
 gem 'nprogress-rails' # loading for turbolinks
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
@@ -46,7 +42,7 @@ gem 'jbuilder', '~> 2.0'
 gem 'sdoc', '~> 0.4.0', group: :doc
 
 # Use ActiveModel has_secure_password
-# gem 'bcrypt', '~> 3.1.7'
+gem 'bcrypt', '~> 3.1.7'
 
 # Loading env vars
 gem 'figaro'
@@ -57,10 +53,17 @@ gem 'sweet-alert'
 # Add Kaminari for pagination.
 gem 'kaminari'
 
+# Authentication
+gem 'rails_warden'
+gem 'warden_omniauth'
+gem 'omniauth-github'
 gem 'cancancan', '~> 1.10'
 # Add sidekiq for background jobs
 gem 'sidekiq'
 gem 'redis-rails'
+
+# add gem for forms
+gem 'simple_form'
 
 group :development do
   gem 'better_errors'

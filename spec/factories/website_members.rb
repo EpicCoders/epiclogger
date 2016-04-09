@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :website_member do
     association :website
-    association :member
+    association :user
   end
 end

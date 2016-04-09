@@ -1,0 +1,18 @@
+%div{class: "list-group-item #{error.id == @error.id ? 'checked' : ''}"}
+  .row
+    .col-xs-1.list-check
+      %input{:type => "checkbox"}/
+    .col-xs-11.error-details
+      = link_to error_url(error, page: params[:page]) do
+        .row
+          .col-xs-3
+            %span.badge
+              = icon('users')
+              = error.users_affected
+          .col-xs-9.text-right
+            %span.badge= error.environment
+            %span.badge= error.times_seen
+            %small= "#{distance_of_time_in_words_to_now error.last_seen} ago"
+        %div.message
+          = error.message
+          %small.text-muted= error.culprit

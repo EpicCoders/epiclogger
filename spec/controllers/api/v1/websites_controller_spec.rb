@@ -1,11 +1,11 @@
 require 'rails_helper'
 
 describe Api::V1::WebsitesController, :type => :controller do
-  let(:member) { create :member }
+  let(:user) { create :user }
   let(:website) { create :website }
   let(:group) { create :grouped_issue, website: website }
   let(:subscriber) { create :subscriber, website: website }
-  let!(:website_member) { create :website_member, website: website, member: member }
+  let!(:website_member) { create :website_member, website: website, user: user }
   let(:default_params) { { website_id: website.id, format: :json } }
 
   render_views # this is used so we can check the json response from the controller
@@ -13,7 +13,7 @@ describe Api::V1::WebsitesController, :type => :controller do
     let(:params) { default_params.merge({}) }
 
     context 'if logged in' do
-      before { auth_member(member) }
+      before { auth_user(user) }
 
       it 'renders json' do
         get :index, params
@@ -57,7 +57,7 @@ describe Api::V1::WebsitesController, :type => :controller do
     let(:params) { { website: { domain: 'http://www.google.com', title: 'google' }, format: :json } }
 
     context 'if logged in' do
-      before { auth_member(member) }
+      before { auth_user(user) }
 
       it 'renders json' do
         post :create, params
@@ -112,7 +112,7 @@ describe Api::V1::WebsitesController, :type => :controller do
   describe 'GET #show' do
     let(:params) { default_params.merge(id: website.id) }
     context 'if logged in' do
-      before { auth_member(member) }
+      before { auth_user(user) }
 
       it 'assigns webiste' do
         get :show, params
@@ -147,15 +147,15 @@ describe Api::V1::WebsitesController, :type => :controller do
             realtime: website.realtime,
               owners: [
                 {
-                  id: member.id,
-                  email: member.email,
-                  name: member.name,
-                  created_at: member.created_at,
-                  updated_at: member.updated_at,
-                  provider: member.provider,
-                  uid: member.uid,
-                  nickname: member.nickname,
-                  image: member.image
+                  id: user.id,
+                  email: user.email,
+                  name: user.name,
+                  created_at: user.created_at,
+                  updated_at: user.updated_at,
+                  provider: user.provider,
+                  uid: user.uid,
+                  nickname: user.nickname,
+                  image: user.image
                 }
               ]
           }.to_json
@@ -174,7 +174,7 @@ describe Api::V1::WebsitesController, :type => :controller do
     let(:params) { default_params.merge(id: website.id, format: :js) }
 
     context 'it is logged in' do
-      before { auth_member(member) }
+      before { auth_user(user) }
 
       it 'deletes website' do
         expect{
@@ -182,10 +182,10 @@ describe Api::V1::WebsitesController, :type => :controller do
         }.to change(Website, :count).by(-1)
       end
 
-      it 'deletes only website from current member' do
-        member2 = create :member
+      it 'deletes only website from current user' do
+        user2 = create :user
         website2 = create :website, title: 'Title for website', domain: 'http://www.new-website.com'
-        create :website_member, member: member2, website: website2
+        create :website_member, user: user2, website: website2
         expect {
           delete :destroy, default_params.merge(id: website2.id, format: :js)
         }.to raise_error(Epiclogger::Errors::NotAllowed)
@@ -193,7 +193,7 @@ describe Api::V1::WebsitesController, :type => :controller do
 
       it 'reloads page' do
         website2 = create :website, title: 'Website title', domain: 'http://www.second-website.com'
-        create :website_member, member: member, website: website2
+        create :website_member, user: user, website: website2
         delete :destroy, params
         expect(response.body).to eq('location.reload();')
         expect(response.content_type).to eq('text/javascript')

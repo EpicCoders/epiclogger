@@ -16,6 +16,3 @@
   %body{:id=>"#{controller.controller_name}-#{controller.action_name}"}
     = include_gon
     = yield
-
-    - if asset?("pages/#{controller.controller_name}.js")
-      = javascript_include_tag "pages/#{controller.controller_name}"

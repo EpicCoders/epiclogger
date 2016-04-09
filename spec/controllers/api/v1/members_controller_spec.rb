@@ -1,20 +1,20 @@
 require 'rails_helper'
 
 describe Api::V1::MembersController, :type => :controller do
-  let(:member) { create :member }
+  let(:user) { create :user }
   let(:website) {create :website}
-  let!(:website_member) { create :website_member, member_id: member.id, website_id: website.id, invitation_sent_at: Time.now.utc, role: 1 }
+  let!(:website_member) { create :website_member, user_id: user.id, website_id: website.id, invitation_sent_at: Time.now.utc, role: 1 }
   let(:default_params) { {website_id: website.id, format: :json} }
 
   render_views # this is used so we can check the json response from the controller
   describe 'PUT #create' do
-    let(:invitation_member) { create :website_member, member_id: nil, website_id: website.id, invitation_sent_at: Time.now.utc }
-    let(:params) { default_params.merge({ website_member: {website_id: website.id, email: member.email, token: invitation_member.invitation_token} }) }
+    let(:invitation_member) { create :website_member, user_id: nil, website_id: website.id, invitation_sent_at: Time.now.utc }
+    let(:params) { default_params.merge({ website_member: {website_id: website.id, email: user.email, token: invitation_member.invitation_token} }) }
     it 'should update website_member columns' do
       expect{
         put :create, params
         invitation_member.reload
-      }.to change(invitation_member, :member_id).from(nil)
+      }.to change(invitation_member, :user_id).from(nil)
     end
 
     it 'should render json' do
@@ -29,18 +29,18 @@ describe Api::V1::MembersController, :type => :controller do
   end
 
   describe 'GET #show' do
-    let(:params) { default_params.merge({ id: member.id }) }
+    let(:params) { default_params.merge({ id: user.id }) }
     context 'is logged in' do
-      before { auth_member(member) }
+      before { auth_user(user) }
 
-      it 'should get current member' do
+      it 'should get current user' do
         get :show, params
-        expect(assigns(:member)).to eq(member)
+        expect(assigns(:user)).to eq(user)
       end
 
-      it 'should get current member no matter the parameter' do
-        get :show, default_params.merge({ id: member.id + 1 })
-        expect(assigns(:member)).to eq(member)
+      it 'should get current user no matter the parameter' do
+        get :show, default_params.merge({ id: user.id + 1 })
+        expect(assigns(:user)).to eq(user)
       end
 
       it 'should render json' do
@@ -53,9 +53,9 @@ describe Api::V1::MembersController, :type => :controller do
         get :show, params
         expect(response).to be_successful
         expect(response.body).to eq({
-          id: member.id,
-          email: member.email,
-          confirmed_at: member.confirmed_at
+          id: user.id,
+          email: user.email,
+          confirmed_at: user.confirmed_at
           }.to_json)
       end
     end
