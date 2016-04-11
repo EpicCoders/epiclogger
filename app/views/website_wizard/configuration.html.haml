@@ -1,0 +1,11 @@
+= simple_form_for @website, url: wizard_path, method: :put, wrapper: :vertical_form do |f|
+  = render layout: 'wizard_structure' do
+    .content
+      %section.body.current.step
+        = render partial: "installations/platforms/#{@website.platform}_tab"
+    .actions
+      %ul
+        %li
+          = link_to 'Back', previous_wizard_path, class: 'btn step-button'
+        %li
+          = f.submit 'Finish', class: 'step-button btn'

@@ -1,0 +1,15 @@
+= simple_form_for @website, url: wizard_path, method: :put, wrapper: :vertical_form do |f|
+  = render layout: 'wizard_structure' do
+    .content
+      %section.body.current.step
+        = f.input :title, placeholder: 'Website name'
+        = f.input :domain, placeholder: 'http://www.domain.com'
+    .actions
+      %ul
+        %li
+          - if current_user.websites.count > 0
+            = link_to "Back", errors_path, :class => 'step-button btn'
+          - else
+            = link_to 'Logout', logout_url, :class => 'step-button btn', method: :delete
+        %li
+          = f.submit 'Next', class: 'step-button btn'

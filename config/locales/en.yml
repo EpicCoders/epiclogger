@@ -24,6 +24,9 @@ en:
     pagination:
       next: '<i class="fa fa-chevron-right"></i>'
       previous: '<i class="fa fa-chevron-left"></i>'
+  create: 'Add website'
+  choose_platform: 'Choose platform'
+  configuration: 'Configuration'
   helpers:
     page_entries_info:
       one_page:

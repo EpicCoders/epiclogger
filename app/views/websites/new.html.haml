@@ -1,6 +1,6 @@
 #page-background
   .col-lg-8.align-wizard
-    = form_for :websites, url: websites_path do |f|
+    = simple_form_for @website do |f|
       #steps-uid-0.steps.wizard.clearfix{:role => "application"}
         .steps.clearfix
           %ul{:role => "tablist"}

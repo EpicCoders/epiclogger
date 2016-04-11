@@ -20,10 +20,15 @@ class Website < ActiveRecord::Base
   end
 
   def unique_domain
-    domain = URI.parse(self.domain)
+    begin
+      domain = URI.parse(self.domain)
+    rescue
+      errors.add :domain, 'The domain entered is not valid'
+      return false
+    end
     website_cases = ["http://#{domain.host}", "https://#{domain.host}", "ftp://#{domain.host}", self.domain]
     return true unless Website.exists?(domain: website_cases)
-    errors.add :website, 'This website already exists for you'
+    errors.add :domain, 'This website already exists for you'
     false
   end
 

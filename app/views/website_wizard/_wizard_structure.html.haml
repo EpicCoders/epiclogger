@@ -1,0 +1,23 @@
+#page-background
+  .col-lg-8.align-wizard
+    #steps-uid-0.steps.wizard.clearfix{:role => "application"}
+      = wizard_progress_bar
+      .clearfix
+      = yield
+
+      -# - if @step == 0 || @step == 2
+      -#   .actions.clearfix
+      -#     %ul{"aria-label" => "Pagination", :role => "menu"}
+      -#       - if @step == 0
+      -#         %li
+      -#           - if current_user.websites.count > 0
+      -#             = link_to "Back", errors_path, :class => 'step-button btn'
+      -#           - else
+      -#             = link_to 'Logout', logout_url, :class => 'step-button btn', method: :delete
+      -#         %li.next
+      -#           %button.btn.step-button{:name => "next", :type => "submit", :value => "Next"} Next
+      -#       - if @step == 2
+      -#         %li.pull-right
+      -#           = link_to "Finish", errors_path, :class => 'step-button btn'
+      -#         %li
+      -#           %a.btn.step-button{:href => "/websites/#{@website.id}/wizard_install?back=true"} Back

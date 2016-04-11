@@ -25,6 +25,8 @@ Rails.application.routes.draw do
   resources :website_members, only: [:index]
   resources :settings, only: [:index]
 
+  resources :website_wizard
+
   # mount_devise_token_auth_for 'Member', at: 'api/v1/auth', controllers: {
   #   omniauth_callbacks: 'overrides/omniauth_callbacks'
   # }

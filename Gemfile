@@ -64,6 +64,8 @@ gem 'redis-rails'
 
 # add gem for forms
 gem 'simple_form'
+# add wizard gem
+gem 'wicked'
 
 group :development do
   gem 'better_errors'

@@ -1,0 +1,58 @@
+= render layout: 'wizard_structure' do
+  .content
+    %section.body.current.step
+      %h3#steps-uid-0-h-1.title{:tabindex => "-1"} Chose Platform
+      .col-md-12.pagecontainer
+        .pagetitle.text-center
+          %h3 Installation and configuration
+        .panel.panel-default.codeview
+          .panel-heading Client Configuration
+          .panel-body
+            %h5 To start sending events, configure your client with the following DSN value:
+            %pre
+              %code
+                %h5.platform-code https://#{@website.app_key}:#{@website.app_secret}@test-sentry89.herokuapp.com/#{@website.id}
+            %br
+              %h5 If this is a client that only needs public access (like epiclogger-js), you can use the following public DSN:
+              %pre
+                %code
+                  %h5.platform-code https://#{@website.app_key}@test-sentry89.herokuapp.com/#{@website.id}
+        .panel.panel-default.tileview
+          .panel-heading Platforms
+          .panel-body#platform{:style => 'cursor: pointer'}
+            %a.tile.text-center.resize-a{:name => "#javascript"}
+              %img.resize-img{:src => image_path("icon_javascript.png")}/
+              %span Javascript
+            = link_to wizard_path(:choose_platform, 'website[platform]' => 'node_js'), class: 'tile text-center resize-a', method: :put do
+              %img.resize-img{:src => image_path("icon_nodejs.png")}/
+              %span Node Js
+            = link_to wizard_path(:choose_platform, 'website[platform]' => 'ruby'), class: 'tile text-center resize-a', method: :put do
+              %img.resize-img{:src => image_path("icon_ruby.png")}/
+              %span Ruby
+            = link_to wizard_path(:choose_platform, 'website[platform]' => 'python'), class: 'tile text-center resize-a', method: :put do
+              %img.resize-img{:src => image_path("icon_python.png")}/
+              %span Python
+            = link_to wizard_path(:choose_platform, 'website[platform]' => 'ios'), class: 'tile text-center resize-a', method: :put do
+              %img.resize-img{:src => image_path("icon_ios.png")}/
+              %span IOS
+            = link_to wizard_path(:choose_platform, 'website[platform]' => 'php'), class: 'tile text-center resize-a', method: :put do
+              %img.resize-img{:src => image_path("icon_php.png")}/
+              %span PHP
+            = link_to wizard_path(:choose_platform, 'website[platform]' => 'java'), class: 'tile text-center resize-a', method: :put do
+              %img.resize-img{:src => image_path("icon_java.png")}/
+              %span Java
+        .panel.panel-default.tileview#client-frameworks
+          .panel-heading Frameworks
+          .panel-body{:style => 'cursor: pointer'}
+            = link_to wizard_path(:choose_platform, 'website[platform]' => 'ruby', 'tab' => 'rails_3'), class: 'tile text-center resize-a', method: :put do
+              %img.resize-img{:src => image_path("icon_rails.png")}/
+              %span Rails 3
+            = link_to wizard_path(:choose_platform, 'website[platform]' => 'ruby', 'tab' => 'rails_4'), class: 'tile text-center resize-a', method: :put do
+              %img.resize-img{:src => image_path("icon_rails.png")}/
+              %span Rails 4
+            = link_to wizard_path(:choose_platform, 'website[platform]' => 'python', 'tab' => 'django'), class: 'tile text-center resize-a', method: :put do
+              %img.resize-img{:src => image_path("icon_django.png")}/
+              %span Django
+        %div
+          %h5{:style => "display:inline"} For more information on developing clients and the Sentry API, see the
+          %a{:href => "#"} documentation.

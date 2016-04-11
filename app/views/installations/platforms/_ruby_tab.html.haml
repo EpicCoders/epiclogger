@@ -1,0 +1,24 @@
+.col-md-12.pagecontainer.tab#ruby_tab
+  .pagetitle.text-center
+    %h3 Configuring Ruby
+    = @tab
+    = @tab == 'rails_4' ? 'active' : ''
+  #custom-bootstrap.navbar.navbar-default{:role => "navigation"}
+    %ul.nav.navbar-nav.navbar-left
+      %li{class: @tab == 'ruby' ? 'active' : ''}
+        %a{name: "ruby", href: "#ruby"} Ruby
+      %li{class: @tab == 'rails_3' ? 'active' : ''}
+        %a{:name =>"rails_3", :href => "#rails_3"} Rails 3
+      %li{name: 'rails_4', class: ( @tab == 'rails_4' ? 'active' : '')}
+        %a{:name =>"rails_4", :href => "#rails_4"} Rails 4
+      %li{class: @tab == 'sinatra' ? 'active' : ''}
+        %a{:name =>"sinatra", :href => "#sinatra"} Sinatra
+      %li{class: @tab == 'sidekiq' ? 'active' : ''}
+        %a{:name =>"sidekiq", :href => "#sidekiq"} Sidekiq
+  .panel.panel-default.codeview
+    .panel-heading
+    = render partial: 'installations/platforms/ruby/ruby'
+    = render partial: 'installations/platforms/ruby/rails_3'
+    = render partial: 'installations/platforms/ruby/rails_4'
+    = render partial: 'installations/platforms/ruby/sinatra'
+    = render partial: 'installations/platforms/ruby/sidekiq'
