@@ -21,7 +21,7 @@ class Api::V1::WebsitesController < Api::V1::ApiController
     @website.destroy
     respond_to do |format|
       format.js { render inline: 'location.reload();' } unless current_member.websites.blank?
-      format.js { render inline: "location.href='#{new_website_path}';" } if current_member.websites.blank?
+      format.js { render inline: "location.href='#{website_wizard_path(:create)}';" } if current_member.websites.blank?
     end
   end
 

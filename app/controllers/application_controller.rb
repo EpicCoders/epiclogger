@@ -42,7 +42,7 @@ class ApplicationController < ActionController::Base
     if current_website
       redirect_to errors_url, notice: "Logged in"
     else
-      redirect_to new_website_url, notice: 'Logged in'
+      redirect_to website_wizard_path(:create), notice: 'Logged in'
     end
   end
   helper_method :after_login_redirect

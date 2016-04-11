@@ -202,7 +202,7 @@ describe Api::V1::WebsitesController, :type => :controller do
 
       it 'redirects to new_website_path' do
         delete :destroy, params
-        expect(response.body).to eq("location.href='/websites/new';")
+        expect(response.body).to eq("location.href='/website_wizard/create';")
         expect(response.content_type).to eq('text/javascript')
         expect(response).to have_http_status(200)
       end

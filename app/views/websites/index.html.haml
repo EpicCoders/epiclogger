@@ -3,7 +3,7 @@
     .pagetitle
       %h3
         Websites
-        = link_to new_website_path(), class: 'btn btn-primary pull-right' do
+        = link_to website_wizard_path(:create), class: 'btn btn-primary pull-right' do
           = icon('plus')
           Add new website
     .clearfix
