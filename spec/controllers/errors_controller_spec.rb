@@ -12,10 +12,6 @@ RSpec.describe ErrorsController, type: :controller do
 
   describe 'POST #notify_subscribers' do
     context 'if logged in' do
-      include Warden::Test::Helpers
-      after { Warden.test_reset! }
-
-      before { login_as(user) }
       let(:params) { default_params.merge(user: {password: 'hello123', email: user.email}, message: message, id: group.id) }
 
       it 'should email subscribers' do
@@ -23,7 +19,7 @@ RSpec.describe ErrorsController, type: :controller do
         expect(mailer).to receive(:deliver_later)
         expect(UserMailer).to receive(:notify_subscriber).with(group, user, message).and_return(mailer).once
 
-        post :notify_subscribers, params
+        post_with user, :notify_subscribers, params
       end
 
       it 'should email 2 subscribers' do

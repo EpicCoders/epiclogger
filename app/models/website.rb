@@ -2,7 +2,7 @@ class Website < ActiveRecord::Base
   has_many :subscribers, dependent: :destroy
   has_many :grouped_issues, dependent: :destroy
   has_many :website_members, -> { uniq }, autosave: true
-  has_many :members, through: :website_members
+  has_many :users, through: :website_members
 
   validates :title, presence: true
   validates :domain, presence: true
@@ -20,15 +20,10 @@ class Website < ActiveRecord::Base
   end
 
   def unique_domain
-    begin
-      domain = URI.parse(self.domain)
-    rescue
-      errors.add :domain, 'The domain entered is not valid'
-      return false
-    end
+    domain = URI.parse(self.domain)
     website_cases = ["http://#{domain.host}", "https://#{domain.host}", "ftp://#{domain.host}", self.domain]
     return true unless Website.exists?(domain: website_cases)
-    errors.add :domain, 'This website already exists for you'
+    errors.add :website, 'This website already exists for you'
     false
   end
 

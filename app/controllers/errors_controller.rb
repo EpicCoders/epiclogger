@@ -27,7 +27,7 @@ class ErrorsController < ApplicationController
 
   def notify_subscribers
     @message = params[:message]
-    @error.website.members.each do |member|
+    @error.website.users.each do |member|
       UserMailer.notify_subscriber(@error, member, @message).deliver_later
     end
   end

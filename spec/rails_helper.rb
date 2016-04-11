@@ -39,6 +39,7 @@ RSpec.configure do |config|
   # explicitly tag your specs with their type, e.g.:
 
   config.include ErrorRequestMock
+  config.include Warden::Test::ControllerHelpers, type: :controller
 
   #     RSpec.describe UsersController, :type => :controller do
   #       # ...
