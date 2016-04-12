@@ -9,7 +9,7 @@ describe Api::V1::WebsitesController, :type => :controller do
   let(:default_params) { { website_id: website.id, format: :json } }
 
   render_views # this is used so we can check the json response from the controller
-  describe 'GET #index' do
+  xdescribe 'GET #index' do
     let(:params) { default_params.merge({}) }
 
     context 'if logged in' do
@@ -53,7 +53,7 @@ describe Api::V1::WebsitesController, :type => :controller do
     end
   end
 
-  describe 'POST #create' do
+  xdescribe 'POST #create' do
     let(:params) { { website: { domain: 'http://www.google.com', title: 'google' }, format: :json } }
 
     context 'if logged in' do
@@ -109,7 +109,7 @@ describe Api::V1::WebsitesController, :type => :controller do
     end
   end
 
-  describe 'GET #show' do
+  xdescribe 'GET #show' do
     let(:params) { default_params.merge(id: website.id) }
     context 'if logged in' do
       before { auth_user(user) }
@@ -170,7 +170,7 @@ describe Api::V1::WebsitesController, :type => :controller do
     end
   end
 
-  describe 'DELETE #destroy' do
+  xdescribe 'DELETE #destroy' do
     let(:params) { default_params.merge(id: website.id, format: :js) }
 
     context 'it is logged in' do

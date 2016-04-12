@@ -8,7 +8,7 @@ describe Api::V1::InvitationsController, :type => :controller do
 
   render_views # this is used so we can check the json response from the controller
 
-  describe 'POST #create' do
+  xdescribe 'POST #create' do
     let(:params) { default_params.merge({user: { email: user.email }}) }
 
     context 'if logged in' do

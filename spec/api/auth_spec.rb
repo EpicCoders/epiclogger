@@ -6,7 +6,7 @@ describe "Auth API" do
   let!(:website_member) { create :website_member, website: website, user: user }
 
   it 'can login with valid credentials' do
-    post '/api/v1/auth/sign_in', {email: user.email, password: "hello123"}
+    post_with user, '/api/v1/auth/sign_in', {email: user.email, password: "hello123"}
     expect(response).to be_success
   end
 
