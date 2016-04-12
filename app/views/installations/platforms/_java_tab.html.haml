@@ -1,185 +1,23 @@
 .col-md-12.pagecontainer.tab#java_tab
   .pagetitle.text-center
-    %h3 Configurating Java
+    %h3 Configuring Java
+    = @tab
   #custom-bootstrap.navbar.navbar-default{:role => "navigation"}
     %ul.nav.navbar-nav.navbar-left
-      %li.active
-        %a{:name =>"Java", :href => "#java"} Java
-      %li
-        %a{:name =>"Java Util Logging(Java)", :href => "#java-util-logging"} java.util.logging
-      %li
-        %a{:name =>"Log4j(Java)", :href => "#log4j"} log4j
-      %li
-        %a{:name =>"Log4j2(Java)", :href => "#log4j2"} log4j2
-      %li
-        %a{:name =>"Logback(Java)", :href => "#logback"} logback
-  .panel-body.tabs#java
-    %div
-      %h5{:style => 'display:inline'} Start by installing
-      %a{:href => 'https://github.com/EpicCoders/epiclogger-java'}epiclogger-java.
-    %h5 The easiest way to add the Raven dependency is with Maven:
-    %pre
-      %code.language-html
-        =preserve do
-          :escaped
-            <dependency>
-              <groupId>net.kencochrane.raven</groupId>
-              <artifactId>raven</artifactId>
-              <version>4.0</version>
-            </dependency>
-    %h5 You can manually send events using the EventBuilder:
-    %pre
-      %code.language-html
-        =preserve do
-          :escaped
-            import net.kencochrane.raven.Raven;
-            import net.kencochrane.raven.Raven;
-            import net.kencochrane.raven.event.EventBuilder;
-            import net.kencochrane.raven.event.interfaces.ExceptionInterface;
-
-            public class Example {
-                public static void main(String[] args) {
-                    String rawDsn = "https://#{@website.app_key}:#{@website.app_key}@test-sentry89.herokuapp.com/#{@website.id}";
-                    Raven raven = RavenFactory.ravenInstance(new Dsn(rawDsn));
-
-                    // record a simple message
-                    EventBuilder eventBuilder = new EventBuilder()
-                                    .setMessage("Hello from Raven!")
-                                    .setLevel(Event.Level.ERROR)
-                                    .setLogger(MyClass.class.getName())
-                                    .addSentryInterface(new ExceptionInterface(e));
-
-                    raven.runBuilderHelpers(eventBuilder); // Optional
-                    raven.sendEvent(eventBuilder.build());
-                }
-            }
-    %hr
-    %div
-      %h5{:style => 'display:inline'}For more information on other uses of Epiclogger with Java, please see the
-      %a{:href => 'https://github.com/EpicCoders/epiclogger-php'}official documentation for epiclogger-java.
-  .panel-body.tabs#java-util-logging
-    %div
-      %h5{:style => 'display:inline'} Start by installing
-      %a{:href => 'https://github.com/EpicCoders/epiclogger-java'}epiclogger-java.
-    %h5 The easiest way to add the Raven dependency is with Maven:
-    %pre
-      %code.language-html
-        =preserve do
-          :escaped
-            <dependency>
-              <groupId>net.kencochrane.raven</groupId>
-              <artifactId>raven</artifactId>
-              <version>4.0</version>
-            </dependency>
-    %h5 You'll need to configure the SentryHandler in your logging.properties:
-    %pre
-      %code.language-html
-        =preserve do
-          :escaped
-            level=ERROR
-            handlers=net.kencochrane.raven.jul.SentryHandler
-            net.kencochrane.raven.jul.SentryHandler.dsn=https://#{@website.app_key}:#{@website.app_key}@test-sentry89.herokuapp.com/#{@website.id}
-    %hr
-    %div
-      %h5{:style => 'display:inline'}For more information on other uses of Epiclogger with Java, please see the
-      %a{:href => 'https://github.com/EpicCoders/epiclogger-php'}official documentation for epiclogger-java.
-  .panel-body.tabs#log4j
-    %div
-      %h5{:style => 'display:inline'} Start by installing
-      %a{:href => 'https://github.com/EpicCoders/epiclogger-java'}epiclogger-java.
-    %h5 The easiest way to add the Raven dependency is with Maven:
-    %pre
-      %code.language-html
-        =preserve do
-          :escaped
-            <dependency>
-              <groupId>net.kencochrane.raven</groupId>
-              <artifactId>raven</artifactId>
-              <version>4.0</version>
-            </dependency>
-    %h5 You'll need to configure the SentryAppender in your logging configuration:
-    %pre
-      %code.language-html
-        =preserve do
-          :escaped
-            log4j.rootLogger=DEBUG, SentryAppender
-            log4j.appender.SentryAppender=net.kencochrane.raven.log4j.SentryAppender
-            log4j.appender.SentryAppender.dsn=https://#{@website.app_key}:#{@website.app_key}@test-sentry89.herokuapp.com/#{@website.id}
-            level=ERROR
-    %hr
-    %div
-      %h5{:style => 'display:inline'}For more information on other uses of Epiclogger with Java, please see the
-      %a{:href => 'https://github.com/EpicCoders/epiclogger-php'}official documentation for epiclogger-java.
-  .panel-body.tabs#log4j2
-    %div
-      %h5{:style => 'display:inline'} Start by installing
-      %a{:href => 'https://github.com/EpicCoders/epiclogger-java'}epiclogger-java.
-    %h5 The easiest way to add the Raven dependency is with Maven:
-    %pre
-      %code.language-html
-        =preserve do
-          :escaped
-            <dependency>
-              <groupId>net.kencochrane.raven</groupId>
-              <artifactId>raven</artifactId>
-              <version>4.0</version>
-            </dependency>
-    %h5 You'll need to configure the SentryAppender in your logging configuration:
-    %pre
-      %code.language-html
-        =preserve do
-          :escaped
-            <?xml version="1.0" encoding="UTF-8"?>
-            <configuration status="warn" packages="org.apache.logging.log4j.core,net.kencochrane.raven.log4j2">
-                <appenders>
-                    <Raven name="Sentry">
-                        <dsn>
-                            https://#{@website.app_key}:#{@website.app_key}@test-sentry89.herokuapp.com/#{@website.id}
-                        </dsn>
-                    </Raven>
-                </appenders>
-
-                <loggers>
-                    <root level="error">
-                        <appender-ref ref="Sentry"/>
-                    </root>
-                </loggers>
-            </configuration>
-    %hr
-    %div
-      %h5{:style => 'display:inline'}For more information on other uses of Epiclogger with Java, please see the
-      %a{:href => 'https://github.com/EpicCoders/epiclogger-php'}official documentation for epiclogger-java.
-  .panel-body.tabs#logback
-    %div
-      %h5{:style => 'display:inline'} Start by installing
-      %a{:href => 'https://github.com/EpicCoders/epiclogger-java'}epiclogger-java.
-    %h5 The easiest way to add the Raven dependency is with Maven:
-    %pre
-      %code.language-html
-        =preserve do
-          :escaped
-            <dependency>
-              <groupId>net.kencochrane.raven</groupId>
-              <artifactId>raven</artifactId>
-              <version>4.0</version>
-            </dependency>
-    %h5 You'll need to configure the SentryAppender in your logging configuration:
-    %pre
-      %code.language-html
-        =preserve do
-          :escaped
-            <configuration>
-            <appender name="Sentry" class="net.kencochrane.raven.logback.SentryAppender">
-                <dsn>
-                    https://#{@website.app_key}:#{@website.app_key}@test-sentry89.herokuapp.com/#{@website.id}
-                </dsn>
-            </appender>
-
-            <root level="error">
-                <appender-ref ref="Sentry"/>
-            </root>
-        </configuration>
-    %hr
-    %div
-      %h5{:style => 'display:inline'}For more information on other uses of Epiclogger with Java, please see the
-      %a{:href => 'https://github.com/EpicCoders/epiclogger-php'}official documentation for epiclogger-java.
+      %li{class: @tab == 'java' ? 'active' : ''}
+        %a{name: "java", href: "#java"} Java
+      %li{class: @tab == 'java_util_logging' ? 'active' : ''}
+        %a{:name =>"java_util_logging", :href => "#java_util_logging"} java.util.logging
+      %li{ class: ( @tab == 'log4j' ? 'active' : '')}
+        %a{:name =>"log4j", :href => "#log4j"} log4j
+      %li{class: @tab == 'log4j2' ? 'active' : ''}
+        %a{:name =>"log4j2", :href => "#log4j2"} log4j2
+      %li{class: @tab == 'logback' ? 'active' : ''}
+        %a{:name =>"logback", :href => "#logback"} logback
+  .panel.panel-default.codeview
+    .panel-heading
+    = render partial: 'installations/platforms/java/java'
+    = render partial: 'installations/platforms/java/java_util_logging'
+    = render partial: 'installations/platforms/java/log4j'
+    = render partial: 'installations/platforms/java/log4j2'
+    = render partial: 'installations/platforms/java/logback'
