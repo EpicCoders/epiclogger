@@ -10,9 +10,7 @@ module WebsiteWizardHelper
           step_url = wizard_path(every_step) if every_step!=:create
           concat(
             content_tag(:li, class: class_str) do
-              link_to step_url do
-                I18n.t(every_step)
-              end
+              I18n.t(every_step)
             end
           )
         end
