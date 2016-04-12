@@ -35,6 +35,22 @@
                 %div= frame.get_culprit_string(with_lineno: true)
               %p.read-more.text-center
                 %a.btn.btn-default{:href => "#"} View full backtrace
+          .panel.panel-default.broadcast
+            .panel-heading Broadcast
+            .panel-body
+              .subscribers
+                .row
+                  .col-sm-offset-1.col-sm-11
+                    - @error.subscribers.limit(10).each do |subscriber|
+                      = image_tag subscriber.avatar_url(30)
+                    - if @error.subscribers.size > 10
+                      = " and #{@error.subscribers.size - 10} more"
+                .row.notify
+                  .col-sm-1
+                    = image_tag current_user.avatar_url
+                  = form_for @error, url: notify_subscribers_error_path(), remote: true, html: { method: :post , class: 'col-sm-11'} do |f|
+                    = text_area_tag 'message', '', placeholder: 'Write a message ...'
+                    %button.btn.btn-primary{:type => 'submit'} Send
 
         .col-sm-5.col-md-4
           .panel.panel-default

@@ -64,5 +64,36 @@
         color:#288ee2;
       }
     }
+
+    .broadcast{
+      .subscribers{
+        box-sizing:border-box;
+        display:block;
+
+        img{
+          border-radius:50%;
+          overflow:hidden;
+        }
+
+        .notify{
+          margin-top:15px;
+
+          textarea{
+            width:100%;
+            min-height:120px;
+            resize:none;
+            overflow-y:auto;
+            border-radius:5px;
+            padding: 10px;
+            box-sizing: border-box;
+          }
+
+          button{
+            margin-top:15px;
+            float:right;
+          }
+        }
+      }
+    }
   }
 }
