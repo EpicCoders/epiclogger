@@ -8,11 +8,11 @@ RSpec.describe ErrorsController, type: :controller do
   let(:subscriber) { create :subscriber, website: website }
   let!(:issue_error) { create :issue, subscriber: subscriber, group: group }
   let(:message) { 'asdada' }
-  let(:default_params) { { epiclogger_website_id: website.id, format: :json } }
+  let(:default_params) { { format: :json } }
 
   describe 'POST #notify_subscribers' do
     context 'if logged in' do
-      let(:params) { default_params.merge(user: {password: 'hello123', email: user.email}, message: message, id: group.id) }
+      let(:params) { default_params.merge( message: message, id: group.id) }
 
       it 'should email subscribers' do
         mailer = double('UserMailer')
@@ -23,51 +23,43 @@ RSpec.describe ErrorsController, type: :controller do
       end
 
       it 'should email 2 subscribers' do
-        user2 = create :user
+        user2 = create :user, provider: "some"
         create :website_member, website: website, user_id: user2.id
         mailer = double('UserMailer')
         expect(mailer).to receive(:deliver_later).twice
-        expect(UserMailer).to receive(:notify_subscriber).with(group, an_instance_of(Member), message).and_return(mailer).twice
-        post :notify_subscribers, params
+        expect(UserMailer).to receive(:notify_subscriber).with(group, an_instance_of(User), message).and_return(mailer).twice
+        post_with user, :notify_subscribers, params
       end
 
       it 'assigns message' do
-        post :notify_subscribers, params
+        post_with user, :notify_subscribers, params
         expect(assigns(:message)).to eq('asdada')
       end
     end
 
     describe 'GET #index' do
-      let(:params) { default_params.merge(website_id: website.id) }
+      let(:params) { default_params.merge(current_issue: issue_error.id) }
 
       context 'if logged in' do
-        before { auth_user(user) }
 
         it 'renders json' do
-          get :index, params
+          get_with user, :index, params, { epiclogger_website_id: website.id}
           expect(response).to be_successful
           expect(response.content_type).to eq('application/json')
         end
 
         it 'assigns current_site errors' do
-          auth_user(user)
-          get :index, params
+          get_with user, :index, params, { epiclogger_website_id: website.id}
           expect(assigns(:errors)).to eq([group])
         end
       end
+    end
+    context 'not logged in' do
+      let(:params) { default_params.merge(current_issue: issue_error.id) }
 
       it 'should give error if not logged in' do
         get :index, params
-        expect(response.body).to eq({errors: ['Authorized users only.']}.to_json)
-        expect(response).to have_http_status(401)
-      end
-    end
-    context 'not logged in' do
-      let(:params) { default_params.merge({website_id: website.id}) }
-      it 'should give error if not logged in' do
-        get :index, params
-        expect(response.body).to eq({errors: ['Authorized users only.']}.to_json)
-        expect(response).to have_http_status(401)
+        expect(response).to have_http_status(302)
       end
     end
   end
@@ -76,46 +68,52 @@ RSpec.describe ErrorsController, type: :controller do
     let(:params) { default_params.merge(status: 'resolved', id: group.id, website_id: website.id) }
     render_views
     context 'if logged in' do
-      before { auth_user(user) }
 
       it 'renders json' do
-        get :show, params
+        get_with user, :show, params, { epiclogger_website_id: website.id}
         expect(response).to be_successful
         expect(response.content_type).to eq('application/json')
       end
 
       it 'renders the expected json' do
-        get :show, params
+        get_with user, :show, params, { epiclogger_website_id: website.id}
         expect(response).to be_successful
         expect(response.body).to eq({
-          id: group.id,
-          message: group.message,
-          culprit: group.culprit,
-          times_seen: group.times_seen,
-          first_seen: group.first_seen,
-          last_seen: group.last_seen,
-          score: group.score,
-          status: group.status,
-          level: group.level,
-          issue_logger: group.issue_logger,
-          resolved_at: group.resolved_at,
-          subscribers: [
+          id: website.id,
+          app_secret: website.app_secret,
+          app_key: website.app_key,
+          domain: website.domain,
+          title: website.title,
+          platform: website.platform,
+          new_event: website.new_event,
+          frequent_event: website.frequent_event,
+          daily: website.daily,
+          realtime: website.realtime,
+          owners: [
             {
-              id: subscriber.id,
-              email: subscriber.email,
-              avatar_url: "http://www.gravatar.com/avatar/#{Digest::MD5.hexdigest(subscriber.email)}"
-            }
-          ],
-          subscribers_count: group.subscribers.count,
-          issues: [
-            {
-              id: issue_error.id,
-              platform: issue_error.platform,
-              event_id: issue_error.event_id,
-              data: issue_error.error.data,
-              message: issue_error.message,
-              datetime: issue_error.datetime,
-              time_spent: issue_error.time_spent,
+              id: user.id,
+              email: user.email,
+              name: user.name,
+              created_at: user.created_at,
+              updated_at: user.updated_at,
+              provider: user.provider,
+              uid: user.uid,
+              password_digest: user.password_digest,
+              reset_password_token: user.reset_password_token,
+              reset_password_sent_at: user.reset_password_sent_at,
+              remember_created_at: user.remember_created_at,
+              sign_in_count: user.sign_in_count,
+              current_sign_in_at: user.current_sign_in_at,
+              last_sign_in_at: user.last_sign_in_at,
+              current_sign_in_ip: user.current_sign_in_ip,
+              last_sign_in_ip: user.last_sign_in_ip,
+              confirmation_token: user.confirmation_token,
+              confirmed_at: user.confirmed_at,
+              confirmation_sent_at: user.confirmation_sent_at,
+              unconfirmed_email: user.unconfirmed_email,
+              nickname: user.nickname,
+              image: user.image,
+              tokens: user.tokens
             }
           ]
         }.to_json)
@@ -123,35 +121,33 @@ RSpec.describe ErrorsController, type: :controller do
     end
 
     it 'should give error if not logged in' do
-      get :show, params
-      expect(response.body).to eq({ errors: ['Authorized users only.'] }.to_json)
-      expect(response).to have_http_status(401)
+      get :show, params, { epiclogger_website_id: website.id}
+      expect(response).to have_http_status(302)
     end
   end
 
   describe 'PUT #update' do
     let(:params) { default_params.merge(error: { status: 'resolved' }, id: group.id, website_id: website.id) }
     context 'if logged in' do
-      before { auth_user(user) }
       it 'assigns error' do
-        put :update, params
+        put_with user, :update, params, { epiclogger_website_id: website.id}
         expect(assigns(:error)).to eq(group)
       end
       it 'updates error status' do
         expect {
-          put :update, params
+          put_with user, :update, params, { epiclogger_website_id: website.id}
           group.reload
         }.to change(group, :status).from('unresolved').to('resolved')
       end
 
       it 'does not allow update of other parameters other than status' do
         expect{
-          put :update, id: group.id, error: { error: 'some' }, website_id: website.id, format: :json
+          put_with user, :update, id: group.id, error: { error: 'some' }, website_id: website.id, format: :json
         }.to_not change(group, :status).from('unresolved')
       end
 
       it 'renders json' do
-        put :update, params
+        put_with user, :update, params, { epiclogger_website_id: website.id}
         expect(response).to be_successful
         expect(response.content_type).to eq('application/json')
       end
@@ -160,8 +156,7 @@ RSpec.describe ErrorsController, type: :controller do
       let(:params) { default_params.merge(status: 'resolved', id: group.id, website_id: website.id) }
       it 'throws unauthorized' do
         get :update, params
-        expect(response.body).to eq({ errors: ['Authorized users only.'] }.to_json)
-        expect(response).to have_http_status(401)
+        expect(response).to have_http_status(302)
       end
     end
 

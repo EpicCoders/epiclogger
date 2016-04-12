@@ -10,7 +10,7 @@ describe Api::V1::ErrorsController, :type => :controller do
   let(:message) { 'asdada' }
   let(:default_params) { { website_id: website.id, format: :json } }
 
-  describe 'POST #notify_subscribers' do
+  xdescribe 'POST #notify_subscribers' do
     context 'if logged in' do
       before { auth_user(user) }
       let(:params) { default_params.merge(message: message, id: group.id) }
@@ -73,7 +73,7 @@ describe Api::V1::ErrorsController, :type => :controller do
     end
   end
 
-  describe 'GET #show' do
+  xdescribe 'GET #show' do
     let(:params) { default_params.merge(status: 'resolved', id: group.id, website_id: website.id) }
     render_views
     context 'if logged in' do
@@ -130,7 +130,7 @@ describe Api::V1::ErrorsController, :type => :controller do
     end
   end
 
-  describe 'PUT #update' do
+  xdescribe 'PUT #update' do
     let(:params) { default_params.merge(error: { status: 'resolved' }, id: group.id, website_id: website.id) }
     context 'if logged in' do
       before { auth_user(user) }
