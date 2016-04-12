@@ -9,6 +9,8 @@ Rails.application.routes.draw do
   post 'signup' => 'users#create'
   delete 'logout' => 'sessions#destroy', :as => :logout
 
+  get "/omniauth/:provider/callback" => "omniauth#create"
+
   resources :errors, only: [:show, :index, :update] do
     member do
       post :notify_subscribers

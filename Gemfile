@@ -88,7 +88,7 @@ group :development, :test do
 
   gem 'faker'
   gem 'pry'
-  gem 'rspec-rails', '~> 3.4.0'
+  gem 'rspec-rails', '~> 3.4.2'
   gem 'factory_girl_rails'
 
   gem 'brakeman', require: false
