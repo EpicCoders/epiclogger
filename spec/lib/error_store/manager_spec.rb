@@ -94,7 +94,7 @@ RSpec.describe ErrorStore::Manager do
         platform: issue.platform,
         culprit: 'app/controllers/home_controller.rb in / at line 5',
         issue_logger: 1,
-        level: 10,
+        level: 'fatal',
         time_spent_total: 0,
         time_spent_count: 0
       }
@@ -184,7 +184,7 @@ RSpec.describe ErrorStore::Manager do
         platform: issue.platform,
         culprit: 'app/controllers/home_controller.rb in / at line 5',
         issue_logger: 1,
-        level: 10,
+        level: 'fatal',
         time_spent_total: 0,
         time_spent_count: 0
       }
