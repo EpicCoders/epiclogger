@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   resources :errors, only: [:show, :index, :update] do
     member do
       post :notify_subscribers
+      put  :resolve
     end
   end
   resources :grouped_issues, only: [:index, :show]

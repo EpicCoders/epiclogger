@@ -32,6 +32,14 @@ class ErrorsController < ApplicationController
     end
   end
 
+  def resolve
+    if !@error.resolved_at.nil?
+      @error.update_attributes(resolved_at: nil)
+    else
+      @error.update_attributes(resolved_at: DateTime.now)
+    end
+  end
+
   private
 
   def error_params

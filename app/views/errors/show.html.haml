@@ -6,7 +6,7 @@
       .row
         .col-xs-1.times_seen
           = @error.times_seen
-        .col-xs-9
+        .col-xs-8
           %div.message= @error.message
           %ul.list-inline
             %li
@@ -17,7 +17,7 @@
               %span.label.label-primary= @error.environment
             %li
               %span.label.label-default= @error.checksum
-        .col-xs-2.text-right
+        .col-xs-3.text-right
           .btn-group
             = paginate @issues, theme: 'next_prev_theme', param_name: :page_issue
     .error-content
@@ -38,6 +38,14 @@
 
         .col-sm-5.col-md-4
           .panel.panel-default
+            .panel-heading Actions
+            .panel-body
+              %ul.actions
+                %li
+                  - resolve_text = ('<i class="fa fa-times"></i><span>Unresolve</span>' if !@error.resolved_at.nil?) || '<i class="fa fa-check"></i><span>Resolve</span>' 
+                  = link_to raw(resolve_text), resolve_error_path(@error), remote:true, method: :put, id: 'resolve-button'
+
+          .panel.panel-default
             .panel-heading Details
             .panel-body
               %dl
@@ -52,7 +60,7 @@
                 %dt Level
                 %dd= @error.level
                 %dt Logger
-                %dd= @error.platform
+                %dd= @error.platform        
     .broadcast
       .row
         .col-sm-12

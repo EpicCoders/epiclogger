@@ -1,0 +1,6 @@
+- if !@error.resolved_at.nil?
+  $('#resolve-button span').text('Unresolve')
+  $('#resolve-button i').removeClass('fa-check').addClass('fa-times')
+- else
+  $('#resolve-button span').text('Resolve')
+  $('#resolve-button i').removeClass('fa-times').addClass('fa-check')
