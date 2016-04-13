@@ -1,4 +1,4 @@
-.panel-body.tabs#rails_4{style: @tab == 'rails_4' ? 'display: block;' : ''}
+.panel-body.tabs#rails_4{:style => "display:#{@website.platform == 'Rails 4' ? '' : 'none'};"}
   %div
     %h5{:style => 'display:inline'} Start by installing
     %a{:href => 'https://github.com/EpicCoders/epiclogger-ruby'}epiclogger-ruby.

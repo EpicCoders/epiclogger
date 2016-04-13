@@ -1,4 +1,4 @@
-.panel-body.tabs#node_js{style: @tab == 'node_js' ? 'display:block;' : ''}
+.panel-body.tabs#node_js{:style => "display:#{@website.platform == 'Node js' ? '' : 'none'};"}
   %div
     %h5{:style => 'display:inline'} Start by installing
     %a{:href => 'https://github.com/EpicCoders/epiclogger-node'}epiclogger-node.

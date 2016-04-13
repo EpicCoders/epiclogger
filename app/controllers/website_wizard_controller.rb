@@ -8,7 +8,7 @@ class WebsiteWizardController < ApplicationController
       @website = Website.new
     when :configuration
       @website = current_website
-      @tab = session[:install_tab] || @website.platform
+      @platform = session[:install_tab] || @website.platform
     else
       @website = current_website
     end
@@ -16,7 +16,6 @@ class WebsiteWizardController < ApplicationController
   end
 
   def update
-    binding.pry
     case step
     when :create
       # @website = Website.new(website_params)
@@ -31,8 +30,12 @@ class WebsiteWizardController < ApplicationController
       end
     when :choose_platform
       @website = current_website
-      @website.platform = website_params[:platform]
-      session[:install_tab] = params[:tab]
+      if params[:tab].present?
+        @website.platform = params[:tab].humanize
+      else
+        @website.platform = website_params[:platform].humanize
+      end
+      session[:install_tab] = website_params[:platform] unless params[:website].nil?
       render_wizard @website
     else
       @website = current_website
@@ -41,7 +44,6 @@ class WebsiteWizardController < ApplicationController
   end
 
   def finish_wizard_path
-    binding.pry
     websites_path
   end
 

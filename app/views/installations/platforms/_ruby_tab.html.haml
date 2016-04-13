@@ -2,20 +2,18 @@
   .pagetitle.text-center
     %h3 Configuring Ruby
     = @tab
-    = @tab == 'rails_4' ? 'active' : ''
   #custom-bootstrap.navbar.navbar-default{:role => "navigation"}
     %ul.nav.navbar-nav.navbar-left
-      %li{class: @tab == 'ruby' ? 'active' : ''}
-        = link_to "Ruby", wizard_path(:choose_platform, 'website[platform]' => 'node_js'), class: 'tile text-center resize-a', method: :put
-        %a{name: "ruby", href: "#ruby"} Ruby
-      %li{class: @tab == 'rails_3' ? 'active' : ''}
-        %a{:name =>"rails_3", :href => "#rails_3"} Rails 3
-      %li{name: 'rails_4', class: ( @tab == 'rails_4' ? 'active' : '')}
-        %a{:name =>"rails_4", :href => "#rails_4"} Rails 4
-      %li{class: @tab == 'sinatra' ? 'active' : ''}
-        %a{:name =>"sinatra", :href => "#sinatra"} Sinatra
-      %li{class: @tab == 'sidekiq' ? 'active' : ''}
-        %a{:name =>"sidekiq", :href => "#sidekiq"} Sidekiq
+      %li{class: @website.platform == 'Ruby' ? 'active' : ''}
+        = link_to "Ruby", wizard_path(:choose_platform, 'tab' => 'ruby'), method: :put
+      %li{class: @website.platform == 'Rails 3' ? 'active' : ''}
+        = link_to "Rails 3", wizard_path(:choose_platform, 'tab' => 'rails_3'), method: :put
+      %li{class: ( @website.platform == 'Rails 4' ? 'active' : '')}
+        = link_to "Rails 4", wizard_path(:choose_platform, 'tab' => 'rails_4'), method: :put
+      %li{class: @website.platform == 'Sinatra' ? 'active' : ''}
+        = link_to "Sinatra", wizard_path(:choose_platform, 'tab' => 'sinatra'), method: :put
+      %li{class: @website.platform == 'Sidekiq' ? 'active' : ''}
+        = link_to "Sidekiq", wizard_path(:choose_platform, 'tab' => 'sidekiq'), method: :put
   .panel.panel-default.codeview
     .panel-heading
     = render partial: 'installations/platforms/ruby/ruby'

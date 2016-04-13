@@ -1,4 +1,4 @@
-.panel-body.tabs#tornado{style: @tab == 'tornado' ? 'display:block;' : ''}
+.panel-body.tabs#tornado{:style => "display:#{@website.platform == 'Tornado' ? '' : 'none'};"}
   %div
     %h5{:style => 'display:inline'} Start by installing
     %a{:href => 'https://github.com/EpicCoders/epiclogger-python'}epiclogger-python.

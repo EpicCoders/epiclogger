@@ -4,14 +4,14 @@
     = @tab
   #custom-bootstrap.navbar.navbar-default{:role => "navigation"}
     %ul.nav.navbar-nav.navbar-left
-      %li{class: @tab == 'python' ? 'active' : ''}
-        %a{name: "python", href: "#python"} Python
-      %li{class: @tab == 'django' ? 'active' : ''}
-        %a{:name =>"django", :href => "#django"} Django
-      %li{class: ( @tab == 'flask' ? 'active' : '')}
-        %a{:name =>"flask", :href => "#flask"} Flask
-      %li{class: @tab == 'tornado' ? 'active' : ''}
-        %a{:name =>"tornado", :href => "#tornado"} Tornado
+      %li{class: @website.platform == 'Python' ? 'active' : ''}
+        = link_to "Python", wizard_path(:choose_platform, 'tab' => 'python'), method: :put
+      %li{class: @website.platform == 'Django' ? 'active' : ''}
+        = link_to "Django", wizard_path(:choose_platform, 'tab' => 'django'), method: :put
+      %li{class: ( @website.platform == 'Flask' ? 'active' : '')}
+        = link_to "Flask", wizard_path(:choose_platform, 'tab' => 'flask'), method: :put
+      %li{class: @website.platform == 'Tornado' ? 'active' : ''}
+        = link_to "Tornado", wizard_path(:choose_platform, 'tab' => 'tornado'), method: :put
   .panel.panel-default.codeview
     .panel-heading
     = render partial: 'installations/platforms/python/python'

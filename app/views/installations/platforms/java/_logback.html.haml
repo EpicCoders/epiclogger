@@ -1,4 +1,4 @@
-.panel-body.tabs#logback{style: @tab == 'java' ? 'display:block;' : ''}
+.panel-body.tabs#logback{:style => "display:#{@website.platform == 'Logback' ? '' : 'none'};"}
   %div
     %h5{:style => 'display:inline'} Start by installing
     %a{:href => 'https://github.com/EpicCoders/epiclogger-java'}epiclogger-java.

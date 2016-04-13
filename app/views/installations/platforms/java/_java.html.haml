@@ -1,4 +1,4 @@
-.panel-body.tabs#java{style: @tab == 'java' ? 'display:block;' : ''}
+.panel-body.tabs#java{:style => "display:#{@website.platform == 'Java' ? '' : 'none'};"}
   %div
     %h5{:style => 'display:inline'} Start by installing
     %a{:href => 'https://github.com/EpicCoders/epiclogger-java'}epiclogger-java.
