@@ -1,4 +1,5 @@
-var chart = AmCharts.makeChart("chartdiv", {
+var ready = function () {
+  AmCharts.makeChart("chartdiv", {
     "type": "serial",
     "theme": "light",
     "marginRight": 40,
@@ -56,4 +57,7 @@ var chart = AmCharts.makeChart("chartdiv", {
         "enabled": true
     },
     "dataProvider": gon.chart_data
-});
+  }); 
+}
+$(document).ready(ready)
+$(document).on('page:load', ready)

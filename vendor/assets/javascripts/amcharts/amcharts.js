@@ -2010,7 +2010,7 @@
         },
         drawChart: function() {
             0 <
-                this.realWidth && 0 < this.realHeight && (this.drawBackground(), this.redrawLabels(), this.drawTitles(), this.brr(), this.renderFix(), this.chartDiv && (this.boundingRect = this.chartDiv.getBoundingClientRect()))
+                this.realWidth && 0 < this.realHeight && (this.drawBackground(), this.redrawLabels(), this.drawTitles(), this.renderFix(), this.chartDiv && (this.boundingRect = this.chartDiv.getBoundingClientRect()))
         },
         makeAccessible: function(a, b) {
             this.accessible && a && (a.setAttr("role", "img"), a.setAttr("aria-label", b))
@@ -6548,7 +6548,6 @@
                 width: e,
                 height: h
             });
-            //debugger;
             this.R.path(g, a);
             this.addToContainer(g.node, f);
             return g
