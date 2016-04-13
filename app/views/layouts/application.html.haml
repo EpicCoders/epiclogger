@@ -9,11 +9,11 @@
     %meta{:content => "Engage developers with users to solve errors", :name => "description"}/
 
     = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
-    = include_gon
     = javascript_include_tag 'application', 'data-turbolinks-eval' => false
 
     = csrf_meta_tags
   %body{:id=>"#{controller.controller_name}-#{controller.action_name}"}
+    = include_gon
     .loading
     #wrapper.main-wrapper{ class: "#{no_sidebar? ? 'no-sidebar' : ''} #{error_sidebar? ? 'error-sidebar' : ''}" }
       - if error_sidebar?
