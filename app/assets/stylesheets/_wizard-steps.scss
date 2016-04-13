@@ -74,6 +74,48 @@
       > ul > li {
         width: 25%;
         float: left;
+        display: block;
+        margin: 0 0.5em 0.5em;
+        padding: 1em 1em;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        border-radius: 5px;
+        &.disabled {
+          background: #eee;
+          color: #aaa;
+          cursor: default;
+          &:hover, &:active {
+            background: #eee;
+            color: #aaa;
+            cursor: default;
+          }
+        }
+        &.current {
+          background: #2184be;
+          color: #fff;
+          cursor: default;
+          &:hover, &:active {
+            background: #2184be;
+            color: #fff;
+            cursor: default;
+          }
+        }
+        &.done {
+          background: #9dc8e2;
+          color: #fff;
+          &:hover, &:active {
+            background: #9dc8e2;
+            color: #fff;
+          }
+        }
+        &.error {
+          background: #ff3111;
+          color: #fff;
+          &:hover, &:active {
+            background: #ff3111;
+            color: #fff;
+          }
+        }
       }
     }
     .actions > ul > li {
@@ -81,64 +123,6 @@
     }
   }
   > {
-    .steps {
-      a {
-        display: block;
-        width: auto;
-        margin: 0 0.5em 0.5em;
-        padding: 1em 1em;
-        text-decoration: none;
-        -webkit-border-radius: 5px;
-        -moz-border-radius: 5px;
-        border-radius: 5px;
-        &:hover, &:active {
-          display: block;
-          width: auto;
-          margin: 0 0.5em 0.5em;
-          padding: 1em 1em;
-          text-decoration: none;
-          -webkit-border-radius: 5px;
-          -moz-border-radius: 5px;
-          border-radius: 5px;
-        }
-      }
-      .disabled a {
-        background: #eee;
-        color: #aaa;
-        cursor: default;
-        &:hover, &:active {
-          background: #eee;
-          color: #aaa;
-          cursor: default;
-        }
-      }
-      .current a {
-        background: #2184be;
-        color: #fff;
-        cursor: default;
-        &:hover, &:active {
-          background: #2184be;
-          color: #fff;
-          cursor: default;
-        }
-      }
-      .done a {
-        background: #9dc8e2;
-        color: #fff;
-        &:hover, &:active {
-          background: #9dc8e2;
-          color: #fff;
-        }
-      }
-      .error a {
-        background: #ff3111;
-        color: #fff;
-        &:hover, &:active {
-          background: #ff3111;
-          color: #fff;
-        }
-      }
-    }
     .content {
       background: #eee;
       display: block;

@@ -16,6 +16,7 @@ class WebsiteWizardController < ApplicationController
   end
 
   def update
+    binding.pry
     case step
     when :create
       # @website = Website.new(website_params)
@@ -40,6 +41,7 @@ class WebsiteWizardController < ApplicationController
   end
 
   def finish_wizard_path
+    binding.pry
     websites_path
   end
 

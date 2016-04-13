@@ -6,6 +6,7 @@
   #custom-bootstrap.navbar.navbar-default{:role => "navigation"}
     %ul.nav.navbar-nav.navbar-left
       %li{class: @tab == 'ruby' ? 'active' : ''}
+        = link_to "Ruby", wizard_path(:choose_platform, 'website[platform]' => 'node_js'), class: 'tile text-center resize-a', method: :put
         %a{name: "ruby", href: "#ruby"} Ruby
       %li{class: @tab == 'rails_3' ? 'active' : ''}
         %a{:name =>"rails_3", :href => "#rails_3"} Rails 3
