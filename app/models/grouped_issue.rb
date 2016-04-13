@@ -30,7 +30,7 @@ class GroupedIssue < ActiveRecord::Base
   def chart_data
     data = []
     issues = self.issues.where('created_at >= ? AND created_at <= ?', Date.today - 3.months, Date.today.end_of_day)
-    (Date.today - 3.months..Date.today).map(&:to_date).each do |date|
+    (Date.today - 1.months..Date.today.end_of_day).map(&:to_date).each do |date|
       times = issues.select { |issue| issue.created_at.to_date == date }
       data.push({value: times.size, date: date.strftime('%Y-%m-%d')})
     end
