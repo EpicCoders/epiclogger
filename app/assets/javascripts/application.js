@@ -30,6 +30,9 @@
 //= require amcharts/amcharts
 //= require amcharts/serial
 
+//= require amcharts/amcharts
+//= require amcharts/serial
+
 //= require prism
 // require bar-chart
 // require line-chart
