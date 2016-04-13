@@ -4,9 +4,8 @@ class User < ActiveRecord::Base
 
   validates :name, presence: true
   validates :email, presence: true, uniqueness: true
-  validates :password, presence: true, confirmation: true, on: :create
-  validates :password_confirmation, presence: true
-  has_secure_password
+  validates :password, confirmation: true, on: :create
+  has_secure_password(validations: false)
 
   def is_owner_of?(website)
     website.website_members.with_role(:owner).where(website: website).map(&:user_id).include?(self.id)
@@ -19,5 +18,14 @@ class User < ActiveRecord::Base
   def avatar_url(size = 40)
     gravatar = Digest::MD5.hexdigest(email).downcase
     "http://gravatar.com/avatar/#{gravatar}.png?s=#{size}"
+  end
+
+  def self.create_with_omniauth(auth)
+    create! do |user|
+      user.provider = auth["provider"]
+      user.uid = auth["uid"]
+      user.name = auth["info"]["name"] || auth["info"]["nickname"]
+      user.email = auth["info"]["email"]
+    end
   end
 end
