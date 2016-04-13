@@ -27,6 +27,9 @@
 //= require jquery.deparam
 //= require highlightjs
 
+//= require amcharts/amcharts
+//= require amcharts/serial
+
 //= require prism
 // require bar-chart
 // require line-chart

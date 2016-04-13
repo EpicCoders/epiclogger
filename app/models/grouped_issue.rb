@@ -27,6 +27,16 @@ class GroupedIssue < ActiveRecord::Base
     subscribers.count
   end
 
+  def chart_data
+    data = []
+    issues = self.issues.where('created_at >= ? AND created_at <= ?', Date.today - 3.months, Date.today.end_of_day)
+    (Date.today - 3.months..Date.today).map(&:to_date).each do |date|
+      times = issues.select { |issue| issue.created_at.to_date == date }
+      data.push({value: times.size, date: date.strftime('%Y-%m-%d')})
+    end
+    data
+  end
+
   private
 
   def check_fields

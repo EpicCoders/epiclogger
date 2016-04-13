@@ -22,6 +22,8 @@
             = paginate @issues, theme: 'next_prev_theme', param_name: :page_issue
     .error-content
       .row
+        #chartdiv{:style => "width: 100%; height: 362px;"}
+      .row
         .col-sm-12
           %h4 Error Message
           %p.lead= @error.message

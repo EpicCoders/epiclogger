@@ -24,6 +24,7 @@ class ErrorsController < ApplicationController
     @errors = current_website.grouped_issues.order('last_seen DESC').page(@page).per(5)
     @issues = @error.issues.page(page_issue).per(1)
     @issue = @issues.first
+    gon.chart_data = @error.chart_data
   end
 
   def update
