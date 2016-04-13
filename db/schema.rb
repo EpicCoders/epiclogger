@@ -161,4 +161,9 @@ ActiveRecord::Schema.define(version: 20160707095431) do
   end
   add_index "website_members", ["user_id", "website_id"], :name=>"index_website_members_on_user_id_and_website_id", :unique=>true
 
+  add_foreign_key "grouped_issues", "releases"
+  add_foreign_key "integrations", "websites"
+  add_foreign_key "issues", "subscribers"
+  add_foreign_key "issues", "websites"
+  add_foreign_key "releases", "websites"
 end
