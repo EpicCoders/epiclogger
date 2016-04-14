@@ -10,7 +10,7 @@ class WebsiteMember < ActiveRecord::Base
   def valid_url
     valid = (self.website.domain =~ /\A#{URI::regexp(['http', 'https'])}\z/).nil?
     return true unless valid
-    errors.add :base, 'Invalid url' if valid
+    errors.add :domain, 'Invalid url' if valid
     false
   end
 
