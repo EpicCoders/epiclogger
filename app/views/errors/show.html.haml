@@ -25,7 +25,10 @@
         #chartdiv
       .row
         .col-sm-12
-          %h4 Error Message
+          %h4.col-sm-11 Error Message
+          .col-sm-1.resolve
+            - resolve_content = ("Unresolve" if !@error.resolved_at.nil?) || "Resolve" 
+            = button_to resolve_content, resolve_error_path(@error), class: "btn pull-right #{ !@error.resolved_at.nil? ? 'btn-danger' : 'btn-primary' } ", remote:true, method: :put, id: 'resolve-button'
           %p.lead= @error.message
       .row
         .col-sm-7.col-md-8
@@ -70,16 +73,7 @@
                   = form_for @error, url: notify_subscribers_error_path(), remote: true, html: { method: :post , class: 'col-sm-11'} do |f|
                     = text_area_tag 'message', '', placeholder: 'Write a message ...'
                     %button.btn.btn-primary{:type => 'submit'} Send
-
         .col-sm-5.col-md-4
-          .panel.panel-default
-            .panel-heading Actions
-            .panel-body
-              %ul.actions
-                %li
-                  - resolve_text = ('<i class="fa fa-times"></i><span>Unresolve</span>' if !@error.resolved_at.nil?) || '<i class="fa fa-check"></i><span>Resolve</span>' 
-                  = link_to raw(resolve_text), resolve_error_path(@error), remote:true, method: :put, id: 'resolve-button'
-
           .panel.panel-default
             .panel-heading Details
             .panel-body
@@ -95,7 +89,7 @@
                 %dt Level
                 %dd= @error.level
                 %dt Logger
-                %dd= @error.platform        
+                %dd= @error.platform
     .broadcast
       .row
         .col-sm-12

@@ -1,13 +1,15 @@
 .errors-sidebar-list.no-margin
-  .header
-    .row
-      .col-sm-6
-        .btn.btn-default.btn-sm{'data-toggle'=>'button','aria-pressed'=>"false"}
-          %input.all{:title => "toggle all", :type => "checkbox"}/
-      .col-sm-6.error_pagination.text-right
-        %span.sidebar_pagination_text= page_entries_info @errors, entry_name: 'error'
-        .btn-group
-          = paginate @errors, theme: 'next_prev_theme'
-  #errors-sidebar-elements
-    %ul.list-group
-      = render partial: 'sidebar_elements', collection: @errors, as: :error
+  = form_for :@error, url: {action: "resolve"}, method: :put, remote: true do |f|
+    .header
+      .row
+        .col-sm-8
+          .btn.btn-default.btn-sm.pull-left{'data-toggle'=>'button','aria-pressed'=>"false"}
+            %input.all{:title => "toggle all", :type => "checkbox"}/
+          = f.submit 'Resolve selected', class: "btn btn-primary header-resolve", remote:true, method: :put
+        .col-sm-4.error_pagination.text-right
+          %span.sidebar_pagination_text= page_entries_info @errors, entry_name: 'error'
+          .btn-group
+            = paginate @errors, theme: 'next_prev_theme'
+    #errors-sidebar-elements
+      %ul.list-group
+        = render partial: 'sidebar_elements', collection: @errors, as: :error

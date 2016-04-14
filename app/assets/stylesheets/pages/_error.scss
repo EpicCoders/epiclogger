@@ -96,34 +96,8 @@
   .error-content{
     padding: 15px 0;
 
-    .actions{
-      list-style-type:none;
-      font-size:18px;
+    .resolve{
       padding:0px;
-
-      li{
-        color:#676a72;
-        padding:10px 0px;
-        border-bottom:1px solid #ecf0f1;
-        border-top:1px solid #ecf0f1;
-
-        a{
-          display:list-item;
-        }
-
-        i{
-          font-size:20px;
-          margin-right:10px;
-        }
-      }
-
-      li:first-child, li:last-child{
-        border:none;
-      }
-
-      li:hover{
-        color:#288ee2;
-      }
     }
 
     .broadcast{

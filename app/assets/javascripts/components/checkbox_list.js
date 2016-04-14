@@ -23,13 +23,12 @@ $(function () {
     $parent = $(this).parents('list-group-item');
     $parent.toggleClass('checked');
     var $this = $(this).find("[type=checkbox]");
-    if($this.is(":checked")) {
-      $this.prop("checked",false);
-    } else {
-      $this.prop("checked",true);
+    if !$this.attr('disabled'){
+      if($this.is(":checked")) {
+        $this.prop("checked",false);
+      } else {
+        $this.prop("checked",true);
+      }
     }
-    // if ($this.hasClass("all")) {
-    //   $this.trigger('click');
-    // }
   });
 });

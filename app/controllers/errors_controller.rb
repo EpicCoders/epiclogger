@@ -39,10 +39,14 @@ class ErrorsController < ApplicationController
   end
 
   def resolve
-    if !@error.resolved_at.nil?
-      @error.update_attributes(resolved_at: nil)
+    if params[:error_ids]
+      GroupedIssue.where(id: params[:error_ids]).update_all(resolved_at: DateTime.now)
     else
-      @error.update_attributes(resolved_at: DateTime.now)
+      if !@error.resolved_at.nil?
+        @error.update_attributes(resolved_at: nil)
+      else
+        @error.update_attributes(resolved_at: DateTime.now)
+      end
     end
   end
 
