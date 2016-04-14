@@ -1,24 +1,26 @@
 .row
   .col-md-12.pagecontainer
     .pagetitle
-      %h3 Site Users
-    %button.btn.btn-primary.pull-right
-      %span.fa.fa-plus
-      Add User
+      %h3
+        Website Subscribers
     .clearfix
     %br/
     .panel.panel-default
-      %table.table#userscontainer
+      %table.table#members-container
         %thead
           %tr
-            %th User Name
+            %th Name
             %th Email
-            %th
-        %tbody.users
-          %tr
-            %td.name User Name
-            %td.email user@email.com
-            %td
-              %button.btn.btn-danger.btn-sm.pull-right
-                %span.fa.fa-close
-                Remove user
+            / %th.text-right Actions
+        %tbody.websites
+          - @subscribers.each do |subscriber|
+            %tr
+              %td= subscriber.name
+              %td= subscriber.email
+              / %td.text-right
+              /   = link_to ' Delete', "/subscribers/#{subscriber.id}", :method => :delete, :remote => "true", data: {confirm: "Are you sure?"}, :class => "delete_website btn btn-danger pull-right fa fa-close"
+    - if @subscribers.count == 0
+      .bs-example.col-lg-12{"data-example-id" => "simple-alerts"}
+        .alert.alert-info{:role => "alert", :align => "center"}
+          %strong There are no subscribers.
+          Website subscribers will be listed in a table as soon as they will appear.

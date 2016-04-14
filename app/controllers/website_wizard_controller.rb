@@ -18,7 +18,6 @@ class WebsiteWizardController < ApplicationController
   def update
     case step
     when :create
-      # @website = Website.new(website_params)
       @website = Website.new(website_params)
       @website.website_members.build(user: current_user, role: :owner)
       if @website.save

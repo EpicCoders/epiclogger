@@ -16,10 +16,11 @@
             %th Email
             %th Role
             %th.text-right Actions
-        %tbody.website_members
-          %tr.website_member_row{"id"=>1}
-            %td.name
-            %td.email
-            %td.role
-            %td.text-right
-              = link_to ' Remove', api_v1_website_members_path(), :method => :delete, :remote => "true", data: {confirm: "Are you sure?"}, :class => "delete_member btn btn-danger pull-right fa fa-close"
+        %tbody.websites
+          - @members.each do |member|
+            %tr
+              %td= member.user.name
+              %td= member.user.email
+              %td= member.role
+              %td.text-right
+                = link_to ' Delete', "/website_members/#{member.id}", :method => :delete, :remote => "true", data: {confirm: "Are you sure?"}, :class => "delete_website btn btn-danger pull-right fa fa-close"

@@ -25,10 +25,10 @@ Rails.application.routes.draw do
   resources :users, only: [:index, :edit]
   resources :invitations, only: [:new, :show]
   resources :subscribers, only: [:index]
-  resources :accounts, only: [:show]
-  resources :installations, only: [:show, :index]
+  # resources :accounts, only: [:show]
+  resources :installations, only: [:index]
   resources :website_members, only: [:index]
-  resources :settings, only: [:index]
+  # resources :settings, only: [:index]
 
   resources :website_wizard
 

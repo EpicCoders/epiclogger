@@ -1,4 +1,5 @@
 class SubscribersController < ApplicationController
-  def index; end
-  def new; end
+  def index
+    @subscribers = current_website.subscribers
+  end
 end
