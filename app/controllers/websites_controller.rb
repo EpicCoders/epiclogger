@@ -12,8 +12,11 @@ class WebsitesController < ApplicationController
   def destroy
     @website.destroy
     respond_to do |format|
-      format.js { render inline: 'location.reload();' } unless current_member.websites.blank?
-      format.js { render inline: "location.href='#{website_wizard_path(:create)}';" } if current_member.websites.blank?
+      unless current_user.websites.blank?
+        set_website(current_user.websites.first)
+        format.js { render inline: 'location.reload();' }
+      end
+      format.js { render inline: "location.href='#{website_wizard_path(:create)}';" } if current_user.websites.blank?
     end
   end
 

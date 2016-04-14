@@ -16,7 +16,7 @@ Rails.application.routes.draw do
     end
   end
   resources :grouped_issues, only: [:index, :show]
-  resources :websites, only: [:index, :create, :new, :show] do
+  resources :websites, only: [:index, :create, :new, :show, :destroy] do
     member do
       post :change_current
       get :wizard_install

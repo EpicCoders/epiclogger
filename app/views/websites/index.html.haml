@@ -18,16 +18,13 @@
             %th App Secret
             %th.text-right Actions
         %tbody.websites
-          %tr.website_row{"id"=>1}
-            %td.title
-            %td.domain
-            %td.app_key
-            %td.app_secret
-            %td.text-right
-              = link_to ' Delete', websites_path(), :method => :delete, :remote => "true", data: {confirm: "Are you sure?"}, :class => "delete_website btn btn-danger pull-right fa fa-close"
-    #missing-websites.bs-example.col-lg-12{"data-example-id" => "simple-alerts"}
-      .alert.alert-info{:role => "alert", :align => "center"}
-        %strong There are no websites.
-        Go click "Add new website" on top right of the page to add new website. Thanks!
+          - @websites.each do |website|
+            %tr
+              %td= website.title
+              %td= website.domain
+              %td= website.app_key
+              %td= website.app_secret
+              %td.text-right
+                = link_to ' Delete', "/websites/#{website.id}", :method => :delete, :remote => "true", data: {confirm: "Are you sure?"}, :class => "delete_website btn btn-danger pull-right fa fa-close"
 
 

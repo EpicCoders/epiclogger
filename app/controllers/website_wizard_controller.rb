@@ -50,6 +50,6 @@ class WebsiteWizardController < ApplicationController
   private
 
   def website_params
-    params.require(:website).permit(:domain, :title, :platform)
+    params.require(:website).permit(:domain, :url, :title, :platform)
   end
 end

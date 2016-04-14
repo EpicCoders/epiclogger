@@ -3,9 +3,16 @@ class WebsiteMember < ActiveRecord::Base
   belongs_to :website
   belongs_to :user
   enumerize :role, in: { owner: 1, user: 2 }, default: :user, scope: true
-  before_create :generate_token
+  before_create :generate_token, :valid_url
 
   before_destroy :validate_destroy
+
+  def valid_url
+    valid = (self.website.domain =~ /\A#{URI::regexp(['http', 'https'])}\z/).nil?
+    return true unless valid
+    errors.add :base, 'Invalid url' if valid
+    false
+  end
 
   def validate_destroy
     owners = WebsiteMember.with_role(:owner).where('website_id=?', website.id)
