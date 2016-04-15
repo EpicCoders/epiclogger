@@ -22,6 +22,12 @@ $list-error-height: 100%;
       margin-top:5px;
       margin-left:20px;
     }
+    .sidebar-tabs{
+      li{
+        padding:0px;
+        text-align:center;
+      }
+    }
   }
 }
 #errors-sidebar-elements{
@@ -44,6 +50,9 @@ $list-error-height: 100%;
   .list-group-item:hover, .checked, .active{
     background: #F5F5F5;
     a { text-decoration: none; }
+  }
+  .list-group{
+    margin-bottom:0px;
   }
   .message{
     overflow: hidden;

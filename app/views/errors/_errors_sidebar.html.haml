@@ -3,13 +3,31 @@
     .header
       .row
         .col-sm-8
-          .btn.btn-default.btn-sm.pull-left{'data-toggle'=>'button','aria-pressed'=>"false"}
-            %input.all{:title => "toggle all", :type => "checkbox"}/
-          = f.submit 'Resolve selected', class: "btn btn-primary header-resolve", remote:true, method: :put
+          .select-all{ :style => "display:#{params['resolved'] == 'false' ? 'block' : 'none'};" }
+            .btn.btn-default.btn-sm.pull-left{'data-toggle'=>'button','aria-pressed'=>"false"}
+              %input.all{:title => "toggle all", :type => "checkbox"}/
+            = f.submit 'Resolve selected', class: "btn btn-primary header-resolve", remote:true, method: :put
         .col-sm-4.error_pagination.text-right
-          %span.sidebar_pagination_text= page_entries_info @errors, entry_name: 'error'
+          %span.sidebar_pagination_text= page_entries_info @selected_errors, entry_name: 'error'
           .btn-group
-            = paginate @errors, theme: 'next_prev_theme'
-    #errors-sidebar-elements
-      %ul.list-group
-        = render partial: 'sidebar_elements', collection: @errors, as: :error
+            = paginate @selected_errors, theme: 'next_prev_theme'
+      .row
+        %ul.nav.nav-tabs.sidebar-tabs
+          %li.col-sm-6{:class => "#{params[:resolved] == 'true' || params[:resolved].nil? ? 'active' : ''}"}
+            %a{:href => "#{request.path}?resolved=true"}
+              Resolved
+              %span.badge
+                =@error_count[:resolved]
+          %li.col-sm-6{:class => "#{params[:resolved] == 'false' ? 'active' : ''}"}
+            %a{:href => "#{request.path}?resolved=false"}
+              Unresolved
+              %span.badge
+                =@error_count[:unresolved]
+        .tab-content
+          #resolved.tab-pane{:class => "#{params[:resolved] == 'true' || params[:resolved].nil? ? 'active' : ''}"}
+            = render partial: 'sidebar_elements', collection: @selected_errors, as: :error
+          #unresolved.tab-pane{:class => "#{params[:resolved] == 'false' ? 'active' : ''}"}
+            = render partial: 'sidebar_elements', collection: @selected_errors, as: :error
+
+
+

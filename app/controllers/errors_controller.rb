@@ -21,7 +21,18 @@ class ErrorsController < ApplicationController
   def show
     @page = params[:page]
     page_issue = params[:page_issue] || 1
-    @errors = current_website.grouped_issues.order('last_seen DESC').page(@page).per(5)
+
+    resolved = params[:resolved] || 'true'
+    errors = current_website.grouped_issues.order('last_seen DESC')
+    resolved_errors = errors.where('resolved_at IS NOT NULL').order('last_seen DESC')
+    unresolved_errors = errors.where(resolved_at: nil).order('last_seen DESC')
+    @error_count = {total: errors.size, resolved: resolved_errors.size, unresolved: unresolved_errors.size}
+    if resolved == 'true'
+      @selected_errors = resolved_errors.page(@page).per(5)
+    elsif resolved == 'false'
+      @selected_errors = unresolved_errors.page(@page).per(5)
+    end
+
     @issues = @error.issues.page(page_issue).per(1)
     @issue = @issues.first
     gon.chart_data = @error.chart_data

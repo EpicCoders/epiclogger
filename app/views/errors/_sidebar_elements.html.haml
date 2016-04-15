@@ -1,18 +1,20 @@
-%div{class: "list-group-item #{error.id == @error.id ? 'checked' : ''}"}
-  .row
-    .col-xs-1.list-check
-      = check_box_tag 'error_ids[]', value = "#{error.id}", checked = !error.resolved_at.nil? ? true : false, style: "display:#{!error.resolved_at.nil? ? 'none' : 'block'};"
-    .col-xs-11.error-details
-      = link_to error_url(error, page: params[:page]) do
-        .row
-          .col-xs-3
-            %span.badge
-              = icon('users')
-              = error.users_affected
-          .col-xs-9.text-right
-            %span.badge= error.environment
-            %span.badge= error.times_seen
-            %small= "#{distance_of_time_in_words_to_now error.last_seen} ago"
-        %div.message
-          = error.message
-          %small.text-muted= error.culprit
+#errors-sidebar-elements
+  %ul.list-group
+    %div{class: "list-group-item #{error.id == @error.id ? 'checked' : ''}"}
+      .row
+        .col-xs-1.list-check{ :style => "display:#{params['resolved'] == 'false' ? 'block' : 'none'};" }
+          = check_box_tag 'error_ids[]', value = "#{error.id}", checked = !error.resolved_at.nil? ? true : false
+        .error-details{ :class => "#{params['resolved'] == 'false' ? 'col-xs-11' : 'col-xs-12'}"}
+          = link_to error_url(error, page: params[:page], resolved: params[:resolved]) do
+            .row
+              .col-xs-3
+                %span.badge
+                  = icon('users')
+                  = error.users_affected
+              .col-xs-9.text-right
+                %span.badge= error.environment
+                %span.badge= error.times_seen
+                %small= "#{distance_of_time_in_words_to_now error.last_seen} ago"
+            %div.message
+              = error.message
+              %small.text-muted= error.culprit
