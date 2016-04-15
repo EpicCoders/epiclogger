@@ -4,14 +4,25 @@
     = @tab
   #custom-bootstrap.navbar.navbar-default{:role => "navigation"}
     %ul.nav.navbar-nav.navbar-left
-      %li{class: @website.platform == 'Node js' ? 'active' : ''}
-        = link_to "Node js", wizard_path(:choose_platform, 'tab' => 'node_js'), method: :put
-      %li{class: @website.platform == 'Express' ? 'active' : ''}
-        = link_to "Express", wizard_path(:choose_platform, 'tab' => 'express'), method: :put
-      %li{class: ( @website.platform == 'Connect' ? 'active' : '')}
-        = link_to "Connect", wizard_path(:choose_platform, 'tab' => 'connect'), method: :put
+      - if params[:controller] == "installations"
+        %li{class: @platform_tab == 'node_js' ? 'active' : ''}
+          = link_to "Node.js", installations_path('platform_tab' => 'node_js')
+        %li{class: @platform_tab == 'express' ? 'active' : ''}
+          = link_to "Express", installations_path('platform_tab' => 'express')
+        %li{class: @platform_tab == 'connect' ? 'active' : ''}
+          = link_to "Connect", installations_path('platform_tab' => 'connect')
+      - else
+        %li{class: @website.platform == 'Node js' ? 'active' : ''}
+          = link_to "Node js", wizard_path(:choose_platform, 'tab' => 'node_js'), method: :put
+        %li{class: @website.platform == 'Express' ? 'active' : ''}
+          = link_to "Express", wizard_path(:choose_platform, 'tab' => 'express'), method: :put
+        %li{class: ( @website.platform == 'Connect' ? 'active' : '')}
+          = link_to "Connect", wizard_path(:choose_platform, 'tab' => 'connect'), method: :put
   .panel.panel-default.codeview
     .panel-heading
-    = render partial: 'installations/platforms/node_js/node_js'
-    = render partial: 'installations/platforms/node_js/express'
-    = render partial: 'installations/platforms/node_js/connect'
+    - if params[:controller] == "installations"
+      = render partial: "installations/platforms/node_js/#{@platform_tab}"
+    - else
+      = render partial: 'installations/platforms/node_js/node_js'
+      = render partial: 'installations/platforms/node_js/express'
+      = render partial: 'installations/platforms/node_js/connect'

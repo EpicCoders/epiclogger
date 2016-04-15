@@ -1,4 +1,4 @@
-.panel-body.tabs#sinatra{:style => "display:#{@website.platform == 'Sinatra' ? 'block' : 'none'};"}
+.panel-body.tabs#sinatra{:style => "display:#{(@website.platform == 'Sinatra' || @platform_tab == 'sinatra') ? 'block' : 'none'};"}
   %div
     %h5{:style => 'display:inline'} Start by installing
     %a{:href => 'https://github.com/EpicCoders/epiclogger-ruby'}epiclogger-ruby.

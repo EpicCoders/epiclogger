@@ -1,4 +1,4 @@
-.panel-body.tabs#javascript{:style => "display:#{@website.platform == 'Javascript' ? 'block' : 'none'};"}
+.panel-body.tabs#javascript{:style => "display:#{(@website.platform == 'Javascript' || @platform_tab == 'javascript') ? 'block' : 'none'};"}
   %div
     %h5{:style => 'display:inline'} Start by installing
     %a{:href => 'https://github.com/EpicCoders/epiclogger-js'}epiclogger-js.

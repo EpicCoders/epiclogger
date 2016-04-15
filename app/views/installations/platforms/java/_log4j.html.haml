@@ -1,4 +1,4 @@
-.panel-body.tabs#log4j{:style => "display:#{@website.platform == 'Log4j' ? 'block' : 'none'};"}
+.panel-body.tabs#log4j{:style => "display:#{(@website.platform == 'Log4j' || @platform_tab == 'log4j') ? 'block' : 'none'};"}
   %div
     %h5{:style => 'display:inline'} Start by installing
     %a{:href => 'https://github.com/EpicCoders/epiclogger-java'}epiclogger-java.

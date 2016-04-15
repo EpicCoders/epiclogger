@@ -1,4 +1,4 @@
-.panel-body.tabs#connect{:style => "display:#{@website.platform == 'Connect' ? 'block' : 'none'};"}
+.panel-body.tabs#connect{:style => "display:#{(@website.platform == 'Connect' || @platform_tab == 'connect') ? 'block' : 'none'};"}
   %div
     %h5{:style => 'display:inline'} Start by installing
     %a{:href => 'https://github.com/EpicCoders/epiclogger-node'}epiclogger-node.
