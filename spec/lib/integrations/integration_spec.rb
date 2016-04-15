@@ -9,11 +9,16 @@ RSpec.describe Integrations::Integration do
 
   it { expect(new_integration.name).to eq('Intercom') }
   it { expect(new_integration.type).to eq(:intercom) }
+  it { expect(new_integration.website).to eq(website) }
 
   describe 'initialize' do
     it 'assigns request and issue provided' do
       expect( new_integration.instance_variable_get(:@integration) ).to eq(integration)
       expect( new_integration.instance_variable_get(:@driver) ).to be_kind_of(Integrations::Drivers::Intercom)
     end
+  end
+
+  describe 'returns the api_url' do
+
   end
 end

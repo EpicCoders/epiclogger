@@ -4,6 +4,7 @@ module Integrations
     attr_reader :driver, :integration
 
     delegate :name, :type, to: :driver
+    delegate :website, to: :integration
 
     def initialize(integration, driver)
       @integration = integration

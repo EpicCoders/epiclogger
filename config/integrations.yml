@@ -1,0 +1,3 @@
+intercom:
+  app_key: <%= ENV['INTERCOM_APP_KEY'] %>
+  app_secret: <%= ENV['INTERCOM_APP_SECRET'] %>

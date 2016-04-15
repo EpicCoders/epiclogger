@@ -10,5 +10,9 @@ module Integrations::Drivers
     def type
       :intercom
     end
+
+    def authorization
+
+    end
   end
 end
