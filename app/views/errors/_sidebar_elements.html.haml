@@ -1,7 +1,7 @@
 %div{class: "list-group-item #{error.id == @error.id ? 'checked' : ''}"}
   .row
     .col-xs-1.list-check
-      = check_box_tag 'error_ids[]', value = "#{error.id}", checked = !error.resolved_at.nil? ? true : false, disabled: !error.resolved_at.nil? ? true : false
+      = check_box_tag 'error_ids[]', value = "#{error.id}", checked = !error.resolved_at.nil? ? true : false, style: "display:#{!error.resolved_at.nil? ? 'none' : 'block'};"
     .col-xs-11.error-details
       = link_to error_url(error, page: params[:page]) do
         .row
