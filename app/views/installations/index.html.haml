@@ -8,4 +8,4 @@
       %li{class: @main_tab == 'integrations' ? 'active' : ''}
         = link_to "Integrations" ,installations_path('main_tab' => 'integrations')
 
-  = render partial: "installations/#{@main_tab}"
+  = render partial: "installations/header_tabs/#{@main_tab}"

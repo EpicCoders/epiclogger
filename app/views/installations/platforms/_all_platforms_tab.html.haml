@@ -1,0 +1,51 @@
+.panel.panel-default.codeview
+  .panel-heading Installation and configuration
+  .panel-body
+    %h5 To start sending events, configure your client with the following DSN value:
+    %pre
+      %code
+        %h5.platform-code https://#{@website.app_key}:#{@website.app_secret}@test-sentry89.herokuapp.com/#{@website.id}
+    %br
+      %h5 If this is a client that only needs public access (like epiclogger-js), you can use the following public DSN:
+      %pre
+        %code
+          %h5.platform-code https://#{@website.app_key}@test-sentry89.herokuapp.com/#{@website.id}
+.panel.panel-default.tileview
+  .panel-heading Platforms
+  .panel-body#platform{:style => 'cursor: pointer'}
+    = link_to installations_path('configuration_tab' => 'javascript'), class: 'tile text-center resize-a' do
+      %img.resize-img{:src => image_path("icon_javascript.png")}/
+      %span Javascript
+    = link_to installations_path('configuration_tab' => 'node_js'), class: 'tile text-center resize-a' do
+      %img.resize-img{:src => image_path("icon_nodejs.png")}/
+      %span Node Js
+    = link_to installations_path('configuration_tab' => 'ruby'), class: 'tile text-center resize-a' do
+      %img.resize-img{:src => image_path("icon_ruby.png")}/
+      %span Ruby
+    = link_to installations_path('configuration_tab' => 'python'), class: 'tile text-center resize-a' do
+      %img.resize-img{:src => image_path("icon_python.png")}/
+      %span Python
+    = link_to installations_path('configuration_tab' => 'ios'), class: 'tile text-center resize-a' do
+      %img.resize-img{:src => image_path("icon_ios.png")}/
+      %span IOS
+    = link_to installations_path('configuration_tab' => 'php'), class: 'tile text-center resize-a' do
+      %img.resize-img{:src => image_path("icon_php.png")}/
+      %span PHP
+    = link_to installations_path('configuration_tab' => 'java'), class: 'tile text-center resize-a' do
+      %img.resize-img{:src => image_path("icon_java.png")}/
+      %span Java
+.panel.panel-default.tileview#client-frameworks
+  .panel-heading Frameworks
+  .panel-body{:style => 'cursor: pointer'}
+    = link_to installations_path('configuration_tab' => 'ruby', 'platform_tab' => 'rails_3'), class: 'tile text-center resize-a' do
+      %img.resize-img{:src => image_path("icon_rails.png")}/
+      %span Rails 3
+    = link_to installations_path('configuration_tab' => 'ruby', 'platform_tab' => 'rails_4'), class: 'tile text-center resize-a' do
+      %img.resize-img{:src => image_path("icon_rails.png")}/
+      %span Rails 4
+    = link_to installations_path('configuration_tab' => 'python', 'platform_tab' => 'django'), class: 'tile text-center resize-a' do
+      %img.resize-img{:src => image_path("icon_django.png")}/
+      %span Django
+%div
+  %h5{:style => "display:inline"} For more information on developing clients and the Sentry API, see the
+  %a{:href => "#"} documentation.

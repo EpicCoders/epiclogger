@@ -1,4 +1,4 @@
-.panel-body.tabs#python{:style => "display:#{@website.platform == 'Python' ? 'block' : 'none'};"}
+.panel-body.tabs#python{:style => "display:#{(@website.platform == 'Python' || @platform_tab == 'python') ? 'block' : 'none'};"}
   %div
     %h5{:style => 'display:inline'} Start by installing
     %a{:href => 'https://github.com/EpicCoders/epiclogger-python'}epiclogger-python.
