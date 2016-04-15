@@ -27,7 +27,7 @@ Rails.application.routes.draw do
   resources :subscribers, only: [:index]
   # resources :accounts, only: [:show]
   resources :installations, only: [:index]
-  resources :website_members, only: [:index]
+  resources :website_members, only: [:index, :destroy]
   # resources :settings, only: [:index]
 
   resources :website_wizard

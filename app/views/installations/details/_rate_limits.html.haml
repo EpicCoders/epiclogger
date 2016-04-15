@@ -1,0 +1,28 @@
+/ #rate-limits.tab
+/   .col-lg-9
+/     .panel.panel-default
+/       .panel-heading Rate Limits
+/       .panel-body
+/         %p With the nature of Epiclogger, sometimes the amount of data collected can be overwhelming. You can set rate limits per-project to ensure that a single flood of<br>errors won't affect any other projects utilizing Epiclogger.
+
+/         %p Rate limits apply on a per-minute basis, which means that they rollover at the start of a new minute. When you attempt to send an event and the project is over<br> its quota, the client will receive an HTTP 429 (Too Many Requests) response.
+/         %strong Note: The Epiclogger application is not configured to manage rate limits.
+
+/         %p
+/         %form#formWebsite{:action => "", :method => "post"}
+/           .form-group
+/             .col-lg-4
+/               %label.control-label Maximum events per minute
+/               %input#title.form-control{:placeholder => "90%", :required => "required", :type => "text", :name => 'name'}/
+/         %br
+/         %br
+/         %br
+/         %small This cannot be higher than the team (or system) allotted maximum. The value can be either a fixed number, or a percentage that is relative to the team's overall quota.
+/         %hr
+/         %button.btn.btn-primary Save Changes
+/ #tags.tab
+/   .col-lg-9
+/     .panel.panel-default
+/       .panel-heading Manage Tags
+/       .panel-default
+/         %p We have not yet recorded any tags for this project.

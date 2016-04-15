@@ -1,0 +1,25 @@
+#notifications.tab
+  .col-lg-12
+    .panel.panel-default
+      .panel-heading Notifications
+      .panel-body
+        .col-lg-9
+          %label Events
+          .alert.alert-info
+            Epiclogger will automatically notify you whenever an event is first seen, or its state changes from resolved to unresolved.
+          %p
+            %input{:name => "daily", :type => "checkbox", :value => "daily"}
+              Recieve daily reports
+          %p
+            %input{:name => "realtime", :type => "checkbox", :value => "realtime"}
+              Receive realtime error emails
+          %p
+            %input{:name => "new_event", :type => "checkbox", :value => "new_event"}
+              Receive emails when a new event happens
+          %p
+            %input{:name => "frequent_event", :type => "checkbox", :value => "frequent_event"}
+              Recieve another email if an event/error happens more than 10 times in a certain time interval.
+        .col-lg-3
+          %button.btn.btn-primary.pull-right#save
+            %span.fa.fa-save
+            Save settings

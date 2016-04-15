@@ -1,0 +1,23 @@
+#api-keys.tab
+  .col-lg-12
+    .panel.panel-default
+      .panel-heading.clearfix
+        %h4.panel-title.pull-left{:style => "padding-top: 7.5px;"} API Keys
+        .btn-group.pull-right
+          %button.btn.btn-primary.pull-right#generateAppKey
+            %span.fa.fa-key
+            Generate new key
+      .panel-body
+        #current-website.row
+          .codeview
+            .codepanel
+              .col-lg-1
+                %h5 App Id:
+                %h5 App Key:
+              .col-lg-8
+                %h5.app_secret
+                %h5.app_key
+              .col-lg-3
+                %br
+                %span.btn.btn-danger.pull-right#revoke
+                  Revoke

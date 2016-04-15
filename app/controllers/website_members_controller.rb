@@ -1,4 +1,5 @@
 class WebsiteMembersController < ApplicationController
+	load_and_authorize_resource
   def index
     @members = current_website.website_members
   end
