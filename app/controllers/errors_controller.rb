@@ -50,8 +50,15 @@ class ErrorsController < ApplicationController
   end
 
   def resolve
+    #has values when we resolve issues through the error sidebar
     if params[:error_ids]
-      GroupedIssue.where(id: params[:error_ids]).update_all(resolved_at: DateTime.now)
+      #if we are on the resolved tab unresolve issues
+      if params[:resolved] == 'true' || params[:resolved].nil?
+        GroupedIssue.where(id: params[:error_ids]).update_all(resolved_at: nil)
+      #if we are on the unresolved tab resolve issues
+      elsif params[:resolved] == 'false'
+        GroupedIssue.where(id: params[:error_ids]).update_all(resolved_at: DateTime.now)
+      end
     else
       if !@error.resolved_at.nil?
         @error.update_attributes(resolved_at: nil)

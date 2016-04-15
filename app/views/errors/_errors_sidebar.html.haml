@@ -1,12 +1,11 @@
 .errors-sidebar-list.no-margin
-  = form_for :@error, url: {action: "resolve"}, method: :put, remote: true do |f|
+  = form_for :@error, url: {action: "resolve", params: {resolved: params[:resolved]}}, method: :put, remote: true do |f|
     .header
       .row
         .col-sm-8
-          .select-all{ :style => "display:#{params['resolved'] == 'false' ? 'block' : 'none'};" }
-            .btn.btn-default.btn-sm.pull-left{'data-toggle'=>'button','aria-pressed'=>"false"}
-              %input.all{:title => "toggle all", :type => "checkbox"}/
-            = f.submit 'Resolve selected', class: "btn btn-primary header-resolve", remote:true, method: :put
+          .btn.btn-default.btn-sm.pull-left{'data-toggle'=>'button','aria-pressed'=>"false"}
+            %input.all{:title => "toggle all", :type => "checkbox"}/
+          = f.submit "#{params['resolved'] == 'false' ? 'Resolve selected' : 'Unresolve selected'}", class: "btn header-resolve #{params['resolved'] == 'false' ? 'btn-primary' : 'btn-danger'}", remote:true, method: :put
         .col-sm-4.error_pagination.text-right
           %span.sidebar_pagination_text= page_entries_info @selected_errors, entry_name: 'error'
           .btn-group

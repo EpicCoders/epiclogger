@@ -2,9 +2,9 @@
   %ul.list-group
     %div{class: "list-group-item #{error.id == @error.id ? 'checked' : ''}"}
       .row
-        .col-xs-1.list-check{ :style => "display:#{params['resolved'] == 'false' ? 'block' : 'none'};" }
-          = check_box_tag 'error_ids[]', value = "#{error.id}", checked = !error.resolved_at.nil? ? true : false
-        .error-details{ :class => "#{params['resolved'] == 'false' ? 'col-xs-11' : 'col-xs-12'}"}
+        .col-xs-1.list-check
+          = check_box_tag 'error_ids[]', value = "#{error.id}", checked = false
+        .col-xs-11.error-details
           = link_to error_url(error, page: params[:page], resolved: params[:resolved]) do
             .row
               .col-xs-3
