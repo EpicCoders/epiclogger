@@ -3,19 +3,17 @@ require 'rails_helper'
 RSpec.describe Integrations do
   let(:website) { create :website }
   let(:subscriber) { create :subscriber, website: website }
-  let(:interface) { create :interface, website: website }
+  let(:integration) { create :integration, website: website }
 
-  # describe 'create', truncation: true do
-  #   it 'calls error.create!' do
-  #     expect_any_instance_of(ErrorStore::Error).to receive(:create!)
-  #     subject.create!(request)
-  #   end
-  #   it 'returns the error id' do
-  #     event_id = subject.create!(request)
-  #     expect(event_id).to be_kind_of(String)
-  #     expect(event_id.length).to eq(32)
-  #   end
-  # end
+  describe 'create', truncation: true do
+    it 'calls new on integration' do
+      expect(Integrations::Integration).to receive(:new)
+      subject.create(integration)
+    end
+    it 'returns an instance of integraiton' do
+      expect(subject.create(integration)).to be_kind_of(Integrations::Integration)
+    end
+  end
 
   describe 'find_drivers' do
     it 'contains all the drivers in the folder' do

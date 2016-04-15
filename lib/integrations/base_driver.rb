@@ -1,6 +1,9 @@
 module Integrations
   class BaseDriver
 
+    def initialize(integration)
+      @integration = integration
+    end
 
     def self.available
       true

@@ -1,6 +1,6 @@
 module Integrations
   def self.create(integration)
-    driver = get_driver(integration.provider)
+    driver = get_driver(integration.provider.to_sym)
     Integrations::Integration.new(integration, driver)
   end
 
