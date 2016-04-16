@@ -56,6 +56,16 @@ RSpec.describe Integrations do
     end
   end
 
+  describe 'config' do
+    it 'returns hash with configurations' do
+      expect( subject.config ).to be_kind_of(Hash)
+    end
+
+    it 'contains github app keys' do
+      expect( subject.config ).to include(:github)
+    end
+  end
+
   describe 'exceptions' do
     it 'has IntegrationError exception' do
       expect { raise Integrations::IntegrationError }.to raise_error(Integrations::IntegrationError)

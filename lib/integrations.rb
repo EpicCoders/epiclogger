@@ -5,6 +5,7 @@ module Integrations
   end
 
   @@drivers_list = []
+  @@config = nil
 
   def self.find_drivers
     Dir[Pathname(File.dirname(__FILE__)).join('integrations/drivers/*.rb')].each do |path|
@@ -46,6 +47,13 @@ module Integrations
     driver = available_drivers.find { |e| e[:type] == type }.try(:[], :driver)
     raise Integrations::InvalidDriver.new(self), 'This driver does not exist' if driver.nil?
     driver
+  end
+
+  def self.config
+    unless @@config
+      @@config = YAML.load(ERB.new(File.read("#{Rails.root}/config/integrations.yml")).result).with_indifferent_access
+    end
+    @@config
   end
 
   class IntegrationError < StandardError
