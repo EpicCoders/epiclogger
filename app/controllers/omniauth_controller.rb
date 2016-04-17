@@ -6,7 +6,7 @@ class OmniauthController < ApplicationController
     auth = request.env["omniauth.auth"]
     user = User.find_by_provider_and_uid(auth["provider"], auth["uid"]) || User.create_with_omniauth(auth)
 
-    authenticate!(:password) if user
+    authenticate!(auth["provider"].to_sym) if user
     after_login_redirect
   end
 end
