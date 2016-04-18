@@ -16,9 +16,11 @@ class WebsiteMember < ActiveRecord::Base
 
   def validate_destroy
     owners = WebsiteMember.with_role(:owner).where('website_id=?', website.id)
-    return unless owners.count == 1
-    errors.add :base, 'Website must have at least one owner'
-    false
+    if owners.count == 1 && website.website_members.count == 1
+      errors.add :base, 'Website must have at least one owner'
+      return false
+    end
+    return true
   end
 
   def generate_token

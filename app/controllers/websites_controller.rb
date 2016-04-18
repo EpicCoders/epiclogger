@@ -7,9 +7,11 @@ class WebsitesController < ApplicationController
 
   def update
     @website.update_attributes(website_params)
+    redirect_to :back
   end
 
   def destroy
+    return false unless WebsiteMember.where(user_id: current_user.id, website_id: @website.id).first.role == "owner"
     @website.destroy
     respond_to do |format|
       unless current_user.websites.blank?
@@ -25,6 +27,6 @@ class WebsitesController < ApplicationController
   private
 
   def website_params
-    params.require(:websites).permit(:domain, :platform, :generate, :title, :id, :new_event, :frequent_event, :daily, :realtime)
+    params.require(:website).permit(:domain, :platform, :generate, :title, :id, :new_event, :frequent_event, :daily, :realtime)
   end
 end

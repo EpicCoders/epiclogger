@@ -1,93 +1,19 @@
-#settings.tab
-  .col-lg-6
-    .panel.panel-default
-      .panel-heading Project Details
-      .panel-body
-        %form#formWebsite{:action => "", :method => "post"}
+#settings
+  = simple_form_for @website, url: "websites/#{@website.id}", method: :put, wrapper: :vertical_form do |f|
+    .col-lg-6
+      .panel.panel-default
+        .panel-heading Project Details
+        .panel-body
           .form-group
-            %label.control-label Name
-            %input#title.form-control{:placeholder => "Website name", :required => "required", :type => "text", :name => 'website[title]'}/
-          .form-group
-            %label.control-label Domain
-            %input#domain.form-control{:placeholder => "http://www.domain.com", :required => "required", :type => "url", :name => 'website[domain]'}/
-          %hr
-          .form-group
-            %label.control-label Platforms*
-            %br
+            = f.input :title, placeholder: 'Website name'
+            = f.input :domain, placeholder: 'http://www.domain.com'
             .dropdown
-              %button.btn.btn-default.cust-dropdown.dropdown-toggle#platform{"data-toggle" => "dropdown", :type => "button"}
-                Platforms
-                %span.caret
-              %ul.dropdown-menu
-                %li
-                  %a{:href => '#', :name => 'Connect(Node.js)'} Connect(Node.js)
-                %li
-                  %a{:href => '#', :name => 'Django(Python)'} Django(Python)
-                %li
-                  %a{:href => '#', :name => 'Express(Node.js)'} Express(Node.js)
-                %li
-                  %a{:href => '#', :name => 'Flask(Python)'} Flask(Python)
-                %li
-                  %a{:href => '#', :name => 'IOS'} IOS
-                %li
-                  %a{:href => '#', :name => 'Java'} Java
-                %li
-                  %a{:href => '#', :name => 'Java Util Logging(Java)'} Java
-                %li
-                  %a{:href => '#', :name => 'Log4j(Java)'} Log4j(Java)
-                %li
-                  %a{:href => '#', :name => 'Log4j 2.x(Java)'} Log4j 2.x(Java)
-                %li
-                  %a{:href => '#', :name => 'Logback(Java)'} Logback(Java)
-                %li
-                  %a{:href => '#', :name => 'Javascript'} Javascript
-                %li
-                  %a{:href => '#', :name => 'Node.js'} Node.js
-                %li
-                  %a{:href => '#', :name => 'PHP'} PHP
-                %li
-                  %a{:href => '#', :name => 'Python'} Python
-                %li
-                  %a{:href => '#', :name => 'Ruby'} Ruby
-                %li
-                  %a{:href => '#', :name => 'Rails 3(Ruby)'} Rails 3(Ruby)
-                %li
-                  %a{:href => '#', :name => 'Rails 4(Ruby)'} Rails 4(Ruby)
-                %li
-                  %a{:href => '#', :name => 'Sidekiq'} Sidekiq
-                %li
-                  %a{:href => '#', :name => 'Sinatra'} Sinatra
-                %li
-                  %a{:href => '#', :name => 'Tornado'} Tornado
-          %hr
-          .form-group
-            %label.control-label Owner*
-            %br
-            .dropdown#owners
-              %button.btn.btn-default.dropdown-toggle#owner{"data-toggle" => "dropdown", :type => "button"}
-                Owners
-                %span.caret
-              %ul.dropdown-menu.members
-                %li
-                  %a.email{:href => '#'}
-          / %hr
-          / .form-group
-          /   %label.control-label Slug*
-          /   %input.form-control{:required => "required", :type => "text", :name => "Slug"}
-    / .panel.panel-default.codeview
-    /   .panel-heading Event Settings
-    /   .panel-body
-    /     %small Treat an event as resolved if it hasn't been seen for this amount of time.
-    /     %p
-    /     .range-slider
-    /       %input.input-range{:max => "168", :min => "0", :type => "range", :value => "0"}
-    /         %span.range-value
-    /     %br
-    .form-group
-      %button.btn.btn-success#edit-website Save Changes
-      %button.btn.btn-danger Remove Project
+              = f.select :platform, @options, {}, prompt: '#{@website.platform}', :class => "btn btn-default cust-dropdown dropdown-toggle"
+      .form-group
+        = f.submit 'Save Changes', class: 'btn btn-success'
+        = link_to ' Remove Project', "/websites/#{@website.id}", :method => :delete, :class => "btn btn-danger"
   .col-lg-6
-    .panel.panel-default.codeview
+    .panel.panel-info.codeview
       .panel-heading Project Details
       .panel-body
         .well.wel-sm

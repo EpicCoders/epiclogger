@@ -4,7 +4,7 @@
       .panel-heading.clearfix
         %h4.panel-title.pull-left{:style => "padding-top: 7.5px;"} API Keys
         .btn-group.pull-right
-          %button.btn.btn-primary.pull-right#generateAppKey
+          = link_to "websites/#{@website.id}?website[generate]=true", method: :put, :class => "btn btn-primary pull-right" do
             %span.fa.fa-key
             Generate new key
       .panel-body
@@ -15,9 +15,8 @@
                 %h5 App Id:
                 %h5 App Key:
               .col-lg-8
-                %h5.app_secret
-                %h5.app_key
+                %h5 #{@website.app_secret}
+                %h5 #{@website.app_key}
               .col-lg-3
                 %br
-                %span.btn.btn-danger.pull-right#revoke
-                  Revoke
+                = link_to "Revoke", "websites/#{@website.id}?website[generate]=true", method: :put, :class => "btn btn-danger pull-right"
