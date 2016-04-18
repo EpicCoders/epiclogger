@@ -12,7 +12,7 @@ Rails.application.routes.draw do
   get '/forgot_password/:id' => 'reset_password#edit', as: :reset_password
   patch '/forgot_password/:id' => 'reset_password#update'
 
-  get "/auth/:provider/callback" => "omniauth#create"
+  get '/auth/:provider/callback' => 'auth#success'
 
   resources :errors, only: [:show, :index, :update] do
     member do
