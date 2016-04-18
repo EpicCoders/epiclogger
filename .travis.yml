@@ -6,7 +6,7 @@ sudo: false
 bundler_args: "--without development production"
 before_install:
   - gem update --system
-  - travis_retry gem install bundler --pre
+  - travis_retry gem install bundler
 before_script:
   - cp -f config/database.travis.yml config/database.yml
   - cp -f .env.example .env
