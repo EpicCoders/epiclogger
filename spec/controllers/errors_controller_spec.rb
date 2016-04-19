@@ -15,6 +15,7 @@ RSpec.describe ErrorsController, type: :controller do
       let(:params) { default_params.merge( message: message, id: group.id) }
 
       it 'should email subscribers' do
+        params[:format] = 'js'
         mailer = double('UserMailer')
         expect(mailer).to receive(:deliver_later)
         expect(UserMailer).to receive(:notify_subscriber).with(group, user, message).and_return(mailer).once
@@ -23,6 +24,7 @@ RSpec.describe ErrorsController, type: :controller do
       end
 
       it 'should email 2 subscribers' do
+        params[:format] = 'js'
         user2 = create :user, provider: "some"
         create :website_member, website: website, user_id: user2.id
         mailer = double('UserMailer')
@@ -32,6 +34,7 @@ RSpec.describe ErrorsController, type: :controller do
       end
 
       it 'assigns message' do
+        params[:format] = 'js'
         post_with user, :notify_subscribers, params
         expect(assigns(:message)).to eq('asdada')
       end

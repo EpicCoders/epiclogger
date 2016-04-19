@@ -58,6 +58,6 @@ var ready = function () {
     },
     "dataProvider": gon.chart_data
   }); 
-}
-$(document).ready(ready)
-$(document).on('page:load', ready)
+};
+$(document).ready(ready);
+$(document).on('page:load', ready);
