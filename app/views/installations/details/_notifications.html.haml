@@ -1,5 +1,5 @@
 #notifications.tab
-  = simple_form_for @website, url: "websites/#{@website.id}", method: :put, wrapper: :vertical_form do |f|
+  = simple_form_for @website, url: "websites/#{@website.id}", method: :put, remote: true, wrapper: :vertical_form do |f|
     .col-lg-12
       .panel.panel-default
         .panel-heading Notifications

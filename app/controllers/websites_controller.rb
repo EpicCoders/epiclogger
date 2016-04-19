@@ -7,7 +7,9 @@ class WebsitesController < ApplicationController
 
   def update
     @website.update_attributes(website_params)
-    redirect_to :back
+    respond_to do |format|
+      format.js { render inline: 'location.reload();' }
+    end
   end
 
   def destroy
@@ -20,6 +22,12 @@ class WebsitesController < ApplicationController
       end
       format.js { render inline: "location.href='#{website_wizard_path(:create)}';" } if current_user.websites.blank?
     end
+  end
+
+  def revoke
+    @website.generate = true
+    @website.save
+    redirect_to "/installations?details_tab=api_keys&main_tab=details"
   end
 
   def show; end
