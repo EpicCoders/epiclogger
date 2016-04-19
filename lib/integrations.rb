@@ -56,6 +56,10 @@ module Integrations
     @@config
   end
 
+  def self.supports?(integration_type)
+    self.available_drivers.any?{|e| e[:type].to_s == integration_type.to_s}
+  end
+
   class IntegrationError < StandardError
     attr_reader :website_id
     def initialize(error_integration = nil)
