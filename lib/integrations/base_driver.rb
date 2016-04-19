@@ -16,5 +16,9 @@ module Integrations
     def type
       self.class.type
     end
+
+    def authenticate(hash)
+      raise Integrations::NotImplementedError.new(self), 'Authenticate not implemented'
+    end
   end
 end

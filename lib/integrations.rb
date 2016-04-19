@@ -76,6 +76,7 @@ module Integrations
   # an exception raised when the timestamp is not valid
   class InvalidDriver < IntegrationError; end
   class ValidationError < IntegrationError; end
+  class NotImplementedError < IntegrationError; end
 end
 
 Integrations.find_drivers

@@ -11,7 +11,7 @@ module Integrations::Drivers
       :intercom
     end
 
-    def authorization
+    def authenticate(hash)
 
     end
   end
