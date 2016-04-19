@@ -1,0 +1,30 @@
+#accordion.panel-group
+  .panel.panel-default
+    .panel-heading
+      %a{"data-parent" => "#accordion", "data-toggle" => "collapse", :href => "#collapseOne"}
+        %h4.panel-title Messages
+    #collapseOne.panel-collapse.collapse.in
+      .panel-body
+        %table.table#members-container
+          %thead
+            %tr
+              %th Name
+              %th Email
+          %tbody.websites
+            %tr
+              %td Gore
+              %td Vasile
+  .panel.panel-default
+    .panel-heading
+      %a{"data-parent" => "#accordion", "data-toggle" => "collapse", :href => "#collapseTwo"}
+        %h4.panel-title User Info
+    #collapseTwo.panel-collapse.collapse
+      .panel-body
+        %p TEST
+  .panel.panel-default
+    .panel-heading
+      %a{"data-parent" => "#accordion", "data-toggle" => "collapse", :href => "#collapseThree"}
+        %h4.panel-title Browsers
+    #collapseThree.panel-collapse.collapse
+      .panel-body
+        %p Test

@@ -89,9 +89,27 @@ class ErrorsController < ApplicationController
   end
 
   def to_boolean(str)
-   return true if str=="true"
-   return false if str=="false"
-   return nil
+    return true if str=="true"
+    return false if str=="false"
+    return nil
+  end
+
+  def aggregations (issues)
+    data = { "message" => [] }
+    attributes = ['message']
+    attributes.each do |attribute|
+      issues.each do |issue|
+        found = data[attribute].index { |x| x[attribute] == issue[attribute] }
+        if found
+          data[attribute][found][:count]+= 1
+        else
+          item = {count: 1, created_at: issue.created_at, updated_at: issue.updated_at}
+          item[attribute] = issue[attribute]
+          data[attribute].push(item)
+        end
+      end
+    end
+    data
   end
 
   def error_params
