@@ -14,10 +14,6 @@ RSpec.describe WebsitesController, type: :controller do
 
     context 'if logged in' do
 
-      it "should route to websites_path" do
-        assert_routing '/websites', { controller: "websites", action: "index" }
-      end
-
       it 'renders json' do
         get_with user, :index, params
         expect(response).to be_successful
@@ -56,14 +52,6 @@ RSpec.describe WebsitesController, type: :controller do
     let(:params) { default_params.merge(id: website.id, format: :js) }
 
     context 'it is logged in' do
-
-      it "should route to destroy" do
-        expect(delete: "/websites/#{website.id}").to route_to(
-          controller: "websites",
-          action: "destroy",
-          id: "#{website.id}"
-        )
-      end
 
       it 'deletes website' do
         expect{
@@ -109,20 +97,12 @@ RSpec.describe WebsitesController, type: :controller do
 
     context 'it is logged in' do
 
-      it "should route to websites" do
-        expect(put: "/websites/#{website.id}").to route_to(
-          controller: "websites",
-          action: "update",
-          id: "#{website.id}"
-        )
+      it 'updates website params', js: true do
+        expect {
+          put_with user, :update, params
+          website.reload
+        }.to change(website, :platform).from(nil).to('Sinatra')
       end
-
-      # it 'updates website params' do
-      #   expect {
-      #     put_with user, :update, params
-      #     website.reload
-      #   }.to change(website, :platform).from(nil).to('Sinatra')
-      # end
     end
   end
 end
