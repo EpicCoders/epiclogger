@@ -95,18 +95,30 @@ class ErrorsController < ApplicationController
   end
 
   def aggregations (issues)
-    data = { "message" => [] }
-    attributes = ['message']
-    attributes.each do |attribute|
-      issues.each do |issue|
-        found = data[attribute].index { |x| x[attribute] == issue[attribute] }
-        if found
-          data[attribute][found][:count]+= 1
-        else
-          item = {count: 1, created_at: issue.created_at, updated_at: issue.updated_at}
-          item[attribute] = issue[attribute]
-          data[attribute].push(item)
-        end
+    data = { messages: [], subscribers: [], browsers: [] }
+    issues.each do |issue|
+      found_message = data[:messages].index { |x| x["message"] == issue.message }
+      if found_message
+        data[:messages][found_message]["count"] += 1
+      else
+        item = {"count" => 1, "created_at" => issue.created_at, "updated_at" => issue.updated_at, "message" => issue.message}
+        data[:messages].push(item)
+      end
+
+      found_subscriber = data[:subscribers].index { |x| x["name"] == issue.subscriber.name }
+      if found_subscriber
+        data[:subscribers][found_subscriber]["count"] += 1
+      else
+        item = {"count" => 1, "created_at" => issue.created_at, "updated_at" => issue.updated_at, "name" => issue.subscriber.name}
+        data[:subscribers].push(item)
+      end
+
+      found_browser = data[:browsers].index { |x| x["name"] == issue.user_agent.browser }
+      if found_browser
+        data[:browsers][found_browser]["count"] += 1
+      else
+        item = {"count" => 1, "created_at" => issue.created_at, "updated_at" => issue.updated_at, "name" => issue.user_agent.browser}
+        data[:browsers].push(item)
       end
     end
     data

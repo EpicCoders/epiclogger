@@ -66,6 +66,8 @@ gem 'redis-rails'
 gem 'simple_form'
 # add wizard gem
 gem 'wicked'
+#parsing the user_agent string
+gem 'useragent'
 
 group :development do
   gem 'better_errors'

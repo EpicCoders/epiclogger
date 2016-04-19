@@ -31,4 +31,14 @@ class Issue < ActiveRecord::Base
   def environment
     error.data[:environment]
   end
+
+  def user_agent
+    headers = JSON.parse(data)["interfaces"]["http"]["headers"]
+    headers.each do |hash|
+      if hash["user_agent"]
+        return UserAgent.parse(hash["user_agent"])
+      end
+    end
+    nil
+  end
 end
