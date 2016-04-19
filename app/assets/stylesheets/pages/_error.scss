@@ -118,9 +118,14 @@
             min-height:120px;
             resize:none;
             overflow-y:auto;
-            border-radius:5px;
+            border:1px solid #ddd;
+            border-radius:4px;
             padding: 10px;
             box-sizing: border-box;
+          }
+
+          .broadcast-textarea{
+            padding-left:0px;
           }
 
           button{

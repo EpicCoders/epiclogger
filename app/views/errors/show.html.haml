@@ -58,7 +58,8 @@
               %p.read-more.text-center{style: "display:#{valid_stacktrace ? 'block' : 'none'}"}
                 %a.btn.btn-default{:href => "#"} View full backtrace
           .panel.panel-default.broadcast
-            .panel-heading Broadcast
+            .panel-heading
+              Broadcast
             .panel-body
               .subscribers
                 .row
@@ -70,7 +71,7 @@
                 .row.notify
                   .col-sm-1
                     = image_tag current_user.avatar_url
-                  = form_for @error, url: notify_subscribers_error_path(), remote: true, html: { method: :post , class: 'col-sm-11'} do |f|
+                  = form_for @error, url: notify_subscribers_error_path(), remote: true, html: { method: :post , class: 'col-sm-11 broadcast-textarea'}, :data => {:confirm => 'Are you sure?'} do |f|
                     = text_area_tag 'message', '', placeholder: 'Write a message ...'
                     %button.btn.btn-primary{:type => 'submit'} Send
         .col-sm-5.col-md-4
