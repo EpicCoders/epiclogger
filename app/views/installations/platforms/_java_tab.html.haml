@@ -6,15 +6,15 @@
     %ul.nav.navbar-nav.navbar-left
       - if params[:controller] == "installations"
         %li{class: @platform_tab == 'java' ? 'active' : ''}
-          = link_to "Java", installations_path('platform_tab' => 'java')
+          = link_to "Java", installations_path('main_tab' => 'configuration', 'configuration_tab' => 'java', 'platform_tab' => 'java')
         %li{class: @platform_tab == 'java_util_logging' ? 'active' : ''}
-          = link_to "Java util logging", installations_path('platform_tab' => 'java_util_logging')
+          = link_to "Java util logging", installations_path('main_tab' => 'configuration', 'configuration_tab' => 'java', 'platform_tab' => 'java_util_logging')
         %li{class: @platform_tab == 'log4j' ? 'active' : ''}
-          = link_to "Log4j", installations_path('platform_tab' => 'log4j')
+          = link_to "Log4j", installations_path('main_tab' => 'configuration', 'configuration_tab' => 'java', 'platform_tab' => 'log4j')
         %li{class: @platform_tab == 'log4j2' ? 'active' : ''}
-          = link_to "Log4j2", installations_path('platform_tab' => 'log4j2')
+          = link_to "Log4j2", installations_path('main_tab' => 'configuration', 'configuration_tab' => 'java', 'platform_tab' => 'log4j2')
         %li{class: @platform_tab == 'logback' ? 'active' : ''}
-          = link_to "Logback", installations_path('platform_tab' => 'logback')
+          = link_to "Logback", installations_path('main_tab' => 'configuration', 'configuration_tab' => 'java', 'platform_tab' => 'logback')
       - else
         %li{class: @website.platform == 'Java' ? 'active' : ''}
           = link_to "Java", wizard_path(:choose_platform, 'tab' => 'java'), method: :put

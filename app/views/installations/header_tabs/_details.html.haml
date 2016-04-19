@@ -2,14 +2,14 @@
   #custom-bootstrap.navbar.navbar-default{:role => "navigation"}
     %ul.nav.navbar-nav.navbar-left#details-tabs.main-tabs
       %li{class: @details_tab == 'settings' ? 'active' : ''}
-        = link_to "Settings", installations_path('details_tab' => 'settings')
+        = link_to "Settings", installations_path('main_tab' => 'details', 'details_tab' => 'settings')
       %li{class: @details_tab == 'notifications' ? 'active' : ''}
-        = link_to "Notifications", installations_path('details_tab' => 'notifications')
+        = link_to "Notifications", installations_path('main_tab' => 'details', 'details_tab' => 'notifications')
       / %li{class: @details_tab == 'rate_limits' ? 'active' : ''}
-      /   = link_to "Rate limits", installations_path('details_tab' => 'rate_limits')
+      /   = link_to "Rate limits", installations_path('main_tab' => 'details', 'details_tab' => 'rate_limits')
       / %li{class: @details_tab == 'tags' ? 'active' : ''}
-      /   = link_to "Tags", installations_path('details_tab' => 'tags')
+      /   = link_to "Tags", installations_path('main_tab' => 'details', 'details_tab' => 'tags')
       %li{class: @details_tab == 'api_keys' ? 'active' : ''}
-        = link_to "Api Keys", installations_path('details_tab' => 'api_keys')
+        = link_to "Api Keys", installations_path('main_tab' => 'details', 'details_tab' => 'api_keys')
   %br
   = render partial: "installations/details/#{@details_tab}"

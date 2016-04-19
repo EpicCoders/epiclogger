@@ -6,11 +6,11 @@
     %ul.nav.navbar-nav.navbar-left
       - if params[:controller] == "installations"
         %li{class: @platform_tab == 'node_js' ? 'active' : ''}
-          = link_to "Node.js", installations_path('platform_tab' => 'node_js')
+          = link_to "Node.js", installations_path('main_tab' => 'configuration', 'configuration_tab' => 'node_js', 'platform_tab' => 'node_js')
         %li{class: @platform_tab == 'express' ? 'active' : ''}
-          = link_to "Express", installations_path('platform_tab' => 'express')
+          = link_to "Express", installations_path('main_tab' => 'configuration', 'configuration_tab' => 'node_js', 'platform_tab' => 'express')
         %li{class: @platform_tab == 'connect' ? 'active' : ''}
-          = link_to "Connect", installations_path('platform_tab' => 'connect')
+          = link_to "Connect", installations_path('main_tab' => 'configuration', 'configuration_tab' => 'node_js', 'platform_tab' => 'connect')
       - else
         %li{class: @website.platform == 'Node js' ? 'active' : ''}
           = link_to "Node js", wizard_path(:choose_platform, 'tab' => 'node_js'), method: :put

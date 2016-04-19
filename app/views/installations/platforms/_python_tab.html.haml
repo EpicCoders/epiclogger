@@ -6,13 +6,13 @@
     %ul.nav.navbar-nav.navbar-left
       - if params[:controller] == "installations"
         %li{class: @platform_tab == 'python' ? 'active' : ''}
-          = link_to "Python", installations_path('platform_tab' => 'python')
+          = link_to "Python", installations_path('main_tab' => 'configuration', 'configuration_tab' => 'python', 'platform_tab' => 'python')
         %li{class: @platform_tab == 'django' ? 'active' : ''}
-          = link_to "Django", installations_path('platform_tab' => 'django')
+          = link_to "Django", installations_path('main_tab' => 'configuration', 'configuration_tab' => 'python', 'platform_tab' => 'django')
         %li{class: @platform_tab == 'flask' ? 'active' : ''}
-          = link_to "Flask", installations_path('platform_tab' => 'flask')
+          = link_to "Flask", installations_path('main_tab' => 'configuration', 'configuration_tab' => 'python', 'platform_tab' => 'flask')
         %li{class: @platform_tab == 'tornado' ? 'active' : ''}
-          = link_to "Tornado", installations_path('platform_tab' => 'tornado')
+          = link_to "Tornado", installations_path('main_tab' => 'configuration', 'configuration_tab' => 'python', 'platform_tab' => 'tornado')
       - else
         %li{class: @website.platform == 'Python' ? 'active' : ''}
           = link_to "Python", wizard_path(:choose_platform, 'tab' => 'python'), method: :put
