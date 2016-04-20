@@ -11,6 +11,18 @@ describe Website do
   end
 
   describe "ActiveModel validations" do
+    it "adds http to website" do
+      website2 = create :website, domain: "simple-string.com"
+      expect(website2.domain).to eq("http://simple-string.com")
+    end
+
+    it "returns same if valid" do
+      website2 = create :website, domain: "http://valid-website.com"
+      website3 = create :website, domain: "https://secured-website.com"
+      expect(website2.domain).to eq("http://valid-website.com")
+      expect(website3.domain).to eq("https://secured-website.com")
+    end
+
     it "is invalid without a title" do
       expect(website).to validate_presence_of :title
     end

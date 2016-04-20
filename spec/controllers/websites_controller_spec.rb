@@ -93,11 +93,11 @@ RSpec.describe WebsitesController, type: :controller do
   end
 
   describe "PUT #update" do
-    let(:params) { default_params.merge( id: website.id, website: { platform: "Sinatra" } ) }
+    let(:params) { default_params.merge( id: website.id, website: { platform: "Sinatra" }, format: :js ) }
 
     context 'it is logged in' do
 
-      it 'updates website params', js: true do
+      it 'updates website params' do
         expect {
           put_with user, :update, params
           website.reload
