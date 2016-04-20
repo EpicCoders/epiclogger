@@ -50,6 +50,9 @@ class ErrorsController < ApplicationController
   end
 
   def resolve
+    errors_per_page = params[:per_page] || 5
+    @page = params[:page]
+    errors = current_website.grouped_issues.order('last_seen DESC')
     #has values when we resolve issues through the error sidebar
     errors_per_page = params[:per_page] || 5
     page = params[:page]
@@ -63,6 +66,10 @@ class ErrorsController < ApplicationController
       resolve_issues(ids, resolved, errors_per_page, page, @error)
     else
       raise 'Could not find error!'
+    end
+
+    if @sidebar
+      render partial: 'sidebar_elements', collection: @sidebar, as: :error
     end
   end
 

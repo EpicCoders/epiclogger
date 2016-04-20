@@ -1,5 +1,5 @@
 .errors-sidebar-list.no-margin
-  = form_for :@error, url: {action: "resolve", params: {resolved: params[:resolved]}}, method: :put, remote: true do |f|
+  = form_for :@error, url: {action: "resolve", params: {resolved: params[:resolved]}}, method: :put, html: { :update_target => 'error-container' }, remote: true do |f|
     .header
       .row
         .pull-left.error_select
