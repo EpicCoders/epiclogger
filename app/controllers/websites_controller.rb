@@ -32,6 +32,11 @@ class WebsitesController < ApplicationController
 
   def show; end
 
+  def change_current
+    set_website(@website)
+    redirect_to errors_url, notice: 'Website changed'
+  end
+
   private
 
   def website_params

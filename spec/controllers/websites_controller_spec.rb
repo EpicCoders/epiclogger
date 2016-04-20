@@ -105,4 +105,12 @@ RSpec.describe WebsitesController, type: :controller do
       end
     end
   end
+
+  describe 'change_current' do
+    it 'changes the current website' do
+      website2 = create :website
+      post_with user, :change_current, { id: website2.id }
+      expect(assigns(:website)).to eq(website2)
+    end
+  end
 end
