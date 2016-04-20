@@ -50,21 +50,52 @@ class ErrorsController < ApplicationController
   end
 
   def resolve
+    errors_per_page = params[:per_page] || 5
+    @page = params[:page]
+    errors = current_website.grouped_issues.order('last_seen DESC')
     #has values when we resolve issues through the error sidebar
     if params[:error_ids]
       #if we are on the resolved tab unresolve issues
       if params[:resolved] == 'true' || params[:resolved].nil?
         GroupedIssue.where(id: params[:error_ids]).update_all(resolved_at: nil)
+        @sidebar = errors
+                    .where('resolved_at IS NOT NULL')
+                    .order('last_seen DESC')
+                    .page(@page)
+                    .per(params[:error_ids].size)
+                    .offset(errors_per_page)
       #if we are on the unresolved tab resolve issues
       elsif params[:resolved] == 'false'
         GroupedIssue.where(id: params[:error_ids]).update_all(resolved_at: DateTime.now)
+        @sidebar = errors
+                    .where(resolved_at: nil)
+                    .order('last_seen DESC')
+                    .page(@page)
+                    .per(params[:error_ids].size)
+                    .offset(errors_per_page)
       end
     else
       if !@error.resolved_at.nil?
         @error.update_attributes(resolved_at: nil)
+        @sidebar = errors
+                    .where('resolved_at IS NOT NULL')
+                    .order('last_seen DESC')
+                    .page(@page)
+                    .per(1)
+                    .offset(errors_per_page) 
       else
         @error.update_attributes(resolved_at: DateTime.now)
+        @sidebar = errors
+                    .where(resolved_at: nil)
+                    .order('last_seen DESC')
+                    .page(@page)
+                    .per(1)
+                    .offset(errors_per_page)
       end
+    end
+
+    if @sidebar
+      render partial: 'sidebar_elements', collection: @sidebar, as: :error
     end
   end
 

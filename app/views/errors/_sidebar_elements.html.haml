@@ -1,4 +1,4 @@
-#errors-sidebar-elements
+.errors-sidebar-elements{"data-id" => "#{error.id}"}
   %ul.list-group
     %div{class: "list-group-item #{error.id == @error.id ? 'checked' : ''}"}
       .row
@@ -9,11 +9,12 @@
             .row
               .col-xs-3
                 %span.badge
+                  = error.times_seen
+              .col-xs-9.text-right
+                %span.badge.badge-environment= error.environment
+                %span.badge.badge-subscribers
                   = icon('users')
                   = error.users_affected
-              .col-xs-9.text-right
-                %span.badge= error.environment
-                %span.badge= error.times_seen
                 %small= "#{distance_of_time_in_words_to_now error.last_seen} ago"
             %div.message
               = error.message

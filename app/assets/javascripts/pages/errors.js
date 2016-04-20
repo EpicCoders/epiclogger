@@ -1,4 +1,5 @@
 var ready = function () {
+//initialize and create the chart
   AmCharts.makeChart("chartdiv", {
     "type": "serial",
     "theme": "light",
@@ -57,7 +58,34 @@ var ready = function () {
         "enabled": true
     },
     "dataProvider": gon.chart_data
-  }); 
+  });
+
+//actions to the sidebar when resolving errors
+  $('#resolve-button').click(function(e){
+    id = $('.error-content').attr('data-id')
+    e.stopPropagation();
+    element = $(".errors-sidebar-elements[data-id='"+id+"']")
+    if(element){
+      $(element).fadeOut(500, function() { $(this).remove(); });
+    }
+  });
+
+  $('#multiple-resolve').click(function(e){
+    checked = $('.list-group input:checked')
+    if(checked.length > 0){
+      checked.each(function() {
+        $(this).closest('.errors-sidebar-elements').fadeOut(500, function() { $(this).closest('.errors-sidebar-elements').remove(); });
+      });
+    }
+    else{
+      alert("Please make a selection first!")
+    }
+  });
+
+  $('form[update_target]').on('ajax:success', function(evt, data) {
+    var target = $(this).attr('update_target');
+    $(data).appendTo('.' + target).hide().fadeIn(2000);
+  });
 };
 $(document).ready(ready);
 $(document).on('page:load', ready);

@@ -78,6 +78,12 @@
       white-space: nowrap;
       // float:left;
     }
+    .btn-group{margin-right:10px;height:100%;}
+    .resolve{
+      margin-right:7%;
+      margin-top:15px;
+      margin-bottom:20px;
+    }
   }
   .panel-body.expand-box {
     max-height: 200px;
@@ -95,10 +101,6 @@
   }
   .error-content{
     padding: 15px 0;
-
-    .resolve{
-      padding:0px;
-    }
 
     .broadcast{
       .subscribers{

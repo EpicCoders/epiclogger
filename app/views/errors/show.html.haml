@@ -6,30 +6,26 @@
       .row
         .col-xs-1.times_seen
           = @error.times_seen
-        .col-xs-8
+        .col-xs-7
           %div.message= @error.message
           %ul.list-inline
             %li
-              %span.label.label-primary
+              %span.badge.badge-subscribers
                 = icon('users')
                 = @error.users_affected
             %li
-              %span.label.label-primary= @error.environment
+              %span.badge.badge-environment= @error.environment
             %li
-              %span.label.label-default= @error.checksum
-        .col-xs-3.text-right
+              %span.label.badge= @error.checksum
+        .col-xs-4.text-right
           .btn-group
             = paginate @issues, theme: 'next_prev_theme', param_name: :page_issue
-    .error-content
+          .btn-group.resolve
+            - resolve_content = ("Unresolve" if !@error.resolved_at.nil?) || "Resolve" 
+            = button_to resolve_content, resolve_error_path(@error), class: "btn pull-right #{ !@error.resolved_at.nil? ? 'btn-danger' : 'btn-primary' } ", action: "single", remote:true, method: :put, id: 'resolve-button'
+    .error-content{"data-id" => "#{@error.id}"}
       .row
         #chartdiv
-      .row
-        .col-sm-12
-          %h4.col-sm-11 Error Message
-          .col-sm-1.resolve
-            - resolve_content = ("Unresolve" if !@error.resolved_at.nil?) || "Resolve" 
-            = button_to resolve_content, resolve_error_path(@error), class: "btn pull-right #{ !@error.resolved_at.nil? ? 'btn-danger' : 'btn-primary' } ", remote:true, method: :put, id: 'resolve-button'
-          %p.lead= @error.message
       .row
         .col-sm-7.col-md-8
           .panel.panel-default.exception
