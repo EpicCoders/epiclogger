@@ -58,44 +58,28 @@ class ErrorsController < ApplicationController
       #if we are on the resolved tab unresolve issues
       if params[:resolved] == 'true' || params[:resolved].nil?
         GroupedIssue.where(id: params[:error_ids]).update_all(resolved_at: nil)
-        @sidebar = errors
-                    .where('resolved_at IS NOT NULL')
-                    .order('last_seen DESC')
-                    .page(@page)
-                    .per(params[:error_ids].size)
-                    .offset(errors_per_page)
+        resolved = errors.where('resolved_at IS NOT NULL')
+        @sidebar = resolved.page(@page).per(params[:error_ids].size).offset(errors_per_page)
+        @pagination = errors.page(@page).per(errors_per_page).offset(params[:error_ids].size)
       #if we are on the unresolved tab resolve issues
       elsif params[:resolved] == 'false'
         GroupedIssue.where(id: params[:error_ids]).update_all(resolved_at: DateTime.now)
-        @sidebar = errors
-                    .where(resolved_at: nil)
-                    .order('last_seen DESC')
-                    .page(@page)
-                    .per(params[:error_ids].size)
-                    .offset(errors_per_page)
+        unresolved = errors.where(resolved_at: nil).page(@page)
+        @sidebar = unresolved.per(params[:error_ids].size).offset(errors_per_page)
+        @pagination = unresolved.per(errors_per_page).offset(params[:error_ids].size)
       end
     else
       if !@error.resolved_at.nil?
         @error.update_attributes(resolved_at: nil)
-        @sidebar = errors
-                    .where('resolved_at IS NOT NULL')
-                    .order('last_seen DESC')
-                    .page(@page)
-                    .per(1)
-                    .offset(errors_per_page) 
+        resolved = errors.where('resolved_at IS NOT NULL').page(@page)
+        @sidebar = resolved.per(1).offset(errors_per_page)
+        @pagination = resolved.per(errors_per_page).offset(1) 
       else
         @error.update_attributes(resolved_at: DateTime.now)
-        @sidebar = errors
-                    .where(resolved_at: nil)
-                    .order('last_seen DESC')
-                    .page(@page)
-                    .per(1)
-                    .offset(errors_per_page)
+        unresolved = errors.where(resolved_at: nil).page(@page)
+        @sidebar = unresolved.per(1).offset(errors_per_page)
+        @pagination = unresolved.per(errors_per_page).offset(1)                    
       end
-    end
-
-    if @sidebar
-      render partial: 'sidebar_elements', collection: @sidebar, as: :error
     end
   end
 

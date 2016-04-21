@@ -1,5 +1,5 @@
 .errors-sidebar-list.no-margin
-  = form_for :@error, url: {action: "resolve", params: {resolved: params[:resolved]}}, method: :put, html: { :update_target => 'error-container' }, remote: true do |f|
+  = form_for :@error, url: {action: "resolve", params: {resolved: params[:resolved]}}, method: :put, remote: true do |f|
     .header
       .row
         .col-sm-8
@@ -8,7 +8,7 @@
           = f.submit "#{params['resolved'] == 'false' ? 'Resolve' : 'Unresolve'}", class: "btn header-resolve #{params['resolved'] == 'false' ? 'btn-primary' : 'btn-danger'}", id: "multiple-resolve", remote:true, method: :put
         .col-sm-4.error_pagination.text-right
           %span.sidebar_pagination_text= page_entries_info @selected_errors, entry_name: 'error'
-          .btn-group
+          .btn-group.sidebar_pagination_buttons
             = paginate @selected_errors, theme: 'next_prev_theme'
     #custom-bootstrap.navbar.navbar-default.sidebar-tabs{:role => "navigation"}
       %ul.nav.navbar-nav.navbar-left.main-tabs.col-sm-12

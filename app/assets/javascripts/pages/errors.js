@@ -81,11 +81,6 @@ var ready = function () {
       alert("Please make a selection first!")
     }
   });
-
-  $('form[update_target]').on('ajax:success', function(evt, data) {
-    var target = $(this).attr('update_target');
-    $(data).appendTo('.' + target).hide().fadeIn(2000);
-  });
 };
 $(document).ready(ready);
 $(document).on('page:load', ready);
