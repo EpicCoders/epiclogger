@@ -22,7 +22,7 @@
             = paginate @issues, theme: 'next_prev_theme', param_name: :page_issue
           .btn-group.resolve
             - resolve_content = ("Unresolve" if !@error.resolved_at.nil?) || "Resolve" 
-            = button_to resolve_content, resolve_error_path(@error), class: "btn pull-right #{ !@error.resolved_at.nil? ? 'btn-danger' : 'btn-primary' } ", action: "single", remote:true, method: :put, id: 'resolve-button'
+            = button_to resolve_content, resolve_error_path(@error), params: { individual_resolve: true }, class: "btn pull-right #{ !@error.resolved_at.nil? ? 'btn-danger' : 'btn-primary' } ", action: "single", remote:true, method: :put, id: 'resolve-button'
     .error-content{"data-id" => "#{@error.id}"}
       .row
         #chartdiv

@@ -50,40 +50,44 @@ class ErrorsController < ApplicationController
   end
 
   def resolve
-    errors_per_page = params[:per_page] || 5
-    @page = params[:page]
-    errors = current_website.grouped_issues.order('last_seen DESC')
     #has values when we resolve issues through the error sidebar
     if params[:error_ids]
-      #if we are on the resolved tab unresolve issues
-      if params[:resolved] == 'true' || params[:resolved].nil?
-        GroupedIssue.where(id: params[:error_ids]).update_all(resolved_at: nil)
-        resolved = errors.where('resolved_at IS NOT NULL')
-        @sidebar = resolved.page(@page).per(params[:error_ids].size).offset(errors_per_page)
-        @pagination = errors.page(@page).per(errors_per_page).offset(params[:error_ids].size)
-      #if we are on the unresolved tab resolve issues
-      elsif params[:resolved] == 'false'
-        GroupedIssue.where(id: params[:error_ids]).update_all(resolved_at: DateTime.now)
-        unresolved = errors.where(resolved_at: nil).page(@page)
-        @sidebar = unresolved.per(params[:error_ids].size).offset(errors_per_page)
-        @pagination = unresolved.per(errors_per_page).offset(params[:error_ids].size)
-      end
+      ids = params[:error_ids]
+      resolved = to_boolean(params[:resolved]) if params[:resolved]
+      resolve_issues(ids, resolved)
+    elsif params[:individual_resolve]
+      ids = [@error.id]
+      resolved = to_boolean(!@error.resolved_at.nil?)
+      resolve_issues(ids, resolved)
     else
-      if !@error.resolved_at.nil?
-        @error.update_attributes(resolved_at: nil)
-        resolved = errors.where('resolved_at IS NOT NULL').page(@page)
-        @sidebar = resolved.per(1).offset(errors_per_page)
-        @pagination = resolved.per(errors_per_page).offset(1) 
-      else
-        @error.update_attributes(resolved_at: DateTime.now)
-        unresolved = errors.where(resolved_at: nil).page(@page)
-        @sidebar = unresolved.per(1).offset(errors_per_page)
-        @pagination = unresolved.per(errors_per_page).offset(1)                    
-      end
+      raise 'Could not find error!'
     end
   end
 
   private
+
+  def resolve_issues (ids, resolved = true)
+    errors_per_page = params[:per_page] || 5
+    page = params[:page]
+    errors = current_website.grouped_issues.order('last_seen DESC')
+    if resolved
+      GroupedIssue.where(id: ids).update_all(resolved_at: nil)
+      resolved = errors.where('resolved_at IS NOT NULL')
+      @sidebar = resolved.page(page).per(ids.size).offset(errors_per_page)
+      @pagination = errors.page(page).per(errors_per_page).offset(ids.size)
+    else
+      GroupedIssue.where(id: ids).update_all(resolved_at: DateTime.now)
+      unresolved = errors.where(resolved_at: nil).page(page)
+      @sidebar = unresolved.per(ids.size).offset(errors_per_page)
+      @pagination = unresolved.per(errors_per_page).offset(ids.size)
+    end
+  end
+
+  def to_boolean(str)
+   return true if str=="true"
+   return false if str=="false"
+   return nil
+  end
 
   def error_params
     @error_params ||= params.require(:error).permit(:description, :message, :name, :status, :logger, :platform)
