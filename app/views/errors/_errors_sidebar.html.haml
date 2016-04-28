@@ -2,20 +2,20 @@
   = form_for :@error, url: {action: "resolve", params: {resolved: params[:resolved]}}, method: :put, remote: true do |f|
     .header
       .row
-        .col-sm-8
-          .btn.btn-default.btn-sm.pull-left{'data-toggle'=>'button','aria-pressed'=>"false"}
+        .pull-left.error_select
+          .btn.btn-default.btn-sm{'data-toggle'=>'button','aria-pressed'=>"false"}
             %input.all{:title => "toggle all", :type => "checkbox"}/
           = f.submit "#{params['resolved'] == 'false' ? 'Resolve' : 'Unresolve'}", class: "btn header-resolve #{params['resolved'] == 'false' ? 'btn-primary' : 'btn-danger'}", id: "multiple-resolve", remote:true, method: :put
-        .col-sm-4.error_pagination.text-right
+        .error_pagination.text-right
           %span.sidebar_pagination_text= page_entries_info @selected_errors, entry_name: 'error'
           .btn-group.sidebar_pagination_buttons
             = paginate @selected_errors, theme: 'next_prev_theme'
     #custom-bootstrap.navbar.navbar-default.sidebar-tabs{:role => "navigation"}
-      %ul.nav.navbar-nav.navbar-left.main-tabs.col-sm-12
-        %li.col-sm-6{:class => "#{params[:resolved] == 'true' || params[:resolved].nil? ? 'active' : ''}"}
+      %ul.nav.navbar-nav.navbar-left.main-tabs
+        %li{:class => "#{params[:resolved] == 'true' || params[:resolved].nil? ? 'active' : ''}"}
           %a{:href => "#{request.path}?resolved=true"}
             Resolved
-        %li.col-sm-6{:class => "#{params[:resolved] == 'false' ? 'active' : ''}"}
+        %li{:class => "#{params[:resolved] == 'false' ? 'active' : ''}"}
           %a{:href => "#{request.path}?resolved=false"}
             Unresolved
     .tab-content

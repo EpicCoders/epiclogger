@@ -27,9 +27,9 @@ class ErrorsController < ApplicationController
     resolved_errors = errors.where('resolved_at IS NOT NULL').order('last_seen DESC')
     unresolved_errors = errors.where(resolved_at: nil).order('last_seen DESC')
     @error_count = {total: errors.size, resolved: resolved_errors.size, unresolved: unresolved_errors.size}
-    if resolved == 'true'
+    if to_boolean(resolved)
       @selected_errors = resolved_errors.page(@page).per(5)
-    elsif resolved == 'false'
+    else
       @selected_errors = unresolved_errors.page(@page).per(5)
     end
 
@@ -57,7 +57,7 @@ class ErrorsController < ApplicationController
       resolve_issues(ids, resolved)
     elsif params[:individual_resolve]
       ids = [@error.id]
-      resolved = to_boolean(!@error.resolved_at.nil?)
+      resolved = !@error.resolved_at.nil?
       resolve_issues(ids, resolved)
     else
       raise 'Could not find error!'
@@ -74,7 +74,7 @@ class ErrorsController < ApplicationController
       GroupedIssue.where(id: ids).update_all(resolved_at: nil)
       resolved = errors.where('resolved_at IS NOT NULL')
       @sidebar = resolved.page(page).per(ids.size).offset(errors_per_page)
-      @pagination = errors.page(page).per(errors_per_page).offset(ids.size)
+      @pagination = resolved.page(page).per(errors_per_page).offset(ids.size)
     else
       GroupedIssue.where(id: ids).update_all(resolved_at: DateTime.now)
       unresolved = errors.where(resolved_at: nil).page(page)

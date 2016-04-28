@@ -8,29 +8,39 @@ $list-error-height: 100%;
   .header {
     @include error-header();
     padding-top: 15px;
+
     .pagination{ margin: 0; }
-    // .list-check{
-    //   height: $list-error-height - 10px;
-    //   margin: -10px 0;
-    //   padding: 10px;
-    //   &:hover{
-    //     cursor: pointer;
-    //     background: $brand-primary;
-    //   }
-    // }
+
     .header-resolve{
-      margin-top:5px;
       margin-left:20px;
+    }
+    .error_pagination{
+      margin-right:10px;
+    }
+    .error_select{
+      margin-left:10px;
+      .btn{
+        margin-top:0px;
+      }
     }
   }
   .sidebar-tabs{
     margin-bottom:2px;
+    height:50px;
     ul{
+      height:100%;
       margin:0px;
       padding:0px;
+      width:100%;
       li{
+        float:left;
+        width:49.9%;
+        height:100%;
         margin:0px;
         padding:0px;
+        a{
+          height:100%;
+        }
       }
     }
   }

@@ -53,23 +53,20 @@
               %h5.text-center{style: "display:#{valid_stacktrace ? 'none' : 'block'}"} Missing stacktrace
               %p.read-more.text-center{style: "display:#{valid_stacktrace ? 'block' : 'none'}"}
                 %a.btn.btn-default{:href => "#"} View full backtrace
-          .panel.panel-default.broadcast
+          .panel.panel-default.broadcast{ :style => "display:#{ @error.subscribers.empty? ? 'none' : 'block' }" }
             .panel-heading
               Broadcast
             .panel-body
               .subscribers
-                .row
-                  .col-sm-offset-1.col-sm-11
-                    - @error.subscribers.limit(10).each do |subscriber|
-                      = image_tag subscriber.avatar_url(30)
-                    - if @error.subscribers.size > 10
-                      = " and #{@error.subscribers.size - 10} more"
-                .row.notify
-                  .col-sm-1
-                    = image_tag current_user.avatar_url
-                  = form_for @error, url: notify_subscribers_error_path(), remote: true, html: { method: :post , class: 'col-sm-11 broadcast-textarea'}, :data => {:confirm => 'Are you sure?'} do |f|
+                - @error.subscribers.limit(10).each do |subscriber|
+                  = image_tag subscriber.avatar_url(30)
+                - if @error.subscribers.size > 10
+                  = " and #{@error.subscribers.size - 10} more"
+                .notify
+                  = form_for @error, url: notify_subscribers_error_path(), remote: true, html: { method: :post , class: ' broadcast-textarea'}, :data => {:confirm => 'Are you sure?'} do |f|
                     = text_area_tag 'message', '', placeholder: 'Write a message ...'
-                    %button.btn.btn-primary{:type => 'submit'} Send
+                  %button.btn.btn-primary{:type => 'submit'} Send
+                  = image_tag current_user.avatar_url
         .col-sm-5.col-md-4
           .panel.panel-default
             .panel-heading Details

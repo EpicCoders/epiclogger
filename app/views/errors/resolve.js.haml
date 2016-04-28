@@ -6,6 +6,12 @@
   $('#resolve-button').removeClass('btn-danger').addClass('btn-primary')
 
 -if @sidebar
+
+  if($(".all").is(':checked')){$(".all").prop("checked",false);}
+
+  // replace resolved errors
   $("#{escape_javascript(render partial: 'sidebar_elements',collection: @sidebar, as: :error)}").appendTo('.error-container').hide().fadeIn(2000);
+
+  // reinitialize pagination buttons & page number
   $('.sidebar_pagination_text').html("#{ escape_javascript(page_entries_info @pagination, entry_name: 'error') } ");
   $('.sidebar_pagination_buttons').html("#{escape_javascript(paginate @pagination, theme: 'next_prev_theme', params: { controller: 'errors', action: 'show', _: nil, _method: nil, commit: nil, error_ids: nil, utf8: nil } ) }");
