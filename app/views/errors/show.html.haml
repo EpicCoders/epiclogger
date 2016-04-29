@@ -53,20 +53,20 @@
               %h5.text-center{style: "display:#{valid_stacktrace ? 'none' : 'block'}"} Missing stacktrace
               %p.read-more.text-center{style: "display:#{valid_stacktrace ? 'block' : 'none'}"}
                 %a.btn.btn-default{:href => "#"} View full backtrace
-          .panel.panel-default.broadcast{ :style => "display:#{ @error.subscribers.empty? ? 'none' : 'block' }" }
+          .panel.panel-default.broadcast{ :style => "display:#{ @error.website.users.empty? ? 'none' : 'block' }" }
             .panel-heading
               Broadcast
             .panel-body
               .subscribers
-                - @error.subscribers.limit(10).each do |subscriber|
+                - @error.website.users.limit(10).each do |subscriber|
                   = image_tag subscriber.avatar_url(30)
-                  - if @error.subscribers.size > 10
-                    = " and #{@error.subscribers.size - 10} more"
+                  - if @error.website.users.size > 10
+                    = " and #{@error.website.users.size - 10} more"
                     - break
-                - if @error.subscribers.size > 0
+                - if @error.website.users.size > 0
                   %h5.pull-right
                     This message will be sent to
-                    = @error.subscribers.size.to_s + (@error.subscribers.size > 1 ? ' users' : ' user')
+                    = @error.website.users.size.to_s + (@error.website.users.size > 1 ? ' users' : ' user')
                 .notify
                   = form_for @error, url: notify_subscribers_error_path(), remote: true, html: { method: :post , class: ' broadcast-textarea'}, :data => {:confirm => 'Are you sure?'} do |f|
                     = text_area_tag 'message', '', placeholder: 'Write a message ...'
