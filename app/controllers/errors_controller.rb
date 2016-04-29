@@ -113,11 +113,11 @@ class ErrorsController < ApplicationController
         data[:subscribers].push(item)
       end
 
-      found_browser = data[:browsers].index { |x| x["name"] == issue.user_agent.browser }
+      found_browser = data[:browsers].index { |x| x["name"] == issue.user_agent.try(:browser) }
       if found_browser
         data[:browsers][found_browser]["count"] += 1
       else
-        item = {"count" => 1, "created_at" => issue.created_at, "updated_at" => issue.updated_at, "name" => issue.user_agent.browser}
+        item = {"count" => 1, "created_at" => issue.created_at, "updated_at" => issue.updated_at, "name" => issue.user_agent.try(:browser)}
         data[:browsers].push(item)
       end
     end
