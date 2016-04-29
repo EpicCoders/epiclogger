@@ -44,8 +44,8 @@ class ErrorsController < ApplicationController
 
   def notify_subscribers
     @message = params[:message]
-    @error.website.users.each do |member|
-      UserMailer.notify_subscriber(@error, member, @message).deliver_later
+    @error.subscribers.each do |subscriber|
+      UserMailer.notify_subscriber(@error, subscriber, @message).deliver_later
     end
   end
 
@@ -78,8 +78,8 @@ class ErrorsController < ApplicationController
     else
       GroupedIssue.where(id: ids).update_all(resolved_at: DateTime.now)
       unresolved = errors.where(resolved_at: nil).page(page)
-      @sidebar = unresolved.per(ids.size).offset(errors_per_page)
-      @pagination = unresolved.per(errors_per_page).offset(ids.size)
+      @sidebar = unresolved.page(page).per(ids.size).offset(errors_per_page)
+      @pagination = unresolved.page(page).per(errors_per_page).offset(ids.size)
     end
   end
 
