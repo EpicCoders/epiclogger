@@ -12,7 +12,7 @@
         :escaped
           # Set your DSN value
           RAVEN_CONFIG = {
-              'dsn': 'https://#{@website.app_key}:#{@website.app_key}@test-sentry89.herokuapp.com/#{@website.id}',
+              'dsn': 'https://#{@website.app_key}:#{@website.app_secret}@test-sentry89.herokuapp.com/#{@website.id}',
           }
 
           # Add raven to the list of installed apps

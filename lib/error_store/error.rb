@@ -81,7 +81,7 @@ module ErrorStore
       data[:server_name]  = data.fetch(:server_name, nil)
       data[:site]         = data.fetch(:site, nil)
       data[:checksum]     = data.fetch(:checksum, nil)
-      data[:environment]  = data.fetch(:environment, nil) || data[:tags].fetch(:environment, nil)
+      data[:environment]  = data.fetch(:environment, nil) || data[:tags].try(:fetch, :environment)
       data[:extra]        = data.fetch(:extra, {})
       data.delete(:project) # remove the project attribute from data as it's not used
 

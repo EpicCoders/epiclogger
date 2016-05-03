@@ -12,7 +12,7 @@
         :escaped
           from raven import Client
 
-          client = Client('https://#{@website.app_key}:#{@website.app_key}@test-sentry89.herokuapp.com/#{@website.id}')
+          client = Client('https://#{@website.app_key}:#{@website.app_secret}@test-sentry89.herokuapp.com/#{@website.id}')
   %h5 Now call out to the epiclogger client to capture events:
   %pre
     %code.language-html

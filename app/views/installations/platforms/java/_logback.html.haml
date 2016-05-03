@@ -20,7 +20,7 @@
           <configuration>
           <appender name="Sentry" class="net.kencochrane.raven.logback.SentryAppender">
               <dsn>
-                  https://#{@website.app_key}:#{@website.app_key}@test-sentry89.herokuapp.com/#{@website.id}
+                  https://#{@website.app_key}:#{@website.app_secret}@test-sentry89.herokuapp.com/#{@website.id}
               </dsn>
           </appender>
 

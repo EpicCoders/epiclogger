@@ -19,7 +19,7 @@
         :escaped
           log4j.rootLogger=DEBUG, SentryAppender
           log4j.appender.SentryAppender=net.kencochrane.raven.log4j.SentryAppender
-          log4j.appender.SentryAppender.dsn=https://#{@website.app_key}:#{@website.app_key}@test-sentry89.herokuapp.com/#{@website.id}
+          log4j.appender.SentryAppender.dsn=https://#{@website.app_key}:#{@website.app_secret}@test-sentry89.herokuapp.com/#{@website.id}
           level=ERROR
   %hr
   %div

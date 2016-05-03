@@ -19,7 +19,7 @@
         :escaped
           level=ERROR
           handlers=net.kencochrane.raven.jul.SentryHandler
-          net.kencochrane.raven.jul.SentryHandler.dsn=https://#{@website.app_key}:#{@website.app_key}@test-sentry89.herokuapp.com/#{@website.id}
+          net.kencochrane.raven.jul.SentryHandler.dsn=https://#{@website.app_key}:#{@website.app_secret}@test-sentry89.herokuapp.com/#{@website.id}
   %hr
   %div
     %h5{:style => 'display:inline'}For more information on other uses of Epiclogger with Java, please see the
