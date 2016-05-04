@@ -1,5 +1,18 @@
 #grouped-issues.groups
-  = link_to error_url(error), class: 'warning' do
+  = link_to error_url(error) do
+    .left-id
+      %span= error.id
+    - case error.level
+    - when "debug"
+      %button.btn.btn-xs.btn-default.fa.fa-bug{title: "Level: debug"}
+    - when "error"
+      %button.btn.btn-xs.btn-danger.glyphicon.glyphicon-exclamation-sign{title: "Level: error"}
+    - when "warning"
+      %button.btn.btn-xs.btn-warning.glyphicon.glyphicon-star{title: "Level: warning"}
+    - when "fatal"
+      %button.btn.btn-xs.btn-danger.glyphicon.glyphicon-remove{title: "Level: fatal"}
+    - when "info"
+      %button.btn.btn-xs.btn-info.glyphicon.glyphicon-info-sign{title: "Level: info"}
     .left
       %span.message= error.message
     .right

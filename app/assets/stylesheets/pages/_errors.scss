@@ -126,6 +126,7 @@
     overflow-x: hidden;
     &#grouped-issuescontainer {
       padding: 0;
+      margin-top: -18px;
     }
     .pagetitle {
       border-bottom: 1px solid #cccccc;
@@ -193,16 +194,27 @@
   #missing-errors {
     text-align: center;
   }
+  .errors_buttons {
+    ul{
+      position: relative;
+      z-index: 1;
+      top: 50px;
+      left: -45px;
+      li{
+        display: inline-block;
+      }
+    }
+  }
   #grouped-issues {
     &:before {
       content: " ";
       display: block;
-      background: asset-url("line.png") repeat-y 19px 0;
-      height: 25px;
+      background: asset-url("line.png") repeat-y 123px 0;
+      height: 15px;
       margin: 0 10px;
     }
     > a {
-      background: asset-url("line.png") repeat-y 29px 0;
+      background: asset-url("line.png") repeat-y 133px 0;
       min-height: 80px;
       height: 80px;
       overflow: hidden;
@@ -211,28 +223,15 @@
       padding: 10px 20px;
       cursor: pointer;
       transition: all 80ms ease-in-out;
-      &.warning:before, &.error:before {
-        background: #f0ae47;
-        content: " ";
+      button{
         display: block;
         border: 4px solid white;
-        width: 20px;
-        height: 20px;
         border-radius: 10px;
         float: left;
         position: relative;
-        top: 18px;
-        margin-right: -20px;
+        margin-left: 99px;
+        top: 12px;
         transition: all 80ms ease-in-out;
-      }
-      &.warning:before:hover {
-        color: blue;
-      }
-      &.error:before {
-        &:hover {
-          color: blue;
-        }
-        background: #da4141;
       }
       &:hover, &.large {
         background-color: #f9f9f9;
@@ -241,10 +240,18 @@
       &:hover:before, &.large:before {
         border-color: #f9f9f9;
       }
+      .left-id {
+        position: fixed;
+        margin-left:33px;
+        span{
+          text-align: center;
+          font-size: 40px;
+        }
+      }
       .left {
         margin: 20px 25px 0 15px;
         margin-top: 15px;
-        width: 200px;
+        width: 300px;
         margin-left: 25px;
         float: left;
       }
@@ -255,7 +262,7 @@
         padding-top: 10px;
       }
       .main {
-        margin: 20px 25px 0 250px;
+        margin: 20px 25px 0 500px;
       }
       .group-right {
         margin: 20px 25px 0 15px;
@@ -272,6 +279,9 @@
           margin_top: 10px;
           font-weight: 500;
           padding-left: 16px;
+        }
+        &.message{
+          font-weight: bold;
         }
         &.occurrences, &.users_count {
           font-size: 12px;
@@ -319,7 +329,7 @@
       border-left: 2px solid #cccccc;
       border-bottom: 2px solid #cccccc;
       border-radius: 0 0 0 6px;
-      margin-left: 44px;
+      margin-left: 148px;
     }
     .buttons {
       padding-top: 20px;

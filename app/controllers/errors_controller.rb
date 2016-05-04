@@ -2,14 +2,15 @@ class ErrorsController < ApplicationController
   load_and_authorize_resource class: GroupedIssue
 
   def index
+    @filter = params[:filter] || "recent"
     errors_per_page = params[:error_count].to_i || 10
     current_error = params[:current_issue]
-    if current_error
-    #   @page = current_issue_page(errors_per_page, current_error)
-    # else
-      @page = params[:page] || 1
+    @page = params[:page] || 1 if current_error
+    if @filter == "recent"
+      @errors = current_website.grouped_issues.order('last_seen DESC').page(@page).per(errors_per_page)
+    else
+      @errors = current_website.grouped_issues.page(@page).per(errors_per_page)
     end
-    @errors = current_website.grouped_issues.order('last_seen DESC').page(@page).per(errors_per_page)
     @pages = @errors.total_pages
   end
 
