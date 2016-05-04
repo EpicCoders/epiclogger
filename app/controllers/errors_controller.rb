@@ -6,10 +6,13 @@ class ErrorsController < ApplicationController
     errors_per_page = params[:error_count].to_i || 10
     current_error = params[:current_issue]
     @page = params[:page] || 1 if current_error
-    if @filter == "recent"
+    case @filter
+    when "recent"
       @errors = current_website.grouped_issues.order('last_seen DESC').page(@page).per(errors_per_page)
-    else
-      @errors = current_website.grouped_issues.page(@page).per(errors_per_page)
+    when "unresolved", "resolved", "muted"
+      @errors = current_website.grouped_issues.where(status: GroupedIssue.status.find_value(@filter.to_sym).value).page(@page).per(errors_per_page)
+    when "most_encountered"
+      @errors = current_website.grouped_issues.joins(:issues).group("grouped_issues.id").order("count(grouped_issues.id) DESC").page(@page).per(errors_per_page)
     end
     @pages = @errors.total_pages
   end
