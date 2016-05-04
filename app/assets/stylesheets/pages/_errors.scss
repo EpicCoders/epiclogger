@@ -194,6 +194,81 @@
   #missing-errors {
     text-align: center;
   }
+
+  .seach-box{
+    overflow: hidden;
+    position: relative;
+    z-index: 1;
+    margin-right: -7px;
+    margin-top: 7px;
+    width: 250px;
+    vertical-align: middle;
+    white-space: nowrap;
+  }
+
+  .seach-box input#search{
+    width: 250px;
+    height: 40px;
+    background: #F3F3F3;
+    border: none;
+    font-size: 10pt;
+    float: left;
+    color: #757988;
+    padding-left: 15px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+  }
+
+  .seach-box input#search::-webkit-input-placeholder {
+     color: #65737e;
+  }
+
+  .seach-box input#search:-moz-placeholder { /* Firefox 18- */
+     color: #65737e;
+  }
+
+  .seach-box input#search::-moz-placeholder {  /* Firefox 19+ */
+     color: #65737e;
+  }
+
+  .seach-box input#search:-ms-input-placeholder {
+     color: #65737e;
+  }
+
+  .seach-box input.icon{
+    -webkit-border-top-right-radius: 5px;
+    -webkit-border-bottom-right-radius: 5px;
+    -moz-border-radius-topright: 5px;
+    -moz-border-radius-bottomright: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+
+    border: none;
+    background: #E3E3E3;
+    height: 40px;
+    width: 55px;
+    color: #4f5b66;
+    opacity: 0;
+    font-size: 10pt;
+
+    -webkit-transition: all .55s ease;
+    -moz-transition: all .55s ease;
+    -ms-transition: all .55s ease;
+    -o-transition: all .55s ease;
+    transition: all .55s ease;
+  }
+
+  .seach-box:hover input.icon, .seach-box:active input.icon, .seach-box:focus input.icon{
+    outline: none;
+    opacity: 1;
+    color: #757988;
+    margin-left: -55px;
+  }
+
+  .seach-box:hover input.icon:hover{
+    background: #333333;
+  }
   .errors_buttons {
     ul{
       position: relative;

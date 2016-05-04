@@ -1,20 +1,31 @@
 .row.col-lg-12.pull-right
   #custom-bootstrap.navbar.navbar-default.col-lg-12
-    .errors_buttons
-      %ul
-        %li
-          %a.btn.btn-default.btn-xs.glyphicon.glyphicon-time{href: "#{errors_path('action_type' => 'task')}", title: "Task"}
-        %li
-          %a.btn.btn-default.btn-xs.glyphicon.glyphicon-trash{href: "#{errors_path('action_type' => 'remove')}", title: "Remove"}
-        %li
-          %a.btn.btn-danger.btn-xs.glyphicon.glyphicon-star{href: "#{errors_path('action_type' => 'assign')}", title: "Assign"}
+    / .errors_buttons
+    /   %ul
+    /     %li
+    /       %a.btn.btn-default.btn-xs.glyphicon.glyphicon-time{href: "#{errors_path('action_type' => 'task')}", title: "Task"}
+    /     %li
+    /       %a.btn.btn-default.btn-xs.glyphicon.glyphicon-trash{href: "#{errors_path('action_type' => 'remove')}", title: "Remove"}
+    /     %li
+    /       %a.btn.btn-danger.btn-xs.glyphicon.glyphicon-star{href: "#{errors_path('action_type' => 'assign')}", title: "Assign"}
     %ul.nav.navbar-nav.navbar-left.pull-right
       %li{class: @filter == 'recent' ? 'active' : ''}
         = link_to "Recent", errors_path('filter' => 'recent')
+      %li{class: @filter == 'muted' ? 'active' : ''}
+        = link_to "Muted", errors_path('filter' => 'muted')
+      %li{class: @filter == 'resolved' ? 'active' : ''}
+        = link_to "Resolved", errors_path('filter' => 'resolved')
+      %li{class: @filter == 'unresolved' ? 'active' : ''}
+        = link_to "Unresolved", errors_path('filter' => 'unresolved')
       %li{class: @filter == 'most_encountered' ? 'active' : ''}
         = link_to "Most encountered", errors_path('filter' => 'most_encountered')
       %li
-        %a.glyphicon.glyphicon-search{href: "#{errors_path('filter' => 'search')}"}
+        .box
+          .seach-box
+            %form{"accept-charset" => "UTF-8", :action => "/errors", :method => "get"}
+              %input{:name => "utf8", :type => "hidden", :value => "✓"}
+                %input#search{:name => "search", :placeholder => "Search...", :type => "text"}
+                  %input.icon{:name => "commit", :type => "submit"}
 
 .row
   #grouped-issuescontainer.col-lg-12.col-md-8.pagecontainer
