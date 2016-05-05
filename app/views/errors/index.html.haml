@@ -11,8 +11,6 @@
     %ul.nav.navbar-nav.navbar-left.pull-right
       %li{class: @filter == 'recent' ? 'active' : ''}
         = link_to "Recent", errors_path('filter' => 'recent')
-      %li{class: @filter == 'muted' ? 'active' : ''}
-        = link_to "Muted", errors_path('filter' => 'muted')
       %li{class: @filter == 'resolved' ? 'active' : ''}
         = link_to "Resolved", errors_path('filter' => 'resolved')
       %li{class: @filter == 'unresolved' ? 'active' : ''}

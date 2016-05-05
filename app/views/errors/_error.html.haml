@@ -18,9 +18,14 @@
     .right
       %span.last Last occurrence
       %span.last_occurrence= distance_of_time_in_words_to_now error.last_seen
-    .main
-      %span.language Language
-      %span.issue_logger= "#{error.platform} - #{error.culprit}"
+    %span.language= "#{error.subscribers.count} users"
+    %span.language= "Language - #{error.platform}"
+    .main-middle
+      %span.language= "Level - #{error.level}"
+      %span.language= "Times seen - #{error.times_seen}"
+    .main-right
+      %span.language Culprit
+      %span= error.culprit
     .group-right
       .issues
         %span.page_title

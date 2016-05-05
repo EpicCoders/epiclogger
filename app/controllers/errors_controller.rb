@@ -9,7 +9,7 @@ class ErrorsController < ApplicationController
     case @filter
     when "recent"
       @errors = current_website.grouped_issues.order('last_seen DESC').page(@page).per(errors_per_page)
-    when "unresolved", "resolved", "muted"
+    when "unresolved", "resolved"
       @errors = current_website.grouped_issues.where(status: GroupedIssue.status.find_value(@filter.to_sym).value).page(@page).per(errors_per_page)
     when "most_encountered"
       @errors = current_website.grouped_issues.joins(:issues).group("grouped_issues.id").order("count(grouped_issues.id) DESC").page(@page).per(errors_per_page)
