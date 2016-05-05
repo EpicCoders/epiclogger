@@ -284,14 +284,14 @@
     &:before {
       content: " ";
       display: block;
-      background: asset-url("line.png") repeat-y 123px 0;
-      height: 15px;
+      background: asset-url("line.png") repeat-y 93px 0;
+      height: 5px;
       margin: 0 10px;
     }
     > a {
-      background: asset-url("line.png") repeat-y 133px 0;
-      min-height: 80px;
-      height: 80px;
+      background: asset-url("line.png") repeat-y 103px 0;
+      min-height: 60px;
+      height: 60px;
       overflow: hidden;
       display: block;
       margin: 0;
@@ -304,8 +304,8 @@
         border-radius: 10px;
         float: left;
         position: relative;
-        margin-left: 99px;
-        top: 12px;
+        margin-left: 69px;
+        top: 6px;
         transition: all 80ms ease-in-out;
       }
       &:hover, &.large {
@@ -317,15 +317,14 @@
       }
       .left-id {
         position: fixed;
-        margin-left:33px;
+        margin-left:20px;
         span{
           text-align: center;
-          font-size: 40px;
+          font-size: 30px;
         }
       }
       .left {
-        margin: 20px 25px 0 15px;
-        margin-top: 15px;
+        margin: 10px 25px 0 15px;
         width: 300px;
         margin-left: 25px;
         float: left;
@@ -337,7 +336,7 @@
         padding-top: 10px;
       }
       .main {
-        margin: 20px 25px 0 500px;
+        margin: 0 25px 0 500px;
       }
       .group-right {
         margin: 20px 25px 0 15px;
@@ -356,7 +355,10 @@
           padding-left: 16px;
         }
         &.message{
-          font-weight: bold;
+          color: #333333;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          overflow: hidden;
         }
         &.occurrences, &.users_count {
           font-size: 12px;
@@ -400,11 +402,11 @@
   }
   #pagination {
     .side {
-      height: 39px;
+      height: 20px;
       border-left: 2px solid #cccccc;
       border-bottom: 2px solid #cccccc;
       border-radius: 0 0 0 6px;
-      margin-left: 148px;
+      margin-left: 118px;
     }
     .buttons {
       padding-top: 20px;
