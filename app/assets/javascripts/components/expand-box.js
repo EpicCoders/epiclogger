@@ -3,6 +3,7 @@ $(function () {
 
   $(".expand-box .btn").click(function() {
     totalHeight = 30
+    defaultHeight = 700
     console.log('dada');
     $el = $(this);
     $p  = $el.parent();
@@ -13,14 +14,23 @@ $(function () {
     $ps.each(function() {
       totalHeight += $(this).outerHeight();
     });
+
+    // if the stacktrace is too big we should add a scrollbar
+    if(totalHeight < defaultHeight){
+      defaultHeight = totalHeight      
+    }
+    else{
+      $up.css({ "overflow": "auto" })      
+    }
+
     $up
       .css({
         // Set height to prevent instant jumpdown when max height is removed
         "height": $up.height(),
-        "max-height": 9999
+        "max-height": defaultHeight
       })
       .animate({
-        "height": totalHeight
+        "height": defaultHeight
       });
 
     // fade out read-more

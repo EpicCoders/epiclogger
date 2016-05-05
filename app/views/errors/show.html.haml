@@ -27,12 +27,22 @@
           %p.lead= @error.message
       .row
         .col-sm-7.col-md-8
-          -# exception display
           .panel.panel-default.exception
             .panel-heading Exception
             .panel-body.expand-box
               - @issue.stacktrace_frames.each do |frame|
-                %div= frame.get_culprit_string(with_lineno: true)
+                .frame
+                  .file
+                    = frame.get_culprit_string(with_lineno: true)
+                  .content
+                    %pre
+                      %code
+                        = frame._data[:pre_context] ? simple_format(frame._data[:pre_context].join('')).gsub("\n", "<br />").html_safe : ''
+                        = frame._data[:context_line] ? simple_format(frame._data[:context_line], class: 'error-line').gsub("\n", "<br />").html_safe : ''
+                        = frame._data[:post_context] ? simple_format(frame._data[:post_context].join('')).gsub("\n", "<br />").html_safe : ''
+
+
+
               %p.read-more.text-center
                 %a.btn.btn-default{:href => "#"} View full backtrace
           .panel.panel-default.broadcast
@@ -82,3 +92,6 @@
         .col-sm-12
           - @error.subscribers.each do |subscriber|
             = image_tag subscriber.avatar_url
+
+:javascript
+  hljs.initHighlightingOnLoad();

@@ -25,6 +25,7 @@
 //= require sweet-alert/sweet-alert
 //= require jquery.cookie
 //= require jquery.deparam
+//= require highlightjs
 
 //= require prism
 // require bar-chart
