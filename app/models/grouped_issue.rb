@@ -1,6 +1,7 @@
 class GroupedIssue < ActiveRecord::Base
   extend Enumerize
   belongs_to :website
+  belongs_to :release
   has_many :subscribers, -> { uniq }, through: :issues, foreign_key: 'group_id'
   has_many :issues, foreign_key: 'group_id', dependent: :destroy
   enumerize :level, in: [:debug, :error, :fatal, :info, :warning], default: :error

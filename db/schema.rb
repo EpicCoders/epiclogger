@@ -11,11 +11,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160409090026) do
+ActiveRecord::Schema.define(version: 20160506120457) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-  enable_extension "hstore"
 
   create_table "active_admin_comments", force: :cascade do |t|
     t.string   "namespace"
@@ -69,6 +68,7 @@ ActiveRecord::Schema.define(version: 20160409090026) do
     t.string   "culprit"
     t.string   "checksum",         limit: 32
     t.integer  "time_spent_total",            default: 0
+    t.integer  "release_id"
   end
 
   add_index "grouped_issues", ["active_at"], name: "index_grouped_issues_on_active_at", using: :btree
@@ -77,6 +77,7 @@ ActiveRecord::Schema.define(version: 20160409090026) do
   add_index "grouped_issues", ["issue_logger"], name: "index_grouped_issues_on_issue_logger", using: :btree
   add_index "grouped_issues", ["last_seen"], name: "index_grouped_issues_on_last_seen", using: :btree
   add_index "grouped_issues", ["level"], name: "index_grouped_issues_on_level", using: :btree
+  add_index "grouped_issues", ["release_id"], name: "index_grouped_issues_on_release_id", using: :btree
   add_index "grouped_issues", ["resolved_at"], name: "index_grouped_issues_on_resolved_at", using: :btree
   add_index "grouped_issues", ["status"], name: "index_grouped_issues_on_status", using: :btree
   add_index "grouped_issues", ["times_seen"], name: "index_grouped_issues_on_times_seen", using: :btree
@@ -110,6 +111,16 @@ ActiveRecord::Schema.define(version: 20160409090026) do
   end
 
   add_index "messages", ["issue_id"], name: "index_messages_on_issue_id", using: :btree
+
+  create_table "releases", force: :cascade do |t|
+    t.string   "version"
+    t.jsonb    "data",       default: {}
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+    t.integer  "website_id"
+  end
+
+  add_index "releases", ["website_id"], name: "index_releases_on_website_id", using: :btree
 
   create_table "subscribers", force: :cascade do |t|
     t.string   "name",       null: false
@@ -170,14 +181,16 @@ ActiveRecord::Schema.define(version: 20160409090026) do
     t.datetime "created_at",                     null: false
     t.datetime "updated_at",                     null: false
     t.string   "app_key"
+    t.string   "app_secret"
     t.boolean  "new_event",      default: true
     t.boolean  "frequent_event", default: false
     t.boolean  "daily",          default: false
     t.boolean  "realtime",       default: false
-    t.string   "app_secret"
     t.string   "platform"
   end
 
+  add_foreign_key "grouped_issues", "releases"
   add_foreign_key "issues", "subscribers"
   add_foreign_key "issues", "websites"
+  add_foreign_key "releases", "websites"
 end

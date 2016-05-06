@@ -41,6 +41,7 @@ Rails.application.routes.draw do
   namespace :api, defaults: { format: :json } do
     scope module: 'v1' do
       match '/:id/store' => 'store#create', as: :store, via: [:get, :post]
+      match '/:id/release' => 'release#create', as: :release, via: [:post]
     end
   end
   #   namespace :v1 do
