@@ -1,7 +1,7 @@
 class Website < ActiveRecord::Base
   include ModelUtils::URIField
   has_many :subscribers, dependent: :destroy
-  has_many :releases, dependent: :destroy
+  has_one :release, dependent: :destroy
   has_many :grouped_issues, dependent: :destroy
   has_many :website_members, -> { uniq }, autosave: true
   has_many :users, through: :website_members
