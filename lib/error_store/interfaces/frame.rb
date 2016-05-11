@@ -45,11 +45,11 @@ module ErrorStore::Interfaces
       function = nil if function == '?'
 
       context_locals = data[:vars]
-      context_locals = if context_locals.is_a?(Array)
-                         Hash[context_locals]
-                       elsif !context_locals.is_a?(Hash)
-                         {}
-                       end
+      if context_locals.is_a?(Array)
+        context_locals = Hash[context_locals]
+      elsif !context_locals.is_a?(Hash)
+        context_locals = {}
+      end
 
       context_locals = trim_hash(context_locals) do |result|
         handle_nan(result)

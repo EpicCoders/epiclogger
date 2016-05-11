@@ -67,6 +67,11 @@ RSpec.describe ErrorStore::Interfaces::Frame do
       expect( subject._data[:vars] ).to eq({})
     end
 
+    it 'does not change the value of context_locals if its already a Hash' do
+      post_data[:vars] = { value: 'zoro' }
+      expect( subject._data[:vars] ).to eq( { value: 'zoro' } )
+    end
+
     it 'trimps hash of context_locals' do
       post_data[:vars] = generate_array(100)
       expect( subject._data[:vars].length ).to eq(ErrorStore::MAX_HASH_ITEMS)
