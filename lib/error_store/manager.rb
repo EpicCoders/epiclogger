@@ -27,6 +27,7 @@ module ErrorStore
       platform      = data.delete(:platform)
 
       culprit = generate_culprit(data) if culprit.blank?
+      release = Release.find_by_version(data.delete(:release)) || website.releases.last
 
       # TODO implement tags
       # tags = data[:tags] || []
@@ -68,7 +69,8 @@ module ErrorStore
         last_seen: date,
         first_seen: date,
         time_spent_total: time_spent || 0,
-        time_spent_count: time_spent && 1 || 0
+        time_spent_count: time_spent && 1 || 0,
+        release_id: release.id
       }
 
       group, is_sample = _save_aggregate(issue, hash, **group_params)
