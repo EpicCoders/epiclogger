@@ -61,6 +61,7 @@ module ErrorStore
     'user': :user,
     'csp': :csp,
     'http': :http,
+    'sdk': :sdk,
 
     'sentry.interfaces.Exception': :exception,
     'sentry.interfaces.Message': :message,
