@@ -18,3 +18,5 @@ before_script:
   - bundle exec rake db:test:prepare
 env:
   - APP_DOMAIN='localhost:3000' MAILER_HOST='localhost:3000' GITHUB_SECRET='123123asdasd' GITHUB_KEY='23232sssss'
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
