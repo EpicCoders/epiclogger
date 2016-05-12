@@ -7,7 +7,7 @@ class Api::V1::ReleaseController < Api::V1::ApiController
         release.data = params
         release.website_id = params[:id]
       end
-      @last_release.grouped_issues.update_all(:status => 2, :release_id => @current_release )
+      @last_release.grouped_issues.update_all(:status => GroupedIssue.status.find_value('resolved').value )
     end
   end
 end

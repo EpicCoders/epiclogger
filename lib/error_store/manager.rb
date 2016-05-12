@@ -1,6 +1,6 @@
 module ErrorStore
   class Manager
-    attr_accessor :data, :current_release
+    attr_accessor :data
 
     def initialize(data, version: '5')
       @data     = data
@@ -88,12 +88,11 @@ module ErrorStore
     def check_release(slug_commit, website)
       last_release = website.releases.last
       unless slug_commit.nil?
-        current_release = Release.create_with(website_id: website.id).find_or_create_by(version: slug_commit)
+        release = Release.create_with(website_id: website.id).find_or_create_by(version: slug_commit)
         unless last_release.nil? || last_release.version == current_release.version
-          last_release.grouped_issues.update_all(:status => 2, :release_id => current_release.id )
+          last_release.grouped_issues.update_all(:status => GroupedIssue.status.find_value('resolved').value, :release_id => current_release.id )
         end
       end
-      release = current_release unless slug_commit.nil?
       release = last_release if slug_commit.nil?
 
       return release
