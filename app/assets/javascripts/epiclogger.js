@@ -1,9 +1,14 @@
 //= require_tree ./pages
 //= require_tree ./components
 
-$( document ).ready(function() {
+ready = function() {
+  hljs.initHighlighting.called = false;
+  hljs.initHighlighting();
   $("#menu-toggle").click(function(e) {
     e.preventDefault();
     $("#wrapper").toggleClass("toggled");
   });
-});
+};
+
+$(document).ready(ready);
+$(document).on('page:load', ready);

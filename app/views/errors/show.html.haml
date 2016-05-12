@@ -29,21 +29,24 @@
         .col-sm-7.col-md-8
           .panel.panel-default.exception
             .panel-heading Exception
-            .panel-body.expand-box
-              - @issue.stacktrace_frames.each do |frame|
-                .frame
-                  .file
-                    = frame.get_culprit_string(with_lineno: true)
-                  .content
-                    %pre
-                      %code
-                        = frame._data[:pre_context] ? simple_format(frame._data[:pre_context].join('')).gsub("\n", "<br />").html_safe : ''
-                        = frame._data[:context_line] ? simple_format(frame._data[:context_line], class: 'error-line').gsub("\n", "<br />").html_safe : ''
-                        = frame._data[:post_context] ? simple_format(frame._data[:post_context].join('')).gsub("\n", "<br />").html_safe : ''
+            - valid_stacktrace = @issue.stacktrace_frames != 'Missing stacktrace' && @issue.stacktrace_frames.present?
+            .panel-body{ class: "#{valid_stacktrace ? 'expand-box' : ''}" }
+              - if valid_stacktrace
+                - @issue.stacktrace_frames.each do |frame|
+                  .frame
+                    .file
+                      = frame.get_culprit_string(with_lineno: true)
+                    .content
+                      %pre
+                        %code
+                          = frame._data[:pre_context] ? simple_format(frame._data[:pre_context].join('')).gsub("\n", "<br />").html_safe : ''
+                          = frame._data[:context_line] ? simple_format(frame._data[:context_line], class: 'error-line').gsub("\n", "<br />").html_safe : ''
+                          = frame._data[:post_context] ? simple_format(frame._data[:post_context].join('')).gsub("\n", "<br />").html_safe : ''
 
 
 
-              %p.read-more.text-center
+              %h5.text-center{style: "display:#{valid_stacktrace ? 'none' : 'block'}"} Missing stacktrace
+              %p.read-more.text-center{style: "display:#{valid_stacktrace ? 'block' : 'none'}"}
                 %a.btn.btn-default{:href => "#"} View full backtrace
           .panel.panel-default.broadcast
             .panel-heading Broadcast
@@ -92,6 +95,3 @@
         .col-sm-12
           - @error.subscribers.each do |subscriber|
             = image_tag subscriber.avatar_url
-
-:javascript
-  hljs.initHighlightingOnLoad();
