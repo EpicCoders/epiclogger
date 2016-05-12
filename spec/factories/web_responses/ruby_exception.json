@@ -6,6 +6,7 @@
    "level":40,
    "project":null,
    "platform":"ruby",
+   "release": "862c28f5604030e37889bbd10742b0ba2dcb77bc",
    "logger":"",
    "culprit":"app/controllers/home_controller.rb in / at line 5",
    "server_name":"imac.local",

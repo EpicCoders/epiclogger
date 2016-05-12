@@ -89,7 +89,7 @@ module ErrorStore
       last_release = website.releases.last
       unless slug_commit.nil?
         current_release = Release.create_with(website_id: website.id).find_or_create_by(version: slug_commit)
-        unless last_release.version == current_release.version
+        unless last_release.nil? || last_release.version == current_release.version
           last_release.grouped_issues.update_all(:status => 2, :release_id => current_release.id )
         end
       end

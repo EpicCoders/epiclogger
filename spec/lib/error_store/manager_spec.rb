@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe ErrorStore::Manager do
   let(:website) { create :website }
+  let!(:release) { create :release, website: website }
   let(:post_request) { post_error_request(web_response_factory('ruby_exception'), website) }
   let(:get_request) { get_error_request(web_response_factory('js_exception'), website) }
   let(:validated_post_data) { validated_request(post_request) }
@@ -96,7 +97,8 @@ RSpec.describe ErrorStore::Manager do
         issue_logger: 1,
         level: 'fatal',
         time_spent_total: 0,
-        time_spent_count: 0
+        time_spent_count: 0,
+        release_id: release.id
       }
     }
     subject { post_manager._save_aggregate(issue, 'somehashhere', **group_params) }
