@@ -1,6 +1,8 @@
 language: ruby
 rvm:
   - 2.2.2
+addons:
+  postgresql: "9.4"
 cache: bundler
 sudo: false
 bundler_args: "--without development production"
