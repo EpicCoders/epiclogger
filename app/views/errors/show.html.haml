@@ -32,14 +32,14 @@
             - valid_stacktrace = @issue.stacktrace_frames != 'Missing stacktrace' && @issue.stacktrace_frames.present?
             .panel-body{ class: "#{valid_stacktrace ? 'expand-box' : ''}" }
               - if valid_stacktrace
-                - @issue.stacktrace_frames.each do |frame|
-                  #frame.accordion
+                #frame.accordion
+                  - @issue.stacktrace_frames.each_with_index do |frame, index|
                     .accordion-group
                       .accordion-heading.heading
-                        %a.accordion-toggle.collapsed{"data-parent" => "#frame", "data-toggle" => "collapse", :href => "#collapseOne"}
-                          %em.icon-fixed-width.fa.fa-plus>
+                        %a.accordion-toggle.collapsed
+                          %em.icon-fixed-width.fa.fa-plus{"data-parent" => "#frame", "data-toggle" => "collapse", :href => "#collapse#{index}"}
                           = frame.get_culprit_string(with_lineno: true)
-                      #collapseOne.accordion-body.collapse{:style => "height: 0px;"}
+                      .accordion-body.collapse{:style => "height: 0px;", :id => "collapse#{index}"}
                         .accordion-inner.content
                           %pre
                             %code
