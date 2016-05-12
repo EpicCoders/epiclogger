@@ -16,6 +16,8 @@
 !/log/.keep
 /tmp
 
+/coverage/*
+
 config/database.yml
 .DS_Store
 

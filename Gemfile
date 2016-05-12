@@ -79,6 +79,7 @@ group :test do
   gem 'capybara'
   gem 'timecop'
   gem 'shoulda-matchers', require: false
+  gem 'codecov', require: false
 end
 
 group :development, :test do
