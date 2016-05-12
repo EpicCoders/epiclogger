@@ -1,8 +1,7 @@
 # EpicLogger
 
 [![Dependency Status](https://gemnasium.com/EpicCoders/epiclogger.svg)](https://gemnasium.com/EpicCoders/epiclogger)
-[![Code Climate](https://codeclimate.com/github/EpicCoders/epiclogger/badges/gpa.svg)](https://codeclimate.com/github/EpicCoders/epiclogger)
-[![Test Coverage](https://codeclimate.com/github/EpicCoders/epiclogger/badges/coverage.svg)](https://codeclimate.com/github/EpicCoders/epiclogger/coverage)
+[![codecov](https://codecov.io/gh/EpicCoders/epiclogger/branch/master/graph/badge.svg)](https://codecov.io/gh/EpicCoders/epiclogger)
 [![Build Status](https://travis-ci.org/EpicCoders/epiclogger.svg)](https://travis-ci.org/EpicCoders/epiclogger)
 
 ## EpicLogger engage developers with users to solve errors
