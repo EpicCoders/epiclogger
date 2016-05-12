@@ -1,6 +1,6 @@
 module ErrorStore
   class Manager
-    attr_accessor :data
+    attr_accessor :data, :current_release
 
     def initialize(data, version: '5')
       @data     = data
@@ -27,7 +27,7 @@ module ErrorStore
       platform      = data.delete(:platform)
 
       culprit = generate_culprit(data) if culprit.blank?
-      release = Release.find_by_version(data.delete(:release)) || website.releases.last
+      release = check_release(data.delete(:release), website)
 
       # TODO implement tags
       # tags = data[:tags] || []
@@ -82,6 +82,21 @@ module ErrorStore
       db_store(:issue) { issue.save } unless is_sample
 
       issue
+    end
+
+    #match a release
+    def check_release(slug_commit, website)
+      last_release = website.releases.last
+      unless slug_commit.nil?
+        current_release = Release.create_with(website_id: website.id).find_or_create_by(version: slug_commit)
+        unless last_release.version == current_release.version
+          last_release.grouped_issues.update_all(:status => 2, :release_id => current_release.id )
+        end
+      end
+      release = current_release unless slug_commit.nil?
+      release = last_release if slug_commit.nil?
+
+      return release
     end
 
     # here we save the grouped issue with all details
@@ -174,11 +189,12 @@ module ErrorStore
       return unless group.resolved?
 
       # we now think its a regression so we are updating the status of the grouped issue
+      last_release = group.website.releases.last
       date = [issue.datetime, group.last_seen].max
       statuses = [GroupedIssue::RESOLVED, GroupedIssue::UNRESOLVED]
       is_regression = GroupedIssue.where(id: group.id, status: statuses)
                       .where('active_at < ?', date - 5.seconds)
-                      .update_all(active_at: date, last_seen: date, status: GroupedIssue::UNRESOLVED)
+                      .update_all(active_at: date, last_seen: date, status: GroupedIssue::UNRESOLVED, release_id: last_release.id)
 
       group.active_at = date
       group.status = :unresolved

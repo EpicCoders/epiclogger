@@ -2,7 +2,8 @@ require 'rails_helper'
 
 RSpec.describe ErrorStore::Error do
   let(:website) { create :website }
-  let(:group) { create :grouped_issue, website: website }
+  let(:release) { create :release, website: website }
+  let(:group) { create :grouped_issue, website: website, release: release }
   let(:subscriber) { create :subscriber, website: website }
   let!(:issue_error) { create :issue, subscriber: subscriber, group: group, event_id: '8af060b2986f5914764d49b7f39b036c' }
 

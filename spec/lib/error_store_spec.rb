@@ -2,7 +2,8 @@ require 'rails_helper'
 
 RSpec.describe ErrorStore do
   let(:website) { create :website }
-  let(:group) { create :grouped_issue, website: website }
+  let(:release) { create :release, website: website }
+  let(:group) { create :grouped_issue, website: website, release: release }
   let(:subscriber) { create :subscriber, website: website }
   let!(:issue_error) { create :issue, subscriber: subscriber, group: group }
   let(:request) { post_error_request(web_response_factory('ruby_exception'), website) }
