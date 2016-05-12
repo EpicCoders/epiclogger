@@ -1,7 +1,7 @@
 module ErrorStore::Interfaces
   class Sdk < ErrorStore::BaseInterface
 
-  	def self.display_name
+    def self.display_name
       'Sdk'
     end
 
@@ -9,7 +9,7 @@ module ErrorStore::Interfaces
       :sdk
     end
 
-  	def sanitize_data (data)
+    def sanitize_data (data)
       raise ErrorStore::ValidationError.new(self), "No 'name' value" if !data[:name].present?
       raise ErrorStore::ValidationError.new(self), "No 'version' value" if !data[:version].present?
       self._data =
@@ -18,6 +18,6 @@ module ErrorStore::Interfaces
         version: trim(data[:version])
       }
       self
-  	end
+    end
   end
 end
