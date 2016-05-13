@@ -105,11 +105,11 @@ class ErrorsController < ApplicationController
         data[:messages].push(item)
       end
 
-      found_subscriber = data[:subscribers].index { |x| x["name"] == issue.subscriber.name }
+      found_subscriber = data[:subscribers].index { |x| x["id"] == issue.subscriber.try(:id) }
       if found_subscriber
         data[:subscribers][found_subscriber]["count"] += 1
       else
-        item = {"count" => 1, "created_at" => issue.created_at, "updated_at" => issue.updated_at, "name" => issue.subscriber.name}
+        item = {"count" => 1, "created_at" => issue.created_at, "updated_at" => issue.updated_at, "name" => issue.subscriber.try(:name), "id" => issue.subscriber.try(:id)}
         data[:subscribers].push(item)
       end
 
