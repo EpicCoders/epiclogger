@@ -14,7 +14,7 @@ class UsersController < ApplicationController
 
   def create
     user = User.new(user_params)
-    
+
     authenticate!(:password) if user.save
     after_login_redirect
   end

@@ -6,16 +6,13 @@
     .row
       .col-md-6
         .panel.panel-default
-          .panel-heading Enter the member details below
+          .panel-heading Send an email invitation to:
           .panel-body
-            %form#addMember{:action => "", :method => "post"}
-              .form-group
-                %label.control-label Email
-                %input#getEmail.form-control{:placeholder => "Enter email here", :required => "required", :type => "email", :name => 'getEmail'}/
-              .form-group
-                %button.btn.btn-primary.m-t-n-xs{:type => "submit"} Send invitation
+            = simple_form_for User.new, url: invitations_path, method: :create, :remote => "true", wrapper: :vertical_form do |f|
+              = f.input :email, placeholder: 'user@domain.com', class: 'form-control', required: true
+              = f.submit 'Send Invitation', class: "btn btn-primary btn-sm pull-right"
       .col-md-6
         .well.wel-sm
-          %p We will send an email with a link that will allow current website member to login/sign up on our site for free.
+          %p We will send an email with a link that will allow current website member to sign/login up on our site for free.
           %p The signed in user will be able to see the errors of your current website.
           %p Thanks.

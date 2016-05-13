@@ -17,10 +17,10 @@
             %th Role
             %th.text-right Actions
         %tbody.websites
-          - @members.each do |member|
+          - @website_members.each do |website_member|
             %tr
-              %td= member.user.name
-              %td= member.user.email
-              %td= member.role
+              %td= website_member.user.name
+              %td= website_member.user.email
+              %td= website_member.role
               %td.text-right
-                = link_to ' Delete', "/website_members/#{member.id}", :method => :delete, :remote => "true", data: {confirm: "Are you sure?"}, :class => "delete_website btn btn-danger pull-right fa fa-close"
+                = link_to ' Delete', "/website_members/#{website_member.id}", :method => :delete, :remote => "true", data: {confirm: "Are you sure?"}, :class => "delete_website btn btn-danger pull-right fa fa-close"
