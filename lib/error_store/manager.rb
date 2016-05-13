@@ -27,7 +27,7 @@ module ErrorStore
       platform      = data.delete(:platform)
 
       culprit = generate_culprit(data) if culprit.blank?
-      release = check_release(data.delete(:release), website)
+      release = website.check_release(data.delete(:release))
 
       # TODO implement tags
       # tags = data[:tags] || []
@@ -82,20 +82,6 @@ module ErrorStore
       db_store(:issue) { issue.save } unless is_sample
 
       issue
-    end
-
-    #match a release
-    def check_release(slug_commit, website)
-      last_release = website.releases.last
-      unless slug_commit.nil?
-        release = Release.create_with(website_id: website.id).find_or_create_by(version: slug_commit)
-        unless last_release.nil? || last_release.version == release.version
-          last_release.grouped_issues.update_all(:status => GroupedIssue.status.find_value('resolved').value, :release_id => release.id )
-        end
-      end
-      release = last_release if slug_commit.nil?
-
-      return release
     end
 
     # here we save the grouped issue with all details

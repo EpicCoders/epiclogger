@@ -30,6 +30,20 @@ class Website < ActiveRecord::Base
     false
   end
 
+  #match a release
+  def check_release(slug)
+    last_release = self.releases.last
+    unless slug.nil?
+      release = self.releases.create_with(website_id: self.id).find_or_create_by(version: slug)
+      unless last_release.nil? || last_release.version == release.version
+        last_release.grouped_issues.update_all( status: GroupedIssue.status.find_value('resolved').value )
+      end
+    end
+    release = last_release if slug.nil?
+
+    return release
+  end
+
   def self.daily_report
     date = Time.now - 1.day
     Website.select("websites.id").joins(:grouped_issues).where('grouped_issues.updated_at > ?', date).uniq.each do |website|
