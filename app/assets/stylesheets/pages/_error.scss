@@ -19,7 +19,7 @@
   text-decoration: none;
 }
 
-#frame .accordion-heading .accordion-toggle > em {
+#frame .accordion-heading .accordion-toggle > i {
   float:right;
   cursor: pointer;
   background-color:#fff;
@@ -30,11 +30,12 @@
   height: 20px;
   line-height: 20px;
   text-align: center;
-  width: 20px;}
+  width: 20px;
+}
 
-#frame .accordion-heading .accordion-toggle > em:hover {background-color:#f5f5f5;}
+#frame .accordion-heading .accordion-toggle > i:hover {background-color:#f5f5f5;}
 
-#frame .accordion-heading .accordion-toggle.active em{background-color: #337ab7; color:#fff;}
+#frame .accordion-heading .accordion-toggle.active i{background-color: #337ab7; color:#fff;}
 
 #frame{
   .heading{
@@ -47,15 +48,13 @@
     code{
       p{
         padding:0px;
+        margin: 0;
       }
 
       .error-line{
         background-color:#ffecec;
+        padding-top: 5px;
       }
-    }
-
-    br {
-     line-height:0;
     }
   }
 }
@@ -87,7 +86,7 @@
     }
   }
   .panel-body.expand-box {
-    max-height: 200px;
+    max-height: 300px;
     overflow: hidden;
     position: relative;
     .read-more{

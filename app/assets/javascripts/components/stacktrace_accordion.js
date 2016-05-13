@@ -6,7 +6,7 @@
   $(document).on('show.bs.collapse hide.bs.collapse', '.accordion', function (e) {
       var $target = $(e.target)
         $target.siblings('.accordion-heading')
-        .find('em').toggleClass(iconOpen + ' ' + iconClose);
+        .find('i').toggleClass(iconOpen + ' ' + iconClose);
         if(e.type == 'show')
             $target.prev('.accordion-heading').find('.accordion-toggle').addClass('active');
         if(e.type == 'hide')

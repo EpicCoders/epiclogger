@@ -36,16 +36,16 @@
                   - @issue.stacktrace_frames.each_with_index do |frame, index|
                     .accordion-group
                       .accordion-heading.heading
-                        %a.accordion-toggle.collapsed
-                          %em.icon-fixed-width.fa.fa-plus{"data-parent" => "#frame", "data-toggle" => "collapse", :href => "#collapse#{index}"}
+                        %a.accordion-toggle.collapsed{ href: '#' }
+                          %i.icon-fixed-width.fa.fa-plus{"data-parent" => "#frame", "data-toggle" => "collapse", :href => "#collapse#{index}"}
                           = frame.get_culprit_string(with_lineno: true)
                       .accordion-body.collapse{:style => "height: 0px;", :id => "collapse#{index}"}
                         .accordion-inner.content
                           %pre
-                            %code
-                              = frame._data[:pre_context] ? simple_format(frame._data[:pre_context].join('')).gsub("\n", "<br />").html_safe : ''
-                              = frame._data[:context_line] ? simple_format(frame._data[:context_line], class: 'error-line').gsub("\n", "<br />").html_safe : ''
-                              = frame._data[:post_context] ? simple_format(frame._data[:post_context].join('')).gsub("\n", "<br />").html_safe : ''
+                            %code{ class: @error.platform }
+                              = frame._data[:pre_context] ? simple_format(frame._data[:pre_context].join('')).html_safe : ''
+                              = frame._data[:context_line] ? simple_format(frame._data[:context_line], class: 'error-line').html_safe : ''
+                              = frame._data[:post_context] ? simple_format(frame._data[:post_context].join('')).html_safe : ''
 
 
 
