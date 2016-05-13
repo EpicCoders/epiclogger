@@ -4,8 +4,8 @@ describe Api::V1::ReleaseController, :type => :controller do
   let(:user) { create :user }
   let(:website) { create :website }
   let!(:website_member) { create :website_member, website: website, user: user }
-  let(:release) { create :release, website: website }
-  let(:group) { create :grouped_issue, website: website, release: release }
+  let!(:release) { create :release, website: website }
+  let!(:group) { create :grouped_issue, website: website, release: release }
 
   describe 'POST #create' do
     context 'when release changed' do
@@ -31,7 +31,6 @@ describe Api::V1::ReleaseController, :type => :controller do
             group.reload
           }.to change { group.status }.from('unresolved').to('resolved')
            .and change(Release, :count).by(1)
-           .and change { group.release_id }
       end
     end
 
