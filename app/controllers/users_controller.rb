@@ -1,8 +1,18 @@
 class UsersController < ApplicationController
-  layout "landing"
+  layout 'landing', :only => [:new, :create]
   skip_before_action :authenticate!
 
   def index; end
+
+  def edit
+    @user = current_user
+  end
+
+  def update
+    @user = current_user
+    @user.update_attributes(user_params)
+    reload_page
+  end
 
   def new
     after_login_redirect if logged_in?

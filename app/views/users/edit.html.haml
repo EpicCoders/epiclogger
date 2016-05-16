@@ -1,0 +1,46 @@
+%br
+.row
+  .col-md-12.pagecontainer
+    = simple_form_for @user, url: user_path(id: @user.id), method: :put, remote: true, wrapper: :vertical_form do |f|
+      .col-lg-8
+        .panel.panel-default
+          .panel-heading User Details
+          .panel-body
+            .form-group
+              = f.input :name, placeholder: 'User name', value: @user.name
+              = f.input :email, placeholder: 'email@example.com', value: @user.email
+              = f.input :provider, value: @user.provider
+        .form-group
+          = f.submit 'Save Changes', class: 'btn btn-success'
+
+    .col-md-4
+      .panel.panel-default
+        .panel-heading Profile Details
+        .panel-body
+          %table
+            %thead
+              %tr
+                %td
+                  %p Name:
+                %td
+                  %h5 #{@user.name}
+              %tr
+                %td
+                  %p Email:
+                %td
+                  %h5 #{@user.email}
+              %tr
+                %td
+                  %p Provider:
+                %td
+                  %h5 #{@user.provider}
+              %tr
+                %td
+                  %p Created at: &nbsp&nbsp&nbsp
+                %td
+                  %h5 #{@user.created_at}
+              %tr
+                %td
+                  %p Uid:
+                %td
+                  %h5 #{@user.uid}
