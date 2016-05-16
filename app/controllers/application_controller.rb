@@ -14,6 +14,12 @@ class ApplicationController < ActionController::Base
     redirect_to login_url, :alert => exception.message
   end
 
+  def reload_page
+    respond_to do |format|
+      format.js { render inline: 'location.reload();' }
+    end
+  end
+
   protected
 
   def set_gon

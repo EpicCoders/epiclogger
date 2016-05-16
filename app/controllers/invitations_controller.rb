@@ -1,13 +1,12 @@
 class InvitationsController < ApplicationController
   def create
     if current_website.nil? || validate_email(user_params[:email])
-      respond_to do |format|
-        format.js { render inline: 'location.reload();' }
-      end
+      reload_page
       return false
     end
     @website_member = current_website.website_members.create(invitation_sent_at: Time.now.utc, website_id: current_website.id)
     UserMailer.member_invitation(current_website.id, user_params[:email], @website_member.id, current_user.id).deliver_later
+    reload_page
   end
 
   def new; end

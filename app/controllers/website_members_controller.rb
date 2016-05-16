@@ -7,8 +7,6 @@ class WebsiteMembersController < ApplicationController
   def destroy
     @website_member.destroy
     return false unless @website_member.errors.full_messages.blank?
-    respond_to do |format|
-      format.js {render inline: 'location.reload();' }
-    end
+    reload_page
   end
 end

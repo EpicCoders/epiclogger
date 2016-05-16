@@ -7,9 +7,7 @@ class WebsitesController < ApplicationController
 
   def update
     @website.update_attributes(website_params)
-    respond_to do |format|
-      format.js { render inline: 'location.reload();' }
-    end
+    reload_page
   end
 
   def destroy
