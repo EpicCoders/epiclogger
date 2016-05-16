@@ -7,6 +7,7 @@ class User < ActiveRecord::Base
   validates :password, confirmation: true, on: :create
   has_secure_password(validations: false)
 
+  before_create :generate_uid, if: Proc.new { |u| u.provider == 'email'}
   def is_owner_of?(website)
     website.website_members.with_role(:owner).where(website: website).map(&:user_id).include?(self.id)
   end
@@ -26,6 +27,14 @@ class User < ActiveRecord::Base
       user.uid = auth["uid"]
       user.name = auth["info"]["name"] || auth["info"]["nickname"]
       user.email = auth["info"]["email"]
+    end
+  end
+
+  protected
+  def generate_uid
+    self.uid = loop do
+      random = SecureRandom.hex(16)
+      break random unless User.exists?(uid: random)
     end
   end
 end
