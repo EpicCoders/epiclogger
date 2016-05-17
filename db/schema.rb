@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160506120457) do
+ActiveRecord::Schema.define(version: 20160517124703) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -83,6 +83,16 @@ ActiveRecord::Schema.define(version: 20160506120457) do
   add_index "grouped_issues", ["times_seen"], name: "index_grouped_issues_on_times_seen", using: :btree
   add_index "grouped_issues", ["website_id", "checksum"], name: "index_grouped_issues_on_website_id_and_checksum", unique: true, using: :btree
   add_index "grouped_issues", ["website_id"], name: "index_grouped_issues_on_website_id", using: :btree
+
+  create_table "invites", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "website_id"
+    t.string   "email"
+    t.string   "token"
+    t.datetime "accepted_at"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
 
   create_table "issues", force: :cascade do |t|
     t.datetime "created_at",    null: false
@@ -167,9 +177,7 @@ ActiveRecord::Schema.define(version: 20160506120457) do
   create_table "website_members", force: :cascade do |t|
     t.integer "user_id"
     t.integer "website_id"
-    t.integer "role",               default: 1
-    t.string  "invitation_token"
-    t.string  "invitation_sent_at"
+    t.integer "role",       default: 1
   end
 
   add_index "website_members", ["user_id"], name: "index_website_members_on_user_id", using: :btree
