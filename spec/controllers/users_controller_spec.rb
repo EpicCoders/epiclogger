@@ -84,4 +84,26 @@ RSpec.describe UsersController, :type => :controller do
     end
   end
 
+  describe "GET confirm_account" do
+    let(:params) { default_params.merge({ id: user.id, token: user.confirmation_token }) }
+
+    it "finds the user" do
+      get :confirm_account, params
+      expect( subject.instance_variable_get(:@user) ).to eq(user)
+    end
+
+    it "should update user" do
+      expect{
+        post :confirm_account, params
+        user.reload
+        }.to change(user, :confirmation_token).from(anything()).to(nil)
+        .and change(user, :confirmed_at)
+    end
+
+    it "should redirect to login" do
+      get :confirm_account, params
+      expect( get :confirm_account, params ).to redirect_to(login_url)
+      expect( flash[:alert] ).to eq("You confirmed your email once")
+    end
+  end
 end
