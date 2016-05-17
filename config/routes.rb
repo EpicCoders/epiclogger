@@ -26,7 +26,11 @@ Rails.application.routes.draw do
       get :wizard_install
     end
   end
-  resources :users, only: [:index, :edit, :update]
+  resources :users, only: [:index, :edit, :update] do
+    member do
+      get :confirm_account
+    end
+  end
   resources :invitations, only: [:new, :create, :show]
   resources :subscribers, only: [:index]
   # resources :accounts, only: [:show]

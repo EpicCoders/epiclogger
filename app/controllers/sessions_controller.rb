@@ -8,9 +8,16 @@ class SessionsController < ApplicationController
   end
 
   def create
-    user = authenticate!(:password)
-    set_website(user.default_website)
-    after_login_redirect
+    user = User.find_by_email(user_params[:email])
+    unless user.nil?
+      if user.confirmation_token.nil?
+        user = authenticate!(:password)
+        set_website(user.default_website)
+        after_login_redirect
+      else
+        redirect_to login_url, alert: "Confirm your email first"
+      end
+    end
   end
 
   def destroy
@@ -23,4 +30,7 @@ class SessionsController < ApplicationController
   end
 
   protected
+  def user_params
+    params.require(:user).permit(:name, :email, :password, :password_confirmation, :provider, :uid)
+  end
 end

@@ -1,6 +1,14 @@
 # Preview all emails at http://localhost:3000/rails/mailers/user_mailer
 class UserMailerPreview < ActionMailer::Preview
 
+  def member_invitation
+    @user = User.first
+    @website = Website.first
+    @token = WebsiteMember.first.invitation_token
+    @email = 'email@example.com'
+    mail(to: @email, subject: 'Epic Logger Invite Users')
+  end
+
   def notify_subscriber
     message = 'Custom message sent to members'
     group = GroupedIssue.first

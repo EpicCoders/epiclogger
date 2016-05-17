@@ -1,0 +1,1 @@
+json.user(@user, :id, :confirmation_token, :confirmation_sent_at, :confirmed_at)

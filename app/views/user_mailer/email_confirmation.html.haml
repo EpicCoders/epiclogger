@@ -1,0 +1,4 @@
+Hi #{@user.name},
+%p This is an email from Epic Logger.
+%p
+  Follow the url to confirm youre account: #{link_to 'click here', confirm_account_user_url(id: @user.id, token: @user.confirmation_token)}.

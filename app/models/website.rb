@@ -1,5 +1,7 @@
 class Website < ActiveRecord::Base
   include ModelUtils::URIField
+  # include the TokenGenerator extension
+  include TokenGenerator
   has_many :subscribers, dependent: :destroy
   has_many :releases, dependent: :destroy
   has_many :grouped_issues, dependent: :destroy
@@ -54,13 +56,7 @@ class Website < ActiveRecord::Base
   protected
 
   def generate_api_keys
-    self.app_key = loop do
-      key = SecureRandom.hex(16)
-      break key unless Website.exists?(app_key: key)
-    end
-    self.app_secret = loop do
-      secret = SecureRandom.hex(16)
-      break secret unless Website.exists?(app_secret: secret)
-    end
+    generate_token(:app_key)
+    generate_token(:app_secret)
   end
 end

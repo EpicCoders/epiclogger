@@ -34,7 +34,20 @@ class UsersController < ApplicationController
       end
     end
 
+    UserMailer.email_confirmation(user.confirmation_token).deliver_later
+    user.update_attributes(confirmation_sent_at: Time.now)
     after_login_redirect
+  end
+
+  def confirm_account
+    logout unless current_user.blank?
+    @user = User.find_by_id_and_confirmation_token(params[:id], params[:token])
+    unless @user.nil?
+      @user.update_attributes(confirmation_token: nil, confirmed_at: Time.now.utc)
+      redirect_to login_url
+    else
+      redirect_to login_url, alert: 'You confirmed your email once'
+    end
   end
 
   private
