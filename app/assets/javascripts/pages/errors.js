@@ -1,5 +1,5 @@
-var ready = function () {
-//initialize and create the chart
+$(function () {
+  //initialize and create the chart
   AmCharts.makeChart("chartdiv", {
     "type": "serial",
     "theme": "light",
@@ -60,7 +60,7 @@ var ready = function () {
     "dataProvider": gon.chart_data
   });
 
-//actions to the sidebar when resolving errors
+  //actions to the sidebar when resolving errors
   $('#resolve-button').click(function(e){
     var id, element;
     id = $('.error-content').attr('data-id');
@@ -83,6 +83,4 @@ var ready = function () {
       alert("Please make a selection first!");
     }
   });
-};
-$(document).ready(ready);
-$(document).on('page:load', ready);
+});

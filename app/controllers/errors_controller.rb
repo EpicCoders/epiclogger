@@ -51,14 +51,16 @@ class ErrorsController < ApplicationController
 
   def resolve
     #has values when we resolve issues through the error sidebar
+    errors_per_page = params[:per_page] || 5
+    page = params[:page]
     if params[:error_ids]
       ids = params[:error_ids]
       resolved = to_boolean(params[:resolved]) if params[:resolved]
-      resolve_issues(ids, resolved)
+      resolve_issues(ids, resolved, errors_per_page, page, @error)
     elsif params[:individual_resolve]
       ids = [@error.id]
       resolved = !@error.resolved_at.nil?
-      resolve_issues(ids, resolved)
+      resolve_issues(ids, resolved, errors_per_page, page, @error)
     else
       raise 'Could not find error!'
     end
@@ -66,17 +68,15 @@ class ErrorsController < ApplicationController
 
   private
 
-  def resolve_issues (ids, resolved = true)
-    errors_per_page = params[:per_page] || 5
-    page = params[:page]
-    errors = current_website.grouped_issues.order('last_seen DESC')
+  def resolve_issues (ids, resolved = true, errors_per_page, page, current_error)
+    errors = current_error.website.grouped_issues.order('last_seen DESC')
     if resolved
-      GroupedIssue.where(id: ids).update_all(resolved_at: nil)
+      GroupedIssue.where(id: ids).update_all(resolved_at: nil, status: 3) # 3 = unresolved
       resolved = errors.where('resolved_at IS NOT NULL')
       @sidebar = resolved.page(page).per(ids.size).offset(errors_per_page)
       @pagination = resolved.page(page).per(errors_per_page).offset(ids.size)
     else
-      GroupedIssue.where(id: ids).update_all(resolved_at: DateTime.now)
+      GroupedIssue.where(id: ids).update_all(resolved_at: DateTime.now, status: 2) # 2 = resolved
       unresolved = errors.where(resolved_at: nil).page(page)
       @sidebar = unresolved.page(page).per(ids.size).offset(errors_per_page)
       @pagination = unresolved.page(page).per(errors_per_page).offset(ids.size)

@@ -162,6 +162,96 @@ RSpec.describe ErrorsController, type: :controller do
         expect(response).to have_http_status(302)
       end
     end
+  end
 
+  describe 'PUT #resolve' do
+    let(:params) { { id: group.id, format: :js } }
+    context 'logged in' do
+      it 'responds with js format' do
+        params[:individual_resolve] = true
+        put_with user, :resolve, params
+        expect(response.content_type).to eq('text/javascript')
+      end
+
+      it 'resolves a single error' do
+        new_error  = FactoryGirl.create(:grouped_issue, { website: website, checksum: SecureRandom.hex(), status: 'unresolved', resolved_at: nil } )
+        params[:individual_resolve] = true
+        params[:id] = new_error.id
+        put_with user, :resolve, params
+        expect(assigns(:error).reload.status).to eq('resolved')
+        expect(assigns(:error).reload.resolved_at).to be_truthy
+      end
+
+      it 'unresolves a single error' do
+        new_error  = FactoryGirl.create(:grouped_issue, { website: website, checksum: SecureRandom.hex(), status: 'resolved', resolved_at: DateTime.now } )
+        params[:individual_resolve] = true
+        params[:id] = new_error.id
+        put_with user, :resolve, params
+        expect(assigns(:error).reload.status).to eq('unresolved')
+        expect(assigns(:error).reload.resolved_at).to eq(nil)
+      end
+
+      it 'resolves multiple errors' do
+        new_error1  = FactoryGirl.create(:grouped_issue, { website: website, checksum: SecureRandom.hex(), status: 'unresolved', resolved_at: nil } )
+        new_error2  = FactoryGirl.create(:grouped_issue, { website: website, checksum: SecureRandom.hex(), status: 'unresolved', resolved_at: nil } )
+        params[:error_ids] = [new_error1.id, new_error2.id]
+        params[:resolved] = "false"
+        put_with user, :resolve, params
+        expect([new_error1.reload.status, new_error2.reload.status]).to all(eq('resolved'))
+        expect([new_error2.reload.resolved_at, new_error2.reload.resolved_at]).to all(be_truthy)
+      end
+
+      it 'unresolves multiple errors' do
+        new_error1  = FactoryGirl.create(:grouped_issue, { website: website, checksum: SecureRandom.hex(), status: 'resolved', resolved_at: DateTime.now } )
+        new_error2  = FactoryGirl.create(:grouped_issue, { website: website, checksum: SecureRandom.hex(), status: 'resolved', resolved_at: DateTime.now } )
+        params[:error_ids] = [new_error1.id, new_error2.id]
+        params["resolved"] = "true"
+        put_with user, :resolve, params
+        expect([new_error1.reload.status, new_error2.reload.status]).to all(eq('unresolved'))
+        expect([new_error2.reload.resolved_at, new_error2.reload.resolved_at]).to all(be_nil)
+      end
+
+      it "raises 'Could not find error!' if we dont pass the ids" do
+        expect{ put_with user, :resolve, params }.to raise_error("Could not find error!")
+      end
+    end
+  end
+
+  describe "private methods" do
+    context "resolve_issues" do
+      it "returns the next issues in the list and updates pagination" do
+        controller = ErrorsController.new
+        errors = []
+
+        number_of_errors = 20
+        number_of_errors.times do |index|
+          new_error = FactoryGirl.create(:grouped_issue, { website: website, checksum: SecureRandom.hex(), status: 'resolved', resolved_at: DateTime.now } )
+          errors.push(new_error)
+        end
+        errors.sort_by!(&:last_seen).reverse!
+
+        #params
+        ids_sent = errors.first(5).map(&:id)   #selected errors
+        current_error = errors.first           #@error
+        resolved = true                        #status
+        per_page = offset = 5                  #number of items per page
+        page = 1                               #current page
+
+        controller.instance_eval { resolve_issues(ids_sent, resolved, per_page, page, current_error ) }
+        # remove the first 5 since their status was updated
+        errors.shift(per_page)
+        sidebar = controller.instance_eval { @sidebar }
+        expect(sidebar).to match_array(errors[per_page..per_page + 4])
+
+        pagination = controller.instance_eval { @pagination }
+        # start_value - end_value of total_count
+        # eg: 5 - 10 of 15
+        start_value = pagination.offset_value + 1
+        end_value = pagination.last_page? ? pagination.total_count : pagination.offset_value + pagination.limit_value
+
+        expect(start_value).to eq(per_page + 1)
+        expect(end_value).to eq(per_page + ids_sent.size)
+      end
+    end
   end
 end
