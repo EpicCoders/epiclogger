@@ -7,6 +7,7 @@ class Website < ActiveRecord::Base
   has_many :grouped_issues, dependent: :destroy
   has_many :website_members, -> { uniq }, autosave: true
   has_many :users, through: :website_members
+  has_many :invites, dependent: :destroy
 
   validates :title, presence: true
   validates :domain, presence: true

@@ -8,8 +8,8 @@
         .panel.panel-default
           .panel-heading Send an email invitation to:
           .panel-body
-            = simple_form_for User.new, url: invitations_path, method: :create, :remote => "true", wrapper: :vertical_form do |f|
-              = f.input :email, placeholder: 'user@domain.com', class: 'form-control', required: true
+            = simple_form_for Invite.new, url: invites_path, method: :create, wrapper: :vertical_form do |f|
+              = f.input :email, placeholder: 'email@example.com', class: 'form-control', required: true
               = f.submit 'Send Invitation', class: "btn btn-primary btn-sm pull-right"
       .col-md-6
         .well.wel-sm

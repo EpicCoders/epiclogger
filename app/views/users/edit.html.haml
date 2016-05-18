@@ -9,7 +9,6 @@
             .form-group
               = f.input :name, placeholder: 'User name', value: @user.name
               = f.input :email, placeholder: 'email@example.com', value: @user.email
-              = f.input :provider, value: @user.provider
         .form-group
           = f.submit 'Save Changes', class: 'btn btn-success'
 
@@ -36,7 +35,7 @@
                   %h5 #{@user.provider}
               %tr
                 %td
-                  %p Created at: &nbsp&nbsp&nbsp
+                  %p Created at:
                 %td
                   %h5 #{@user.created_at}
               %tr

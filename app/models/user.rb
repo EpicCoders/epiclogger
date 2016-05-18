@@ -9,7 +9,7 @@ class User < ActiveRecord::Base
   validates :password, confirmation: true, on: :create
   has_secure_password(validations: false)
 
-  before_create { generate_token(:uid) if Proc.new { |u| u.provider == 'email'} }
+  before_create { generate_token(:uid) if provider == 'email' }
   before_create { generate_token(:confirmation_token) if confirmation_token.blank? }
 
   def is_owner_of?(website)

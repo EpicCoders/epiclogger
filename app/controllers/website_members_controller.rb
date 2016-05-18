@@ -7,6 +7,6 @@ class WebsiteMembersController < ApplicationController
   def destroy
     @website_member.destroy
     return false unless @website_member.errors.full_messages.blank?
-    reload_page
+    redirect_to website_members_path, notice: 'Member removed'
   end
 end

@@ -1,17 +1,15 @@
 class UsersController < ApplicationController
   layout 'landing', :only => [:new, :create]
+  load_and_authorize_resource only: [:edit, :update]
   skip_before_action :authenticate!
 
   def index; end
 
-  def edit
-    @user = current_user
-  end
+  def edit; end
 
   def update
-    @user = current_user
     @user.update_attributes(user_params)
-    reload_page
+    redirect_to edit_user_path(@user), notice: 'User updated'
   end
 
   def new
@@ -52,7 +50,6 @@ class UsersController < ApplicationController
 
   private
   def user_params
-    params[:user][:provider] = 'email'
     params.require(:user).permit(:name, :email, :password, :password_confirmation, :provider, :uid)
   end
 end

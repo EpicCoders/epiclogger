@@ -12,6 +12,8 @@
               Sign up with Github
           %span.or or
           = form_for @user, url: signup_path do |f|
+            = hidden_field_tag(:invitation_token, params[:id])
+            = f.text_field :provider, :type => "hidden",  :value => "email"
             .input-group.username
               .input-group-addon
                 %span.glyphicon.glyphicon-user
@@ -27,7 +29,6 @@
               .input-group-addon
                 %span.glyphicon.glyphicon-lock
               = f.password_field :password_confirmation, :placeholder => 'Confirm password', class: 'form-control input-lg', required: true
-              = hidden_field_tag(:invitation_token, params[:id])
             .row.signup_footer
               .col-md-12
                 %button.btn.btn-default.btn-block{:type => "submit"} Sign Up

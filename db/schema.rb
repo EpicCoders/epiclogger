@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160517124703) do
+ActiveRecord::Schema.define(version: 20160518065259) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -85,13 +85,13 @@ ActiveRecord::Schema.define(version: 20160517124703) do
   add_index "grouped_issues", ["website_id"], name: "index_grouped_issues_on_website_id", using: :btree
 
   create_table "invites", force: :cascade do |t|
-    t.integer  "user_id"
+    t.integer  "invited_by_id"
     t.integer  "website_id"
     t.string   "email"
     t.string   "token"
     t.datetime "accepted_at"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
   end
 
   create_table "issues", force: :cascade do |t|
