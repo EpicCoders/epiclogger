@@ -33,12 +33,14 @@ class Issue < ActiveRecord::Base
   end
 
   def user_agent
-    headers = JSON.parse(data)["interfaces"]["http"]["headers"] rescue nil
+    headers = JSON.parse(data).try(:[], "interfaces").try(:[], "http").try(:[], "headers")
     unless headers.nil?
       headers.each do |hash|
         return UserAgent.parse(hash["user_agent"]) if hash["user_agent"]
       end
     end
     nil
+  rescue => e
+    "Could not parse data!"
   end
 end
