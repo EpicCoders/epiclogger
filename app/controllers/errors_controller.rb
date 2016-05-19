@@ -72,15 +72,13 @@ class ErrorsController < ApplicationController
     errors = current_error.website.grouped_issues.order('last_seen DESC')
     if resolved
       GroupedIssue.where(id: ids).update_all(resolved_at: nil, status: 3) # 3 = unresolved
-      resolved = errors.where('resolved_at IS NOT NULL')
-      @sidebar = resolved.page(page).per(ids.size).offset(errors_per_page)
-      @pagination = resolved.page(page).per(errors_per_page).offset(ids.size)
+      errors = errors.where('resolved_at IS NOT NULL')
     else
       GroupedIssue.where(id: ids).update_all(resolved_at: DateTime.now, status: 2) # 2 = resolved
-      unresolved = errors.where(resolved_at: nil).page(page)
-      @sidebar = unresolved.page(page).per(ids.size).offset(errors_per_page)
-      @pagination = unresolved.page(page).per(errors_per_page).offset(ids.size)
+      errors = errors.where(resolved_at: nil).page(page)
     end
+    @sidebar = errors.page(page).per(ids.size).offset(errors_per_page)
+    @pagination = errors.page(page).per(errors_per_page).offset(ids.size)
   end
 
   def to_boolean(str)
