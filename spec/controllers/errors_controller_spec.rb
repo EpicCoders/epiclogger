@@ -178,8 +178,9 @@ RSpec.describe ErrorsController, type: :controller do
         params[:individual_resolve] = true
         params[:id] = new_error.id
         put_with user, :resolve, params
-        expect(assigns(:error).reload.status).to eq('resolved')
-        expect(assigns(:error).reload.resolved_at).to be_truthy
+        new_error.reload
+        expect(new_error.status).to eq('resolved')
+        expect(new_error.resolved_at).to be_truthy
       end
 
       it 'unresolves a single error' do
@@ -187,8 +188,9 @@ RSpec.describe ErrorsController, type: :controller do
         params[:individual_resolve] = true
         params[:id] = new_error.id
         put_with user, :resolve, params
-        expect(assigns(:error).reload.status).to eq('unresolved')
-        expect(assigns(:error).reload.resolved_at).to eq(nil)
+        new_error.reload
+        expect(new_error.status).to eq('unresolved')
+        expect(new_error.resolved_at).to eq(nil)
       end
 
       it 'resolves multiple errors' do
@@ -197,8 +199,10 @@ RSpec.describe ErrorsController, type: :controller do
         params[:error_ids] = [new_error1.id, new_error2.id]
         params[:resolved] = "false"
         put_with user, :resolve, params
-        expect([new_error1.reload.status, new_error2.reload.status]).to all(eq('resolved'))
-        expect([new_error2.reload.resolved_at, new_error2.reload.resolved_at]).to all(be_truthy)
+        new_error1.reload
+        new_error2.reload
+        expect([new_error1.status, new_error2.status]).to all(eq('resolved'))
+        expect([new_error1.resolved_at, new_error2.resolved_at]).to all(be_truthy)
       end
 
       it 'unresolves multiple errors' do
@@ -207,8 +211,10 @@ RSpec.describe ErrorsController, type: :controller do
         params[:error_ids] = [new_error1.id, new_error2.id]
         params["resolved"] = "true"
         put_with user, :resolve, params
-        expect([new_error1.reload.status, new_error2.reload.status]).to all(eq('unresolved'))
-        expect([new_error2.reload.resolved_at, new_error2.reload.resolved_at]).to all(be_nil)
+        new_error1.reload
+        new_error2.reload
+        expect([new_error1.status, new_error2.status]).to all(eq('unresolved'))
+        expect([new_error1.resolved_at, new_error2.resolved_at]).to all(be_nil)
       end
 
       it "raises 'Could not find error!' if we dont pass the ids" do

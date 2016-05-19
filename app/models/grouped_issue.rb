@@ -6,7 +6,7 @@ class GroupedIssue < ActiveRecord::Base
   has_many :issues, foreign_key: 'group_id', dependent: :destroy
   enumerize :level, in: [:debug, :error, :fatal, :info, :warning], default: :error
   # enumerize :issue_logger, in: { javascript: 1, php: 2 }, default: :javascript
-  enumerize :status, in: { muted: 1, resolved: 2, unresolved: 3 }, default: :unresolved, predicates: true
+  enumerize :status, in: { muted: 1, resolved: 2, unresolved: 3 }, default: :unresolved, predicates: true, scope: true
   after_create :group_created
 
   before_save :check_fields

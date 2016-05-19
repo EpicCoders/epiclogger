@@ -21,8 +21,7 @@ describe Api::V1::ReleaseController, :type => :controller do
                        "app_uuid": "31cc9d59-5608-4ab9-ba11-b14691738dbb",
                        "head_long": "c8b1da16bd2860fb252cb738660b48201ea1a09f",
                        "prev_head": "862c28f5604030e37889bbd10742b0ba2dcb77bc",
-                       "controller": "api/v1/release",
-                       format: :json
+                       "controller": "api/v1/release"
                       }
                     }
       it 'should update the release' do
@@ -47,8 +46,7 @@ describe Api::V1::ReleaseController, :type => :controller do
                          "app_uuid": "31cc9d59-5608-4ab9-ba11-b14691738dbb",
                          "head_long": "51bda2437170d7d5fe39fb358db9af51baf91c1e",
                          "prev_head": "3dcb9cdb0c6c1efaa64be6134728d9d4a1360a73",
-                         "controller": "api/v1/release",
-                         format: :json
+                         "controller": "api/v1/release"
                       }
                     }
       it 'should not create new release' do

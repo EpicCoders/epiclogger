@@ -24,8 +24,8 @@ class ErrorsController < ApplicationController
 
     resolved = params[:resolved] || 'true'
     errors = current_website.grouped_issues.order('last_seen DESC')
-    resolved_errors = errors.where('resolved_at IS NOT NULL').order('last_seen DESC')
-    unresolved_errors = errors.where(resolved_at: nil).order('last_seen DESC')
+    resolved_errors = errors.with_status(:resolved).order('last_seen DESC')
+    unresolved_errors = errors.with_status(:unresolved).order('last_seen DESC')
     @error_count = {total: errors.size, resolved: resolved_errors.size, unresolved: unresolved_errors.size}
     if to_boolean(resolved)
       @selected_errors = resolved_errors.page(@page).per(5)
@@ -71,11 +71,11 @@ class ErrorsController < ApplicationController
   def resolve_issues (ids, resolved = true, errors_per_page, page, current_error)
     errors = current_error.website.grouped_issues.order('last_seen DESC')
     if resolved
-      GroupedIssue.where(id: ids).update_all(resolved_at: nil, status: 3) # 3 = unresolved
-      errors = errors.where('resolved_at IS NOT NULL')
+      GroupedIssue.where(id: ids).update_all(resolved_at: nil, status: GroupedIssue::UNRESOLVED) # 3 = unresolved
+      errors = errors.with_status(:resolved)
     else
-      GroupedIssue.where(id: ids).update_all(resolved_at: DateTime.now, status: 2) # 2 = resolved
-      errors = errors.where(resolved_at: nil).page(page)
+      GroupedIssue.where(id: ids).update_all(resolved_at: Time.now.utc, status: GroupedIssue::RESOLVED) # 2 = resolved
+      errors = errors.with_status(:unresolved)
     end
     @sidebar = errors.page(page).per(ids.size).offset(errors_per_page)
     @pagination = errors.page(page).per(errors_per_page).offset(ids.size)
