@@ -1,68 +1,69 @@
-#chartdiv
-      .row
-        .col-sm-7.col-md-8
-          .panel.panel-default.exception
-            .panel-heading Exception
-            - valid_stacktrace = @issue.stacktrace_frames != 'Missing stacktrace' && @issue.stacktrace_frames.present?
-            .panel-body{ class: "#{valid_stacktrace ? 'expand-box' : ''}" }
-              - if valid_stacktrace
-                #frame.accordion
-                  - @issue.stacktrace_frames.each_with_index do |frame, index|
-                    .accordion-group
-                      .accordion-heading.heading
-                        %a.accordion-toggle.collapsed{ href: '#' }
-                          %i.icon-fixed-width.fa.fa-plus{"data-parent" => "#frame", "data-toggle" => "collapse", :href => "#collapse#{index}"}
-                          = frame.get_culprit_string(with_lineno: true)
-                      .accordion-body.collapse{:style => "height: 0px;", :id => "collapse#{index}"}
-                        .accordion-inner.content
-                          %pre
-                            %code{ class: @error.platform }
-                              = frame._data[:pre_context] ? simple_format(frame._data[:pre_context].join('')).html_safe : ''
-                              = frame._data[:context_line] ? simple_format(frame._data[:context_line], class: 'error-line').html_safe : ''
-                              = frame._data[:post_context] ? simple_format(frame._data[:post_context].join('')).html_safe : ''
+.row
+  #chartdiv
+.row
+  .col-sm-7.col-md-8
+    .panel.panel-default.exception
+      .panel-heading Exception
+      - valid_stacktrace = @issue.stacktrace_frames != 'Missing stacktrace' && @issue.stacktrace_frames.present?
+      .panel-body{ class: "#{valid_stacktrace ? 'expand-box' : ''}" }
+        - if valid_stacktrace
+          #frame.accordion
+            - @issue.stacktrace_frames.each_with_index do |frame, index|
+              .accordion-group
+                .accordion-heading.heading
+                  %a.accordion-toggle.collapsed{ href: '#' }
+                    %i.icon-fixed-width.fa.fa-plus{"data-parent" => "#frame", "data-toggle" => "collapse", :href => "#collapse#{index}"}
+                    = frame.get_culprit_string(with_lineno: true)
+                .accordion-body.collapse{:style => "height: 0px;", :id => "collapse#{index}"}
+                  .accordion-inner.content
+                    %pre
+                      %code{ class: @error.platform }
+                        = frame._data[:pre_context] ? simple_format(frame._data[:pre_context].join('')).html_safe : ''
+                        = frame._data[:context_line] ? simple_format(frame._data[:context_line], class: 'error-line').html_safe : ''
+                        = frame._data[:post_context] ? simple_format(frame._data[:post_context].join('')).html_safe : ''
 
 
 
-              %h5.text-center{style: "display:#{valid_stacktrace ? 'none' : 'block'}"} Missing stacktrace
-              %p.read-more.text-center{style: "display:#{valid_stacktrace ? 'block' : 'none'}"}
-                %a.btn.btn-default{:href => "#"} View full backtrace
-          .panel.panel-default.broadcast{ :style => "display:#{ @error.website.users.empty? ? 'none' : 'block' }" }
-            .panel-heading
-              Broadcast
-            .panel-body
-              .subscribers
-                - @error.website.users.limit(10).each do |subscriber|
-                  = image_tag subscriber.avatar_url(30)
-                  - if @error.website.users.size > 10
-                    = " and #{@error.website.users.size - 10} more"
-                    - break
-                - if @error.website.users.size > 0
-                  %h5.pull-right
-                    This message will be sent to
-                    = @error.website.users.size.to_s + (@error.website.users.size > 1 ? ' users' : ' user')
-                .notify
-                  = form_for @error, url: notify_subscribers_error_path(), remote: true, html: { method: :post , class: ' broadcast-textarea'}, :data => {:confirm => 'Are you sure?'} do |f|
-                    = text_area_tag 'message', '', placeholder: 'Write a message ...'
-                    %button.btn.btn-primary{:type => 'submit'} Send
-        .col-sm-5.col-md-4
-          .panel.panel-default
-            .panel-heading Details
-            .panel-body
-              %dl
-                %dt Occured at
-                %dd= @issue.created_at
-                %dt First seen at
-                %dd= @error.first_seen
-                %dt File
-                %dd= @error.culprit
-                %dt ID
-                %dd= @issue.event_id
-                %dt Level
-                %dd= @error.level
-                %dt Logger
-                %dd= @error.platform
-    .broadcast
-      .row
-        .col-sm-12
-          - @error.subscribers.each do |subscriber|
-            = image_tag subscriber.avatar_url
+        %h5.text-center{style: "display:#{valid_stacktrace ? 'none' : 'block'}"} Missing stacktrace
+        %p.read-more.text-center{style: "display:#{valid_stacktrace ? 'block' : 'none'}"}
+          %a.btn.btn-default{:href => "#"} View full backtrace
+    .panel.panel-default.broadcast{ :style => "display:#{ @error.website.users.empty? ? 'none' : 'block' }" }
+      .panel-heading
+        Broadcast
+      .panel-body
+        .subscribers
+          - @error.website.users.limit(10).each do |subscriber|
+            = image_tag subscriber.avatar_url(30)
+            - if @error.website.users.size > 10
+              = " and #{@error.website.users.size - 10} more"
+              - break
+          - if @error.website.users.size > 0
+            %h5.pull-right
+              This message will be sent to
+              = @error.website.users.size.to_s + (@error.website.users.size > 1 ? ' users' : ' user')
+          .notify
+            = form_for @error, url: notify_subscribers_error_path(), remote: true, html: { method: :post , class: ' broadcast-textarea'}, :data => {:confirm => 'Are you sure?'} do |f|
+              = text_area_tag 'message', '', placeholder: 'Write a message ...'
+              %button.btn.btn-primary{:type => 'submit'} Send
+  .col-sm-5.col-md-4
+    .panel.panel-default
+      .panel-heading Details
+      .panel-body
+        %dl
+          %dt Occured at
+          %dd= @issue.created_at
+          %dt First seen at
+          %dd= @error.first_seen
+          %dt File
+          %dd= @error.culprit
+          %dt ID
+          %dd= @issue.event_id
+          %dt Level
+          %dd= @error.level
+          %dt Logger
+          %dd= @error.platform
+.broadcast
+  .row
+    .col-sm-12
+      - @error.subscribers.each do |subscriber|
+        = image_tag subscriber.avatar_url
