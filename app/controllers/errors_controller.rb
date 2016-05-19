@@ -33,7 +33,13 @@ class ErrorsController < ApplicationController
       @selected_errors = unresolved_errors.page(@page).per(5)
     end
 
-    @issues = @error.issues.page(page_issue).per(1)
+    issues = @error.issues
+
+    if params[:current_tab] == 'aggregations'
+      @aggregations = aggregations(issues)
+    end
+
+    @issues = issues.page(page_issue).per(1)
     @issue = @issues.first
     gon.chart_data = @error.chart_data
   end
