@@ -25,11 +25,11 @@ Warden::Strategies.add(:password) do
 
   def authenticate!
     user = User.find_by_email(user_params[:email])
-    if user && user.authenticate(user_params[:password])
+    if user && user.authenticate(user_params[:password]) && user.confirmation_token.nil?
       success! user
     else
       session.delete('session')
-      fail "Invalid email or password"
+      fail "Confirm email or retype your credentials"
     end
   end
 

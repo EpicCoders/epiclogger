@@ -14,12 +14,11 @@ class UserMailer < ApplicationMailer
     mail(to: @user.email, subject: 'Epic Logger Subscriber notification')
   end
 
-  def member_invitation(website_id, email, website_member_id, inviter_id)
-    @user = User.find(inviter_id)
-    @website = Website.find(website_id)
-    @token = WebsiteMember.find(website_member_id).invitation_token
-    @email = email
-    mail(to: @email, subject: 'Epic Logger Invite Users')
+  def member_invitation(invite_id)
+    @invite = Invite.find(invite_id)
+    @inviter = User.find(@invite.invited_by_id)
+    @website = @invite.website
+    mail(to: @invite.email, subject: 'Epic Logger Invite Users')
   end
 
   def error_occurred(website_id, message_id)

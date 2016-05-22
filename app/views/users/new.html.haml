@@ -12,7 +12,7 @@
               Sign up with Github
           %span.or or
           = form_for @user, url: signup_path do |f|
-            = hidden_field_tag(:invitation_token, params[:id])
+            = hidden_field_tag(:token, params[:token])
             = f.text_field :provider, :type => "hidden",  :value => "email"
             .input-group.username
               .input-group-addon

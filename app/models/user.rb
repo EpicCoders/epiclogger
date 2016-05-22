@@ -16,6 +16,17 @@ class User < ActiveRecord::Base
     website.website_members.with_role(:owner).where(website: website).map(&:user_id).include?(self.id)
   end
 
+  def accept(invite_token)
+    unless invite_token.blank?
+      invite = Invite.find_by_token(invite_token)
+      website_members.create( website_id: invite.website_id, role: 'user' )
+      invite.update_attributes( accepted_at: Time.now )
+      true
+    else
+      return false
+    end
+  end
+
   def default_website
     websites.try(:first)
   end

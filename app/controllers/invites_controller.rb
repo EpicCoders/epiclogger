@@ -1,4 +1,5 @@
 class InvitesController < ApplicationController
+  skip_before_action :authenticate!
   def create
     begin
       unless Invite.where('email = ? AND website_id = ? AND invited_by_id =?', invite_params[:email], current_website.id, current_user.id).blank?
@@ -16,12 +17,14 @@ class InvitesController < ApplicationController
   def new; end
 
   def show
-    if @user = User.find_by_email(params[:email])
-      WebsiteMember.where( invitation_token: params[:id] ).update_all( user_id: @user.id )
-      redirect_to login_url()
+    @invite = Invite.find_by_token(params[:token])
+    #we create new website member in case user already has an account
+    unless user = User.find_by_email(@invite.email).blank?
+      user.website_members.create(website_id: @invite.website_id)
+      redirect_to root_url(), notice: "You are now a member of #{@invite.website.domain}"
     else
-      logout
-      redirect_to signup_url(id: params[:id], email: params[:email])
+      logout unless current_website.nil?
+      redirect_to signup_url(token: params[:token], email: @invite.email)
     end
   end
 
