@@ -7,7 +7,7 @@ class InvitesController < ApplicationController
       end
       invite = current_website.invites.new(invited_by_id: current_user.id, email: invite_params[:email])
       UserMailer.member_invitation(invite.id).deliver_later if invite.save
-      redirect_to new_invites_url, notice: 'Email sent'
+      redirect_to new_invite_url, notice: 'Email sent'
 
     rescue Exception => e
       redirect_to(:action => 'new', notice: e.message)
@@ -19,7 +19,8 @@ class InvitesController < ApplicationController
   def show
     @invite = Invite.find_by_token(params[:token])
     #we create new website member in case user already has an account
-    unless user = User.find_by_email(@invite.email).blank?
+    user = User.find_by_email(@invite.email)
+    unless user.blank?
       user.website_members.create(website_id: @invite.website_id)
       redirect_to root_url(), notice: "You are now a member of #{@invite.website.domain}"
     else
