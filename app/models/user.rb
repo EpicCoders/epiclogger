@@ -10,21 +10,10 @@ class User < ActiveRecord::Base
   has_secure_password(validations: false)
 
   before_create { generate_token(:uid) if provider == 'email' }
-  before_create { generate_token(:confirmation_token) if confirmation_token.blank? }
+  before_create :send_confirmation
 
   def is_owner_of?(website)
     website.website_members.with_role(:owner).where(website: website).map(&:user_id).include?(self.id)
-  end
-
-  def accept(invite_token)
-    unless invite_token.blank?
-      invite = Invite.find_by_token(invite_token)
-      website_members.create( website_id: invite.website_id, role: 'user' )
-      invite.update_attributes( accepted_at: Time.now )
-      true
-    else
-      return false
-    end
   end
 
   def default_website
@@ -43,5 +32,11 @@ class User < ActiveRecord::Base
       user.name = auth["info"]["name"] || auth["info"]["nickname"]
       user.email = auth["info"]["email"]
     end
+  end
+
+  def send_confirmation
+    generate_token(:confirmation_token)
+    self.confirmation_sent_at = Time.now
+    UserMailer.email_confirmation(self.confirmation_token).deliver_later
   end
 end
