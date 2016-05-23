@@ -68,8 +68,11 @@ gem 'simple_form'
 gem 'wicked'
 #parsing the user_agent string
 gem 'useragent'
+
 #group objects by time frames
 gem 'groupdate'
+#gem for charts
+gem 'chartkick'
 
 group :development do
   gem 'better_errors'

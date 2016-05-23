@@ -1,5 +1,5 @@
 .row
-  #chartdiv
+  = line_chart @error.issues.group_by_day(:created_at, range: Date.today.beginning_of_day - 1.months..Date.today.end_of_day).count, id: "chart", height: "200px", label: "Occurences", colors: ["black", "#000"]
 .row
   .col-sm-7.col-md-8
     .panel.panel-default.exception

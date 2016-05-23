@@ -87,6 +87,7 @@ GEM
       rack (>= 1.0.0)
       rack-test (>= 0.5.4)
       xpath (~> 2.0)
+    chartkick (1.5.2)
     codecov (0.1.4)
       json
       simplecov
@@ -394,6 +395,7 @@ DEPENDENCIES
   brakeman
   cancancan (~> 1.10)
   capybara
+  chartkick
   codecov
   coffee-rails (~> 4.1.0)
   database_cleaner

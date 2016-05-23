@@ -26,15 +26,9 @@
 //= require jquery.cookie
 //= require jquery.deparam
 //= require highlightjs
-
-//= require amcharts/amcharts
-//= require amcharts/serial
-
-//= require amcharts/amcharts
-//= require amcharts/serial
+//= require chartkick
+//= require highcharts
 
 //= require prism
-// require bar-chart
-// require line-chart
 
 //= require epiclogger

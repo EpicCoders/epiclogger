@@ -35,7 +35,6 @@ class ErrorsController < ApplicationController
 
     @issues = @error.issues.page(page_issue).per(1)
     @issue = @issues.first
-    gon.chart_data = @error.issues.group_by_day(:created_at, range: Date.today.beginning_of_day - 1.months..Date.today.end_of_day).count.map{ |k, v| { date: k, value: v } }
   end
 
   def update
