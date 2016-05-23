@@ -14,15 +14,15 @@
                 %th First seen at
                 %th Last seen at
             %tbody.websites
-              - @aggregations[:messages].each do |message|
+              - @error.aggregations[:messages].each do |message|
                 %tr
-                  %td 
+                  %td
                     =message["message"]
-                  %td 
+                  %td
                     =message["count"]
-                  %td 
+                  %td
                     =message["created_at"].strftime("%Y-%m-%d %l:%M")
-                  %td 
+                  %td
                     =message["updated_at"].strftime("%Y-%m-%d %l:%M")
     .panel.panel-default
       .panel-heading
@@ -38,7 +38,7 @@
                 %th First seen at
                 %th Last seen at
             %tbody.websites
-              - @aggregations[:subscribers].each do |subscriber|
+              - @error.aggregations[:subscribers].each do |subscriber|
                 %tr
                   %td 
                     =subscriber["name"]
@@ -62,7 +62,7 @@
                 %th First seen at
                 %th Last seen at
             %tbody.websites
-              - @aggregations[:browsers].each do |browser|
+              - @error.aggregations[:browsers].each do |browser|
                 %tr
                   %td 
                     =browser["name"]

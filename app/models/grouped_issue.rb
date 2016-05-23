@@ -37,6 +37,36 @@ class GroupedIssue < ActiveRecord::Base
     data
   end
 
+  def aggregations
+    data = { messages: [], subscribers: [], browsers: [] }
+    self.issues.each do |issue|
+      found_message = data[:messages].index { |x| x["message"] == issue.message }
+      if found_message
+        data[:messages][found_message]["count"] += 1
+      else
+        item = {"count" => 1, "created_at" => issue.created_at, "updated_at" => issue.updated_at, "message" => issue.message}
+        data[:messages].push(item)
+      end
+
+      found_subscriber = data[:subscribers].index { |x| x["id"] == issue.subscriber.try(:id) }
+      if found_subscriber
+        data[:subscribers][found_subscriber]["count"] += 1
+      else
+        item = {"count" => 1, "created_at" => issue.created_at, "updated_at" => issue.updated_at, "name" => issue.subscriber.try(:name), "id" => issue.subscriber.try(:id)}
+        data[:subscribers].push(item)
+      end
+
+      found_browser = data[:browsers].index { |x| x["name"] == issue.user_agent.try(:browser) }
+      if found_browser
+        data[:browsers][found_browser]["count"] += 1
+      else
+        item = {"count" => 1, "created_at" => issue.created_at, "updated_at" => issue.updated_at, "name" => issue.user_agent.try(:browser)}
+        data[:browsers].push(item)
+      end
+    end
+    data
+  end
+
   private
 
   def check_fields
