@@ -175,8 +175,7 @@ RSpec.describe ErrorsController, type: :controller do
 
       it 'resolves a single error' do
         new_error  = FactoryGirl.create(:grouped_issue, { website: website, checksum: SecureRandom.hex(), status: 'unresolved', resolved_at: nil } )
-        params[:individual_resolve] = true
-        params[:id] = new_error.id
+        params[:error_ids] = [new_error.id]
         put_with user, :resolve, params
         new_error.reload
         expect(new_error.status).to eq('resolved')
@@ -185,9 +184,8 @@ RSpec.describe ErrorsController, type: :controller do
 
       it 'unresolves a single error' do
         new_error  = FactoryGirl.create(:grouped_issue, { website: website, checksum: SecureRandom.hex(), status: 'resolved', resolved_at: DateTime.now } )
-        params[:individual_resolve] = true
-        params[:id] = new_error.id
-        put_with user, :resolve, params
+        params[:error_ids] = [new_error.id]
+        put_with user, :unresolve, params
         new_error.reload
         expect(new_error.status).to eq('unresolved')
         expect(new_error.resolved_at).to eq(nil)
@@ -197,7 +195,6 @@ RSpec.describe ErrorsController, type: :controller do
         new_error1  = FactoryGirl.create(:grouped_issue, { website: website, checksum: SecureRandom.hex(), status: 'unresolved', resolved_at: nil } )
         new_error2  = FactoryGirl.create(:grouped_issue, { website: website, checksum: SecureRandom.hex(), status: 'unresolved', resolved_at: nil } )
         params[:error_ids] = [new_error1.id, new_error2.id]
-        params[:resolved] = "false"
         put_with user, :resolve, params
         new_error1.reload
         new_error2.reload
@@ -209,16 +206,11 @@ RSpec.describe ErrorsController, type: :controller do
         new_error1  = FactoryGirl.create(:grouped_issue, { website: website, checksum: SecureRandom.hex(), status: 'resolved', resolved_at: DateTime.now } )
         new_error2  = FactoryGirl.create(:grouped_issue, { website: website, checksum: SecureRandom.hex(), status: 'resolved', resolved_at: DateTime.now } )
         params[:error_ids] = [new_error1.id, new_error2.id]
-        params["resolved"] = "true"
-        put_with user, :resolve, params
+        put_with user, :unresolve, params
         new_error1.reload
         new_error2.reload
         expect([new_error1.status, new_error2.status]).to all(eq('unresolved'))
         expect([new_error1.resolved_at, new_error2.resolved_at]).to all(be_nil)
-      end
-
-      it "raises 'Could not find error!' if we dont pass the ids" do
-        expect{ put_with user, :resolve, params }.to raise_error("Could not find error!")
       end
     end
   end
@@ -227,38 +219,35 @@ RSpec.describe ErrorsController, type: :controller do
     let(:params) { default_params.merge(id: group.id, website_id: website.id, current_tab: 'aggregations') }
 
     context "resolve_issues" do
-      it "returns the next issues in the list and updates pagination" do
-        controller = ErrorsController.new
-        errors = []
-
+      let(:controller) { ErrorsController.new }
+      let(:errors) do
+        array = []
         number_of_errors = 20
         number_of_errors.times do |index|
-          new_error = FactoryGirl.create(:grouped_issue, { website: website, checksum: SecureRandom.hex(), status: 'resolved', resolved_at: DateTime.now } )
-          errors.push(new_error)
+          new_error = FactoryGirl.create(:grouped_issue, { website: website, checksum: SecureRandom.hex(), status: 'unresolved', resolved_at: nil } )
+          array.push(new_error)
         end
-        errors.sort_by!(&:last_seen).reverse!
+        array.sort_by!(&:last_seen).reverse!
+      end
 
-        #params
-        ids_sent = errors.first(5).map(&:id)   #selected errors
-        current_error = errors.first           #@error
-        resolved = true                        #status
-        per_page = offset = 5                  #number of items per page
-        page = 1                               #current page
-
-        controller.instance_eval { resolve_issues(ids_sent, resolved, per_page, page, current_error ) }
+      it "returns the next issues in the list and updates pagination" do
+        ids = errors.first(5).map(&:id)
+        resolve = true
+        errors_per_page = 5
+        page = 1
+        current_error = errors.first.id
+        controller.instance_eval { resolve_issues(ids, resolve, errors_per_page, page, current_error) }
         # remove the first 5 since their status was updated
-        errors.shift(per_page)
         sidebar = controller.instance_eval { @sidebar }
-        expect(sidebar).to match_array(errors[per_page..per_page + 4])
+        expect(sidebar).to match_array(errors[errors_per_page..errors_per_page + 4])
 
         pagination = controller.instance_eval { @pagination }
         # start_value - end_value of total_count
         # eg: 5 - 10 of 15
         start_value = pagination.offset_value + 1
         end_value = pagination.last_page? ? pagination.total_count : pagination.offset_value + pagination.limit_value
-
-        expect(start_value).to eq(per_page + 1)
-        expect(end_value).to eq(per_page + ids_sent.size)
+        expect(start_value).to eq(1)
+        expect(end_value).to eq(errors_per_page)
       end
     end
   end

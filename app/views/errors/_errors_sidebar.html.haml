@@ -1,29 +1,29 @@
 .errors-sidebar-list.no-margin
-  = form_for :@error, url: {action: "resolve", params: {resolved: params[:resolved]}}, method: :put, html: { :update_target => 'error-container' }, remote: true do |f|
+  = form_for @error, url: {action: "#{params[:resolved] == 'true' || params[:unresolved].nil? ? 'unresolve' : 'resolve'}" }, method: :put, html: { :update_target => 'error-container' }, remote: true do |f|
     .header
       .row
         .pull-left.error_select
           .btn.btn-default.btn-sm{'data-toggle'=>'button','aria-pressed'=>"false"}
             %input.all{:title => "toggle all", :type => "checkbox"}/
-          = f.submit "#{params['resolved'] == 'false' ? 'Resolve' : 'Unresolve'}", class: "btn header-resolve #{params['resolved'] == 'false' ? 'btn-primary' : 'btn-danger'}", id: "multiple-resolve", remote:true, method: :put
+          = f.submit "#{params['unresolved'] == 'true' ? 'Resolve' : 'Unresolve'}", class: "btn header-resolve #{params['unresolved'] == 'true' ? 'btn-primary' : 'btn-danger'}", id: "multiple-resolve", remote:true, method: :put
         .error_pagination.text-right
           %span.sidebar_pagination_text= page_entries_info @selected_errors, entry_name: 'error'
           .btn-group.sidebar_pagination_buttons
             = paginate @selected_errors, theme: 'next_prev_theme'
     #custom-bootstrap.navbar.navbar-default.sidebar-tabs{:role => "navigation"}
       %ul.nav.navbar-nav.navbar-left.main-tabs
-        %li{:class => "#{params[:resolved] == 'true' || params[:resolved].nil? ? 'active' : ''}"}
+        %li{:class => "#{params[:resolved] == 'true' || params[:unresolved].nil? ? 'active' : ''}"}
           %a{:href => "#{request.path}?resolved=true"}
             Resolved
-        %li{:class => "#{params[:resolved] == 'false' ? 'active' : ''}"}
-          %a{:href => "#{request.path}?resolved=false"}
+        %li{:class => "#{params[:unresolved] == 'true' ? 'active' : ''}"}
+          %a{:href => "#{request.path}?unresolved=true"}
             Unresolved
     .tab-content
-      #resolved.tab-pane{:class => "#{params[:resolved] == 'true' || params[:resolved].nil? ? 'active error-container' : ''}"}
-        -if params[:resolved] == 'true' || params[:resolved] == nil
+      #resolved.tab-pane{:class => "#{params[:resolved] == 'true' || params[:unresolved].nil? ? 'active resolved-error-container' : ''}"}
+        -if params[:resolved] == 'true' || params[:unresolved] == nil
           = render partial: 'sidebar_elements', collection: @selected_errors, as: :error
-      #unresolved.tab-pane{:class => "#{params[:resolved] == 'false' ? 'active error-container' : ''}"}
-        -if params[:resolved] == 'false'
+      #unresolved.tab-pane{:class => "#{params[:unresolved] == 'true' ? 'active unresolved-error-container' : ''}"}
+        -if params[:unresolved] == 'true'
           = render partial: 'sidebar_elements', collection: @selected_errors, as: :error
 
 

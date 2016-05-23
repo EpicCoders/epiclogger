@@ -15,6 +15,7 @@ Rails.application.routes.draw do
     member do
       post :notify_subscribers
       put  :resolve
+      put  :unresolve
     end
   end
   resources :grouped_issues, only: [:index, :show]

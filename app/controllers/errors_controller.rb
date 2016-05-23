@@ -22,15 +22,13 @@ class ErrorsController < ApplicationController
     @page = params[:page]
     page_issue = params[:page_issue] || 1
 
-    resolved = params[:resolved] || 'true'
-    errors = current_website.grouped_issues.order('last_seen DESC')
-    resolved_errors = errors.with_status(:resolved).order('last_seen DESC')
-    unresolved_errors = errors.with_status(:unresolved).order('last_seen DESC')
-    @error_count = {total: errors.size, resolved: resolved_errors.size, unresolved: unresolved_errors.size}
-    if to_boolean(resolved)
-      @selected_errors = resolved_errors.page(@page).per(5)
+    errors = current_website.grouped_issues
+
+    #get error-sidebar data
+    if params[:unresolved].present?
+      @selected_errors = errors.with_status(:unresolved).order('last_seen DESC').page(@page).per(5)
     else
-      @selected_errors = unresolved_errors.page(@page).per(5)
+      @selected_errors = errors.with_status(:resolved).order('last_seen DESC').page(@page).per(5)
     end
 
     @issues = @error.issues.page(page_issue).per(1)
@@ -49,41 +47,31 @@ class ErrorsController < ApplicationController
   end
 
   def resolve
-    #has values when we resolve issues through the error sidebar
-    errors_per_page = params[:per_page] || 5
-    page = params[:page]
-    if params[:error_ids]
-      ids = params[:error_ids]
-      resolved = to_boolean(params[:resolved]) if params[:resolved]
-      resolve_issues(ids, resolved, errors_per_page, page, @error)
-    elsif params[:individual_resolve]
-      ids = [@error.id]
-      resolved = !@error.resolved_at.nil?
-      resolve_issues(ids, resolved, errors_per_page, page, @error)
-    else
-      raise 'Could not find error!'
-    end
+    resolve_issues(params[:error_ids], true, params[:per_page], params[:page], @error.id)
+    render 'errors/resolve'
+  end
+
+  def unresolve
+    resolve_issues(params[:error_ids], false, params[:per_page], params[:page], @error.id)
+    render 'errors/resolve'
   end
 
   private
 
-  def resolve_issues (ids, resolved = true, errors_per_page, page, current_error)
-    errors = current_error.website.grouped_issues.order('last_seen DESC')
-    if resolved
-      GroupedIssue.where(id: ids).update_all(resolved_at: nil, status: GroupedIssue::UNRESOLVED) # 3 = unresolved
-      errors = errors.with_status(:resolved)
-    else
-      GroupedIssue.where(id: ids).update_all(resolved_at: Time.now.utc, status: GroupedIssue::RESOLVED) # 2 = resolved
+  def resolve_issues (ids, resolve, errors_per_page, page, current_error)
+    errors_per_page ||= 5
+    page ||= 1
+    errors = GroupedIssue.find(current_error).website.grouped_issues.order('last_seen DESC')
+    if resolve
+      GroupedIssue.where(id: ids).update_all(resolved_at: Time.now.utc, status: GroupedIssue::RESOLVED)
       errors = errors.with_status(:unresolved)
+    else
+      GroupedIssue.where(id: ids).update_all(resolved_at: nil, status: GroupedIssue::UNRESOLVED)
+      errors = errors.with_status(:resolved)
     end
-    @sidebar = errors.page(page).per(ids.size).offset(errors_per_page)
-    @pagination = errors.page(page).per(errors_per_page).offset(ids.size)
-  end
 
-  def to_boolean(str)
-    return true if str=="true"
-    return false if str=="false"
-    return nil
+    @sidebar = errors.page(page).per(ids.try(:size))
+    @pagination = errors.page(page).per(errors_per_page)
   end
 
   def error_params

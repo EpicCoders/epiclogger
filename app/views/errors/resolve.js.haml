@@ -1,16 +1,13 @@
--if !@error.reload.resolved_at.nil?
-  $('#resolve-button').val('Unresolve');
-  $('#resolve-button').removeClass('btn-primary').addClass('btn-danger')
--else
-  $('#resolve-button').val('Resolve');
-  $('#resolve-button').removeClass('btn-danger').addClass('btn-primary')
+- if !@error.reload.resolved_at.nil?
+  $('#resolve-button').hide();
+  $('#unresolve-button').show();
+- else
+  $('#unresolve-button').hide();
+  $('#resolve-button').show();
 
--if @sidebar
-
-  if($(".all").is(':checked')){$(".all").prop("checked",false);}
-
-  // replace resolved errors
-  $("#{escape_javascript(render partial: 'sidebar_elements',collection: @sidebar, as: :error)}").appendTo('.error-container').hide().fadeIn(2000);
+- if @sidebar && @pagination
+  // replace updated errors
+  $("#{escape_javascript(render partial: 'sidebar_elements',collection: @sidebar, as: :error)}").appendTo(".#{@sidebar[0].resolved? ? 'resolved' : 'unresolved'}-error-container").hide().fadeIn(2000);
 
   // reinitialize pagination buttons & page number
   $('.sidebar_pagination_text').html("#{ escape_javascript(page_entries_info @pagination, entry_name: 'error') } ");

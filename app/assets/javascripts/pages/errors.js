@@ -1,6 +1,6 @@
 $(function () {
   //actions to the sidebar when resolving errors
-  $('#resolve-button').click(function(e){
+  var removeFromSidebar = function(e){
     var id, element;
     id = $('.error-content').attr('data-id');
     e.stopPropagation();
@@ -8,7 +8,10 @@ $(function () {
     if(element){
       $(element).fadeOut(500, function() { $(this).remove(); });
     }
-  });
+  }
+  $('#resolve-button').click(removeFromSidebar);
+  $('#unresolve-button').click(removeFromSidebar);
+
 
   $('#multiple-resolve').click(function(){
     var checked;
