@@ -23,23 +23,19 @@ class UsersController < ApplicationController
   def create
     user = User.new(user_params)
 
-    if user.save
-      authenticate!(:password)
-      set_website(Invite.find_by_token(params[:token]).website) if user.accept(params[:token])
-      UserMailer.email_confirmation(user.confirmation_token).deliver_later
-      user.update_attributes(confirmation_sent_at: Time.now)
-      after_login_redirect
-    end
+    authenticate!(:password) if user.save
+    redirect_url = accept_invite_url(params[:token]) if params[:token].present?
+    after_login_redirect(redirect_url)
   end
 
   def confirm_account
-    logout unless current_user.blank?
-    @user = User.find_by_id_and_confirmation_token(params[:id], params[:token])
-    unless @user.nil?
-      @user.update_attributes(confirmation_token: nil, confirmed_at: Time.now.utc)
-      redirect_to login_url
-    else
+    user = User.find_by_id_and_confirmation_token(params[:id], params[:token])
+    logout if logged_in? && user
+    if user.nil?
       redirect_to root_url, alert: 'You confirmed your email once'
+    else
+      user.update_attributes(confirmation_token: nil, confirmed_at: Time.now.utc)
+      redirect_to login_url
     end
   end
 
