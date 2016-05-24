@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe InvitationsController, type: :routing do
+RSpec.describe SubscribersController, type: :routing do
   let(:user) { create :user }
   let(:website) { create :website }
   let(:website_member) { create :website_member, website: website, user: user }
