@@ -10,7 +10,6 @@ class User < ActiveRecord::Base
   has_secure_password(validations: false)
 
   before_create { generate_token(:uid) if provider == 'email' }
-  before_create :send_confirmation
 
   def is_owner_of?(website)
     website.website_members.with_role(:owner).where(website: website).map(&:user_id).include?(self.id)
@@ -34,9 +33,14 @@ class User < ActiveRecord::Base
     end
   end
 
+  def confirmed?
+    !confirmed_at.blank?
+  end
+
   def send_confirmation
     generate_token(:confirmation_token)
     self.confirmation_sent_at = Time.now
-    UserMailer.email_confirmation(self.confirmation_token).deliver_later
+    save!
+    UserMailer.email_confirmation(self).deliver_later
   end
 end

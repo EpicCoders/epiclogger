@@ -19,7 +19,6 @@ describe Invite do
 
   describe '#create' do
     it 'before create should add token to invite' do
-      binding.pry
       expect{
         invite.save
         invite.reload

@@ -2,6 +2,7 @@ class UsersController < ApplicationController
   layout 'landing', :only => [:new, :create]
   load_and_authorize_resource only: [:edit, :update]
   skip_before_action :authenticate!
+  attr_accessor :redirect_url
 
   def index; end
 
@@ -23,7 +24,10 @@ class UsersController < ApplicationController
   def create
     user = User.new(user_params)
 
-    authenticate!(:password) if user.save
+    if user.save!
+      authenticate!(:password)
+      user.send_confirmation
+    end
     redirect_url = accept_invite_url(params[:token]) if params[:token].present?
     after_login_redirect(redirect_url)
   end
@@ -35,7 +39,7 @@ class UsersController < ApplicationController
       redirect_to root_url, alert: 'You confirmed your email once'
     else
       user.update_attributes(confirmation_token: nil, confirmed_at: Time.now.utc)
-      redirect_to login_url
+      redirect_to login_url, notice: "Account confirmed"
     end
   end
 

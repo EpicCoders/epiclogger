@@ -1,7 +1,7 @@
 class WebsiteMembersController < ApplicationController
 	load_and_authorize_resource
   def index
-    @website_members = current_website.website_members.where("user_id IS NOT NULL")
+    @website_members = current_website.website_members
   end
 
   def destroy

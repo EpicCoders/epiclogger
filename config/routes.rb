@@ -31,7 +31,11 @@ Rails.application.routes.draw do
       get :confirm_account
     end
   end
-  resources :invites, only: [:new, :create, :show]
+  resources :invites, only: [:new, :create] do
+    member do
+      get :accept
+    end
+  end
   resources :subscribers, only: [:index]
   # resources :accounts, only: [:show]
   resources :installations, only: [:index]

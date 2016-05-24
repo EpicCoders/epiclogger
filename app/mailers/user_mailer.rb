@@ -1,8 +1,9 @@
 class UserMailer < ApplicationMailer
   default from: "Epic Logger <admin@epiclogger.com>"
 
-  def email_confirmation(token)
-    @user = User.find_by_confirmation_token(token)
+  def email_confirmation(user)
+    return if user.confirmed?
+    @user = user
     mail(to: @user.email, subject: "Epic Logger email confirmation")
   end
 
