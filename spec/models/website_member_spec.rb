@@ -19,12 +19,4 @@ describe WebsiteMember do
       expect(website_member).to belong_to(:user)
     end
   end
-
-  describe 'before create' do
-    it 'should add invitation_token to website_member' do
-      website_member = WebsiteMember.new( website_id: website.id, user_id: user.id )
-      website_member.save
-      expect(website_member.invitation_token).not_to be_nil
-    end
-   end
 end

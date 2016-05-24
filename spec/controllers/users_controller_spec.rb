@@ -4,6 +4,7 @@ RSpec.describe UsersController, :type => :controller do
   let(:user) { create :user }
   let(:website) { create :website }
   let!(:website_member) { create :website_member, website: website, user: user }
+  let!(:invite) { create :invite, website: website, invited_by_id: user.id }
   let(:default_params) { { website_id: website.id, format: :json } }
 
   describe "GET index" do
@@ -38,9 +39,9 @@ RSpec.describe UsersController, :type => :controller do
     end
   end
 
-  describe "POST create" do
+  describe "POST #create" do
     context "without invitation" do
-      let(:params) { default_params.merge({ user: { name: 'Name for user', email: 'example@email.com', password: 'password' } }) }
+      let(:params) { default_params.merge({ user: { name: 'Name for user', email: 'example@email.com', password: 'password', provider: 'email' } }) }
 
       it "returns http success" do
         expect{
@@ -54,20 +55,14 @@ RSpec.describe UsersController, :type => :controller do
     end
 
     context "with invitation" do
-      let!(:website_member2) { create :website_member, invitation_token: 'randomString', website_id: website.id, user_id: nil }
-      let(:params) { default_params.merge({ invitation_token: website_member2.invitation_token, user: { name: 'Name for user', email: 'example@email.com', password: 'password' } }) }
+      let(:params) { default_params.merge({ token: invite.token, user: { name: 'Name for user', email: 'example@email.com', password: 'password', provider: 'email' } }) }
 
-      it "updates websites member" do
-        expect{
-          post :create, params
-          website_member2.reload
-        }.to change(website_member2, :user_id).from(nil)
-        .and change(website_member2, :role).from("owner").to("user")
-      end
-
-      it "sets current_website" do
+      it 'should update attributes' do
         post :create, params
-        expect(session[:epiclogger_website_id]).to eq(website.id)
+        user = User.find_by_email('example@email.com')
+
+        expect(user.confirmation_token).not_to be_nil
+        expect(user.confirmation_sent_at).not_to be_nil
       end
 
       it "should email user" do
@@ -77,33 +72,34 @@ RSpec.describe UsersController, :type => :controller do
 
         post :create, params
       end
-
-      it "redirects to /errors" do
-        expect( post :create, params ).to redirect_to(errors_url())
-      end
     end
   end
 
-  describe "GET confirm_account" do
+  describe "GET #confirm_account" do
     let(:params) { default_params.merge({ id: user.id, token: user.confirmation_token }) }
 
-    it "finds the user" do
-      get :confirm_account, params
-      expect( subject.instance_variable_get(:@user) ).to eq(user)
+    it 'should logout user' do
+      post_with user, :confirm_account, params
+      expect(session[:epiclogger_website_id]).to be_nil
+    end
+
+    it "should redirect to login user" do
+      expect( post_with user, :confirm_account, params ).to redirect_to(login_url)
+      expect( flash[:alert] ).to eq('You confirmed your email once')
+    end
+
+    it "should redirect to root" do
+      expect( post_with user, :confirm_account, id: 'x', token: 'bad/edited-token' ).to redirect_to(login_url)
+      expect( flash[:alert] ).to eq('Bad url')
     end
 
     it "should update user" do
+      user2 = create :user, confirmed_at: nil, confirmation_sent_at: Time.now, confirmation_token: 'random-token'
       expect{
-        post :confirm_account, params
-        user.reload
-        }.to change(user, :confirmation_token).from(anything()).to(nil)
-        .and change(user, :confirmed_at)
-    end
-
-    it "should redirect to login" do
-      get :confirm_account, params
-      expect( get :confirm_account, params ).to redirect_to(login_url)
-      expect( flash[:alert] ).to eq("You confirmed your email once")
+        post :confirm_account, id: user2.id, token: user2.confirmation_token
+        user2.reload
+        }.to change(user2, :confirmation_token).from('random-token').to(nil)
+        .and change(user2, :confirmed_at)
     end
   end
 end

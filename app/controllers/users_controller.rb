@@ -36,7 +36,9 @@ class UsersController < ApplicationController
     user = User.find_by_id_and_confirmation_token(params[:id], params[:token])
     logout if logged_in? && user
     if user.nil?
-      redirect_to root_url, alert: 'You confirmed your email once'
+      redirect_to login_url, alert: 'Bad url'
+    elsif !user.confirmed_at.blank?
+      redirect_to login_url, alert: 'You confirmed your email once'
     else
       user.update_attributes(confirmation_token: nil, confirmed_at: Time.now.utc)
       redirect_to login_url, notice: "Account confirmed"

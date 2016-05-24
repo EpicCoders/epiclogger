@@ -4,8 +4,8 @@ RSpec.describe InvitesController, type: :controller do
   let(:user) { create :user }
   let(:website) { create :website }
   let!(:website_member) { create :website_member, user_id: user.id, website_id: website.id }
-  letget_with user, :show, params(:invite) { create :invite, website: website, invited_by_id: user.id }
-  let(:default_params) { { format: :json} }
+  let(:invite) { create :invite, website: website, invited_by_id: user.id }
+  let(:default_params) { {} }
 
   before(:each) do session[:epiclogger_website_id] = website.id end
   # before(:each) do { expect( controller.class.skip_before_action ).to receive(:authenticate!).and_return(true) } end
@@ -39,33 +39,39 @@ RSpec.describe InvitesController, type: :controller do
     end
   end
 
-  describe 'GET #show' do
+  describe 'GET #accept' do
+    let(:params) { default_params.merge({id: invite.token }) }
+    let(:user2) { create :user, email: invite.email }
 
-    context 'already member' do
-      let!(:user2) { create :user, email: 'user@email.com'}
-      let(:invite2) { create :invite, website: website, invited_by_id: user.id, email: user2.email}
-      let(:params) { default_params.merge({id: invite.id,  token: invite2.token }) }
+    context 'logged in' do
+
+      it 'should redirect to errors' do
+         expect(get_with user, :accept, params).to redirect_to(errors_url)
+      end
+
+      it 'should set current website' do
+        get_with user2, :accept, params
+        expect(session[:epiclogger_website_id]).to eq(website.id)
+      end
+
+      it 'should update attribute' do
+        expect{
+          get_with user2, :accept, params
+          invite.reload
+        }.to change(invite, :accepted_at).from(nil)
+      end
 
       it 'should create website_member' do
         expect{
-          get_with user, :show, params
+          get_with user2, :accept, params
           }.to change(WebsiteMember, :count).by(1)
-      end
-
-      it 'should redirect to root' do
-        expect(get_with user, :show, params).to redirect_to(root_url)
       end
     end
 
-    context 'new member' do
-      let(:params) { default_params.merge({id: invite.id,  token: invite.token }) }
-      it 'it should logout user' do
-        get_with user, :show, params
-        expect(session[:epiclogger_website_id]).to be_nil
-      end
+    context 'logged out' do
 
-      it 'redirect to signup' do
-        expect(get_with user, :show, params).to redirect_to(signup_url(token: invite.token, email: invite.email))
+      it 'should redirect to errors' do
+         expect(get :accept, params).to redirect_to(signup_url(token: invite.token))
       end
     end
   end
