@@ -48,12 +48,10 @@ class ErrorsController < ApplicationController
 
   def resolve
     resolve_issues(params[:error_ids], true, params[:per_page], params[:page], @error.id)
-    render 'errors/resolve'
   end
 
   def unresolve
     resolve_issues(params[:error_ids], false, params[:per_page], params[:page], @error.id)
-    render 'errors/resolve'
   end
 
   private

@@ -1,13 +1,9 @@
-- if !@error.reload.resolved_at.nil?
-  $('#resolve-button').hide();
-  $('#unresolve-button').show();
-- else
-  $('#unresolve-button').hide();
-  $('#resolve-button').show();
+$('#resolve-button').hide();
+$('#unresolve-button').show();
 
 - if @sidebar && @pagination
   // replace updated errors
-  $("#{escape_javascript(render partial: 'sidebar_elements',collection: @sidebar, as: :error)}").appendTo(".#{@sidebar[0].resolved? ? 'resolved' : 'unresolved'}-error-container").hide().fadeIn(2000);
+  $("#{escape_javascript(render partial: 'sidebar_elements',collection: @sidebar, as: :error)}").appendTo(".unresolved-error-container").hide().fadeIn(2000);
 
   // reinitialize pagination buttons & page number
   $('.sidebar_pagination_text').html("#{ escape_javascript(page_entries_info @pagination, entry_name: 'error') } ");
