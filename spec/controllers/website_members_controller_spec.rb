@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe WebsiteMembersController, :type => :controller do
-	let(:user) { create :user }
+  let(:user) { create :user }
   let(:website) { create :website }
   let!(:website_member) { create :website_member, website: website, user: user }
   before(:each) do session[:epiclogger_website_id] = website.id end

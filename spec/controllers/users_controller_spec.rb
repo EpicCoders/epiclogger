@@ -104,6 +104,13 @@ RSpec.describe UsersController, :type => :controller do
         post :create, params
       end
     end
+
+    context 'wrong creentials' do
+      let(:params) { default_params.merge({ user: { name: 'Name for user', email: 'example@email.com', password: 'pass', provider: 'email' } }) }
+      it 'should render #new' do
+        expect( post :create, params ).to render_template(:new)
+      end
+    end
   end
 
   describe "GET #confirm" do

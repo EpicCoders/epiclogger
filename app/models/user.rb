@@ -3,6 +3,7 @@ class User < ActiveRecord::Base
   include TokenGenerator
   has_many :website_members, -> { uniq }, dependent: :destroy, autosave: true
   has_many :websites, through: :website_members
+  has_many :invites, foreign_key: :invited_by_id
 
   validates :name, presence: true
   validates :email, presence: true, uniqueness: true

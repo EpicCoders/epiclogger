@@ -16,7 +16,6 @@ RSpec.describe InvitesController, type: :controller do
     it 'should raise error' do
       create :invite, website: website, email: 'invited@person.com'
       expect{ post_with user, params }.to raise_error
-      # expect{ post_with user, params }.to raise_exception(InvitesController, "Duplicate invites")
     end
 
     it 'should create invite' do
