@@ -28,7 +28,7 @@ Rails.application.routes.draw do
   end
   resources :users, only: [:index, :edit, :update] do
     member do
-      get :confirm_account
+      get :confirm
     end
   end
   resources :invites, only: [:new, :create] do

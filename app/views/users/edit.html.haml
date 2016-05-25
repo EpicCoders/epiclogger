@@ -1,7 +1,7 @@
 %br
 .row
   .col-md-12.pagecontainer
-    = simple_form_for @user, url: user_path(id: @user.id), method: :put, remote: true, wrapper: :vertical_form do |f|
+    = simple_form_for @user, wrapper: :vertical_form do |f|
       .col-lg-8
         .panel.panel-default
           .panel-heading User Details

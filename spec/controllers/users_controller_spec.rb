@@ -106,28 +106,28 @@ RSpec.describe UsersController, :type => :controller do
     end
   end
 
-  describe "GET #confirm_account" do
+  describe "GET #confirm" do
     let(:params) { default_params.merge({ id: user.id, token: user.confirmation_token }) }
 
     it 'should logout user' do
-      post_with user, :confirm_account, params
+      post_with user, :confirm, params
       expect(session[:epiclogger_website_id]).to be_nil
     end
 
     it "should redirect to login user" do
-      expect( post_with user, :confirm_account, params ).to redirect_to(login_url)
+      expect( post_with user, :confirm, params ).to redirect_to(login_url)
       expect( flash[:alert] ).to eq('You confirmed your email once')
     end
 
     it "should redirect to root" do
-      expect( post_with user, :confirm_account, id: 'x', token: 'bad/edited-token' ).to redirect_to(login_url)
+      expect( post_with user, :confirm, id: 'x', token: 'bad/edited-token' ).to redirect_to(login_url)
       expect( flash[:alert] ).to eq('Bad url')
     end
 
     it "should update user" do
       user2 = create :user, confirmed_at: nil, confirmation_sent_at: Time.now, confirmation_token: 'random-token'
       expect{
-        post :confirm_account, id: user2.id, token: user2.confirmation_token
+        post :confirm, id: user2.id, token: user2.confirmation_token
         user2.reload
         }.to change(user2, :confirmation_token).from('random-token').to(nil)
         .and change(user2, :confirmed_at)

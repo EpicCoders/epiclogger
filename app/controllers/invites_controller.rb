@@ -4,7 +4,7 @@ class InvitesController < ApplicationController
   def create
     redirect_to(:new_invite, notice: 'User already invited') && return unless current_website.invites.where(email: invite_params[:email]).blank?
     invite = current_website.invites.new(invited_by_id: current_user.id, email: invite_params[:email])
-    UserMailer.member_invitation(invite.id).deliver_later if invite.save
+    UserMailer.member_invitation(invite).deliver_later if invite.save
     redirect_to new_invite_url, notice: 'Email sent'
   end
 

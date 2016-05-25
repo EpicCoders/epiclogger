@@ -12,6 +12,28 @@ Warden::Manager.serialize_from_session do |id|
   User.find(id)
 end
 
+Warden::Strategies.add(:password_unconfirmed) do
+  def user_params
+    params[:user]
+  end
+
+  def valid?
+    return false if request.get?
+    return false if user_params.nil?
+    user_params[:email] && user_params[:password]
+  end
+
+  def authenticate!
+    user = User.find_by_email(user_params[:email])
+    if user && user.authenticate(user_params[:password])
+      success! user
+    else
+      session.delete('session')
+      fail "There was a problem"
+    end
+  end
+end
+
 Warden::Strategies.add(:password) do
   def user_params
     params[:user]
@@ -25,11 +47,11 @@ Warden::Strategies.add(:password) do
 
   def authenticate!
     user = User.find_by_email(user_params[:email])
-    if user && user.authenticate(user_params[:password]) && user.confirmation_token.nil?
+    if user && user.authenticate(user_params[:password]) && user.confirmed?
       success! user
     else
       session.delete('session')
-      fail "Confirm email or retype your credentials"
+      fail "Confirm email first"
     end
   end
 end

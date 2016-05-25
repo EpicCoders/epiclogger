@@ -15,8 +15,8 @@ class UserMailer < ApplicationMailer
     mail(to: @user.email, subject: 'Epic Logger Subscriber notification')
   end
 
-  def member_invitation(invite_id)
-    @invite = Invite.find(invite_id)
+  def member_invitation(invite)
+    @invite = invite
     @inviter = User.find(@invite.invited_by_id)
     @website = @invite.website
     mail(to: @invite.email, subject: 'Epic Logger Invite Users')

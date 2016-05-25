@@ -25,16 +25,16 @@ class UsersController < ApplicationController
     redirect_url = nil
 
     if @user.save
-      authenticate!(:password)
+      authenticate!(:password_unconfirmed)
       @user.send_confirmation
+      redirect_url = accept_invite_url(params[:token]) if params[:token].present?
+      after_login_redirect(redirect_url)
     else
-      redirect_to(signup_url, notice: "There was a problem") && return
+      render :new
     end
-    redirect_url = accept_invite_url(params[:token]) if params[:token].present?
-    after_login_redirect(redirect_url)
   end
 
-  def confirm_account
+  def confirm
     user = User.find_by_id_and_confirmation_token(params[:id], params[:token])
     logout if logged_in? && user
     if user.nil?

@@ -34,7 +34,7 @@ RSpec.describe InvitesController, type: :controller do
     it 'should email user' do
       mailer = double('UserMailer')
       expect(mailer).to receive(:deliver_later)
-      expect(UserMailer).to receive(:member_invitation).with(an_instance_of(Fixnum)).and_return(mailer).once
+      expect(UserMailer).to receive(:member_invitation).with(an_instance_of(Invite)).and_return(mailer).once
 
       post_with user, :create, params
     end

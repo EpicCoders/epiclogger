@@ -34,10 +34,9 @@ class ApplicationController < ActionController::Base
 
   def set_website(website)
     return unless logged_in?
-    unless website.nil?
-      @website = website
-      session[:epiclogger_website_id] = @website.id
-    end
+    return if website.nil?
+    @website = website
+    session[:epiclogger_website_id] = @website.id
   end
 
   def after_login_redirect(url_to_redirect = nil)
