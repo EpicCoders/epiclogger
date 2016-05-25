@@ -7,7 +7,7 @@ RSpec.describe UsersController, :type => :controller do
   let!(:invite) { create :invite, website: website, invited_by_id: user.id }
   let(:default_params) { { website_id: website.id, format: :json } }
 
-  describe "GET index" do
+  describe "GET #index" do
     let(:params) { default_params.merge({}) }
 
     it "returns http success" do
@@ -16,8 +16,39 @@ RSpec.describe UsersController, :type => :controller do
     end
   end
 
+  describe "GET #edit" do
+    let(:params) { default_params.merge({id: user.id}) }
+
+    it "returns http success" do
+      get_with user, :edit, params
+      expect(response).to be_success
+    end
+  end
+
+  describe "PUT #update" do
+    let(:user2) { create :user, email: 'email@email.com' }
+    let(:params) {{ id: user2.id, user: { email: 'changed@email.com' } }}
+
+    it "should update user" do
+      expect{
+        put_with user2, :update, params
+        user2.reload
+      }.to change(user2, :email).from('email@email.com').to('changed@email.com')
+    end
+
+    it 'should redirect to edit' do
+      expect( put_with user2, :update, params ).to redirect_to(edit_user_path(user2))
+      expect( flash[:notice] ).to eq('User updated')
+    end
+  end
+
   describe "GET new" do
     let(:params) { default_params.merge({}) }
+
+    it 'should render layout' do
+      get :new
+      expect(response).to render_template(:layout => 'landing')
+    end
 
     it "returns http success" do
       get :new, params

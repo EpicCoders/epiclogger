@@ -27,6 +27,7 @@ RSpec.describe InvitesController, type: :controller do
 
     it 'should redirect' do
       expect(post_with user, :create, params).to redirect_to(new_invite_url)
+      expect( flash[:notice] ).to eq('Email sent')
       expect(response.status).to be(302)
     end
 

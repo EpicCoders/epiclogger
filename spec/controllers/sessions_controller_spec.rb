@@ -6,7 +6,7 @@ RSpec.describe SessionsController, :type => :controller do
   let!(:website_member) { create :website_member, website: website, user: user }
 
   describe "GET new" do
-    it 'should user layout' do
+    it 'should render layout' do
       get :new
       expect(response).to render_template(:layout => 'landing')
     end

@@ -2,7 +2,6 @@ class UsersController < ApplicationController
   layout 'landing', :only => [:new, :create]
   load_and_authorize_resource only: [:edit, :update]
   skip_before_action :authenticate!
-  attr_accessor :redirect_url
 
   def index; end
 
@@ -23,6 +22,7 @@ class UsersController < ApplicationController
 
   def create
     user = User.new(user_params)
+    redirect_url = nil
 
     if user.save!
       authenticate!(:password)
