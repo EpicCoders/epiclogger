@@ -12,6 +12,7 @@
               Sign up with Github
           %span.or or
           = form_for @user, url: signup_path do |f|
+            = render 'shared/flash_messages'
             = hidden_field_tag(:token, params[:token])
             = f.text_field :provider, :type => "hidden",  :value => "email"
             .input-group.username

@@ -19,10 +19,10 @@ class InvitesController < ApplicationController
       @invite.accept(current_user)
       set_website(@invite.website)
       # it will redirect to errors url because we set the website for the user
-      return after_login_redirect
+      after_login_redirect
     else
       # it will redirect to create website wizard because we don't sent it
-      return after_login_redirect
+      after_login_redirect
     end
   end
 

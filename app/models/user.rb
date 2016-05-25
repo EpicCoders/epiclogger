@@ -6,7 +6,7 @@ class User < ActiveRecord::Base
 
   validates :name, presence: true
   validates :email, presence: true, uniqueness: true
-  validates :password, confirmation: true, on: :create
+  validates :password, confirmation: true, length: { minimum: 6 }, on: :create
   has_secure_password(validations: false)
 
   before_create { generate_token(:uid) if provider == 'email' }

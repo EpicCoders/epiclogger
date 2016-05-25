@@ -21,12 +21,14 @@ class UsersController < ApplicationController
   end
 
   def create
-    user = User.new(user_params)
+    @user = User.new(user_params)
     redirect_url = nil
 
-    if user.save!
+    if @user.save
       authenticate!(:password)
-      user.send_confirmation
+      @user.send_confirmation
+    else
+      redirect_to(signup_url, notice: "There was a problem") && return
     end
     redirect_url = accept_invite_url(params[:token]) if params[:token].present?
     after_login_redirect(redirect_url)
