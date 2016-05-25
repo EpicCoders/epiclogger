@@ -86,7 +86,7 @@ Rails.application.configure do
     authentication: :plain,
     user_name: ENV['SMTP_USERNAME'],
     password: ENV['SMTP_PASSWORD'],
-    domain: 'heroku.com',
+    domain: ENV['SMTP_DOMAIN'],
     enable_starttls_auto: true
   }
 end
