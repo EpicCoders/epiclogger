@@ -20,7 +20,7 @@
           require 'epiclogger'
 
           Epiclogger.configure do |config|
-            config.dsn = 'https://#{@website.app_key}:#{@website.app_secret}@test-sentry89.herokuapp.com/#{@website.id}'
+            config.dsn = 'https://#{@website.app_key}:#{@website.app_secret}@#{app_domain}/#{@website.id}'
           end
   %h5 Now wrap your application to capture events:
   %pre

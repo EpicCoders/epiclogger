@@ -15,7 +15,7 @@
             connect.bodyParser(),
             connect.cookieParser(),
             mainHandler,
-            raven.middleware.connect('https://#{@website.app_key}:#{@website.app_secret}@test-sentry89.herokuapp.com/#{@website.id}'),
+            raven.middleware.connect('https://#{@website.app_key}:#{@website.app_secret}@#{app_domain}/#{@website.id}'),
           ).listen(3000);
   %div
     %h5{:style => 'display:inline'} Ensure Node is run with

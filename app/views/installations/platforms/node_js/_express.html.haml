@@ -13,7 +13,7 @@
         :escaped
           var app = require('express').createServer();
 
-          app.error(raven.middleware.express('https://#{@website.app_key}:#{@website.app_secret}@test-sentry89.herokuapp.com/#{@website.id}'));
+          app.error(raven.middleware.express('https://#{@website.app_key}:#{@website.app_secret}@#{app_domain}/#{@website.id}'));
   %div
     %h5{:style => 'display:inline'} Ensure Node is run with
     %code NODE_ENV=production:

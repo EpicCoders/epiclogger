@@ -13,7 +13,7 @@
         :escaped
           from raven import Client
 
-          client = Client('https://#{@website.app_key}:#{@website.app_secret}@test-sentry89.herokuapp.com/#{@website.id}')
+          client = Client('https://#{@website.app_key}:#{@website.app_secret}@#{app_domain}/#{@website.id}')
   %h5 You can also optionally install a default error handler to catch all exceptions:
   %pre
     %code.language-html

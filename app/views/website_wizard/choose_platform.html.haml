@@ -10,13 +10,13 @@
           .panel-body
             %h5 To start sending events, configure your client with the following DSN value:
             %pre
-              %code
-                %h5.platform-code https://#{@website.app_key}:#{@website.app_secret}@test-sentry89.herokuapp.com/#{@website.id}
+              %code.markdown
+                %h5.platform-code https://#{@website.app_key}:#{@website.app_secret}@#{app_domain}/#{@website.id}
             %br
               %h5 If this is a client that only needs public access (like epiclogger-js), you can use the following public DSN:
               %pre
-                %code
-                  %h5.platform-code https://#{@website.app_key}@test-sentry89.herokuapp.com/#{@website.id}
+                %code.markdown
+                  %h5.platform-code https://#{@website.app_key}@#{app_domain}/#{@website.id}
         .panel.panel-default.tileview
           .panel-heading Platforms
           .panel-body#platform{:style => 'cursor: pointer'}

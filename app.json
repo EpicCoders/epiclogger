@@ -23,6 +23,9 @@
     "LANG": {
       "required": true
     },
+    "APP_DOMAIN": {
+      "required": true
+    },
     "MAILER_HOST": {
       "required": true
     },

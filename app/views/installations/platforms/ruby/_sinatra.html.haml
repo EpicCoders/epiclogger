@@ -21,7 +21,7 @@
           require 'raven'
 
           Raven.configure do |config|
-            config.dsn = 'https://#{@website.app_key}:#{@website.app_secret}@test-sentry89.herokuapp.com/#{@website.id}'
+            config.dsn = 'https://#{@website.app_key}:#{@website.app_secret}@#{app_domain}/#{@website.id}'
           end
 
           use Raven::Rack

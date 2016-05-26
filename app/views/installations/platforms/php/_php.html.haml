@@ -13,7 +13,7 @@
   %h5 Create an instance of the client:
   %pre
     %code.language-html
-      $client = new Raven_Client('https://#{@website.app_key}:#{@website.app_secret}@test-sentry89.herokuapp.com/#{@website.id}');
+      $client = new Raven_Client('https://#{@website.app_key}:#{@website.app_secret}@#{app_domain}/#{@website.id}');
   %h5 Now call out to the raven client to capture events:
   %pre
     %code.language-html

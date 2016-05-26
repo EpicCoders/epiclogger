@@ -21,7 +21,7 @@
               (r"/", MainHandler),
           ])
           application.sentry_client = AsyncSentryClient(
-              "https://#{@website.app_key}:#{@website.app_secret}@test-sentry89.herokuapp.com/#{@website.id}"
+              "https://#{@website.app_key}:#{@website.app_secret}@#{app_domain}/#{@website.id}"
           )
   %h5 Once the sentry client is attached to the application, request handlers can automatically capture uncaught exceptions by inheriting the SentryMixin class.
   %pre

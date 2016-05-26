@@ -23,4 +23,13 @@ module ApplicationHelper
   def regular_sidebar?
     !error_sidebar? && !no_sidebar?
   end
+
+  def app_domain
+    # if this is a review app then we will use the heroku_app_name variable to build the domain
+    if ENV.key?('HEROKU_APP_NAME')
+      "#{ENV['HEROKU_APP_NAME']}.herokuapp.com"
+    else
+      ENV['APP_DOMAIN']
+    end
+  end
 end

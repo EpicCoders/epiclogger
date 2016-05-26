@@ -17,7 +17,7 @@
         :escaped
           from raven.contrib.flask import Sentry
 
-          app.config['SENTRY_DSN'] = 'https://#{@website.app_key}:#{@website.app_secret}@test-sentry89.herokuapp.com/#{@website.id}'
+          app.config['SENTRY_DSN'] = 'https://#{@website.app_key}:#{@website.app_secret}@#{app_domain}/#{@website.id}'
           sentry = Sentry(app)
   %hr
     %h5 That's it! epiclogger automatically installs an error handling hook to pipe all uncaught exceptions to Sentry.

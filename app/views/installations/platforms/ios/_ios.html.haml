@@ -18,7 +18,7 @@
         :escaped
           - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
             // Configure the Sentry client
-            [RavenClient clientWithDSN:@"https://#{@website.app_key}:#{@website.app_secret}@test-sentry89.herokuapp.com/#{@website.id}"];
+            [RavenClient clientWithDSN:@"https://#{@website.app_key}:#{@website.app_secret}@#{app_domain}/#{@website.id}"];
 
             // Install the global error handler
             [[RavenClient sharedClient] setupExceptionHandler];

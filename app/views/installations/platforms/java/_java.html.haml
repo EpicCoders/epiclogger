@@ -24,7 +24,7 @@
 
           public class Example {
               public static void main(String[] args) {
-                  String rawDsn = "https://#{@website.app_key}:#{@website.app_secret}@test-sentry89.herokuapp.com/#{@website.id}";
+                  String rawDsn = "https://#{@website.app_key}:#{@website.app_secret}@#{app_domain}/#{@website.id}";
                   Raven raven = RavenFactory.ravenInstance(new Dsn(rawDsn));
 
                   // record a simple message
