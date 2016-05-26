@@ -8,14 +8,13 @@ RSpec.describe InvitesController, type: :controller do
   let(:default_params) { {} }
 
   before(:each) do session[:epiclogger_website_id] = website.id end
-  # before(:each) do { expect( controller.class.skip_before_action ).to receive(:authenticate!).and_return(true) } end
 
   describe 'POST #create' do
     let(:params) { default_params.merge({invite: { email: 'invited@person.com' }}) }
 
-    it 'should raise error' do
-      create :invite, website: website, email: 'invited@person.com'
-      expect{ post_with user, params }.to raise_error
+    it 'should redirect and notice' do
+      expect(post_with user, :create, invite: { email: invite.email }).to redirect_to(:new_invite)
+      expect( flash[:notice] ).to eq('User already invited')
     end
 
     it 'should create invite' do

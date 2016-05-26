@@ -15,21 +15,21 @@
             = render 'shared/flash_messages'
             = hidden_field_tag(:token, params[:token])
             = f.text_field :provider, :type => "hidden",  :value => "email"
-            .input-group.username
-              .input-group-addon
-                %span.glyphicon.glyphicon-user
-              = f.text_field :name, :placeholder => 'Name', class: 'form-control input-lg', required: true
-            .input-group.username
-              .input-group-addon @
-              = f.email_field :email, :placeholder => 'Email address', class: 'form-control input-lg', required: true
-            .input-group.username
-              .input-group-addon
-                %span.glyphicon.glyphicon-lock
-              = f.password_field :password, :placeholder => 'Password', class: 'form-control input-lg', required: true
-            .input-group.password
-              .input-group-addon
-                %span.glyphicon.glyphicon-lock
-              = f.password_field :password_confirmation, :placeholder => 'Confirm password', class: 'form-control input-lg', required: true
+            = f.input :name, label: false, wrapper: :vertical_input_group, required: true do
+              %span.input-group-addon
+                .glyphicon.glyphicon-user
+              = f.input_field :name, class: "form-control input-lg", placeholder: 'Name'
+            = f.input :email, label: false, wrapper: :vertical_input_group, required: true do
+              %span.input-group-addon @
+              = f.email_field :email, class: "form-control input-lg", placeholder: 'Email address'
+            = f.input :password, label: false, wrapper: :vertical_input_group, required: true do
+              %span.input-group-addon
+                .glyphicon.glyphicon-lock
+              = f.password_field :password, class: "form-control input-lg", placeholder: 'Password'
+            = f.input :password_confirmation, label: false, wrapper: :vertical_input_group, required: true do
+              %span.input-group-addon
+                .glyphicon.glyphicon-lock
+              = f.password_field :password_confirmation, class: "form-control input-lg", placeholder: 'Confirm password'
             .row.signup_footer
               .col-md-12
                 %button.btn.btn-default.btn-block{:type => "submit"} Sign Up
