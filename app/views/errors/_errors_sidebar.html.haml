@@ -1,29 +1,29 @@
 .errors-sidebar-list.no-margin
-  = form_for @error, url: {action: "#{params[:resolved] == 'true' || params[:unresolved].nil? ? 'unresolve' : 'resolve'}" }, method: :put, html: { :update_target => 'error-container' }, remote: true do |f|
+  = form_for @error, url: {action: "#{params[:unresolved] == 'true' || params[:resolved].nil? ? 'resolve' : 'unresolve'}" }, method: :put, html: { :update_target => 'error-container' }, remote: true do |f|
     .header
       .row
         .pull-left.error_select
           .btn.btn-default.btn-sm{'data-toggle'=>'button','aria-pressed'=>"false"}
             %input.all{:title => "toggle all", :type => "checkbox"}/
-          = f.submit "#{params['unresolved'] == 'true' ? 'Resolve' : 'Unresolve'}", class: "btn header-resolve #{params['unresolved'] == 'true' ? 'btn-primary' : 'btn-danger'}", id: "multiple-resolve", remote:true, method: :put
+          = f.submit "#{params['resolved'] == 'true' || @selected_errors.try(:first).try(:unresolved?).present? ? 'Unresolve' : 'Resolve'}", class: "btn header-resolve #{params['resolved'] == 'true' || @selected_errors.try(:first).try(:resolved?).present? ? 'btn-danger' : 'btn-primary'}", id: "multiple-resolve", remote:true, method: :put
         .error_pagination.text-right
           %span.sidebar_pagination_text= page_entries_info @selected_errors, entry_name: 'error'
           .btn-group.sidebar_pagination_buttons
             = paginate @selected_errors, theme: 'next_prev_theme'
     #custom-bootstrap.navbar.navbar-default.sidebar-tabs{:role => "navigation"}
       %ul.nav.navbar-nav.navbar-left.main-tabs
-        %li{:class => "#{params[:resolved] == 'true' || params[:unresolved].nil? ? 'active' : ''}"}
-          %a{:href => "#{request.path}?resolved=true"}
-            Resolved
-        %li{:class => "#{params[:unresolved] == 'true' ? 'active' : ''}"}
+        %li{:class => "#{params[:unresolved] == 'true' || @selected_errors.try(:first).try(:unresolved?).present? ? 'active' : ''}"}
           %a{:href => "#{request.path}?unresolved=true"}
             Unresolved
+        %li{:class => "#{params[:resolved] == 'true' || @selected_errors.try(:first).try(:resolved?).present? ? 'active' : ''}"}
+          %a{:href => "#{request.path}?resolved=true"}
+            Resolved
     .tab-content
-      #resolved.tab-pane{:class => "#{params[:resolved] == 'true' || params[:unresolved].nil? ? 'active resolved-error-container' : ''}"}
-        -if params[:resolved] == 'true' || params[:unresolved] == nil
+      - if params[:unresolved].present? || @selected_errors.try(:first).try(:unresolved?).present?
+        #resolved.tab-pane.unresolved-error-container.active
           = render partial: 'sidebar_elements', collection: @selected_errors, as: :error
-      #unresolved.tab-pane{:class => "#{params[:unresolved] == 'true' ? 'active unresolved-error-container' : ''}"}
-        -if params[:unresolved] == 'true'
+      - elsif params[:resolved].present? || @selected_errors.try(:first).try(:resolved?).present?
+        #unresolved.tab-pane.resolved-error-container.active
           = render partial: 'sidebar_elements', collection: @selected_errors, as: :error
 
 

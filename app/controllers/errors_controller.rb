@@ -19,17 +19,17 @@ class ErrorsController < ApplicationController
   end
 
   def show
-    @page = params[:page]
     page_issue = params[:page_issue] || 1
 
-    errors = current_website.grouped_issues
-
     #get error-sidebar data
-    if params[:unresolved].present?
-      @selected_errors = errors.with_status(:unresolved).order('last_seen DESC').page(@page).per(5)
-    else
-      @selected_errors = errors.with_status(:resolved).order('last_seen DESC').page(@page).per(5)
-    end
+    errors_per_page = 5
+    resolved =  if params[:resolved].present?
+                  true
+                elsif params[:unresolved].present?
+                  false
+                end
+    resolved = @error.resolved? ? true : false if resolved.nil?
+    @selected_errors = current_issue_page(resolved, params[:page], errors_per_page)
 
     @issues = @error.issues.page(page_issue).per(1)
     @issue = @issues.first
@@ -70,6 +70,16 @@ class ErrorsController < ApplicationController
 
     @sidebar = errors.page(page).per(ids.try(:size))
     @pagination = errors.page(page).per(errors_per_page)
+  end
+
+  def current_issue_page(resolved, page, errors_per_page)
+    errors = current_website.grouped_issues.order('last_seen DESC')
+    errors = resolved ? errors.with_status(:resolved) : errors.with_status(:unresolved)
+    if @error.resolved? == resolved
+      position = errors.where("last_seen >= ?", @error.last_seen).count
+      page ||= (position.to_f/errors_per_page).ceil
+    end
+    errors.page(page).per(errors_per_page)
   end
 
   def error_params

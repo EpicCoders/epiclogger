@@ -29,9 +29,9 @@
           #custom-bootstrap.navbar.navbar-default{:role => "navigation"}
             %ul.nav.navbar-nav.navbar-left.main-tabs
               %li{ class: "#{params[:current_tab] == 'overview' || params[:current_tab].nil? ? 'active' : ''}" }
-                = link_to "Overview", error_path(id: @error.id, current_tab: 'overview')
+                = link_to "Overview", request.parameters.merge({current_tab: 'overview'})
               %li{ class: "#{params[:current_tab] == 'aggregations' ? 'active' : ''}" }
-                = link_to "Aggregations", error_path(id: @error.id, current_tab: 'aggregations')
+                = link_to "Aggregations", request.parameters.merge({current_tab: 'aggregations'})
 
           .tab-content
             #overview.tab-pane{ class: "#{params[:current_tab] == 'overview' || params[:current_tab].nil? ? 'active' : ''}" }
