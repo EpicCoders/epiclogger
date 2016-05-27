@@ -27,7 +27,7 @@ class ResetPasswordController < ApplicationController
   def edit
     @user = User.find_by_reset_password_token(params[:id])
     if @user.nil?
-      flash[:alert] = 'User not fount'
+      flash[:alert] = 'User not found'
       redirect_to :login
     end
   end

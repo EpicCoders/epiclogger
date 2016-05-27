@@ -6,7 +6,7 @@
           %a{:href => root_path()} Epic Logger
         .panel.panel-default
           %h3 Email
-          = simple_form_for :user, url: reset_password_index_url, method: :post, wrapper: :vertical_form do |f|
+          = simple_form_for :user, url: forgot_password_url, method: :post, wrapper: :vertical_form do |f|
             = render 'shared/flash_messages'
             .input-group.username
               .row.input-group-addon
