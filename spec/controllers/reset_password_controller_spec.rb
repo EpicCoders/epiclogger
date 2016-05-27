@@ -77,7 +77,7 @@ RSpec.describe ResetPasswordController, :type => :controller do
 
     it 'should redirect and notice' do
       expect( get :edit, id: 'random-token' ).to redirect_to(login_url)
-      expect(flash[:alert]).to eq('User not fount')
+      expect(flash[:alert]).to eq('User not found')
     end
   end
 
