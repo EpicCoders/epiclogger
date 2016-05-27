@@ -8,6 +8,10 @@ Rails.application.routes.draw do
   get 'signup' => 'users#new', :as => :signup
   post 'signup' => 'users#create'
   delete 'logout' => 'sessions#destroy', :as => :logout
+  get '/forgot_password' => 'reset_password#new', as: :forgot_password
+  post '/forgot_password' => 'reset_password#create'
+  get '/forgot_password/:id' => 'reset_password#edit', as: :reset_password
+  patch '/forgot_password/:id' => 'reset_password#update'
 
   get "/auth/:provider/callback" => "omniauth#create"
 

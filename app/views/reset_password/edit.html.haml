@@ -1,0 +1,25 @@
+#header
+  .container
+    .row
+      .col-lg-4.col-lg-offset-4.col-md-6.col-md-offset-3.col-sm-8.col-sm-offset-2
+        %h1
+          %a{:href => root_path()} Epic Logger
+        .panel.panel-default
+          %h3 Reset password
+          = simple_form_for :user, url: reset_password_url(id: params[:id]), method: :patch, wrapper: :vertical_form do |f|
+            = render 'shared/flash_messages'
+            .input-group.username
+              .row.input-group-addon
+                %span.glyphicon.glyphicon-user
+              = f.password_field :password, :placeholder => 'password', class: 'form-control input-lg'
+            .input-group.username
+              .row.input-group-addon
+                %span.glyphicon.glyphicon-user
+              = f.password_field :password_confirmation, :placeholder => 'password confirmation', class: 'form-control input-lg'
+            .row
+              .col-md-12
+                %button.btn.btn-default.btn-block{:type => "submit"} Reset password
+          %p.bottom
+            No account yet?
+            %a{:href => signup_url()} Sign up
+    %p.footer Copyright &copy; Epic Logger #{Time.now.strftime("%Y")}. All rights reserved.
