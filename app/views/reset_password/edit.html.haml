@@ -6,7 +6,8 @@
           %a{:href => root_path()} Epic Logger
         .panel.panel-default
           %h3 Reset password
-          = simple_form_for User.new, url: edit_reset_password_url(id: params[:id]), method: :get, wrapper: :vertical_form do |f|
+          = simple_form_for User.new, url: reset_password_url(id: params[:id]), method: :put, wrapper: :vertical_form do |f|
+            = render 'shared/flash_messages'
             .input-group.username
               .row.input-group-addon
                 %span.glyphicon.glyphicon-user

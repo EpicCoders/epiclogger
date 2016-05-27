@@ -20,7 +20,7 @@ class User < ActiveRecord::Base
     websites.try(:first)
   end
 
-   def send_reset_password
+  def send_reset_password
     generate_token :reset_password_token
     self.reset_password_sent_at = Time.zone.now
     save!

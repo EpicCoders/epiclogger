@@ -1,9 +1,8 @@
 class ResetPasswordController < ApplicationController
   layout "landing"
-  skip_before_action :authenticate!, :only => [:new, :create, :edit]
+  skip_before_action :authenticate!
 
-  def new
-  end
+  def new; end
 
   def create
     if user_params[:email].blank?
@@ -16,24 +15,33 @@ class ResetPasswordController < ApplicationController
       if user
         user.send_reset_password
 
-        flash[:notice] = 'Email sent with password reset instructions'
+        flash[:alert] = 'Email sent with password reset instructions'
+        redirect_to :login
       else
-        flash[:notice] = 'No such user here'
+        flash[:alert] = 'No such user here'
+        render :new
       end
-      redirect_to :login
     end
   end
 
   def edit
     @user = User.find_by_reset_password_token(params[:id])
+    if @user.nil?
+      flash[:alert] = 'User not fount'
+      redirect_to :login
+    end
+  end
+
+  def update
+    @user = User.find_by_reset_password_token(params[:id])
 
     if @user && @user.reset_password_sent_at.utc >= 5.days.ago
       if user_params[:password] == user_params[:password_confirmation]
         @user.update_attributes(user_params)
-        flash[:notice] = 'Your password has been changed'
+        flash[:alert] = 'Your password has been changed'
       end
     else
-      flash[:notice] = "Period Expired"
+      flash[:alert] = "Period expired or Password don't match"
     end
     redirect_to :login
   end
