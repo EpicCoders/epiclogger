@@ -1,0 +1,20 @@
+#header
+  .container
+    .row
+      .col-lg-4.col-lg-offset-4.col-md-6.col-md-offset-3.col-sm-8.col-sm-offset-2
+        %h1
+          %a{:href => root_path()} Epic Logger
+        .panel.panel-default
+          %h3 Email
+          = simple_form_for User.new, url: reset_password_index_url, method: :post, wrapper: :vertical_form do |f|
+            .input-group.username
+              .row.input-group-addon
+                %span.glyphicon.glyphicon-user
+              = f.text_field :email, :placeholder => 'Email', class: 'form-control input-lg'
+            .row
+              .col-md-12
+                %button.btn.btn-default.btn-block{:type => "submit"} Reset password email
+          %p.bottom
+            No account yet?
+            %a{:href => signup_url()} Sign up
+    %p.footer Copyright &copy; Epic Logger #{Time.now.strftime("%Y")}. All rights reserved.

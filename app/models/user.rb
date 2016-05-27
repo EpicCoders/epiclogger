@@ -20,6 +20,13 @@ class User < ActiveRecord::Base
     websites.try(:first)
   end
 
+   def send_reset_password
+    generate_token :reset_password_token
+    self.reset_password_sent_at = Time.zone.now
+    save!
+    UserMailer.reset_password(self).deliver_later
+  end
+
   def avatar_url(size = 40)
     gravatar = Digest::MD5.hexdigest(email).downcase
     "http://gravatar.com/avatar/#{gravatar}.png?s=#{size}"
