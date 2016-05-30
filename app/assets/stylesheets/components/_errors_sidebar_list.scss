@@ -7,15 +7,27 @@ $list-error-height: 100%;
 .errors-sidebar-list{
   .header {
     @include error-header();
-    padding-top: 15px;
+    padding-top: 25px;
 
     .pagination{ margin: 0; }
 
     .header-resolve{
-      margin-left:20px;
+      margin-left:10px;
     }
     .error_pagination{
+      float:right;
       margin-right:10px;
+
+      .sidebar_pagination_text{
+        top:5px;
+        right: 10px;
+        display:block;
+        position:absolute;
+      }
+
+      .sidebar_pagination_buttons{
+        display:block;
+      }
     }
     .error_select{
       margin-left:10px;
@@ -45,6 +57,35 @@ $list-error-height: 100%;
     }
   }
 }
+
+@media(max-width: 1000px) and (min-width: 767px){
+  .header{
+    .error_pagination{
+      .sidebar_pagination_text{
+        font-size:80%;
+      }
+
+      .sidebar_pagination_buttons ul li a{
+        padding:6px 8px;
+      }
+    }
+
+    .header-resolve{
+      font-family:Roboto;
+      font-size:80%;
+      padding:8px 8px;
+      margin-left:5px !important;
+    }
+
+    .error_select{
+      margin-left:5px;
+      .btn{
+        padding:4px 6px;
+      }
+    }
+  }
+}
+
 .errors-sidebar-elements{
   .list-group-item{
     border-radius: 0;

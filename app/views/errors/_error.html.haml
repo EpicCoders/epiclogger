@@ -1,33 +1,31 @@
 #grouped-issues.groups
   = link_to error_url(error) do
-    .left-id
+    .error-count
       %span= error.id
-    - case error.level
-    - when "debug"
-      %button.btn.btn-xs.btn-default.fa.fa-bug{title: "Level: debug"}
-    - when "error"
-      %button.btn.btn-xs.btn-danger.glyphicon.glyphicon-exclamation-sign{title: "Level: error"}
-    - when "warning"
-      %button.btn.btn-xs.btn-warning.glyphicon.glyphicon-star{title: "Level: warning"}
-    - when "fatal"
-      %button.btn.btn-xs.btn-danger.glyphicon.glyphicon-remove{title: "Level: fatal"}
-    - when "info"
-      %button.btn.btn-xs.btn-info.glyphicon.glyphicon-info-sign{title: "Level: info"}
-    .left
-      %span.message= error.message
-    .right
-      %span.last Last occurrence
-      %span.last_occurrence= distance_of_time_in_words_to_now error.last_seen
-    %span.language= "#{error.subscribers.count} users"
-    %span.language= "Language - #{error.platform}"
-    .main-middle
-      %span.language= "Level - #{error.level}"
-      %span.language= "Times seen - #{error.times_seen}"
-    .main-right
-      %span.language Culprit
-      %span= error.culprit
-    .group-right
-      .issues
-        %span.page_title
-        %span.description
-        %span.users_count= error.times_seen
+      - case error.level
+      - when "debug"
+        %button.btn.btn-default.fa.fa-bug{title: "Level: debug"}
+      - when "error"
+        %button.btn.btn-danger.glyphicon.glyphicon-exclamation-sign{title: "Level: error"}
+      - when "warning"
+        %button.btn.btn-warning.glyphicon.glyphicon-star{title: "Level: warning"}
+      - when "fatal"
+        %button.btn.btn-danger.glyphicon.glyphicon-remove{title: "Level: fatal"}
+      - when "info"
+        %button.btn.btn-info.glyphicon.glyphicon-info-sign{title: "Level: info"}
+    .error-content.col-sm-offset-1
+      .error-message.col-sm-2
+        %span.message= error.message
+      .small-details.col-sm-7
+        .col-sm-2.info
+          %span= "#{error.subscribers.count} users"
+          %span= "Language - #{error.platform}"
+        .col-sm-2.info
+          %span= "Level - #{error.level}"
+          %span= "Times seen - #{error.times_seen}"
+        .col-sm-8.culprit
+          %span Culprit
+          %span.bigger-text= error.culprit
+      .error-last-occurence.col-sm-2
+        %span.last Last occurrence
+        %span.last_occurrence= distance_of_time_in_words_to_now error.last_seen

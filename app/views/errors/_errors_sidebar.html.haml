@@ -5,7 +5,7 @@
         .pull-left.error_select
           .btn.btn-default.btn-sm{'data-toggle'=>'button','aria-pressed'=>"false"}
             %input.all{:title => "toggle all", :type => "checkbox"}/
-          = f.submit "#{params['resolved'] == 'true' || @selected_errors.try(:first).try(:unresolved?).present? ? 'Unresolve' : 'Resolve'}", class: "btn header-resolve #{params['resolved'] == 'true' || @selected_errors.try(:first).try(:resolved?).present? ? 'btn-danger' : 'btn-primary'}", id: "multiple-resolve", remote:true, method: :put
+        = f.submit "#{params['resolved'] == 'true' || @selected_errors.try(:first).try(:resolved?).present? ? 'Unresolve' : 'Resolve'}", class: "btn header-resolve #{params['resolved'] == 'true' || @selected_errors.try(:first).try(:resolved?).present? ? 'btn-danger' : 'btn-primary'}", id: "multiple-resolve", remote:true, method: :put
         .error_pagination.text-right
           %span.sidebar_pagination_text= page_entries_info @selected_errors, entry_name: 'error'
           .btn-group.sidebar_pagination_buttons
