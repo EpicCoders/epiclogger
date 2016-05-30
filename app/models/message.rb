@@ -8,6 +8,6 @@ class Message < ActiveRecord::Base
   after_create :issue_created
 
   def issue_created
-    UserMailer.error_occurred(self.issue.group.website_id, self.id).deliver_now
+    UserMailer.error_occurred(self.issue.group.website_id, self.id).deliver_later
   end
 end

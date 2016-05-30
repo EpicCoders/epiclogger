@@ -54,7 +54,7 @@ class UserMailerPreview < ActionMailer::Preview
   def show_email(&block)
     @mail = nil
     ActiveRecord::Base.transaction do
-      @user = User.create!(name: 'Bob User', email: 'preview_user@example.com', provider: 'email', password: 'password', password_confirmation: 'password', reset_password_token: 'token')
+      @user = User.create!(name: 'Bob User', email: 'preview_user@example.com', provider: 'email', password: 'password', password_confirmation: 'password', reset_password_token: 'token', confirmed_at: Time.now)
       @website = Website.create!(domain: 'http://website.com', title: 'Website')
       @invite = Invite.create!(website: @website, invited_by_id: @user.id, email: 'user@invite.com', token: '4zZrL22B6FtRUOU5CJVVbA')
       @website_member = WebsiteMember.create!(user: @user, website: @website)
