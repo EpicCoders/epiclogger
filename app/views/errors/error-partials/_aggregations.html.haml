@@ -1,74 +1,24 @@
-- if params[:current_tab] == 'aggregations'
-  #accordion.panel-group
-    .panel.panel-default
-      .panel-heading
-        %a{"data-parent" => "#accordion", "data-toggle" => "collapse", :href => "#collapseOne"}
-          %h4.panel-title Messages
-      #collapseOne.panel-collapse.collapse.in
-        .panel-body
-          %table.table#members-container
-            %thead
-              %tr
-                %th Message
-                %th # of notices
-                %th First seen at
-                %th Last seen at
-            %tbody.websites
-              - @error.aggregations[:messages].each do |message|
-                %tr
-                  %td
-                    =message["message"]
-                  %td
-                    =message["count"]
-                  %td
-                    =message["created_at"].strftime("%Y-%m-%d %l:%M")
-                  %td
-                    =message["updated_at"].strftime("%Y-%m-%d %l:%M")
-    .panel.panel-default
-      .panel-heading
-        %a{"data-parent" => "#accordion", "data-toggle" => "collapse", :href => "#collapseTwo"}
-          %h4.panel-title Subscribers
-      #collapseTwo.panel-collapse.collapse
-        .panel-body
-          %table.table#members-container
-            %thead
-              %tr
-                %th Message
-                %th # of notices
-                %th First seen at
-                %th Last seen at
-            %tbody.websites
-              - @error.aggregations[:subscribers].each do |subscriber|
-                %tr
-                  %td 
-                    =subscriber["name"]
-                  %td 
-                    =subscriber["count"]
-                  %td 
-                    =subscriber["created_at"].strftime("%Y-%m-%d %l:%M")
-                  %td 
-                    =subscriber["updated_at"].strftime("%Y-%m-%d %l:%M")
-    .panel.panel-default
-      .panel-heading
-        %a{"data-parent" => "#accordion", "data-toggle" => "collapse", :href => "#collapseThree"}
-          %h4.panel-title Browsers
-      #collapseThree.panel-collapse.collapse
-        .panel-body
-          %table.table#members-container
-            %thead
-              %tr
-                %th Message
-                %th # of notices
-                %th First seen at
-                %th Last seen at
-            %tbody.websites
-              - @error.aggregations[:browsers].each do |browser|
-                %tr
-                  %td 
-                    =browser["name"]
-                  %td 
-                    =browser["count"]
-                  %td 
-                    =browser["created_at"].strftime("%Y-%m-%d %l:%M")
-                  %td 
-                    =browser["updated_at"].strftime("%Y-%m-%d %l:%M")
+.panel.panel-default
+  .panel-heading
+    %a{"data-parent" => "#accordion", "data-toggle" => "collapse", :href => "#collapse#{panel}"}
+      %h4.panel-title=title
+  .panel-collapse.collapse{ id: "collapse#{panel}", class: "#{panel == 'One' ? 'in' : ''}" }
+    .panel-body
+      %table.table#members-container
+        %thead
+          %tr
+            %th=type
+            %th # of notices
+            %th First seen at
+            %th Last seen at
+        %tbody.websites
+          - data.each do |element|
+            %tr
+              %td
+                =element["title"]
+              %td
+                =element["count"]
+              %td
+                =element["created_at"].strftime("%Y-%m-%d %l:%M")
+              %td
+                =element["updated_at"].strftime("%Y-%m-%d %l:%M")

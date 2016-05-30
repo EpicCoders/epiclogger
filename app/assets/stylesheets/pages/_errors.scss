@@ -201,13 +201,13 @@
     z-index: 1;
     margin-right: -7px;
     margin-top: 7px;
-    width: auto;
+    width: 250px;
     vertical-align: middle;
     white-space: nowrap;
   }
 
   .search-box input#search{
-    width: auto;
+    width: 250px;
     height: 40px;
     background: #F3F3F3;
     border: none;
@@ -569,6 +569,7 @@
 }
 
 @media(max-width:767px){
+
   .error-sections{
     width:100%;
     li{

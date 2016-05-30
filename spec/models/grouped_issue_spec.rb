@@ -3,8 +3,6 @@ require 'rails_helper'
 describe GroupedIssue do
   let(:website) { create :website }
   let(:grouped_issue) { create :grouped_issue, website: website }
-  # it { is_expected.to enumerize(:level).in(:debug, :error, :fatal, :info, :warning).with_default(:error) }
-  # it { is_expected.to enumerize(:issue_logger).in(:javascript, :php).with_default(:javascript) }
   it { is_expected.to enumerize(:status).in(:muted, :resolved, :unresolved) }
 
   it "has a valid factory" do
@@ -19,8 +17,8 @@ describe GroupedIssue do
       issue2 = FactoryGirl.create(:issue, subscriber: subscriber, group: grouped_issue, data: mozilla_browser )
 
       aggregations = grouped_issue.aggregations
-      expect(aggregations[:browsers][0]["name"]).to eq('Chrome')
-      expect(aggregations[:browsers][1]["name"]).to eq('Firefox')
+      expect(aggregations[:browsers][0]["title"]).to eq('Chrome')
+      expect(aggregations[:browsers][1]["title"]).to eq('Firefox')
     end
 
     it 'returns different messages' do
@@ -28,8 +26,8 @@ describe GroupedIssue do
       issue3 = FactoryGirl.create(:issue, subscriber: subscriber, group: grouped_issue, message: different_message )
 
       aggregations = grouped_issue.aggregations
-      expect(aggregations[:messages][0]["message"]).to eq('ZeroDivisionError: divided by 0')
-      expect(aggregations[:messages][1]["message"]).to eq('mesaju vietii')
+      expect(aggregations[:messages][0]["title"]).to eq('ZeroDivisionError: divided by 0')
+      expect(aggregations[:messages][1]["title"]).to eq('mesaju vietii')
     end
 
     it 'returns different subscribers' do

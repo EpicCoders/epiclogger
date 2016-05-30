@@ -37,4 +37,8 @@
             #overview.tab-pane{ class: "#{params[:current_tab] == 'overview' || params[:current_tab].nil? ? 'active' : ''}" }
               = render partial: 'errors/error-partials/overview'
             #aggregations.tab-pane{ class: "#{params[:current_tab] == 'aggregations' ? 'active' : ''}" }
-              = render partial: 'errors/error-partials/aggregations'
+            - if params[:current_tab] == 'aggregations'
+              #accordion.panel-group
+                = render partial: 'errors/error-partials/aggregations', locals: { title: 'Messages', type: "Message", data: @error.aggregations[:messages], panel: "One" }
+                = render partial: 'errors/error-partials/aggregations', locals: { title: 'Subscribers', type: "Name", data: @error.aggregations[:subscribers], panel: "Two" }
+                = render partial: 'errors/error-partials/aggregations', locals: { title: 'Browsers', type: "Browser", data: @error.aggregations[:browsers], panel: "Three" }

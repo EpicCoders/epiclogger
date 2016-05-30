@@ -30,11 +30,11 @@ class GroupedIssue < ActiveRecord::Base
   def aggregations
     data = { messages: [], subscribers: [], browsers: [] }
     self.issues.each do |issue|
-      found_message = data[:messages].index { |x| x["message"] == issue.message }
+      found_message = data[:messages].index { |x| x["title"] == issue.message }
       if found_message
         data[:messages][found_message]["count"] += 1
       else
-        item = {"count" => 1, "created_at" => issue.created_at, "updated_at" => issue.updated_at, "message" => issue.message}
+        item = {"count" => 1, "created_at" => issue.created_at, "updated_at" => issue.updated_at, "title" => issue.message}
         data[:messages].push(item)
       end
 
@@ -42,16 +42,20 @@ class GroupedIssue < ActiveRecord::Base
       if found_subscriber
         data[:subscribers][found_subscriber]["count"] += 1
       else
-        item = {"count" => 1, "created_at" => issue.created_at, "updated_at" => issue.updated_at, "name" => issue.subscriber.try(:name), "id" => issue.subscriber.try(:id)}
-        data[:subscribers].push(item)
+        unless issue.subscriber.nil?
+          item = {"count" => 1, "created_at" => issue.created_at, "updated_at" => issue.updated_at, "title" => issue.subscriber.try(:name), "id" => issue.subscriber.try(:id)}
+          data[:subscribers].push(item)
+        end
       end
 
-      found_browser = data[:browsers].index { |x| x["name"] == issue.user_agent.try(:browser) }
+      found_browser = data[:browsers].index { |x| x["title"] == issue.user_agent.try(:browser) }
       if found_browser
         data[:browsers][found_browser]["count"] += 1
       else
-        item = {"count" => 1, "created_at" => issue.created_at, "updated_at" => issue.updated_at, "name" => issue.user_agent.try(:browser)}
-        data[:browsers].push(item)
+        unless issue.user_agent.nil?
+          item = {"count" => 1, "created_at" => issue.created_at, "updated_at" => issue.updated_at, "title" => issue.user_agent.try(:browser)}
+          data[:browsers].push(item)
+        end
       end
     end
     data
