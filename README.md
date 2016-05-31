@@ -2,7 +2,7 @@
 
 [![Dependency Status](https://gemnasium.com/EpicCoders/epiclogger.svg)](https://gemnasium.com/EpicCoders/epiclogger)
 [![codecov](https://codecov.io/gh/EpicCoders/epiclogger/branch/master/graph/badge.svg)](https://codecov.io/gh/EpicCoders/epiclogger)
-[![Build Status](https://travis-ci.org/EpicCoders/epiclogger.svg)](https://travis-ci.org/EpicCoders/epiclogger)
+[![Build Status](https://travis-ci.org/EpicCoders/epiclogger.svg?branch=master)](https://travis-ci.org/EpicCoders/epiclogger)
 
 ## EpicLogger engage developers with users to solve errors
 
