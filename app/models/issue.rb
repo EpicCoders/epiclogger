@@ -58,6 +58,11 @@ class Issue < ActiveRecord::Base
   end
 
   def issue_created
-    UserMailer.error_occurred(self).deliver_later
+    counter = website.issues.where('issues.created_at > ?', Time.now - 1.hour).count
+    if counter >= 10
+      UserMailer.more_than_10_errors(self).deliver_later
+    else
+      UserMailer.error_occurred(self).deliver_later
+    end
   end
 end
