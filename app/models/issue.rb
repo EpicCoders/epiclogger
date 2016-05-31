@@ -6,6 +6,7 @@ class Issue < ActiveRecord::Base
   belongs_to :group, class_name: 'GroupedIssue', foreign_key: 'group_id'
   accepts_nested_attributes_for :messages
   validates :message, presence: true, length: {minimum: 10}
+  after_create :issue_created
 
   def error
     ErrorStore.find(self)
@@ -18,6 +19,18 @@ class Issue < ActiveRecord::Base
   end
 
   def stacktrace_frames
+    #added a switch statement in case errors from different platforms will be saved differenty
+    case platform
+    when 'javascript'
+      frames = get_interfaces(:stacktrace)._data[:frames]
+      frames = 'Missing stacktrace' if frames.blank?
+    else
+      frames = get_platform_frames
+    end
+    frames
+  end
+
+  def get_platform_frames
     exception = get_interfaces(:exception)
     return 'Missing stacktrace' if exception.blank?
     frames = []
@@ -42,5 +55,9 @@ class Issue < ActiveRecord::Base
     nil
   rescue => e
     "Could not parse data!"
+  end
+
+  def issue_created
+    UserMailer.error_occurred(self).deliver_later
   end
 end

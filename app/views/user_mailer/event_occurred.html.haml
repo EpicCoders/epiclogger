@@ -2,9 +2,8 @@
   %hr
   %h4 #{@group.message}
   %hr
-  %p A event has just occurred.
-  %strong Error message:
+  %p A event has just occurred at #{@group.created_at}.
+  %p{:style => 'color: gray'} Error message
   %p #{@group.message}
-  %strong Request:
-  / %p Browser: #{JSON.parse(@group.view)["headers"]["User-Agent"]}
-  / %p Url: #{JSON.parse(@group.view)["url"]}
+  %p{:style => 'color: gray'} Culprit
+  %p #{@group.culprit}

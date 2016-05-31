@@ -1,25 +1,25 @@
 .col-lg-6
   %hr
-  %p An error has just occurred. View full detauils at:
+  %p An error has just occurred. View full details at:
   %a http://tralala-url.com/ceva/undeva
+  %p{:style => 'color: gray'} ID
+  %p #{@issue.event_id}
   %hr
   %p{:style => 'color: gray'} Error type
-  %p @message.issue.message
+  %p #{@issue.get_interfaces(:exception)._data[:values].first._data[:type]}
   %p{:style => 'color: gray'} Error message
-  %p @message.content
+  %p #{@issue.get_interfaces(:exception)._data[:values].first._data[:value]}
+  %p{:style => 'color: gray'} When
+  %p #{@issue.created_at}
   %p{:style => 'color: gray'} Where
+  %p #{@issue.stacktrace_frames.first._data[:abs_path]}
   %p{:style => 'color: gray'} File
-  %p @message.issue.group.culprit
+  %p #{@issue.stacktrace_frames.first.get_culprit_string(with_lineno: true)}
   %p{:style => 'color: gray'} Url
+  %p <no content>
   %p{:style => 'color: gray'} Backtrace Summary
-  / %p
-  /   - JSON.parse(@message.issue.description).each do |file|
-  /     #{file["filename"]}, line no: #{file["lineno"]}, colno: #{file["colno"]}
-  /     %br
-  / %strong Backtrace Summary:
-  / %p
-  /   - JSON.parse(@message.issue.data).each do |backtrace|
-  /     - backtrace.each do |type, content|
-  /       #{content}
-  /       %br
-  /       %br
+  #{@issue.stacktrace_frames.first._data[:pre_context] || '<no content>' }
+  %br
+  #{@issue.stacktrace_frames.first._data[:context_line] || '<no content>'}
+  %br
+  #{@issue.stacktrace_frames.first._data[:post_context] || '<no content>'}
