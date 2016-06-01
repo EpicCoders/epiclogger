@@ -43,6 +43,8 @@ class ErrorsController < ApplicationController
   private
 
   def resolve_issues(ids)
+    #flatten array before passing it to activerecord since its gonna be deprecated
+    ids.flatten!
     errors_per_page = params[:errors_per_page] || 5
     page = params[:page] || 1
     errors = current_website.grouped_issues.order('last_seen DESC')
