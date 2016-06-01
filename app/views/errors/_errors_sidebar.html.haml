@@ -1,5 +1,5 @@
 .errors-sidebar-list.no-margin
-  = form_for @error, url: {action: "#{params[:unresolved].present? || @selected_errors.try(:first).try(:unresolved?).present? ? 'resolve' : 'unresolve'}", params: { page: params[:page] } }, method: :put, html: { :update_target => 'error-container', id: "resolve-form" }, remote: true do |f|
+  = form_for @error, url: resolve_error_path(@error, page: params[:page], "#{params[:unresolved].present? || @selected_errors.try(:first).try(:unresolved?).present? ? 'resolved' : 'unresolve'}": true), method: :put, html: { :update_target => 'error-container', id: "resolve-form" } do |f|
     .header
       .row
         .pull-left.error_select

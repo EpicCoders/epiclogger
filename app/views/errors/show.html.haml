@@ -21,8 +21,7 @@
           .btn-group
             = paginate @issues, theme: 'next_prev_theme', param_name: :page_issue
           .btn-group.resolve
-            = button_to 'Resolve', resolve_error_path(error_ids: [@error.id]), class: "btn pull-right btn-primary ", style: "display:#{ !@error.resolved_at.nil? ? 'none' : 'block' };", action: "single", remote:true, method: :put, id: 'resolve-button'
-            = button_to 'Unresolve', unresolve_error_path(error_ids: [@error.id]), class: "btn pull-right btn-danger ", style: "display:#{ @error.resolved_at.nil? ? 'none' : 'block' };", action: "single", remote:true, method: :put, id: 'unresolve-button'
+            = button_to "#{@error.resolved? ? 'Unresolve' : 'Resolve'}", resolve_error_path(error_ids: [@error.id], "#{@error.resolved? ? 'unresolved' : 'resolved'}": true), class: "btn pull-right #{@error.resolved? ? 'btn-danger' : 'btn-primary'} ", method: :put, id: 'resolve-button'
     .error-content{"data-id" => "#{@error.id}"}
       .row
         .col-lg-12

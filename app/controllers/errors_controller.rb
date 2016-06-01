@@ -20,17 +20,7 @@ class ErrorsController < ApplicationController
 
   def show
     page_issue = params[:page_issue] || 1
-
-    #get error-sidebar data
-    errors_per_page = 5
-    resolved =  if params[:resolved].present?
-                  true
-                elsif params[:unresolved].present?
-                  false
-                end
-    resolved = @error.resolved? ? true : false if resolved.nil?
-    @selected_errors = current_issue_page(resolved, params[:page], errors_per_page)
-
+    @selected_errors = current_issue_page()
     @issues = @error.issues.page(page_issue).per(1)
     @issue = @issues.first
   end
@@ -47,60 +37,53 @@ class ErrorsController < ApplicationController
   end
 
   def resolve
-    resolve_issues(params[:error_ids], true, params[:per_page], params[:page], @error.id)
-  end
-
-  def unresolve
-    resolve_issues(params[:error_ids], false, params[:per_page], params[:page], @error.id)
+    resolve_issues(params[:error_ids])
   end
 
   private
 
-  def resolve_issues (ids, resolve, errors_per_page, page, current_error)
-    errors_per_page ||= 5
-    page ||= 1
-    page = page.to_i
-    errors = GroupedIssue.find(current_error).website.grouped_issues.order('last_seen DESC')
-    if resolve
+  def resolve_issues(ids)
+    errors_per_page = params[:errors_per_page] || 5
+    page = params[:page] || 1
+    errors = current_website.grouped_issues.order('last_seen DESC')
+    if resolved?
       GroupedIssue.where(id: ids).update_all(resolved_at: Time.now.utc, status: GroupedIssue::RESOLVED)
-      errors = errors.with_status(:unresolved)
+      errors = errors.with_status(:resolved)
     else
       GroupedIssue.where(id: ids).update_all(resolved_at: nil, status: GroupedIssue::UNRESOLVED)
-      errors = errors.with_status(:resolved)
+      errors = errors.with_status(:unresolved)
     end
 
-    page_total = errors.page(1).per(errors_per_page).total_pages
-
-    #when we change all errors on the last page go to the previous one
-    if page_total == page-1 && errors.page(page).empty?
-      @sidebar = errors.page(page-1).per(errors_per_page)
-      @pagination = errors.page(page-1).per(errors_per_page)
-    #when we try to change less than 5 errors
-    elsif ids.try(:size) < errors_per_page
-      #if on the last page dont add anymore
-      if page_total == page
-        @sidebar = []
-        @pagination = errors.page(page).per(errors_per_page)
-      #add the same amount we changed and offset the amount that are still in the sidebar
-      else
-        @sidebar = errors.page(page).per(ids.try(:size)).offset(errors_per_page - ids.try(:size))
-        @pagination = errors.page(page).per(errors_per_page)
-      end
-    #otherwise
+    if ids.include?(@error.id.to_s)
+      @error = @error.reload
+      position = errors.where("last_seen >= ?", @error.last_seen).count
+      page = (position.to_f/errors_per_page).ceil
+      redirect_to error_path(@error, "#{ @error.resolved? ? 'resolved' : 'unresolved' }": true, page: page)
     else
-      @sidebar = errors.page(page).per(errors_per_page)
-      @pagination = errors.page(page).per(errors_per_page)
+      redirect_to error_path(@error, "#{ resolved? ? 'unresolved' : 'resolved' }": true)
     end
   end
 
-  def current_issue_page(resolved, page, errors_per_page)
+  def current_issue_page
+    page = params[:page] || 1
+    errors_per_page = 5
     errors = current_website.grouped_issues.order('last_seen DESC')
-    errors = resolved ? errors.with_status(:resolved) : errors.with_status(:unresolved)
-    if @error.resolved? == resolved
+    if resolved?.nil? && params[:page].nil?
+      errors = @error.resolved? ? errors.with_status(:resolved) : errors.with_status(:unresolved)
       position = errors.where("last_seen >= ?", @error.last_seen).count
-      page ||= (position.to_f/errors_per_page).ceil
+      page = (position.to_f/errors_per_page).ceil
+    else
+      errors = resolved? ? errors.with_status(:resolved) : errors.with_status(:unresolved)
     end
     errors.page(page).per(errors_per_page)
+  end
+
+  def resolved?
+    if params[:resolved].present?
+      true
+    elsif params[:unresolved].present?
+      false
+    end
   end
 
   def error_params
