@@ -1,3 +1,7 @@
 if defined?(Figaro)
-  Figaro.require_keys("APP_DOMAIN", "MAILER_HOST", "GITHUB_SECRET", "GITHUB_KEY")
+  if Rails.env.review?
+    Figaro.require_keys('GITHUB_SECRET', 'GITHUB_KEY')
+  else
+    Figaro.require_keys('APP_DOMAIN', 'MAILER_HOST', 'GITHUB_SECRET', 'GITHUB_KEY')
+  end
 end

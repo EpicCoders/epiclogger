@@ -5,45 +5,20 @@
     "postdeploy": "bundle exec rake db:setup"
   },
   "env": {
-    "HEROKU_APP_NAME": {
-      "required": true
-    },
-    "HEROKU_PARENT_APP_NAME": {
-      "required": true
-    },
-    "RACK_ENV": "review",
-    "RAILS_ENV": "review",
-    "REDIS_PROVIDER": "REDISCLOUD_URL",
-    "GITHUB_KEY": {
-      "required": true
-    },
-    "GITHUB_SECRET": {
-      "required": true
-    },
-    "LANG": {
-      "required": true
-    },
-    "APP_DOMAIN": {
-      "required": true
-    },
-    "MAILER_HOST": {
-      "required": true
-    },
-    "RAILS_SERVE_STATIC_FILES": {
-      "required": true
-    },
-    "SECRET_KEY_BASE": {
-      "required": true
-    },
-    "SMTP_PASSWORD": {
-      "required": true
-    },
-    "SMTP_SERVER": {
-      "required": true
-    },
-    "SMTP_USERNAME": {
-      "required": true
-    }
+    "HEROKU_APP_NAME":            { "required": true },
+    "HEROKU_PARENT_APP_NAME":     { "required": true },
+    "RACK_ENV":                   "review",
+    "RAILS_ENV":                  "review",
+    "REDIS_PROVIDER":             "REDISCLOUD_URL",
+    "GITHUB_KEY":                 { "required": true },
+    "GITHUB_SECRET":              { "required": true },
+    "LANG":                       { "required": true },
+    "RAILS_SERVE_STATIC_FILES":   { "required": true },
+    "SECRET_KEY_BASE":            { "generator": "secret" },
+    "SMTP_PASSWORD":              { "required": true },
+    "SMTP_SERVER":                { "required": true },
+    "SMTP_USERNAME":              { "required": true },
+    "WEB_CONCURRENCY":            { "required": true }
   },
   "addons": [
     "heroku-postgresql",
