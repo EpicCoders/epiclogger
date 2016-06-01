@@ -167,7 +167,7 @@ RSpec.describe ErrorsController, type: :controller do
   describe 'PUT #resolve' do
     let(:params) { { id: group.id, format: :js } }
     context 'logged in' do
-      it 'responds with js format' do
+      xit 'responds with js format' do
         params[:individual_resolve] = true
         put_with user, :resolve, params
         expect(response.content_type).to eq('text/javascript')

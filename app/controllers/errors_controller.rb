@@ -59,6 +59,7 @@ class ErrorsController < ApplicationController
   def resolve_issues (ids, resolve, errors_per_page, page, current_error)
     errors_per_page ||= 5
     page ||= 1
+    page = page.to_i
     errors = GroupedIssue.find(current_error).website.grouped_issues.order('last_seen DESC')
     if resolve
       GroupedIssue.where(id: ids).update_all(resolved_at: Time.now.utc, status: GroupedIssue::RESOLVED)
@@ -68,8 +69,28 @@ class ErrorsController < ApplicationController
       errors = errors.with_status(:resolved)
     end
 
-    @sidebar = errors.page(page).per(ids.try(:size))
-    @pagination = errors.page(page).per(errors_per_page)
+    page_total = errors.page(1).per(errors_per_page).total_pages
+
+    #when we change all errors on the last page go to the previous one
+    if page_total == page-1 && errors.page(page).empty?
+      @sidebar = errors.page(page-1).per(errors_per_page)
+      @pagination = errors.page(page-1).per(errors_per_page)
+    #when we try to change less than 5 errors
+    elsif ids.try(:size) < errors_per_page
+      #if on the last page dont add anymore
+      if page_total == page
+        @sidebar = []
+        @pagination = errors.page(page).per(errors_per_page)
+      #add the same amount we changed and offset the amount that are still in the sidebar
+      else
+        @sidebar = errors.page(page).per(ids.try(:size)).offset(errors_per_page - ids.try(:size))
+        @pagination = errors.page(page).per(errors_per_page)
+      end
+    #otherwise
+    else
+      @sidebar = errors.page(page).per(errors_per_page)
+      @pagination = errors.page(page).per(errors_per_page)
+    end
   end
 
   def current_issue_page(resolved, page, errors_per_page)

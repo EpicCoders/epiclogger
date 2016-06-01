@@ -1,5 +1,5 @@
 #grouped-issues.groups
-  = link_to error_url(error) do
+  = link_to error_url(error, "#{error.resolved? ? 'resolved' : 'unresolved'}": true) do
     .error-count
       %span= error.id
       - case error.level

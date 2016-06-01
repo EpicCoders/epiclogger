@@ -12,8 +12,7 @@ $(function () {
   $('#resolve-button').click(removeFromSidebar);
   $('#unresolve-button').click(removeFromSidebar);
 
-
-  $('#multiple-resolve').click(function(){
+  $('#resolve-form').submit(function(){
     var checked;
     checked = $('.list-group input:checked');
     if(checked.length > 0){
@@ -22,7 +21,8 @@ $(function () {
       });
     }
     else{
-      alert("Please make a selection first!");
+      alert("Please make a selection before submitting!")
+      return false
     }
   });
 });
