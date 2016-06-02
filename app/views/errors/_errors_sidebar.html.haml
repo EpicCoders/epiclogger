@@ -7,9 +7,11 @@
             %input.all{:title => "toggle all", :type => "checkbox"}/
         = f.submit "#{params['tab'] == 'resolved' || @selected_errors.try(:first).try(:resolved?).present? ? 'Unresolve' : 'Resolve'}", class: "btn header-resolve #{params['tab'] == 'resolved' || @selected_errors.try(:first).try(:resolved?).present? ? 'btn-danger' : 'btn-primary'}", id: "multiple-resolve", remote:true, method: :put
         .error_pagination.text-right
-          %span.sidebar_pagination_text= page_entries_info @selected_errors, entry_name: 'error'
           .btn-group.sidebar_pagination_buttons
             = paginate @selected_errors, theme: 'next_prev_theme'
+      .row
+        .col-sm-12
+          %span.sidebar_pagination_text= page_entries_info @selected_errors, entry_name: 'error'
     #custom-bootstrap.navbar.navbar-default.sidebar-tabs{:role => "navigation"}
       %ul.nav.navbar-nav.navbar-left.main-tabs
         %li{:class => "#{params[:tab] == 'unresolved' || @selected_errors.try(:first).try(:unresolved?).present? ? 'active' : ''}"}

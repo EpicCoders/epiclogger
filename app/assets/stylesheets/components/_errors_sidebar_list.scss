@@ -14,19 +14,15 @@ $list-error-height: 100%;
     .header-resolve{
       margin-left:10px;
     }
+    .sidebar_pagination_text{
+      color: #c1c1c1;
+    }
     .error_pagination{
       float:right;
       margin-right:10px;
-
-      .sidebar_pagination_text{
-        top:5px;
-        right: 10px;
-        display:block;
-        position:absolute;
-      }
-
       .sidebar_pagination_buttons{
         display:block;
+        height: 34px;
       }
     }
     .error_select{
