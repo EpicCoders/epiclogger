@@ -1,7 +1,7 @@
 $list-error-height: 100%;
 #error-sidebar{
   border-right: 1px solid #ccc;
-  height: 100vh;
+  min-height: 100vh;
   bottom: 0;
 }
 .errors-sidebar-list{
