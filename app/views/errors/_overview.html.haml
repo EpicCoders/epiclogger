@@ -64,8 +64,3 @@
           %dd= @error.level
           %dt Logger
           %dd= @error.platform
-.broadcast
-  .row
-    .col-sm-12
-      - @error.subscribers.each do |subscriber|
-        = image_tag subscriber.avatar_url
