@@ -23,7 +23,7 @@ class Issue < ActiveRecord::Base
     case platform
     when 'javascript'
       frames = get_interfaces(:stacktrace)._data[:frames]
-      frames = 'Missing stacktrace' if frames.blank?
+      frames = [] if frames.blank?
     else
       frames = get_platform_frames
     end
@@ -39,6 +39,12 @@ class Issue < ActiveRecord::Base
       frames << value._data[:stacktrace]._data[:frames] || []
     end
     frames.flatten.reverse!
+  end
+
+  def get_frames(frame = nil)
+    frames = stacktrace_frames.first
+    return frames if frame.nil?
+    stacktrace_frames.first._data[frame]
   end
 
   def environment
@@ -58,11 +64,11 @@ class Issue < ActiveRecord::Base
   end
 
   def issue_created
-    counter = website.issues.where('issues.created_at > ?', Time.now - 1.hour).count
-    if counter >= 10
-      UserMailer.more_than_10_errors(self).deliver_later
+    last_hour_errors = website.issues.where('issues.created_at > ?', Time.now - 1.hour)
+    if last_hour_errors.count >= 10
+      GroupedIssueMailer.more_than_10_errors(last_hour_errors).deliver_later
     else
-      UserMailer.error_occurred(self).deliver_later
+      GroupedIssueMailer.error_occurred(self).deliver_later
     end
   end
 end

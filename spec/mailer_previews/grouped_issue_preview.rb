@@ -1,25 +1,34 @@
-# Preview all emails at http://localhost:3000/rails/mailers/user_mailer
-class UserMailerPreview < ActionMailer::Preview
-
-  def email_confirmation
+# Preview all emails at http://localhost:3000/rails/mailers/grouped_issue_mailer
+class GroupedIssueMailerPreview < ActionMailer::Preview
+  def error_occurred
     show_email do
-      @mail = UserMailer.email_confirmation(@user).message
+      @mail = GroupedIssueMailer.error_occurred(@issue).message
     end
   end
 
-
-  def reset_password
+  def notify_subscriber
     show_email do
-     @mail = UserMailer.reset_password(@user).message
+      @mail = GroupedIssueMailer.notify_subscriber(@group, @user, 'current@user.com', 'I think i know the solution').message
     end
   end
 
-  def member_invitation
+  def more_than_10_errors
     show_email do
-      @mail = UserMailer.member_invitation(@invite).message
+      @mail = GroupedIssueMailer.more_than_10_errors([@issue]).message
     end
   end
 
+  def event_occurred
+    show_email do
+      @mail = GroupedIssueMailer.event_occurred(@group).message
+    end
+  end
+
+  def notify_daily
+    show_email do
+      @mail = GroupedIssueMailer.notify_daily([@group]).message
+    end
+  end
   protected
 
   def show_email(&block)
