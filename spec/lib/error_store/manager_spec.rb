@@ -1,7 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe ErrorStore::Manager do
+  let(:user) { create :user }
   let(:website) { create :website }
+  let!(:website_member) { create :website_member, user: user, website: website }
   let!(:release) { create :release, website: website }
   let(:post_request) { post_error_request(web_response_factory('ruby_exception'), website) }
   let(:get_request) { get_error_request(web_response_factory('js_exception'), website) }

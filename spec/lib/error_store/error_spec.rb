@@ -1,7 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe ErrorStore::Error do
+  let(:user) { create :user }
   let(:website) { create :website }
+  let!(:website_member) { create :website_member, user: user, website: website }
   let(:release) { create :release, website: website }
   let(:group) { create :grouped_issue, website: website, release: release }
   let(:subscriber) { create :subscriber, website: website }

@@ -1,7 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe ErrorStore::Auth do
+  let(:user) { create :user }
   let(:website) { create :website }
+  let!(:website_member) { create :website_member, user: user, website: website }
   let(:group) { create :grouped_issue, website: website }
   let(:subscriber) { create :subscriber, website: website }
   let!(:issue_error) { create :issue, subscriber: subscriber, group: group, event_id: '8af060b2986f5914764d49b7f39b036c' }

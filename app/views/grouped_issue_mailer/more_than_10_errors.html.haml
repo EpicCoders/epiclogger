@@ -16,4 +16,4 @@
       %td{:style => "border: 1px solid black;border-collapse: collapse;padding: 5px;text-align: left;"} #{issue.created_at}
       %td{:style => "border: 1px solid black;border-collapse: collapse;padding: 5px;text-align: left;"} #{issue.website.domain}
       %td{:style => "border: 1px solid black;border-collapse: collapse;padding: 5px;text-align: left;"} #{issue.event_id}
-      %td{:style => "border: 1px solid black;border-collapse: collapse;padding: 5px;text-align: left;"} #{link_to 'Follow url for more details', errors_path(issue.id)}
+      %td{:style => "border: 1px solid black;border-collapse: collapse;padding: 5px;text-align: left;"} #{link_to 'Follow url for more details', error_url(issue.group.id, unresolved: :true)}

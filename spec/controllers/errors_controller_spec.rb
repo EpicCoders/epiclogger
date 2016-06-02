@@ -14,9 +14,10 @@ RSpec.describe ErrorsController, type: :controller do
       let(:params) { { message: message, id: group.id, format: :js } }
 
       it 'should email subscribers' do
-        mailer = double('UserMailer')
+        params[:format] = 'js'
+        mailer = double('GroupedIssueMailer')
         expect(mailer).to receive(:deliver_later)
-        expect(UserMailer).to receive(:notify_subscriber).with(group, user, message).and_return(mailer).once
+        expect(GroupedIssueMailer).to receive(:notify_subscriber).with(group, user, user, message).and_return(mailer).once
 
         post_with user, :notify_subscribers, params
       end
@@ -24,9 +25,9 @@ RSpec.describe ErrorsController, type: :controller do
       it 'should email 2 subscribers' do
         user2 = create :user, provider: "some"
         create :website_member, website: website, user_id: user2.id
-        mailer = double('UserMailer')
+        mailer = double('GroupedIssueMailer')
         expect(mailer).to receive(:deliver_later).twice
-        expect(UserMailer).to receive(:notify_subscriber).with(group, an_instance_of(User), message).and_return(mailer).twice
+        expect(GroupedIssueMailer).to receive(:notify_subscriber).with(group, an_instance_of(User), an_instance_of(User), message).and_return(mailer).twice
         post_with user, :notify_subscribers, params
       end
 

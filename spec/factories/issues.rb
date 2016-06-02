@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :issue do
-    platform 'javascript'
+    platform 'ruby'
     event_id SecureRandom.hex()
     time_spent 1
     datetime Time.now.utc
