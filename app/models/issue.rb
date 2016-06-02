@@ -64,9 +64,8 @@ class Issue < ActiveRecord::Base
   end
 
   def issue_created
-    last_hour_errors = website.issues.where('issues.created_at > ?', Time.now - 1.hour)
-    if last_hour_errors.count >= 10
-      GroupedIssueMailer.more_than_10_errors(last_hour_errors).deliver_later
+    if website.issues.where('issues.created_at > ?', Time.now - 1.hour).count > 10
+      GroupedIssueMailer.more_than_10_errors(website).deliver_later
     else
       GroupedIssueMailer.error_occurred(self).deliver_later
     end

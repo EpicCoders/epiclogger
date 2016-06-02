@@ -8,7 +8,7 @@
     %th{:style => "border: 1px solid black;border-collapse: collapse;padding: 5px;text-align: left;background-color: black;color: white;"} Website
     %th{:style => "border: 1px solid black;border-collapse: collapse;padding: 5px;text-align: left;background-color: black;color: white;"} Event id
     %th{:style => "border: 1px solid black;border-collapse: collapse;padding: 5px;text-align: left;background-color: black;color: white;"} Issue Url
-  - @last_hour_issues.each_with_index do |issue, index|
+  - @last_hour_errors.each_with_index do |issue, index|
     %tr
       %td{:style => "border: 1px solid black;border-collapse: collapse;padding: 5px;text-align: left;"} #{issue.id}
       %td{:style => "border: 1px solid black;border-collapse: collapse;padding: 5px;text-align: left;"} #{issue.platform}

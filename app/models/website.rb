@@ -51,8 +51,7 @@ class Website < ActiveRecord::Base
   def daily_report
     date = Time.now - 1.day
     Website.joins(:grouped_issues).where('grouped_issues.updated_at > ?', date).uniq.each do |website|
-      grouped_issues = website.grouped_issues.where('updated_at > ?', date)
-      GroupedIssueMailer.notify_daily(website, grouped_issues).deliver_later
+      GroupedIssueMailer.notify_daily(website).deliver_later
     end
   end
 

@@ -14,9 +14,10 @@ class GroupedIssueMailer < ApplicationMailer
     mail(subject: "Epic Logger Realtime Error",bcc: mail_to(@website))
   end
 
-  def more_than_10_errors(last_hour_issues)
-    @last_hour_issues = last_hour_issues
-    mail(subject: "EpicLogger Constant Error",bcc: mail_to(@last_hour_issues[0].website))
+  def more_than_10_errors(website)
+    @website = website
+    @last_hour_errors = @website.issues.where('issues.created_at > ?', Time.now - 1.hour)
+    mail(subject: "EpicLogger Constant Error",bcc: mail_to(@website))
   end
 
   def event_occurred(group)
@@ -24,9 +25,10 @@ class GroupedIssueMailer < ApplicationMailer
     mail(subject: "Epic Logger Event Occurred",bcc: mail_to(@group.website))
   end
 
-  def notify_daily(grouped_issues)
-    @grouped_issues = grouped_issues
-    @website = @grouped_issues.first.website
+  def notify_daily(website)
+    date = Time.now - 1.day
+    @website = website
+    @grouped_issues = @website.grouped_issues.where('updated_at > ?', date)
     mail(subject: "Epic Logger Daily Reports",bcc: mail_to(@website))
   end
 
