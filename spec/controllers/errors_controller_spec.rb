@@ -141,13 +141,13 @@ RSpec.describe ErrorsController, type: :controller do
         end
 
         it "displays resolved issues when on the resolved tab" do
-          params[:resolved] = true
+          params[:tab] = 'resolved'
           put_with user, :show, params
           expect(assigns(:selected_errors).map(&:resolved?)).to all(be true)
         end
 
         it "displays the page we request via param" do
-          params[:unresolved] = true
+          params[:tab] = 'unresolved'
           params[:page] = 2
           put_with user, :show, params
           expect(assigns(:selected_errors).current_page).to eq(2)
@@ -204,7 +204,6 @@ RSpec.describe ErrorsController, type: :controller do
       it 'resolves a single error' do
         new_error  = FactoryGirl.create(:grouped_issue, { website: website, checksum: SecureRandom.hex(), status: 'unresolved', resolved_at: nil } )
         params[:error_ids] = [new_error.id]
-        params[:resolved] = true
         put_with user, :resolve, params
         new_error.reload
         expect(new_error.resolved?).to be true
@@ -213,8 +212,7 @@ RSpec.describe ErrorsController, type: :controller do
       it 'unresolves a single error' do
         new_error  = FactoryGirl.create(:grouped_issue, { website: website, checksum: SecureRandom.hex(), status: 'resolved', resolved_at: DateTime.now } )
         params[:error_ids] = [new_error.id]
-        params[:unresolved] = true
-        put_with user, :resolve, params
+        put_with user, :unresolve, params
         new_error.reload
         expect(new_error.unresolved?).to be true
       end
@@ -223,7 +221,6 @@ RSpec.describe ErrorsController, type: :controller do
         new_error1  = FactoryGirl.create(:grouped_issue, { website: website, checksum: SecureRandom.hex(), status: 'unresolved', resolved_at: nil } )
         new_error2  = FactoryGirl.create(:grouped_issue, { website: website, checksum: SecureRandom.hex(), status: 'unresolved', resolved_at: nil } )
         params[:error_ids] = [new_error1.id, new_error2.id]
-        params[:resolved] = true
         put_with user, :resolve, params
         new_error1.reload
         new_error2.reload
@@ -234,41 +231,22 @@ RSpec.describe ErrorsController, type: :controller do
         new_error1  = FactoryGirl.create(:grouped_issue, { website: website, checksum: SecureRandom.hex(), status: 'resolved', resolved_at: DateTime.now } )
         new_error2  = FactoryGirl.create(:grouped_issue, { website: website, checksum: SecureRandom.hex(), status: 'resolved', resolved_at: DateTime.now } )
         params[:error_ids] = [new_error1.id, new_error2.id]
-        params[:unresolved] = true
-        put_with user, :resolve, params
+        put_with user, :unresolve, params
         new_error1.reload
         new_error2.reload
         expect([new_error1.unresolved?, new_error2.unresolved?]).to all(be true)
       end
 
-      context "redirects after resolving" do
-        let(:errors) do
-          array = []
-          number_of_errors = 5
-          number_of_errors.times do |index|
-            unresolved_error = FactoryGirl.create(:grouped_issue, { website: website, checksum: SecureRandom.hex(), status: 'unresolved', resolved_at: nil, last_seen: Time.now } )
-            resolved_error = FactoryGirl.create(:grouped_issue, { website: website, checksum: SecureRandom.hex(), status: 'resolved', resolved_at: Time.now, last_seen: Time.now } )
-            array.push(resolved_error, unresolved_error)
-          end
-          array.sort_by!(&:last_seen).reverse!
-        end
+      it 'redirects to errors#show after resolving' do
+        new_error  = FactoryGirl.create(:grouped_issue, { website: website, checksum: SecureRandom.hex(), status: 'resolved', resolved_at: DateTime.now } )
+        params[:error_ids] = [new_error.id]
+        expect(put_with user, :resolve, params).to redirect_to(error_path(id: group.id))
+      end
 
-        it "redirects to the coresponding tab and page if the current error was resolved/unresolved" do
-          ids = [group.id]
-          ids = ids.push(errors.first(4).map(&:id))
-          params[:error_ids] = ids
-          params[:resolved] = true
-          put_with user, :resolve, params
-          expect(put_with user, :resolve, params).to redirect_to(error_path(id: group.id, "resolved": true, page: 2))
-        end
-
-        it "stays in the same tab if the changed error was not affected" do
-          ids = errors.first(5).map(&:id)
-          params[:error_ids] = ids
-          params[:resolved] = true
-          put_with user, :resolve, params
-          expect(put_with user, :resolve, params).to redirect_to(error_path(id: group.id, "unresolved": true))
-        end
+      it 'redirects to errors#show after unresolving' do
+        new_error  = FactoryGirl.create(:grouped_issue, { website: website, checksum: SecureRandom.hex(), status: 'resolved', resolved_at: DateTime.now } )
+        params[:error_ids] = [new_error.id]
+        expect(put_with user, :unresolve, params).to redirect_to(error_path(id: group.id))
       end
     end
   end

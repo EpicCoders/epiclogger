@@ -20,7 +20,17 @@ class ErrorsController < ApplicationController
 
   def show
     page_issue = params[:page_issue] || 1
-    @selected_errors = current_issue_page()
+    page = params[:page] || 1
+    errors_per_page = 5
+    errors = current_website.grouped_issues.order('last_seen DESC')
+    if !params[:tab].present? && params[:page].nil?
+      errors = @error.resolved? ? errors.with_status(:resolved) : errors.with_status(:unresolved)
+      position = errors.where("last_seen >= ?", @error.last_seen).count
+      page = (position.to_f/errors_per_page).ceil
+    else
+      errors = params[:tab] == 'resolved' ? errors.with_status(:resolved) : errors.with_status(:unresolved)
+    end
+    @selected_errors = errors.page(page).per(errors_per_page)
     @issues = @error.issues.page(page_issue).per(1)
     @issue = @issues.first
   end
@@ -37,56 +47,16 @@ class ErrorsController < ApplicationController
   end
 
   def resolve
-    resolve_issues(params[:error_ids])
+    GroupedIssue.where(id: params[:error_ids].flatten).update_all(resolved_at: Time.now.utc, status: GroupedIssue::RESOLVED)
+    redirect_to error_path(@error)
+  end
+
+  def unresolve
+    GroupedIssue.where(id: params[:error_ids].flatten).update_all(resolved_at: nil, status: GroupedIssue::UNRESOLVED)
+    redirect_to error_path(@error)
   end
 
   private
-
-  def resolve_issues(ids)
-    #flatten array before passing it to activerecord since its gonna be deprecated
-    ids.flatten!
-    errors_per_page = params[:errors_per_page] || 5
-    page = params[:page] || 1
-    errors = current_website.grouped_issues.order('last_seen DESC')
-    if resolved?
-      GroupedIssue.where(id: ids).update_all(resolved_at: Time.now.utc, status: GroupedIssue::RESOLVED)
-      errors = errors.with_status(:resolved)
-    else
-      GroupedIssue.where(id: ids).update_all(resolved_at: nil, status: GroupedIssue::UNRESOLVED)
-      errors = errors.with_status(:unresolved)
-    end
-
-    if ids.include?(@error.id.to_s)
-      @error = @error.reload
-      position = errors.where("last_seen >= ?", @error.last_seen).count
-      page = (position.to_f/errors_per_page).ceil
-      redirect_to error_path(@error, "#{ @error.resolved? ? 'resolved' : 'unresolved' }": true, page: page)
-    else
-      redirect_to error_path(@error, "#{ resolved? ? 'unresolved' : 'resolved' }": true)
-    end
-  end
-
-  def current_issue_page
-    page = params[:page] || 1
-    errors_per_page = 5
-    errors = current_website.grouped_issues.order('last_seen DESC')
-    if resolved?.nil? && params[:page].nil?
-      errors = @error.resolved? ? errors.with_status(:resolved) : errors.with_status(:unresolved)
-      position = errors.where("last_seen >= ?", @error.last_seen).count
-      page = (position.to_f/errors_per_page).ceil
-    else
-      errors = resolved? ? errors.with_status(:resolved) : errors.with_status(:unresolved)
-    end
-    errors.page(page).per(errors_per_page)
-  end
-
-  def resolved?
-    if params[:resolved].present?
-      true
-    elsif params[:unresolved].present?
-      false
-    end
-  end
 
   def error_params
     @error_params ||= params.require(:error).permit(:description, :message, :name, :status, :logger, :platform)
