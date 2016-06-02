@@ -6,6 +6,7 @@ class Integration < ActiveRecord::Base
   end
 
   def connect(auth_hash)
-    driver.connect(auth_hash)
+    self.configuration = driver.connect(auth_hash)
+    self.provider = driver.type
   end
 end

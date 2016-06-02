@@ -13,6 +13,7 @@ Rails.application.routes.draw do
   patch '/forgot_password/:id' => 'reset_password#update'
 
   get '/auth/:provider/callback' => 'auth#success'
+  resources :auth, as: :auths, only: [:create, :update]
 
   resources :errors, only: [:show, :index, :update] do
     member do

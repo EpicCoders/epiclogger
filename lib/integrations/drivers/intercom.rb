@@ -12,7 +12,11 @@ module Integrations::Drivers
     end
 
     def authenticate(hash)
+      auth_hash = hash
 
+      config = auth_hash
+
+      config
     end
   end
 end
