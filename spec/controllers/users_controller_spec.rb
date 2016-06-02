@@ -5,25 +5,7 @@ RSpec.describe UsersController, :type => :controller do
   let(:website) { create :website }
   let!(:website_member) { create :website_member, website: website, user: user }
   let!(:invite) { create :invite, website: website, invited_by_id: user.id }
-  let(:default_params) { { website_id: website.id, format: :json } }
-
-  describe "GET #index" do
-    let(:params) { default_params.merge({}) }
-
-    it "returns http success" do
-      get_with user, :index, params
-      expect(response).to be_success
-    end
-  end
-
-  describe "GET #edit" do
-    let(:params) { default_params.merge({id: user.id}) }
-
-    it "returns http success" do
-      get_with user, :edit, params
-      expect(response).to be_success
-    end
-  end
+  let(:default_params) { { website_id: website.id } }
 
   describe "PUT #update" do
     let(:user2) { create :user, email: 'email@email.com' }

@@ -20,7 +20,7 @@ class GroupedIssue < ActiveRecord::Base
   end
 
   def environment
-    first_issue.environment
+    first_issue.try(:environment)
   end
 
   def users_affected

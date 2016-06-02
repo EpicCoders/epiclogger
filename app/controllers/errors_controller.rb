@@ -37,6 +37,7 @@ class ErrorsController < ApplicationController
 
   def update
     @error.update_attributes(status: error_params[:status], resolved_at: Time.now.utc)
+    render nothing: true
   end
 
   def notify_subscribers

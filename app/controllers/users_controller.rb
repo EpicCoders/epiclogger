@@ -3,10 +3,6 @@ class UsersController < ApplicationController
   load_and_authorize_resource only: [:edit, :update]
   skip_before_action :authenticate!
 
-  def index; end
-
-  def edit; end
-
   def update
     @user.update_attributes(user_params)
     redirect_to edit_user_path(@user), notice: 'User updated'

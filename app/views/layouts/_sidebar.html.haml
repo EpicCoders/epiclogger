@@ -3,12 +3,12 @@
     %li.sidebar-brand
       %button.picked-website.collapsed.btn-link.btn-block{"aria-expanded" => "false", "data-target" => "#websites-sidebar", "data-toggle" => "collapse", :type => "button"}
         = image_tag "logo_transparent_light.png", class: 'brand'
-        = current_website.title
+        = current_website.try(:title)
         %span.caret
       #websites-sidebar.collapse
         %ul.nav.nav-stacked
           - current_user.websites.each do |website|
-            = nav_link website.title, change_current_website_url(website), { method: :post }
+            = nav_link website.try(:title), change_current_website_url(website), { method: :post }
           = nav_link 'Add new website', website_wizard_path(:create), { class: 'add-new' }, 'plus'
     = nav_link 'Errors', errors_url, { title: 'Errors', id: 'errornav'}, 'exclamation-triangle'
   .project-details
