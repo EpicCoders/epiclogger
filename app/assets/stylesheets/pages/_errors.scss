@@ -195,7 +195,7 @@
     text-align: center;
   }
 
-  .seach-box{
+  .search-box{
     overflow: hidden;
     position: relative;
     z-index: 1;
@@ -206,7 +206,7 @@
     white-space: nowrap;
   }
 
-  .seach-box input#search{
+  .search-box input#search{
     width: 250px;
     height: 40px;
     background: #F3F3F3;
@@ -220,23 +220,23 @@
     border-radius: 5px;
   }
 
-  .seach-box input#search::-webkit-input-placeholder {
+  .search-box input#search::-webkit-input-placeholder {
      color: #65737e;
   }
 
-  .seach-box input#search:-moz-placeholder { /* Firefox 18- */
+  .search-box input#search:-moz-placeholder { /* Firefox 18- */
      color: #65737e;
   }
 
-  .seach-box input#search::-moz-placeholder {  /* Firefox 19+ */
+  .search-box input#search::-moz-placeholder {  /* Firefox 19+ */
      color: #65737e;
   }
 
-  .seach-box input#search:-ms-input-placeholder {
+  .search-box input#search:-ms-input-placeholder {
      color: #65737e;
   }
 
-  .seach-box input.icon{
+  .search-box input.icon{
     -webkit-border-top-right-radius: 5px;
     -webkit-border-bottom-right-radius: 5px;
     -moz-border-radius-topright: 5px;
@@ -259,14 +259,14 @@
     transition: all .55s ease;
   }
 
-  .seach-box:hover input.icon, .seach-box:active input.icon, .seach-box:focus input.icon{
+  .search-box:hover input.icon, .search-box:active input.icon, .search-box:focus input.icon{
     outline: none;
     opacity: 1;
     color: #757988;
     margin-left: -55px;
   }
 
-  .seach-box:hover input.icon:hover{
+  .search-box:hover input.icon:hover{
     background: #333333;
   }
   .errors_buttons {
@@ -299,14 +299,9 @@
       cursor: pointer;
       transition: all 80ms ease-in-out;
       button{
-        display: block;
+        display: inline-block;
         border: 4px solid white;
         border-radius: 10px;
-        float: left;
-        position: relative;
-        margin-left: 69px;
-        top: 6px;
-        transition: all 80ms ease-in-out;
       }
       &:hover, &.large {
         background-color: #f9f9f9;
@@ -315,45 +310,34 @@
       &:hover:before, &.large:before {
         border-color: #f9f9f9;
       }
-      .left-id {
-        position: fixed;
-        margin-left:20px;
+      .error-count {
         span{
+          float:left;
           text-align: center;
+          width: 40px;
+          vertical-align: top;
+          display: inline-block;
           font-size: 30px;
         }
-      }
-      .left {
-        margin: 10px 25px 0 15px;
-        width: 300px;
-        margin-left: 25px;
-        float: left;
-        .message{
-          overflow-x:hidden;
+        button{
+          margin-left: 30px;
+          float:left;
+          vertical-align: top;
+          font-size: 11px;
+          padding: 3px 5px;
         }
       }
-      .right {
-        float: right;
-        width: 140px;
-        text-align: center;
-        padding-top: 10px;
-      }
-      .main-middle {
-        margin-left: 635px;
-        margin-top: -30px;
-      }
 
-      .main-right {
-        width: 450px;
-        margin-left: 900px;
-        margin-top: -35px;
-      }
-      .group-right {
-        margin: 20px 25px 0 15px;
-        margin-top: 15px;
-        width: 200px;
-        margin-left: 25px;
-        float: left;
+      .small-details {
+        span{
+          font-size: 12px;
+          color: #555555;
+          font-style: italic;
+        }
+
+        .bigger-text{
+          font-size:16px;
+        }
       }
       span {
         display: block;
@@ -362,38 +346,11 @@
         overflow: hidden;
         font-size: 16px;
         transition: all 80ms ease-in-out;
-        &.page_title {
-          margin_top: 10px;
-          font-weight: 500;
-          padding-left: 16px;
-        }
         &.message{
           color: #333333;
           white-space: nowrap;
           text-overflow: ellipsis;
           overflow: hidden;
-        }
-        &.occurrences, &.users_count {
-          font-size: 12px;
-          padding-left: 16px;
-          color: #555555;
-        }
-        &.error {
-          font-weight: 500;
-          height: 22px;
-          min-height: 22px;
-          margin-bottom: 17px;
-          overflow: hidden;
-        }
-        &.type {
-          font-size: 12px;
-          color: #555555;
-          font-style: italic;
-        }
-        &.language {
-          font-size: 12px;
-          color: #555555;
-          font-style: italic;
         }
         &.last {
           font-size: 12px;
@@ -589,4 +546,71 @@
 
 .align-wizard{
   margin-top: 5%;
+  margin-left: 17%;
+}
+
+@media(max-width:1000px) {
+  .small-details{
+    width:50%;
+    .culprit{
+      display:none;
+    }
+
+    .info{
+      width:45%;
+    }
+  }
+}
+
+@media(min-width:1500px){
+  .small-details{
+    width:66.66%;
+  }
+}
+
+@media(max-width:767px){
+
+  .error-sections{
+    width:100%;
+    li{
+      display:inline-block;
+      vertical-align:middle;
+    }
+  }
+
+  #grouped-issues{
+    .error-content{
+      .error-message{
+        vertical-align:middle;
+        display:inline-block;
+        width:60%;
+      }
+      .error-last-occurence{
+        vertical-align:middle;
+        display:inline-block;
+        width:20%;
+      }
+      .small-details{
+        display:none;
+      }
+    }
+  }
+}
+
+@media(max-width:520px){
+  .error-sections{
+    width:100%;
+    li{
+      display:inline-block;
+      vertical-align:middle;
+    }
+  }
+
+  #grouped-issues{
+    .error-content{
+      .error-message{
+        width:50%;
+      }
+    }
+  }
 }

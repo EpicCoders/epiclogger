@@ -1,5 +1,6 @@
 .row
-  = line_chart @error.issues.group_by_day(:created_at, range: Date.today.beginning_of_day - 1.months..Date.today.end_of_day).count, id: "chart", height: "200px", label: "Occurences", colors: ["black", "#000"]
+  - max_value = @chart_data.values.max
+  = line_chart @chart_data , id: "chart", height: "200px", label: "Occurences", colors: ["black", "#000"], min: 0, max: max_value > 0 ? max_value : 10
 .row
   .col-sm-7.col-md-8
     .panel.panel-default.exception
@@ -62,8 +63,3 @@
           %dd= @error.level
           %dt Logger
           %dd= @error.platform
-.broadcast
-  .row
-    .col-sm-12
-      - @error.subscribers.each do |subscriber|
-        = image_tag subscriber.avatar_url

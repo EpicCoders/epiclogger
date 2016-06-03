@@ -19,24 +19,26 @@ class ErrorsController < ApplicationController
   end
 
   def show
-    @page = params[:page]
     page_issue = params[:page_issue] || 1
-
-    errors = current_website.grouped_issues
-
-    #get error-sidebar data
-    if params[:unresolved].present?
-      @selected_errors = errors.with_status(:unresolved).order('last_seen DESC').page(@page).per(5)
+    page = params[:page] || 1
+    errors_per_page = 5
+    errors = current_website.grouped_issues.order('last_seen DESC')
+    if !params[:tab].present? && params[:page].nil?
+      errors = @error.resolved? ? errors.with_status(:resolved) : errors.with_status(:unresolved)
+      position = errors.where("last_seen >= ?", @error.last_seen).count
+      page = (position.to_f/errors_per_page).ceil
     else
-      @selected_errors = errors.with_status(:resolved).order('last_seen DESC').page(@page).per(5)
+      errors = params[:tab] == 'resolved' ? errors.with_status(:resolved) : errors.with_status(:unresolved)
     end
-
+    @selected_errors = errors.page(page).per(errors_per_page)
     @issues = @error.issues.page(page_issue).per(1)
+    @chart_data = @error.issues.group_by_day(:created_at, range: Date.today.beginning_of_day - 1.months..Date.today.end_of_day).count
     @issue = @issues.first
   end
 
   def update
     @error.update_attributes(status: error_params[:status], resolved_at: Time.now.utc)
+    render nothing: true
   end
 
   def notify_subscribers
@@ -47,30 +49,16 @@ class ErrorsController < ApplicationController
   end
 
   def resolve
-    resolve_issues(params[:error_ids], true, params[:per_page], params[:page], @error.id)
+    GroupedIssue.where(id: params[:error_ids].flatten).update_all(resolved_at: Time.now.utc, status: GroupedIssue::RESOLVED)
+    redirect_to error_path(@error)
   end
 
   def unresolve
-    resolve_issues(params[:error_ids], false, params[:per_page], params[:page], @error.id)
+    GroupedIssue.where(id: params[:error_ids].flatten).update_all(resolved_at: nil, status: GroupedIssue::UNRESOLVED)
+    redirect_to error_path(@error)
   end
 
   private
-
-  def resolve_issues (ids, resolve, errors_per_page, page, current_error)
-    errors_per_page ||= 5
-    page ||= 1
-    errors = GroupedIssue.find(current_error).website.grouped_issues.order('last_seen DESC')
-    if resolve
-      GroupedIssue.where(id: ids).update_all(resolved_at: Time.now.utc, status: GroupedIssue::RESOLVED)
-      errors = errors.with_status(:unresolved)
-    else
-      GroupedIssue.where(id: ids).update_all(resolved_at: nil, status: GroupedIssue::UNRESOLVED)
-      errors = errors.with_status(:resolved)
-    end
-
-    @sidebar = errors.page(page).per(ids.try(:size))
-    @pagination = errors.page(page).per(errors_per_page)
-  end
 
   def error_params
     @error_params ||= params.require(:error).permit(:description, :message, :name, :status, :logger, :platform)

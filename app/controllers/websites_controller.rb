@@ -28,8 +28,6 @@ class WebsitesController < ApplicationController
     redirect_to "/installations?details_tab=api_keys&main_tab=details"
   end
 
-  def show; end
-
   def change_current
     set_website(@website)
     redirect_to errors_url, notice: 'Website changed'
