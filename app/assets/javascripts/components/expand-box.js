@@ -17,10 +17,10 @@ $(function () {
 
     // if the stacktrace is too big we should add a scrollbar
     if(totalHeight < defaultHeight){
-      defaultHeight = totalHeight      
+      defaultHeight = totalHeight
     }
     else{
-      $up.css({ "overflow": "auto" })      
+      $up.css({ "overflow": "auto" })
     }
 
     $up

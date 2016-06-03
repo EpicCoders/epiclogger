@@ -8,13 +8,13 @@ class GroupedIssueMailerPreview < ActionMailer::Preview
 
   def notify_subscriber
     show_email do
-      @mail = GroupedIssueMailer.notify_subscriber(@group, @user, 'current@user.com', 'I think i know the solution').message
+      @mail = GroupedIssueMailer.notify_subscriber(@group, @user, @user, 'I think i know the solution').message
     end
   end
 
   def more_than_10_errors
     show_email do
-      @mail = GroupedIssueMailer.more_than_10_errors([@issue]).message
+      @mail = GroupedIssueMailer.more_than_10_errors(@website).message
     end
   end
 
@@ -26,7 +26,7 @@ class GroupedIssueMailerPreview < ActionMailer::Preview
 
   def notify_daily
     show_email do
-      @mail = GroupedIssueMailer.notify_daily([@group]).message
+      @mail = GroupedIssueMailer.notify_daily(@website).message
     end
   end
   protected

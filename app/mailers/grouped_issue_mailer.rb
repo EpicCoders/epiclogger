@@ -22,7 +22,7 @@ class GroupedIssueMailer < ApplicationMailer
 
   def event_occurred(group)
     @group = group
-    mail to: website_owners_emails(@website), subject: 'Epic Logger Event Occurred'
+    mail to: website_owners_emails(@group.website), subject: 'Epic Logger Event Occurred'
   end
 
   def notify_daily(website)
