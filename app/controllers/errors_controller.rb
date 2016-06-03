@@ -32,6 +32,7 @@ class ErrorsController < ApplicationController
     end
     @selected_errors = errors.page(page).per(errors_per_page)
     @issues = @error.issues.page(page_issue).per(1)
+    @chart_data = @error.issues.group_by_day(:created_at, range: Date.today.beginning_of_day - 1.months..Date.today.end_of_day).count
     @issue = @issues.first
   end
 

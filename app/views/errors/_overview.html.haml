@@ -1,7 +1,6 @@
 .row
-  - chart_data = @error.issues.group_by_day(:created_at, range: Date.today.beginning_of_day - 1.months..Date.today.end_of_day).count
-  - max_value = chart_data.values.max
-  = line_chart chart_data , id: "chart", height: "200px", label: "Occurences", colors: ["black", "#000"], min: 0, max: max_value > 0 ? max_value : 10
+  - max_value = @chart_data.values.max
+  = line_chart @chart_data , id: "chart", height: "200px", label: "Occurences", colors: ["black", "#000"], min: 0, max: max_value > 0 ? max_value : 10
 .row
   .col-sm-7.col-md-8
     .panel.panel-default.exception

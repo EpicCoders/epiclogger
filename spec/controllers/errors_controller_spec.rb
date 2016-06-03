@@ -75,20 +75,25 @@ RSpec.describe ErrorsController, type: :controller do
         end
 
         it "displays the page of the current error when no other url params are present" do
-          put_with user, :show, params
+          get_with user, :show, params
           expect(assigns(:selected_errors).current_page).to eq(2)
         end
 
         it "displays resolved issues when on the resolved tab" do
           params[:tab] = 'resolved'
-          put_with user, :show, params
+          get_with user, :show, params
           expect(assigns(:selected_errors).map(&:resolved?)).to all(be true)
+        end
+
+        it 'assigns chart_data' do
+          get_with user, :show, params
+          expect(assigns(:chart_data).count).to eq(32)
         end
 
         it "displays the page we request via param" do
           params[:tab] = 'unresolved'
           params[:page] = 2
-          put_with user, :show, params
+          get_with user, :show, params
           expect(assigns(:selected_errors).current_page).to eq(2)
           expect(assigns(:selected_errors)).to_not be_empty
         end
