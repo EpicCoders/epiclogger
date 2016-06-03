@@ -40,7 +40,6 @@ module ErrorStore
       date = Time.zone.at(data.delete(:timestamp))
 
       issue = Issue.new(
-        website: website,
         event_id: event_id,
         data: data.to_json,
         time_spent: time_spent,
@@ -70,7 +69,8 @@ module ErrorStore
         first_seen: date,
         time_spent_total: time_spent || 0,
         time_spent_count: time_spent && 1 || 0,
-        release_id: release.id
+        release_id: release.id,
+        website: website
       }
 
       group, is_sample = _save_aggregate(issue, hash, **group_params)
@@ -86,7 +86,6 @@ module ErrorStore
 
     # here we save the grouped issue with all details
     def _save_aggregate(issue, hash, **args)
-      website = issue.website
       # attempt to find a matching hash
       group = GroupedIssue.find_by(checksum: hash)
       existing_group_id = group.try(:id)
@@ -94,7 +93,7 @@ module ErrorStore
       group_is_new = if existing_group_id.nil?
                        # args[:score]  = ScoreClause.calculate(1, args[:last_seen])
                        args[:checksum] = hash
-                       group = GroupedIssue.create(website: website, **args)
+                       group = GroupedIssue.create(**args)
                        true
                      else
                        false

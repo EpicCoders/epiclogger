@@ -11,10 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160518065259) do
+ActiveRecord::Schema.define(version: 20160603080353) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "hstore"
 
   create_table "active_admin_comments", force: :cascade do |t|
     t.string   "namespace"
@@ -102,7 +103,6 @@ ActiveRecord::Schema.define(version: 20160518065259) do
     t.text     "data"
     t.integer  "time_spent"
     t.integer  "subscriber_id"
-    t.integer  "website_id"
     t.string   "event_id"
     t.datetime "datetime"
     t.text     "message"
@@ -111,7 +111,6 @@ ActiveRecord::Schema.define(version: 20160518065259) do
   add_index "issues", ["datetime"], name: "index_issues_on_datetime", using: :btree
   add_index "issues", ["group_id"], name: "index_issues_on_group_id", using: :btree
   add_index "issues", ["subscriber_id"], name: "index_issues_on_subscriber_id", using: :btree
-  add_index "issues", ["website_id"], name: "index_issues_on_website_id", using: :btree
 
   create_table "messages", force: :cascade do |t|
     t.text     "content",    null: false
@@ -198,7 +197,7 @@ ActiveRecord::Schema.define(version: 20160518065259) do
   end
 
   add_foreign_key "grouped_issues", "releases"
+  add_foreign_key "issues", "grouped_issues", column: "group_id", on_update: :restrict, on_delete: :cascade
   add_foreign_key "issues", "subscribers"
-  add_foreign_key "issues", "websites"
   add_foreign_key "releases", "websites"
 end
