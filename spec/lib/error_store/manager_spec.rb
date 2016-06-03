@@ -5,6 +5,7 @@ RSpec.describe ErrorStore::Manager do
   let(:website) { create :website }
   let!(:website_member) { create :website_member, user: user, website: website }
   let!(:release) { create :release, website: website }
+  let(:group) { create :grouped_issue, website: website }
   let(:post_request) { post_error_request(web_response_factory('ruby_exception'), website) }
   let(:get_request) { get_error_request(web_response_factory('js_exception'), website) }
   let(:validated_post_data) { validated_request(post_request) }
@@ -90,7 +91,7 @@ RSpec.describe ErrorStore::Manager do
   end
 
   describe '_save_aggregate' do
-    let(:issue) { build :issue, event_id: '8af060b2986f5914764d49b7f39b036c' }
+    let(:issue) { build :issue, event_id: '8af060b2986f5914764d49b7f39b036c', group: nil }
     let(:group_params) {
       {
         message: issue.message,
@@ -100,7 +101,8 @@ RSpec.describe ErrorStore::Manager do
         level: 'fatal',
         time_spent_total: 0,
         time_spent_count: 0,
-        release_id: release.id
+        release_id: release.id,
+        website: website
       }
     }
     subject { post_manager._save_aggregate(issue, 'somehashhere', **group_params) }
@@ -181,7 +183,7 @@ RSpec.describe ErrorStore::Manager do
 
   describe '_process_existing_aggregate' do
     let(:group) { create :grouped_issue, message: 'ZeroDivisionError: divided by 0', website: website }
-    let(:issue) { build :issue, message: 'New message', event_id: '8af060b2986f5914764d49b7f39b036c' }
+    let(:issue) { build :issue, message: 'New message', event_id: '8af060b2986f5914764d49b7f39b036c', group: group }
     let(:data) {
       {
         message: issue.message,
@@ -212,7 +214,7 @@ RSpec.describe ErrorStore::Manager do
 
   describe '_handle_regression' do
     let(:group) { create :grouped_issue, message: 'ZeroDivisionError: divided by 0', status: :resolved, website: website }
-    let(:issue) { build :issue, message: 'New message', event_id: '8af060b2986f5914764d49b7f39b036c' }
+    let(:issue) { build :issue, message: 'New message', event_id: '8af060b2986f5914764d49b7f39b036c', group: group }
     subject { post_manager._handle_regression(group, issue) }
 
     it 'returns nil if group unresolved' do
