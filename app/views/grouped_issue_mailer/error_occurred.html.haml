@@ -2,23 +2,23 @@
   %hr
   %p An error has just occurred. View full details at:
   %a http://tralala-url.com/ceva/undeva
-  %p{:style => 'color: gray'} ID
+  %p.gray_text ID
   %p #{@issue.event_id}
   %hr
   - if @issue.get_interfaces(:exception).present?
-    %p{:style => 'color: gray'} Error type
+    %p.gray_text Error type
     %p #{@issue.get_interfaces(:exception)._data[:values].first._data[:type]}
-    %p{:style => 'color: gray'} Error message
+    %p.gray_text Error message
     %p #{@issue.get_interfaces(:exception)._data[:values].first._data[:value]}
-    %p{:style => 'color: gray'} When
+    %p.gray_text When
     %p #{@issue.created_at}
-    %p{:style => 'color: gray'} Where
+    %p.gray_text Where
     %p #{@issue.get_frames(:abs_path)}
-    %p{:style => 'color: gray'} File
+    %p.gray_text File
     %p #{@issue.get_frames.get_culprit_string(with_lineno: true)}
-    %p{:style => 'color: gray'} Url
+    %p.gray_text Url
     %p no content
-    %p{:style => 'color: gray'} Backtrace Summary
+    %p.gray_text Backtrace Summary
     #{@issue.get_frames(:pre_context) || '<no content>' }
     %br
     #{@issue.get_frames(:context_line) || '<no content>' }

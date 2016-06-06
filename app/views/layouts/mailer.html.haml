@@ -1,3 +1,22 @@
 %hmtl
-  %body
-    = yield
+  %head
+    :css
+      table tr:nth-child(even) {
+          background-color: #eee;
+      }
+      table tr:nth-child(odd) {
+         background-color:#fff;
+      }
+      table th {
+          background-color: #0E0E10;
+          color: white;
+      }
+      table th#gray_th {
+          background-color: #4B4A4A;
+          color: white;
+      }
+      .gray_text {
+        color: #4B4A4A;
+      }
+    %body
+      = yield

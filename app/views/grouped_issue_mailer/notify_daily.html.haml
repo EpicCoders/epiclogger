@@ -1,23 +1,23 @@
 %p Daily report email provides you some information about changes on your website.
-%table#t01{:style => "width: 100%;border: 1px solid black;border-collapse: collapse;"}
+%table
   %tr
-    %th{:style => "border: 1px solid black;border-collapse: collapse;padding: 5px;text-align: left;background-color: black;color: white;"} Title
-    %th{:style => "border: 1px solid black;border-collapse: collapse;padding: 5px;text-align: left;background-color: black;color: white;"} Domain
-    %th{:style => "border: 1px solid black;border-collapse: collapse;padding: 5px;text-align: left;background-color: black;color: white;"} Platform
-    %th{:style => "border: 1px solid black;border-collapse: collapse;padding: 5px;text-align: left;background-color: black;color: white;"} Created At
+    %th Title
+    %th Domain
+    %th Platform
+    %th Created At
   %tr
-    %td{:style => "border: 1px solid black;border-collapse: collapse;padding: 5px;text-align: left;"} #{@website.title}
-    %td{:style => "border: 1px solid black;border-collapse: collapse;padding: 5px;text-align: left;"} #{@website.domain}
-    %td{:style => "border: 1px solid black;border-collapse: collapse;padding: 5px;text-align: left;"} #{@website.platform}
-    %td{:style => "border: 1px solid black;border-collapse: collapse;padding: 5px;text-align: left;"} #{@website.created_at}
+    %td #{@website.title}
+    %td #{@website.domain}
+    %td #{@website.platform}
+    %td #{@website.created_at}
   %tr
-    %th{:style => "border: 1px solid black;border-collapse: collapse;padding: 5px;text-align: left;background-color: #4B4A4A;color: white;"} Message
-    %th{:style => "border: 1px solid black;border-collapse: collapse;padding: 5px;text-align: left;background-color: #4B4A4A;color: white;"} Level
-    %th{:style => "border: 1px solid black;border-collapse: collapse;padding: 5px;text-align: left;background-color: #4B4A4A;color: white;"} Times seen
-    %th{:style => "border: 1px solid black;border-collapse: collapse;padding: 5px;text-align: left;background-color: #4B4A4A;color: white;"} Culprit
+    %th#gray_th Message
+    %th#gray_th Level
+    %th#gray_th Times seen
+    %th#gray_th Culprit
   - @grouped_issues.each do |group|
     %tr
-      %td{:style => "border: 1px solid black;border-collapse: collapse;padding: 5px;text-align: left;"} #{group.message}
-      %td{:style => "border: 1px solid black;border-collapse: collapse;padding: 5px;text-align: left;"} #{group.level}
-      %td{:style => "border: 1px solid black;border-collapse: collapse;padding: 5px;text-align: left;"} #{group.times_seen}
-      %td{:style => "border: 1px solid black;border-collapse: collapse;padding: 5px;text-align: left;"} #{group.culprit}
+      %td #{group.message}
+      %td #{group.level}
+      %td #{group.times_seen}
+      %td #{group.culprit}

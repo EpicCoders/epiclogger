@@ -2,6 +2,7 @@ class ErrorsController < ApplicationController
   load_and_authorize_resource class: GroupedIssue
 
   def index
+    binding.pry
     @filter = params[:filter] || "recent"
     errors_per_page = params[:error_count].to_i || 10
     current_error = params[:current_issue]

@@ -1,19 +1,19 @@
 %p This is a email notifying you that 10 errors occurred in last hour.
-%table#t01{:style => "width: 100%;border: 1px solid black;border-collapse: collapse;"}
+%table
   %tr
-    %th{:style => "border: 1px solid black;border-collapse: collapse;padding: 5px;text-align: left;background-color: black;color: white;"} ID
-    %th{:style => "border: 1px solid black;border-collapse: collapse;padding: 5px;text-align: left;background-color: black;color: white;"} Platform
-    %th{:style => "border: 1px solid black;border-collapse: collapse;padding: 5px;text-align: left;background-color: black;color: white;"} Message
-    %th{:style => "border: 1px solid black;border-collapse: collapse;padding: 5px;text-align: left;background-color: black;color: white;"} Created At
-    %th{:style => "border: 1px solid black;border-collapse: collapse;padding: 5px;text-align: left;background-color: black;color: white;"} Website
-    %th{:style => "border: 1px solid black;border-collapse: collapse;padding: 5px;text-align: left;background-color: black;color: white;"} Event id
-    %th{:style => "border: 1px solid black;border-collapse: collapse;padding: 5px;text-align: left;background-color: black;color: white;"} Issue Url
+    %th.waza ID
+    %th Platform
+    %th Message
+    %th Created At
+    %th Website
+    %th Event id
+    %th Issue Url
   - @last_hour_errors.each_with_index do |issue, index|
     %tr
-      %td{:style => "border: 1px solid black;border-collapse: collapse;padding: 5px;text-align: left;"} #{issue.id}
-      %td{:style => "border: 1px solid black;border-collapse: collapse;padding: 5px;text-align: left;"} #{issue.platform}
-      %td{:style => "border: 1px solid black;border-collapse: collapse;padding: 5px;text-align: left;"} #{issue.message}
-      %td{:style => "border: 1px solid black;border-collapse: collapse;padding: 5px;text-align: left;"} #{issue.created_at}
-      %td{:style => "border: 1px solid black;border-collapse: collapse;padding: 5px;text-align: left;"} #{issue.website.domain}
-      %td{:style => "border: 1px solid black;border-collapse: collapse;padding: 5px;text-align: left;"} #{issue.event_id}
-      %td{:style => "border: 1px solid black;border-collapse: collapse;padding: 5px;text-align: left;"} #{link_to 'Follow url for more details', error_url(issue.group.id, unresolved: :true)}
+      %td #{issue.id}
+      %td #{issue.platform}
+      %td #{issue.message}
+      %td #{issue.created_at}
+      %td #{issue.website.domain}
+      %td #{issue.event_id}
+      %td #{link_to 'Follow url for more details', error_url(issue.group.id, unresolved: :true)}
