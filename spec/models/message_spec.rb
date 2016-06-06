@@ -9,7 +9,7 @@ describe Message do
   let(:message) { build(:message, issue: issue) }
 
   it "has a valid factory" do
-    expect(build(:message)).to be_valid
+    expect(build(:message, issue: issue)).to be_valid
   end
 
   describe "ActiveModel validations" do

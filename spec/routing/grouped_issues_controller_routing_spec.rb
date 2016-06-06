@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe GroupedIssuesController, type: :routing do
   let(:user) { create :user }
   let(:website) { create :website }
-  let(:website_member) { create :website_member, website: website, user: user }
+  let!(:website_member) { create :website_member, website: website, user: user }
   let(:group) { create :grouped_issue, website: website }
 
   describe 'routing' do

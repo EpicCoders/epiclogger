@@ -8,6 +8,18 @@ describe GroupedIssue do
   it { is_expected.to enumerize(:level).in(:debug, :error, :fatal, :info, :warning).with_default(:error) }
   it { is_expected.to enumerize(:status).in(:muted, :resolved, :unresolved) }
 
+  it 'has many subscribers' do
+    expect(subject).to have_many(:subscribers).through(:issues)
+  end
+
+  it 'has many issues' do
+    expect(subject).to have_many(:issues)
+  end
+
+  it 'has many messages' do
+    expect(subject).to have_many(:messages).through(:issues)
+  end
+
   it "has a valid factory" do
     expect(grouped_issue).to be_valid
   end
