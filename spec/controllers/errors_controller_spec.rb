@@ -7,17 +7,17 @@ RSpec.describe ErrorsController, type: :controller do
   let(:group) { create :grouped_issue, website: website, last_seen: Time.now - 1.day }
   let(:subscriber) { create :subscriber, website: website }
   let!(:issue_error) { create :issue, subscriber: subscriber, group: group }
-  let(:message) { 'asdada' }
+  let(:message) { create :message, issue: issue_error }
 
   describe 'POST #notify_subscribers' do
     context 'if logged in' do
-      let(:params) { { message: message, id: group.id, format: :js } }
+      let(:params) { { message: 'message that is going to create record', id: group.id, format: :js } }
 
       it 'should email subscribers' do
         params[:format] = 'js'
         mailer = double('GroupedIssueMailer')
         expect(mailer).to receive(:deliver_later)
-        expect(GroupedIssueMailer).to receive(:notify_subscriber).with(group, user, user, message).and_return(mailer).once
+        expect(GroupedIssueMailer).to receive(:notify_subscriber).with(group, user, user, an_instance_of(Message)).and_return(mailer).once
 
         post_with user, :notify_subscribers, params
       end
@@ -27,13 +27,13 @@ RSpec.describe ErrorsController, type: :controller do
         create :website_member, website: website, user_id: user2.id
         mailer = double('GroupedIssueMailer')
         expect(mailer).to receive(:deliver_later).twice
-        expect(GroupedIssueMailer).to receive(:notify_subscriber).with(group, an_instance_of(User), an_instance_of(User), message).and_return(mailer).twice
+        expect(GroupedIssueMailer).to receive(:notify_subscriber).with(group, an_instance_of(User), an_instance_of(User), an_instance_of(Message)).and_return(mailer).twice
         post_with user, :notify_subscribers, params
       end
 
       it 'assigns message' do
         post_with user, :notify_subscribers, params
-        expect(assigns(:message)).to eq('asdada')
+        expect(subject.instance_variable_get(:@message)).to be_an_instance_of(Message)
       end
     end
 

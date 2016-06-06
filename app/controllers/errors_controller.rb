@@ -2,7 +2,6 @@ class ErrorsController < ApplicationController
   load_and_authorize_resource class: GroupedIssue
 
   def index
-    binding.pry
     @filter = params[:filter] || "recent"
     errors_per_page = params[:error_count].to_i || 10
     current_error = params[:current_issue]
@@ -43,9 +42,11 @@ class ErrorsController < ApplicationController
   end
 
   def notify_subscribers
-    @message = params[:message]
-    @error.website.users.each do |user|
-      GroupedIssueMailer.notify_subscriber(@error, user, current_user, @message).deliver_later
+    unless params[:message].blank?
+      @message = Message.create( content: params[:message], issue_id: @error.issues.last.id )
+      @error.website.users.each do |user|
+        GroupedIssueMailer.notify_subscriber(@error, user, current_user, @message).deliver_later
+      end
     end
   end
 

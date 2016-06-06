@@ -16,6 +16,6 @@ class UserMailer < ApplicationMailer
     @invite = invite
     @inviter = @invite.inviter
     @website = @invite.website
-    mail(to: @invite.email, subject: 'Epic Logger Invite Users')
+    mail(to: @invite.email, subject: "Epic Logger Invite Users")
   end
 end

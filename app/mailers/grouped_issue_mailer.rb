@@ -1,4 +1,5 @@
 class GroupedIssueMailer < ApplicationMailer
+  default from: "Epic Logger <admin@epiclogger.com>"
   def notify_subscriber(group, user, sender, message)
     @sender = sender
     @group = group
