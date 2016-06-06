@@ -52,10 +52,10 @@ class Issue < ActiveRecord::Base
   end
 
   def user_agent
-    headers = JSON.parse(data).try(:[], "interfaces").try(:[], "http").try(:[], "headers")
+    headers = error.data.try(:[], :interfaces).try(:[], :http).try(:[], :headers)
     unless headers.nil?
       headers.each do |hash|
-        return UserAgent.parse(hash["user_agent"]) if hash["user_agent"]
+        return UserAgent.parse(hash[:user_agent]) if hash[:user_agent]
       end
     end
     nil
