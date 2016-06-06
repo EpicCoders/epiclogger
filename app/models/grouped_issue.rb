@@ -4,6 +4,7 @@ class GroupedIssue < ActiveRecord::Base
   belongs_to :release
   has_many :subscribers, -> { uniq }, through: :issues, foreign_key: 'group_id'
   has_many :issues, foreign_key: 'group_id', dependent: :destroy
+  has_many :messages, through: :issues
   enumerize :level, in: [:debug, :error, :fatal, :info, :warning], default: :error
   # enumerize :issue_logger, in: { javascript: 1, php: 2 }, default: :javascript
   enumerize :status, in: { muted: 1, resolved: 2, unresolved: 3 }, default: :unresolved, predicates: true, scope: true
