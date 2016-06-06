@@ -1,4 +1,15 @@
 This is a email notifying you that 10 errors occurred in last hour.
-
-ID  Platform  Message              Created At               Website                 Event id                          Issue Url
-1   ruby      undefined:undefined  2016-05-13 06:49:20 UTC  http://epic-coders.com  7663e5a972341e047cd2820fd00c518d  Follow url for more details /errors.1
+ID
+Message
+Created At
+Website
+Event id
+Issue Url
+- @last_hour_errors.each_with_index do |issue, index|
+  #{issue.id}
+  #{issue.platform}
+  #{issue.message}
+  #{issue.created_at}
+  #{issue.website.domain}
+  #{issue.event_id}
+  #{link_to 'Follow url for more details', error_url(issue.group.id, unresolved: :true)}

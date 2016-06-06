@@ -1,7 +1,19 @@
 Daily report email provides you some information about changes on your website.
+Title
+Domain
+Platform
+Created At
+#{@website.title}
+#{@website.domain}
+#{@website.platform}
+#{@website.created_at}
 
-Title         Domain                    Platform    Created At
-Epic Logger   http://epic-coders.com    php        2016-05-13 06:49:20 UTC
-
-Message       Level    Times seen    Culprit
-Error: foo    error    10            index.php:Raven_ErrorHandler in handleError
+Message
+Level
+Times seen
+Culprit
+- @grouped_issues.each do |group|
+  #{group.message}
+  #{group.level}
+  #{group.times_seen}
+  #{group.culprit}

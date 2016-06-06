@@ -65,9 +65,4 @@ describe Issue do
       expect(issue.user_agent).to eq('Could not parse data!')
     end
   end
-
 end
-
-
-
-

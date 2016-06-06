@@ -1,4 +1,3 @@
 Hi,
-You now have access to http://epic-coders.com website. The invitation was sent by Panioglo Sergiu.
-To accept invitation, just follow this link: <a href="http://localhost:3000/invites/vekDThxIg_CZZI5CbXPsRQ/accept">Accept Invitation</a> and complete the registration form.
-
+You now have access to #{@website[:domain]} website. The invitation was sent by #{@inviter.name}.
+To accept invitation, just follow this link: #{link_to 'accept Invitation', accept_invite_url(id: @invite.token)} and complete the registration form.

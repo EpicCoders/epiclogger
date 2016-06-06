@@ -7,7 +7,6 @@ class UserMailer < ApplicationMailer
   end
 
   def email_confirmation(user)
-    #comment this line when previewing
     return if user.confirmed?
     @user = user
     mail(to: @user.email, subject: "Epic Logger email confirmation")
