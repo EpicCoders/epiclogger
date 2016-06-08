@@ -13,7 +13,10 @@ ActiveAdmin.register User do
 
     column :name
     column :email
+    column :role
     column :nickname
+    column :confirmation_sent_at
+    column :confirmed_at
     column :current_sign_in_at
     column :last_sign_in_at
     column :last_sign_in_ip
@@ -66,12 +69,12 @@ ActiveAdmin.register User do
     active_admin_comments
   end
 
-  action_item :show, if: proc { !member.confirmed? } do
-    link_to 'Confirm member', confirm_admin_member_path(member), method: :put
+  action_item :show, if: proc { !user.confirmed? } do
+    link_to 'Confirm user', confirm_user_url(id: user.id, token: user.confirmation_token), method: :get
   end
 
-  action_item :show, if: proc { member.confirmed? } do
-    link_to 'Unconfirm member', unconfirm_admin_member_path(member), method: :put
+  action_item :show, if: proc { user.confirmed? } do
+    link_to 'Unconfirm user', unconfirm_user_url(user), method: :get
   end
 
   member_action :confirm, method: :put do
@@ -82,7 +85,7 @@ ActiveAdmin.register User do
 
   member_action :unconfirm, method: :put do
     member = User.find(params[:id])
-    member.unconfirm
+    member.send_confirmation(true)
     redirect_to [:admin, member], notice: 'member unconfirmed'
   end
 

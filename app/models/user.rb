@@ -1,5 +1,6 @@
 class User < ActiveRecord::Base
   # include the TokenGenerator extension
+  extend Enumerize
   include TokenGenerator
   has_many :website_members, -> { uniq }, dependent: :destroy, autosave: true
   has_many :websites, through: :website_members
@@ -46,7 +47,12 @@ class User < ActiveRecord::Base
     !confirmed_at.blank?
   end
 
-  def send_confirmation
+  def confirm
+    update_attributes(confirmation_token: nil, confirmed_at: Time.now.utc)
+  end
+
+  def send_confirmation(unconfirm = false)
+    self.confirmed_at = nil if unconfirm
     generate_token(:confirmation_token)
     self.confirmation_sent_at = Time.now
     save!

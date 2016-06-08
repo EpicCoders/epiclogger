@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  #devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
   root 'home#index'
 
@@ -33,6 +32,7 @@ Rails.application.routes.draw do
   resources :users, only: [:index, :edit, :update] do
     member do
       get :confirm
+      get :unconfirm
     end
   end
   resources :invites, only: [:new, :create] do

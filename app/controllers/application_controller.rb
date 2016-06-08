@@ -16,6 +16,19 @@ class ApplicationController < ActionController::Base
 
   protected
 
+  def current_admin_user
+    return current_user if current_user && current_user.role == "admin"
+    return false
+  end
+
+  def authenticate_admin_user!
+    if current_admin_user
+      flash[:notice] = "Hi #{current_user.name}"
+    else
+      redirect_to errors_path, notice: 'Admin role required'
+    end
+  end
+
   def set_gon
     info = { env: Rails.env }
     # this code below seems useless

@@ -43,6 +43,12 @@ class UsersController < ApplicationController
     end
   end
 
+  def unconfirm
+    user = User.find(params[:id])
+    user.send_confirmation(true)
+    redirect_to admin_user_path(user)
+  end
+
   private
   def user_params
     params.require(:user).permit(:name, :email, :password, :password_confirmation, :provider, :uid)
