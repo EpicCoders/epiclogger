@@ -10,7 +10,7 @@ class User < ActiveRecord::Base
   validates :email, presence: true, uniqueness: true
   validates :password, confirmation: true, length: { minimum: 6 }, on: :create
   has_secure_password(validations: false)
-  enumerize :role, in: { admin: 1, user: 2 }, default: :user, scope: true
+  enumerize :role, in: { admin: 1, user: 2 }, default: :user, scope: true, predicates: true
 
   before_create { generate_token(:uid) if provider == 'email' }
 

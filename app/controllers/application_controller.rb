@@ -17,15 +17,15 @@ class ApplicationController < ActionController::Base
   protected
 
   def current_admin_user
-    return current_user if current_user && current_user.role == "admin"
-    return false
+    return current_user if current_user.admin?
+    return nil
   end
 
   def authenticate_admin_user!
-    if current_admin_user
-      flash[:notice] = "Hi #{current_user.name}"
+    if current_user
+      redirect_to errors_path, notice: 'Admin role required' if current_admin_user.nil?
     else
-      redirect_to errors_path, notice: 'Admin role required'
+      redirect_to login_url
     end
   end
 
