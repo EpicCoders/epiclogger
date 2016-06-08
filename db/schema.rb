@@ -167,6 +167,7 @@ ActiveRecord::Schema.define(version: 20160610102447) do
     t.string   "nickname"
     t.string   "image"
     t.text     "tokens"
+    t.integer  "role",                   default: 2
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
