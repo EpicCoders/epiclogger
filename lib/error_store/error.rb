@@ -31,7 +31,7 @@ module ErrorStore
       # TODO, filter data to not have the ip defined by user
       # STEP 2:
       Rails.cache.write(cache_key, @data)
-      ErrorWorker.perform_in(1.minute, cache_key)
+      ErrorWorker.perform_async(cache_key)
       # ErrorStore::Manager.new(@data, version: @data[:version]).store_error
       event_id
     end
