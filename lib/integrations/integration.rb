@@ -11,7 +11,7 @@ module Integrations
       @driver = driver.new(self)
     end
 
-    def connect(auth_hash)
+    def set_configuration(auth_hash)
       driver.authenticate(auth_hash)
     end
   end

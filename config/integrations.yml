@@ -2,5 +2,5 @@ intercom:
   app_key: <%= ENV['INTERCOM_APP_KEY'] %>
   app_secret: <%= ENV['INTERCOM_APP_SECRET'] %>
 github:
-  app_key: <%= ENV['GITHUB_KEY'] %>
-  app_secret: <%= ENV['GITHUB_SECRET'] %>
+  app_key: '7336ee58785b734bcf98'
+  app_secret: '5b45ec0894c3f32d00195dcbaa80312af400dbf4'

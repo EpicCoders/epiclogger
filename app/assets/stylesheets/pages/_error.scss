@@ -72,6 +72,37 @@
   }
 }
 
+.integrations{
+  .text{
+    line-height:40px;
+  }
+}
+
+.provider-button {
+  background: white;
+  border: 1px solid #cccccc;
+  color: #3b3f43;
+  padding: 0px 5px;
+  line-height:38px;
+  span {
+    display: block;
+    float: left;
+    width: 38px;
+    height: 38px;
+    margin-right:5px;
+    border-right: 1px solid #cccccc;
+  }
+  .github-button{
+    background: asset-url("icon_github.png") no-repeat center;
+  }
+  .intercom-button{
+    background: asset-url("icon_intercom.png") no-repeat center;
+  }
+  &:hover {
+    background: #eeeeee;
+  }
+}
+
 #error-details {
   word-wrap: break-word;
   .header {

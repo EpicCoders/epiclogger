@@ -8,11 +8,11 @@ class User < ActiveRecord::Base
 
   validates :name, presence: true
   validates :email, presence: true, uniqueness: true
-  validates :password, confirmation: true, length: { minimum: 6 }, on: :create
+  validates :password, confirmation: true, length: { minimum: 6 }, on: :create, if: :default_provider?
   has_secure_password(validations: false)
   enumerize :role, in: { admin: 1, user: 2 }, default: :user, scope: true, predicates: true
 
-  before_create { generate_token(:uid) if provider == 'email' }
+  before_create { generate_token(:uid) if default_provider? }
 
   def is_owner_of?(website)
     website.website_members.with_role(:owner).pluck(:user_id).include?(id)
@@ -24,6 +24,10 @@ class User < ActiveRecord::Base
 
   def default_website
     websites.try(:first)
+  end
+
+  def default_provider?
+    provider == 'email'
   end
 
   def send_reset_password
@@ -44,6 +48,7 @@ class User < ActiveRecord::Base
       user.uid = auth['uid']
       user.name = auth['info']['name'] || auth['info']['nickname']
       user.email = auth['info']['email']
+      user.password = SecureRandom.urlsafe_base64(16) unless auth['provider'] == 'email'
     end
   end
 

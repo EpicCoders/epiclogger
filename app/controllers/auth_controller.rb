@@ -10,7 +10,9 @@ class AuthController < ApplicationController
 
     @integration = Integration.new(integration_params)
     @integration.website = current_website
+    @integration.save
     if @integration.valid?
+      integration_params[:id] = @integration.id
       session['integration'] = integration_params
       redirect_to "/auth/#{@integration.provider}"
     else
@@ -32,8 +34,7 @@ class AuthController < ApplicationController
           @integration.save!
         end
       rescue
-        redirect_to @integration
-        # redirect_to new_integration_url(@integration, type: @integration.type)
+        redirect_to installations_path(main_tab: 'integrations')
       ensure
         session['integration'] = nil
       end
@@ -61,6 +62,6 @@ class AuthController < ApplicationController
   end
 
   def integration_params
-    @params ||= params.require(:integration).permit(:integration_type, :name)
+    @params ||= params.require(:integration).permit(:integration_type, :name, :provider)
   end
 end

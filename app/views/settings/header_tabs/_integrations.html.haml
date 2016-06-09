@@ -1,61 +1,31 @@
-.col-lg-12
-  .panel.panel-default
-    .panel-heading Manage Integrations
+.col-lg-6
+  .panel.panel-default.integrations
+    .panel-heading Integrations
     .panel-body
-      %table.table.table-striped
+      %table.table
         %thead
           %tr
-            %th Integration
-            %th Version
-            %th.text-center Enabled
+            %th Provider
+            %th Status
+            %th
         %tbody
+        - Integrations.available_drivers.each do |driver|
+          - integration = @website.integrations.find_by_name(driver[:name])
           %tr
             %td
-              Auto Tag: Browsers
-              %br
-              %small
-                By
-                %a{:href => ""} Epiclogger Team
-            %td 6.4.4
-            %td.text-center
-              %input{:type => "checkbox"}
-          %tr
-            %td
-              Auto Tag: Interface Types
-              %br
-              %small
-                By
-                %a{:href => ""} Epiclogger Team
-            %td 6.4.4
-            %td.text-center
-              %input{:type => "checkbox"}
-          %tr
-            %td
-              Auto Tag: Operating Systems
-              %br
-              %small
-                By
-                %a{:href => ""} Epiclogger Team
-            %td 6.4.4
-            %td.text-center
-              %input{:type => "checkbox"}
-          %tr
-            %td
-              Auto Tag: URLs
-              %br
-              %small
-                By
-                %a{:href => ""} Epiclogger Team
-            %td 6.4.4
-            %td.text-center
-              %input{:type => "checkbox"}
-          %tr
-            %td
-              Mail
-              %br
-              %small
-                By
-                %a{:href => ""} Epiclogger TeamMail
-            %td 6.4.4
-            %td.text-center
-              %input{:type => "checkbox"}
+              = driver[:name]
+            - if integration.nil?
+              %td inactive
+              %td
+                = button_to auths_path(integration: { name: driver[:name], provider: driver[:type] } ), class: "btn btn-default btn-block provider-button" do
+                  %span{:class => "#{driver[:name].downcase}-button"}
+                  Integrate
+                  =driver[:name]
+            - else
+              %td
+                = integration.try(:disabled) ? 'inactive' : 'active'
+              %td
+                = button_to auths_path(integration: { name: driver[:name], provider: driver[:type] } ), class: "btn btn-default btn-block provider-button #{integration.try(:disabled) ? '' : 'disabled'}", disabled: !integration.try(:disabled) do
+                  %span{:class => "#{driver[:name].downcase}-button"}
+                  Integrate
+                  =driver[:name]
