@@ -34,6 +34,7 @@ RSpec.describe ErrorStore::Error do
   end
 
   describe 'create!' do
+    temp_enable_dalli_cache!
     # i need this new request because we do body.read on the initial one so using the above
     # would result in an error
     let(:new_request) { post_error_request(web_response_factory('ruby_exception'), website) }
