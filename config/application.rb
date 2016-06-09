@@ -21,6 +21,9 @@ module Epiclogger
     # config.i18n.default_locale = :de
     config.autoload_paths << Rails.root.join('lib')
 
+    redis_url = ENV['REDISCLOUD_URL'] || ENV['REDIS_URL'] || 'redis://127.0.0.1:6379/0/pxls'
+    config.cache_store = :redis_store, redis_url, { expires_in: 1.hour }
+
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true
 
