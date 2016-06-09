@@ -60,7 +60,8 @@ gem 'omniauth-github'
 gem 'cancancan', '~> 1.10'
 # Add sidekiq for background jobs
 gem 'sidekiq'
-gem 'redis-rails'
+# add memcached for cache storage
+gem 'dalli'
 
 # add gem for forms
 gem 'simple_form'

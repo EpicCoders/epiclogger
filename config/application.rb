@@ -21,8 +21,14 @@ module Epiclogger
     # config.i18n.default_locale = :de
     config.autoload_paths << Rails.root.join('lib')
 
-    redis_url = ENV['REDISCLOUD_URL'] || ENV['REDIS_URL'] || 'redis://127.0.0.1:6379/0/pxls'
-    config.cache_store = :redis_store, redis_url, { expires_in: 1.hour }
+    cache_url = ENV['MEMCACHEDCLOUD_SERVERS'] || 'localhost:11211'
+    config.cache_store = :dalli_store, cache_url.split(','), {
+      namespace: 'epiclogger',
+      expires_in: 1.hour,
+      compress: true,
+      username: ENV['MEMCACHEDCLOUD_USERNAME'],
+      password: ENV['MEMCACHEDCLOUD_PASSWORD']
+    }
 
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true

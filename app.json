@@ -22,7 +22,8 @@
   },
   "addons": [
     "heroku-postgresql",
-    "rediscloud:30"
+    "rediscloud:30",
+    "memcachedcloud:30"
   ],
   "formation": [
     { "process": "web",         "quantity": 1},
