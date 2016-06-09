@@ -140,11 +140,11 @@ RSpec.describe UsersController, :type => :controller do
     end
 
     it "should email user" do
-        mailer = double('UserMailer')
-        expect(mailer).to receive(:deliver_later)
-        expect(UserMailer).to receive(:email_confirmation).with(user).and_return(mailer).once
+      mailer = double('UserMailer')
+      expect(mailer).to receive(:deliver_later)
+      expect(UserMailer).to receive(:email_confirmation).with(user).and_return(mailer).once
 
-        get :unconfirm, params
-      end
+      get :unconfirm, params
+    end
   end
 end
