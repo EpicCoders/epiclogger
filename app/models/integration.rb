@@ -5,8 +5,8 @@ class Integration < ActiveRecord::Base
     Integrations.create(self)
   end
 
-  def connect(auth_hash)
-    self.configuration = driver.connect(auth_hash)
+  def assign_configuration(auth_hash)
+    self.configuration = driver.build_configuration(auth_hash)
     self.provider = driver.type
   end
 end

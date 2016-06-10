@@ -4,15 +4,13 @@ class AuthController < ApplicationController
 
   def create
     unless Integrations.supports?(integration_params[:provider])
-      redirect_to :integrations
+      redirect_to :integrations, error: 'Invalid integration'
       return
     end
 
     @integration = Integration.new(integration_params)
     @integration.website = current_website
-    @integration.save
     if @integration.valid?
-      integration_params[:id] = @integration.id
       session['integration'] = integration_params
       redirect_to "/auth/#{@integration.provider}"
     else
@@ -29,12 +27,14 @@ class AuthController < ApplicationController
       # create integration
       begin
         Integration.transaction do
-          @integration = Integration.find(integration_session['id'])
-          @integration.set_configuration(auth_hash)
+          @website = Website.find_by_id(integration_session['website_id'])
+          @integration = @website.integrations.build(integration_session)
+          @integration.assign_configuration(auth_hash)
           @integration.save!
+          redirect_to installations_path(main_tab: 'integrations'), notice: 'Integration created'
         end
       rescue
-        redirect_to installations_path(main_tab: 'integrations')
+        redirect_to installations_path(main_tab: 'integrations'), error: 'Error creating integration'
       ensure
         session['integration'] = nil
       end
@@ -44,7 +44,11 @@ class AuthController < ApplicationController
   end
 
   def failure
-
+    if integration_session
+      redirect_to installations_path(main_tab: 'integrations'), error: 'Error creating integration'
+    else
+      after_login_redirect
+    end
   end
 
   private

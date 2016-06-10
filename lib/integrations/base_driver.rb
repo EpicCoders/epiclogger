@@ -1,6 +1,5 @@
 module Integrations
   class BaseDriver
-
     def initialize(integration)
       @integration = integration
     end
@@ -17,8 +16,23 @@ module Integrations
       self.class.type
     end
 
-    def authenticate(hash)
-      raise Integrations::NotImplementedError.new(self), 'Authenticate not implemented'
+    def build_configuration(auth_hash)
+      config = {}
+
+      auth_type = integration.auth_type
+      token = auth_hash['credentials']['token'] if auth_type == :oauth
+      token.strip! if token.present?
+
+      config[:token] = token
+      if auth_type == :oauth
+        config[:provider]         = auth_hash['provider']
+        config[:secret]           = auth_hash['credentials']['secret']
+        config[:refresh_token]    = auth_hash['credentials']['refresh_token']
+        config[:token_expires_at] = auth_hash['credentials']['expires_at']
+        config[:token_expires]    = auth_hash['credentials']['expires']
+        config[:uid]              = auth_hash['uid'] if auth_hash['uid'].present?
+      end
+      config
     end
   end
 end

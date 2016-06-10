@@ -11,12 +11,8 @@ module Integrations::Drivers
       :intercom
     end
 
-    def authenticate(hash)
-      auth_hash = hash
-
-      config = auth_hash
-
-      config
+    def auth_type
+      :oauth
     end
   end
 end
