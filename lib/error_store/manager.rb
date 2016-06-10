@@ -69,7 +69,7 @@ module ErrorStore
         first_seen: date,
         time_spent_total: time_spent || 0,
         time_spent_count: time_spent && 1 || 0,
-        release_id: release.id,
+        release_id: release.try(:id),
         website: website
       }
 

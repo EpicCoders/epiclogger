@@ -49,6 +49,27 @@ RSpec.describe ErrorStore::Manager do
         subject
       }.to change(Subscriber, :count).by(1)
     end
+
+    it 'saves a new release' do
+      expect {
+        subject
+      }.to change(Release, :count).by(1)
+    end
+
+    it 'returns last release' do
+      post_manager.data.delete(:release)
+      error = post_manager.store_error
+      expect( error.group.release ).to eq(release)
+    end
+
+    it 'has no release' do
+      post_manager.data.delete(:release)
+      release.destroy
+      error = post_manager.store_error
+
+      expect( error.group.release ).to eq(nil)
+    end
+
     it 'saves the provided checksum' do
       validated_post_data[:checksum] = 'sd'
       issue = subject

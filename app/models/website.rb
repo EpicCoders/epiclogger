@@ -35,15 +35,15 @@ class Website < ActiveRecord::Base
   end
 
   #match a release
-  def check_release(slug)
+  def check_release(md5)
     last_release = self.releases.last
-    unless slug.nil?
-      release = self.releases.create_with(website_id: self.id).find_or_create_by(version: slug)
+    unless md5.nil?
+      release = self.releases.create_with(website_id: self.id).find_or_create_by(version: md5)
       unless last_release.nil? || last_release.version == release.version
         last_release.grouped_issues.update_all( status: GroupedIssue.status.find_value('resolved').value )
       end
     end
-    release = last_release if slug.nil?
+    release = last_release if md5.nil?
 
     return release
   end
