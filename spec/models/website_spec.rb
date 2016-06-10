@@ -90,16 +90,6 @@ describe Website do
 
       Website.daily_report
     end
-
-    it 'should email 2 users' do
-      mailer = double('GroupedIssueMailer')
-      user2 = create :user
-      website_member = create :website_member, website: website, user: user2
-      expect(mailer).to receive(:deliver_later).twice
-      expect(GroupedIssueMailer).to receive(:notify_daily).with(website).and_return(mailer).twice
-
-      Website.daily_report
-    end
   end
 end
 
