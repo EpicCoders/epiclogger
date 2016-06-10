@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160603080353) do
+ActiveRecord::Schema.define(version: 20160610102447) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -194,6 +194,7 @@ ActiveRecord::Schema.define(version: 20160603080353) do
     t.boolean  "daily",          default: false
     t.boolean  "realtime",       default: false
     t.string   "platform"
+    t.text     "origins",        default: "*"
   end
 
   add_foreign_key "grouped_issues", "releases"
