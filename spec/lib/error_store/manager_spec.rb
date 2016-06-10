@@ -143,7 +143,7 @@ RSpec.describe ErrorStore::Manager do
       expect(is_sample).to be_falsey
     end
     it 'returns is_sample false if is_regression (resolved group gone unresolved)' do
-      existing_group = create :grouped_issue, website: website, checksum: 'somehashhere', status: GroupedIssue.status.find_value('resolved').value
+      existing_group = create :grouped_issue, website: website, checksum: 'somehashhere', status: GroupedIssue::RESOLVED
       _, is_sample = subject
       expect(is_sample).to be_falsey
       existing_group.reload

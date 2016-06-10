@@ -34,16 +34,16 @@ class Website < ActiveRecord::Base
     false
   end
 
-  #match a release
-  def check_release(md5)
-    last_release = self.releases.last
-    unless md5.nil?
-      release = self.releases.create_with(website_id: self.id).find_or_create_by(version: md5)
+  # match a release
+  def check_release(version)
+    last_release = releases.last
+    unless version.nil?
+      release = releases.create_with(website_id: id).find_or_create_by(version: version)
       unless last_release.nil? || last_release.version == release.version
-        last_release.grouped_issues.update_all( status: GroupedIssue.status.find_value('resolved').value )
+        last_release.grouped_issues.update_all(status: GroupedIssue::RESOLVED)
       end
     end
-    release = last_release if md5.nil?
+    release = last_release if version.nil?
 
     return release
   end
