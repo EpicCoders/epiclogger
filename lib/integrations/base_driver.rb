@@ -16,6 +16,10 @@ module Integrations
       self.class.type
     end
 
+    def config
+      Integrations.config[type]
+    end
+
     def build_configuration(auth_hash)
       config = {}
 

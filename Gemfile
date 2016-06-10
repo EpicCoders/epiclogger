@@ -80,11 +80,12 @@ gem 'groupdate'
 #gem for charts
 gem 'chartkick'
 
+# add a rest client to call apis
+gem 'rest-client'
+
 group :development do
   gem 'better_errors'
   gem 'binding_of_caller'
-  # gem 'spring'
-  # gem 'spring-commands-rspec'
 end
 
 group :test do
