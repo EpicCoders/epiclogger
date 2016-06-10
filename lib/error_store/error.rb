@@ -43,16 +43,8 @@ module ErrorStore
       # and the header params to make sure we get all the api keys and ids that are sent
       # CALL STEP 1
       @auth = Auth.new(self)
-      # origin =  get_origin
 
       raise ErrorStore::MissingCredentials.new(self), 'Missing api key' unless _auth.app_key
-
-      # if the request is not get then we expect the app_secret to be present
-      # we make the check here because we don't want to make a db request if
-      # it's a post request and the app_secret is empty
-      if _auth.app_secret.blank? && !request.get?
-        raise ErrorStore::MissingCredentials.new(self), 'Missing required api secret'
-      end
 
       begin
         # let's get the website now by app_key
@@ -61,9 +53,8 @@ module ErrorStore
         raise ErrorStore::WebsiteMissing.new(self), 'The website for this api key does not exist or api key wrong.'
       end
 
-      # we also check if the website app_secret is different than the app_secret sent
-      unless request.get?
-        raise ErrorStore::MissingCredentials.new(self), 'Invalid api key' if _website.app_secret != _auth.app_secret
+      unless ActiveSupport::SecurityUtils.secure_compare(_website.app_secret, _auth.app_secret || _website.app_secret)
+        raise ErrorStore::MissingCredentials.new(self), 'Missing api key'
       end
     end
 
