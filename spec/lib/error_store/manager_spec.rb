@@ -58,16 +58,24 @@ RSpec.describe ErrorStore::Manager do
 
     it 'returns last release' do
       post_manager.data.delete(:release)
-      error = post_manager.store_error
+      error = subject
       expect( error.group.release ).to eq(release)
     end
 
     it 'has no release' do
       post_manager.data.delete(:release)
       release.destroy
-      error = post_manager.store_error
+      error = subject
 
       expect( error.group.release ).to eq(nil)
+    end
+
+    it 'saves grouped issue without release' do
+      post_manager.data.delete(:release)
+      release.destroy
+      expect {
+        subject
+      }.to change(GroupedIssue, :count).by(1)
     end
 
     it 'saves the provided checksum' do
