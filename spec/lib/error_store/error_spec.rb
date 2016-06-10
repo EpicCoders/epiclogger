@@ -66,10 +66,10 @@ RSpec.describe ErrorStore::Error do
     end
   end
 
-  describe 'get_website' do
+  describe 'assign_website' do
     before do
       error.instance_variable_set(:@context, ErrorStore::Context.new(error))
-      error.get_website
+      error.assign_website
     end
 
     it 'assigns auth' do
@@ -77,24 +77,24 @@ RSpec.describe ErrorStore::Error do
     end
     it 'raises MissingCredentials if missing api key' do
       post_request.headers['HTTP_X_SENTRY_AUTH'] = "Sentry sentry_version='5', sentry_client='raven-ruby/0.15.2',sentry_timestamp=1455616740"
-      expect { ErrorStore::Error.new(request: post_request).get_website }.to raise_exception(ErrorStore::MissingCredentials)
+      expect { ErrorStore::Error.new(request: post_request).assign_website }.to raise_exception(ErrorStore::MissingCredentials)
     end
     it 'raises MissingCredentials if missing api secret' do
       post_request.headers['HTTP_X_SENTRY_AUTH'] = "Sentry sentry_version='5', sentry_client='raven-ruby/0.15.2',sentry_timestamp=1455616740"
-      expect { ErrorStore::Error.new(request: post_request).get_website }.to raise_exception(ErrorStore::MissingCredentials)
+      expect { ErrorStore::Error.new(request: post_request).assign_website }.to raise_exception(ErrorStore::MissingCredentials)
     end
     it 'assigns website to context' do
       expect( error.instance_variable_get(:@context).website ).to eq(website)
     end
     it 'raises WebsiteMissing if website does not exist with api key' do
       post_request.headers['HTTP_X_SENTRY_AUTH'] = "Sentry sentry_version='5', sentry_client='raven-ruby/0.15.2',sentry_timestamp=1455616740,sentry_key=coco,sentry_secret=soco"
-      expect { ErrorStore::Error.new(request: post_request).get_website }.to raise_exception(ErrorStore::WebsiteMissing)
+      expect { ErrorStore::Error.new(request: post_request).assign_website }.to raise_exception(ErrorStore::WebsiteMissing)
     end
     it 'raises MissingCredentials if post request and api_secret is different' do
       post_request.headers['HTTP_X_SENTRY_AUTH'] = "Sentry sentry_version='5', sentry_client='raven-ruby/0.15.2',sentry_timestamp=1455616740,sentry_key=#{website.app_key},sentry_secret=soco"
       some_error = ErrorStore::Error.new(request: post_request)
       some_error.instance_variable_set(:@context, ErrorStore::Context.new(some_error))
-      expect { some_error.get_website }.to raise_exception(ErrorStore::MissingCredentials)
+      expect { some_error.assign_website }.to raise_exception(ErrorStore::MissingCredentials)
     end
   end
 

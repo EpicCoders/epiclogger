@@ -18,8 +18,8 @@ module ErrorStore
 
     def create!
       # let's set the context that we are working on right now.
-      @context = Context.new(self)
-      get_website
+      assign_website
+      check_origin
       # 1. TODO add blacklist ip option !!
       # 2. TODO add rate limit for the api option
       @data = validate_data
@@ -36,19 +36,33 @@ module ErrorStore
       event_id
     end
 
+    def check_origin
+      if _context.origin.blank?
+        if request.get?
+          raise ErrorStore::MissingCredentials.new(self), 'Missing required Origin or Referer header'
+        end
+
+        if request.post? && _website.app_secret != _auth.app_secret
+          raise ErrorStore::MissingCredentials.new(self), 'Invalid api key'
+        end
+      else
+        # This check is specific for clients who need CORS support
+        raise ErrorStore::WebsiteMissing.new(self), 'Client must be upgraded for CORS support' if _website.nil?
+        raise ErrorStore::InvalidOrigin.new(self), "Invalid origin: #{_context.origin}" unless _website.valid_origin?(_context.origin)
+      end
+    end
+
     # 1. get website_id from header or params if it's a get
     # 2. get the website and check if it exists either by checking via api key or id
-    def get_website
-      # here we call the get_website_authorization method to check the get params
+    def assign_website
+      # check the get params
       # and the header params to make sure we get all the api keys and ids that are sent
       # CALL STEP 1
-      @auth = Auth.new(self)
-
       raise ErrorStore::MissingCredentials.new(self), 'Missing api key' unless _auth.app_key
 
       begin
         # let's get the website now by app_key
-        @context.website = Website.find_by!(app_key: _auth.app_key)
+        _context.website = Website.find_by!(app_key: _auth.app_key)
       rescue ActiveRecord::RecordNotFound
         raise ErrorStore::WebsiteMissing.new(self), 'The website for this api key does not exist or api key wrong.'
       end
@@ -235,7 +249,11 @@ module ErrorStore
     end
 
     def _auth
-      @auth
+      @auth ||= Auth.new(self)
+    end
+
+    def _context
+      @context ||= Context.new(self)
     end
 
     def _website

@@ -55,6 +55,15 @@ class Website < ActiveRecord::Base
     end
   end
 
+  def valid_origin?(value)
+    return true if origins.include?('*') # return true if we allow all
+    return false if origins.blank? # no origins to check against
+    return false if value.blank?
+    value = value.downcase
+    origins.include?(value)
+    # TODO add here option to define origins with path *
+  end
+
   protected
 
   def generate_api_keys

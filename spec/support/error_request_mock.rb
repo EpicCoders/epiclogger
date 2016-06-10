@@ -25,7 +25,8 @@ module ErrorRequestMock
   def validated_request(request)
     error = ErrorStore::Error.new(request: request)
     error.context = ErrorStore::Context.new(error)
-    error.get_website
+    error.auth = ErrorStore::Auth.new(error)
+    error.assign_website
     error.validate_data
   end
 

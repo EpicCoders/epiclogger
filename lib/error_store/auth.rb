@@ -17,7 +17,6 @@ module ErrorStore
                  end
 
       raise ErrorStore::MissingCredentials.new(self), 'Missing authentication information' if auth_req.blank?
-      origin = origin_from_request
       # we set the client as the agent if we don't receive it
       auth_req['sentry_client'] = _error.request.headers['HTTP_USER_AGENT'] unless auth_req['sentry_client']
 
@@ -25,7 +24,7 @@ module ErrorStore
       @version    = auth_req['sentry_version'] || ErrorStore::CURRENT_VERSION
       @app_secret = auth_req['sentry_secret']
       @app_key    = auth_req['sentry_key']
-      @public     = origin.present?
+      @public     = _error._context.origin.present?
     end
 
     def parse_auth_header(header)
@@ -37,10 +36,6 @@ module ErrorStore
     end
 
     private
-
-    def origin_from_request
-      _error.request.headers['HTTP_ORIGIN'] || _error.request.headers['HTTP_REFERER']
-    end
 
     def sentry_header
       _error.request.headers['HTTP_X_SENTRY_AUTH']

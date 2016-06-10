@@ -157,6 +157,7 @@ module ErrorStore
   class InvalidFingerprint < StoreError; end
   class InvalidAttribute < StoreError; end
   class InvalidInterface < StoreError; end
+  class InvalidOrigin < StoreError; end
   class ValidationError < StoreError; end
 end
 
