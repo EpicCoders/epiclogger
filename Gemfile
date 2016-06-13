@@ -59,6 +59,7 @@ gem 'kaminari'
 gem 'rails_warden'
 gem 'warden_omniauth'
 gem 'omniauth-github'
+gem 'omniauth-intercom'
 gem 'cancancan', '~> 1.10'
 # Add sidekiq for background jobs
 gem 'sidekiq'
