@@ -27,6 +27,19 @@ RSpec.describe ErrorStore::Context do
       expect( get_context.instance_variable_get(:@ip_address) ).to eq(get_error.request.headers['REMOTE_ADDR'])
       expect( post_context.instance_variable_get(:@ip_address) ).to eq(post_error.request.headers['REMOTE_ADDR'])
     end
+    it 'assigns origin from http_origin' do
+      expect( get_context.instance_variable_get(:@origin) ).to eq('http://192.168.2.3')
+      expect( post_context.instance_variable_get(:@origin) ).to eq('http://192.168.2.3')
+    end
+    it 'assigns origin from http_referrer' do
+      get_request.env.delete('HTTP_ORIGIN')
+      get_request.env['HTTP_REFERER'] = 'waza referrer'
+      expect( get_context.instance_variable_get(:@origin) ).to eq('waza referrer')
+
+      post_request.env.delete('HTTP_ORIGIN')
+      post_request.env['HTTP_REFERER'] = 'waza referrer'
+      expect( post_context.instance_variable_get(:@origin) ).to eq('waza referrer')
+    end
   end
 
   it 'responds to website' do

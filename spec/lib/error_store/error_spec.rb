@@ -14,6 +14,7 @@ RSpec.describe ErrorStore::Error do
   let(:get_request) { get_error_request(web_response_factory('js_exception', json: true), website) }
   let(:data) { JSON.parse(issue_error.data, symbolize_names: true) }
   let(:error) { ErrorStore::Error.new(request: post_request) }
+  let(:assign_context) { error.instance_variable_set(:@context, ErrorStore::Context.new(error)) }
 
   describe 'intialize' do
     it 'assigns request and issue provided' do
@@ -41,12 +42,6 @@ RSpec.describe ErrorStore::Error do
     let!(:event_id) { error.create! }
     let(:cache_key) { "issue:#{website.id}:#{event_id}" }
 
-    it 'assigns context' do
-      expect( error.context ).to be_kind_of(ErrorStore::Context)
-    end
-    it 'gets the website' do
-      expect( error.context.website ).to eq(website)
-    end
     it 'assigns data validated' do
       expect( error.data ).to eq(validated_request(new_request))
       expect( error.data ).not_to be_nil
@@ -66,15 +61,42 @@ RSpec.describe ErrorStore::Error do
     end
   end
 
+  describe 'check_origin' do
+    let(:website2) { create :website, origins: '' }
+
+    it 'raises MissingCredentials if blank origin and get request' do
+      error.request.headers.env.delete('HTTP_ORIGIN')
+      error.request.headers.env['REQUEST_METHOD'] = "GET"
+      assign_context
+
+      expect { error.check_origin }.to raise_exception(ErrorStore::MissingCredentials)
+    end
+
+    it 'raises MissingCredentials if blank origin && post request && app_secret does not match' do
+      error.request.headers.env.delete('HTTP_ORIGIN')
+      assign_context
+      error.context.website = website2
+
+      expect { error.check_origin }.to raise_exception(ErrorStore::MissingCredentials)
+    end
+
+    it 'raises WebsiteMissing if no website' do
+      expect { error.check_origin }.to raise_exception(ErrorStore::WebsiteMissing)
+    end
+
+    it 'raises InvalidOrigin if invalid origin' do
+      assign_context
+      error.context.website = website2
+      expect { error.check_origin }.to raise_exception(ErrorStore::InvalidOrigin)
+    end
+  end
+
   describe 'assign_website' do
     before do
-      error.instance_variable_set(:@context, ErrorStore::Context.new(error))
+      assign_context
       error.assign_website
     end
 
-    it 'assigns auth' do
-      expect( error.auth ).not_to be_nil
-    end
     it 'raises MissingCredentials if missing api key' do
       post_request.headers['HTTP_X_SENTRY_AUTH'] = "Sentry sentry_version='5', sentry_client='raven-ruby/0.15.2',sentry_timestamp=1455616740"
       expect { ErrorStore::Error.new(request: post_request).assign_website }.to raise_exception(ErrorStore::MissingCredentials)
@@ -296,6 +318,13 @@ RSpec.describe ErrorStore::Error do
     it 'returns the auth assigned' do
       error.create!
       expect( error._auth.kind_of?(ErrorStore::Auth) ).to be(true)
+    end
+  end
+
+  describe '_context' do
+    it 'returns the context assigned' do
+      error.create!
+      expect( error._context.kind_of?(ErrorStore::Context) ).to be(true)
     end
   end
 

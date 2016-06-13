@@ -198,6 +198,7 @@ RSpec.describe ErrorStore do
       expect { raise ErrorStore::InvalidFingerprint }.to raise_error(ErrorStore::InvalidFingerprint)
       expect { raise ErrorStore::InvalidAttribute }.to raise_error(ErrorStore::InvalidAttribute)
       expect { raise ErrorStore::InvalidInterface }.to raise_error(ErrorStore::InvalidInterface)
+      expect { raise ErrorStore::InvalidOrigin }.to raise_error(ErrorStore::InvalidOrigin)
       expect { raise ErrorStore::ValidationError }.to raise_error(ErrorStore::ValidationError)
     end
   end

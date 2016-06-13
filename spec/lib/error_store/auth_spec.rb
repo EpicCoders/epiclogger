@@ -28,21 +28,17 @@ RSpec.describe ErrorStore::Auth do
   describe 'get_authorization' do
     describe 'POST' do
       subject { post_auth }
-      it 'raises MissingCredentials if HTTP_X_SENTRY_AUTH or HTTP_AUTHORIZATION are missing' do
-        post_error.request.env.delete 'HTTP_X_SENTRY_AUTH'
-        post_error.request.env.delete 'HTTP_AUTHORIZATION'
-        expect { subject }.to raise_exception(ErrorStore::MissingCredentials, 'Missing authentication header')
-      end
 
-      it 'checks HTTP_X_SENTRY_AUTH for Sentry string and returns parsed' do
+      it 'checks sentry_header for Sentry string and returns parsed' do
         subject
         expect( subject.instance_variable_get(:@client) ).to eq('raven-ruby/0.15.2')
         expect( subject.instance_variable_get(:@version) ).to eq('5')
         expect( subject.instance_variable_get(:@app_key) ).to eq(website.app_key)
         expect( subject.instance_variable_get(:@app_secret) ).to eq(website.app_secret)
+        expect( subject.instance_variable_get(:@public) ).to be(true)
       end
 
-      it 'checks HTTP_AUTHORIZATION for Sentry string and returns parsed' do
+      it 'checks auth_header for Sentry string and returns parsed' do
         post_error.request.headers['HTTP_AUTHORIZATION'] = post_error.request.headers['HTTP_X_SENTRY_AUTH']
         post_error.request.headers['HTTP_X_SENTRY_AUTH'] = ''
         subject
@@ -51,6 +47,7 @@ RSpec.describe ErrorStore::Auth do
         expect( subject.instance_variable_get(:@app_key) ).to eq(website.app_key)
         expect( subject.instance_variable_get(:@app_secret) ).to eq(website.app_secret)
       end
+
       it 'raises MissingCredentials if auth_req is blank' do
         post_error.request.headers['HTTP_AUTHORIZATION'] = ''
         post_error.request.env.delete 'HTTP_X_SENTRY_AUTH'

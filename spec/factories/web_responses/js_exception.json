@@ -4,7 +4,8 @@
    "platform":"javascript",
    "request":{
       "headers":{
-         "User-Agent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.75 Safari/537.36"
+         "User-Agent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.75 Safari/537.36",
+         "Origin":"http://192.168.2.3"
       },
       "url":"http://ravenjs.site/example/index.html"
    },

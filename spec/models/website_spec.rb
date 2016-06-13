@@ -48,7 +48,7 @@ describe Website do
     end
    end
 
-   describe 'before create' do
+  describe 'before create' do
     it 'should add app_key and app_secret to website' do
       website = Website.new(domain: 'domain@example.com', title: 'title for page')
       website.save
@@ -89,6 +89,32 @@ describe Website do
       expect(GroupedIssueMailer).to receive(:notify_daily).with(website).and_return(mailer).once
 
       Website.daily_report
+    end
+  end
+
+  describe 'valid_origin?' do
+    it 'returns true' do
+      expect(website.valid_origin?('http://192.168.2.3')).to eq(true)
+    end
+
+    it 'returns false if blank origins' do
+      website.update_attributes(origins: '')
+      expect(website.valid_origin?('http://192.168.2.3')).to eq(false)
+    end
+
+    it 'returns false if blank value' do
+      website.update_attributes(origins: 'http://192.168.2.3')
+      expect(website.valid_origin?('')).to eq(false)
+    end
+
+    it 'returns true if includes value' do
+      website.update_attributes(origins: 'http://192.168.2.3')
+      expect(website.valid_origin?('http://192.168.2.3')).to eq(true)
+    end
+
+    it 'calls downcase on value' do
+      website.update_attributes(origins: 'http://192.168.2.3')
+      expect(website.valid_origin?('HTTP://192.168.2.3')).to eq(true)
     end
   end
 end

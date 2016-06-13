@@ -15,6 +15,7 @@ module ErrorRequestMock
       'REQUEST_METHOD' => 'POST',
       'HTTP_USER_AGENT' => 'Faraday v0.9.2',
       'REMOTE_ADDR' => '127.0.0.1',
+      'HTTP_ORIGIN' => 'http://192.168.2.3',
       'HTTP_X_SENTRY_AUTH' => "Sentry sentry_version=#{client_version}, sentry_client=#{client}, sentry_timestamp=1455616740, sentry_key=#{website.app_key}, sentry_secret=#{website.app_secret}",
       'HTTP_ACCEPT_ENCODING' => encoding_type,
       'HTTP_CONTENT_ENCODING' => encoding_type,
@@ -41,6 +42,7 @@ module ErrorRequestMock
 
     ActionDispatch::Request.new(
       'REQUEST_METHOD' => 'GET',
+      'HTTP_ORIGIN' => 'http://192.168.2.3',
       'QUERY_STRING' => query.to_param,
       'rack.input' => StringIO.new('')
     )
