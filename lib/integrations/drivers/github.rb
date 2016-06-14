@@ -9,6 +9,12 @@ module Integrations::Drivers
       :github
     end
 
+    def applications
+      config = eval @integration.integration.configuration
+      response = RestClient.get 'https://api.github.com/users/' + config[:username] + '/repos'
+      JSON.parse(response)
+    end
+
     def auth_type
       :oauth
     end

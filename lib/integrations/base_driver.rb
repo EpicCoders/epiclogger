@@ -20,15 +20,28 @@ module Integrations
       Integrations.config[type]
     end
 
+    def applications
+      self.class.applications
+    end
+
+    def api_url
+      if config[:sandbox]
+        'http..sandbox'
+      else
+        'http..live'
+      end
+    end
+
     def build_configuration(auth_hash)
       config = {}
 
-      auth_type = integration.auth_type
+      auth_type = @integration.auth_type
       token = auth_hash['credentials']['token'] if auth_type == :oauth
       token.strip! if token.present?
 
       config[:token] = token
       if auth_type == :oauth
+        config[:username]         = auth_hash['extra']['raw_info']['login']
         config[:provider]         = auth_hash['provider']
         config[:secret]           = auth_hash['credentials']['secret']
         config[:refresh_token]    = auth_hash['credentials']['refresh_token']
