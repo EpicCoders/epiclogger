@@ -17,7 +17,7 @@ RSpec.describe Integrations do
 
   describe 'find_drivers' do
     it 'contains all the drivers in the folder' do
-      expect(subject.available_drivers.length).to eq(1)
+      expect(subject.available_drivers.length).to eq(2)
     end
   end
 
@@ -32,7 +32,7 @@ RSpec.describe Integrations do
 
     it 'gives the drivers with all of them if find_drivers called' do
       expect(subject.available_drivers).to be_kind_of(Array)
-      expect(subject.available_drivers.length).to eq(1)
+      expect(subject.available_drivers.length).to eq(2)
       expect(subject.available_drivers).to eq(subject.class_variable_get(:@@drivers_list))
     end
   end
@@ -42,7 +42,7 @@ RSpec.describe Integrations do
       subject.class_variable_set(:@@drivers_list, []) # reset the drivers list
       subject.find_drivers
 
-      expect(subject.drivers_types).to eq([:intercom])
+      expect(subject.drivers_types).to eq([:github, :intercom])
     end
   end
 
@@ -63,6 +63,10 @@ RSpec.describe Integrations do
 
     it 'contains github app keys' do
       expect( subject.config ).to include(:github)
+    end
+
+    it 'contains intercom app keys' do
+      expect( subject.config ).to include(:intercom)
     end
   end
 
