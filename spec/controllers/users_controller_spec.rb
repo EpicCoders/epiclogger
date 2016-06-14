@@ -116,35 +116,10 @@ RSpec.describe UsersController, :type => :controller do
     it "should update user" do
       user2 = create :user, confirmed_at: nil, confirmation_sent_at: Time.now, confirmation_token: 'random-token'
       expect{
-        post :confirm, id: user2.id, token: user2.confirmation_token
+        post_with user2, :confirm, id: user2.id, token: user2.confirmation_token
         user2.reload
         }.to change(user2, :confirmation_token).from('random-token').to(nil)
         .and change(user2, :confirmed_at)
-    end
-  end
-
-  describe "GET #unconfirm" do
-    let(:params) { default_params.merge({ id: user.id }) }
-
-    it 'should update attributes' do
-      expect{
-        get :unconfirm, params
-        user.reload
-      }.to change( user, :confirmed_at )
-       .and change( user, :confirmation_token)
-       .and change( user, :confirmation_sent_at )
-    end
-
-    it 'should redirect' do
-      expect( get :unconfirm, params ).to redirect_to(admin_user_path(user))
-    end
-
-    it "should email user" do
-      mailer = double('UserMailer')
-      expect(mailer).to receive(:deliver_later)
-      expect(UserMailer).to receive(:email_confirmation).with(user).and_return(mailer).once
-
-      get :unconfirm, params
     end
   end
 end
