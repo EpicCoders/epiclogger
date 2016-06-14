@@ -51,8 +51,7 @@ class User < ActiveRecord::Base
     update_attributes(confirmation_token: nil, confirmed_at: Time.now.utc)
   end
 
-  def send_confirmation(unconfirm = false)
-    self.confirmed_at = nil if unconfirm
+  def send_confirmation
     generate_token(:confirmation_token)
     self.confirmation_sent_at = Time.now
     save!

@@ -73,20 +73,10 @@ ActiveAdmin.register User do
     link_to 'Confirm user', confirm_user_url(id: user.id, token: user.confirmation_token), method: :get
   end
 
-  action_item :show, if: proc { user.confirmed? } do
-    link_to 'Unconfirm user', unconfirm_user_url(user), method: :get
-  end
-
   member_action :confirm, method: :put do
     member = User.find(params[:id])
     member.confirm
     redirect_to [:admin, member], notice: 'member confirmed'
-  end
-
-  member_action :unconfirm, method: :put do
-    member = User.find(params[:id])
-    member.send_confirmation(true)
-    redirect_to [:admin, member], notice: 'member unconfirmed'
   end
 
   def avatar_url(size = 40)

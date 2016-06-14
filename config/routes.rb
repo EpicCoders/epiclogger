@@ -32,7 +32,6 @@ Rails.application.routes.draw do
   resources :users, only: [:index, :edit, :update] do
     member do
       get :confirm
-      get :unconfirm
     end
   end
   resources :invites, only: [:new, :create] do

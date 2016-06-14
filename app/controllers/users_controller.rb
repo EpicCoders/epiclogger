@@ -32,21 +32,19 @@ class UsersController < ApplicationController
 
   def confirm
     user = User.find_by_id_and_confirmation_token(params[:id], params[:token])
-    logout if logged_in? && user
     if user.nil?
       redirect_to login_url, alert: 'Bad url'
     elsif !user.confirmed_at.blank?
       redirect_to login_url, alert: 'You confirmed your email once'
     else
       user.update_attributes(confirmation_token: nil, confirmed_at: Time.now.utc)
-      redirect_to login_url, notice: "Account confirmed"
+      unless current_user.admin?
+        logout if logged_in? && user
+        redirect_to login_url, notice: "Account confirmed"
+      else
+        redirect_to admin_user_url(user), notice: "You have just confirmed #{user.name}'s account}"
+      end
     end
-  end
-
-  def unconfirm
-    user = User.find(params[:id])
-    user.send_confirmation(true)
-    redirect_to admin_user_path(user)
   end
 
   private

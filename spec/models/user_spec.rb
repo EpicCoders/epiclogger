@@ -128,13 +128,6 @@ RSpec.describe User, type: :model do
        .and change( user, :confirmation_sent_at )
     end
 
-    it 'should update confirmed_at' do
-       expect{
-        user.send_confirmation(true)
-        user.reload
-      }.to change( user, :confirmed_at )
-    end
-
     it "should email user" do
       mailer = double('UserMailer')
       expect(mailer).to receive(:deliver_later)
