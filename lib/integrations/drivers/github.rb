@@ -12,7 +12,11 @@ module Integrations::Drivers
     def applications
       config = eval @integration.integration.configuration
       response = RestClient.get 'https://api.github.com/users/' + config[:username] + '/repos'
-      JSON.parse(response)
+      repos = []
+      JSON.parse(response).each do |app|
+        repos.push( { title: app["name"], app_id: app["id"], provider: config[:provider] }, url: app["owner"]["url"] )
+      end
+      repos
     end
 
     def auth_type

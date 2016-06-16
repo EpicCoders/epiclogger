@@ -11,6 +11,16 @@ module Integrations::Drivers
       :intercom
     end
 
+    def applications
+      config = eval @integration.integration.configuration
+      intercom = ::Intercom::Client.new(token: config[:token])
+      companies = []
+      intercom.companies.all.each do |company|
+        companies.push( { title: company.name, app_id: company.created_at, provider: config[:provider] } )
+      end
+      companies
+    end
+
     def auth_type
       :oauth
     end

@@ -24,14 +24,6 @@ module Integrations
       self.class.applications
     end
 
-    def api_url
-      if config[:sandbox]
-        'http..sandbox'
-      else
-        'http..live'
-      end
-    end
-
     def build_configuration(auth_hash)
       config = {}
 

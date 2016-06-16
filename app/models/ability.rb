@@ -22,6 +22,9 @@ class Ability
       can [:change_current, :read], Website do |website|
         user.is_member_of?(website)
       end
+      can :manage, Integration do |integration|
+        user.is_owner_of?(integration.website)
+      end
       can :create, Website
       can :manage, WebsiteMember do |website_member|
         user.is_owner_of?(website_member.website)

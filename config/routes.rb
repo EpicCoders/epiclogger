@@ -22,6 +22,8 @@ Rails.application.routes.draw do
       put  :unresolve
     end
   end
+
+  resources :integrations, only: [:update]
   resources :grouped_issues, only: [:index, :show]
   resources :websites, only: [:index, :create, :new, :show, :destroy, :update] do
     member do

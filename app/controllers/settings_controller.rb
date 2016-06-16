@@ -5,6 +5,7 @@ class SettingsController < ApplicationController
 
     @details_tab = params[:details_tab] || "settings"
     @configuration_tab = params[:configuration_tab] || "all_platforms"
+    @integration_tab = params[:integration_tab] || "github"
     @platform_tab = params[:platform_tab] || @configuration_tab
 
     @options = ["Javascript", "Python", "Django", "Flask", "Tornado", "Php", "Ruby", "Rails 3", "Rails 4", "Sinatra", "Sidekiq", "Node js", "Express", "Connect", "Java", "Java util logging", "Log4j", "Log4j2", "Logback", "Ios"]

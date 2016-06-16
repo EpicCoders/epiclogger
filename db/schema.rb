@@ -79,8 +79,69 @@ ActiveRecord::Schema.define(version: 20160707095431) do
     t.string   "name",          :null=>false
     t.boolean  "disabled",      :default=>false
     t.text     "error"
-    t.datetime "created_at",    :null=>false
-    t.datetime "updated_at",    :null=>false
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+  end
+
+  add_index "integrations", ["website_id"], name: "index_integrations_on_website_id", using: :btree
+
+  create_table "invites", force: :cascade do |t|
+    t.integer  "invited_by_id"
+    t.integer  "website_id"
+    t.string   "email"
+    t.string   "token"
+    t.datetime "accepted_at"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
+
+  create_table "issues", force: :cascade do |t|
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+    t.integer  "group_id"
+    t.string   "platform"
+    t.text     "data"
+    t.integer  "time_spent"
+    t.integer  "subscriber_id"
+    t.integer  "website_id"
+    t.string   "event_id"
+    t.datetime "datetime"
+    t.text     "message"
+  end
+
+  add_index "issues", ["datetime"], name: "index_issues_on_datetime", using: :btree
+  add_index "issues", ["group_id"], name: "index_issues_on_group_id", using: :btree
+  add_index "issues", ["subscriber_id"], name: "index_issues_on_subscriber_id", using: :btree
+  add_index "issues", ["website_id"], name: "index_issues_on_website_id", using: :btree
+
+  create_table "messages", force: :cascade do |t|
+    t.text     "content",    null: false
+    t.integer  "issue_id",   null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "messages", ["issue_id"], name: "index_messages_on_issue_id", using: :btree
+
+  create_table "releases", force: :cascade do |t|
+    t.string   "version"
+    t.jsonb    "data",       default: {}
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+    t.integer  "website_id"
+  end
+
+  add_index "releases", ["website_id"], name: "index_releases_on_website_id", using: :btree
+
+  create_table "subscribers", force: :cascade do |t|
+    t.string   "name",       null: false
+    t.string   "email",      null: false
+    t.integer  "website_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string   "identity"
+    t.string   "username"
+    t.string   "ip_address"
   end
 
   create_table "users", force: :cascade do |t|
