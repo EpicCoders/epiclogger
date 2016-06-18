@@ -73,16 +73,17 @@ ActiveRecord::Schema.define(version: 20160707095431) do
   add_index "grouped_issues", ["website_id", "checksum"], :name=>"index_grouped_issues_on_website_id_and_checksum", :unique=>true
 
   create_table "integrations", force: :cascade do |t|
-    t.integer  "website_id",    :index=>{:name=>"index_integrations_on_website_id"}, :foreign_key=>{:references=>"websites", :name=>"fk_rails_ef5f282bb0", :on_update=>:no_action, :on_delete=>:no_action}
-    t.string   "provider",      :null=>false
-    t.text     "configuration"
-    t.string   "name",          :null=>false
-    t.boolean  "disabled",      :default=>false
+    t.integer  "website_id"
+    t.string   "provider",                      null: false
+    t.string   "name",                          null: false
+    t.boolean  "disabled",      default: false
     t.text     "error"
     t.datetime "created_at",                    null: false
     t.datetime "updated_at",                    null: false
+    t.hstore   "configuration"
   end
 
+  add_index "integrations", ["configuration"], name: "configuration_gin", using: :gin
   add_index "integrations", ["website_id"], name: "index_integrations_on_website_id", using: :btree
 
   create_table "invites", force: :cascade do |t|
