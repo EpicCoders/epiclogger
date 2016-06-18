@@ -2,6 +2,7 @@
   = render layout: 'wizard_structure' do
     .content
       %section.body.current.step
+        = render 'shared/flash_messages'
         = f.input :title, placeholder: 'Website name'
         = f.input :domain, placeholder: 'http://www.domain.com'
     .actions
