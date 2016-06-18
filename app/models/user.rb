@@ -18,6 +18,10 @@ class User < ActiveRecord::Base
     website.website_members.with_role(:owner).where(website: website).map(&:user_id).include?(self.id)
   end
 
+  def is_member_of?(website)
+    website.website_members.with_role(:user).where(website: website).map(&:user_id).include?(self.id)
+  end
+
   def default_website
     websites.try(:first)
   end
