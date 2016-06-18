@@ -3,7 +3,8 @@ class IntegrationsController < ApplicationController
 
   def update
     if params[:application]
-      @integration.application = Application.new(@integration.get_applications.find{|app| app[:title] == params[:application]})
+      @integration.configuration["selected_application"] = @integration.configuration["selected_application"] = @integration.get_applications.find{|app| app[:title] == params[:application]}[:title]
+      @integration.save
       redirect_to installations_path(main_tab: 'integrations', integration_tab: @integration.provider), notice: 'Application added!'
     else
       redirect_to installations_path(main_tab: 'integrations')

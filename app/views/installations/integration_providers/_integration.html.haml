@@ -8,12 +8,12 @@
         = button_to auths_path(integration: { name: provider.capitalize, provider: provider } ), class: "btn btn-default btn-block provider-button #{integration.try(:disabled) ? 'hidden' : ''}" do
           %span{class: "#{provider}-button"}
           = "Integrate " + provider.capitalize
-      - elsif integration.application.nil?
+      - elsif integration.configuration["selected_application"].nil?
         = form_tag integration_path(integration), :method => 'put' do
           = select_tag :application, options_for_select(integration.get_applications.collect{ |c| [ c[:title] ] }), { class: "pull-left selectpicker" }
           = submit_tag "Submit", { class: "pull-right col-sm-4 btn btn-default btn-primary"}
       -else
         Your app is
-        =integration.application.title
+        =integration.configuration["selected_application"]
 
 = render partial: "installations/integration_providers/#{@integration_tab}"

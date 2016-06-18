@@ -2,6 +2,7 @@ class Integration < ActiveRecord::Base
   belongs_to :website
   validates :name, presence: true
   validates :provider, presence: true
+  store_accessor :configuration
 
   def driver
     Integrations.create(self)

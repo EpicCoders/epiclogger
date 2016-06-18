@@ -12,11 +12,13 @@ module Integrations::Drivers
     end
 
     def applications
-      config = eval @integration.integration.configuration
-      intercom = ::Intercom::Client.new(token: config[:token])
+      config = @integration.integration.configuration
       companies = []
-      intercom.companies.all.each do |company|
-        companies.push( { title: company.name, app_id: company.created_at, provider: config[:provider] } )
+      resource = RestClient::Resource.new('https://api.intercom.io/companies', config['token'], nil)
+      response = resource.get( :content_type => :json, :accept => :json)
+      response = JSON.parse(response)
+      response["companies"].each do |company|
+        companies.push( { title: company["name"], id: company["id"] } )
       end
       companies
     end

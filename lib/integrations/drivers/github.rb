@@ -10,11 +10,11 @@ module Integrations::Drivers
     end
 
     def applications
-      config = eval @integration.integration.configuration
-      response = RestClient.get 'https://api.github.com/users/' + config[:username] + '/repos'
+      config = @integration.integration.configuration
+      response = RestClient.get 'https://api.github.com/users/' + config["username"] + '/repos'
       repos = []
       JSON.parse(response).each do |app|
-        repos.push( { title: app["name"], app_id: app["id"], provider: config[:provider] }, url: app["owner"]["url"] )
+        repos.push( { title: app["name"] } )
       end
       repos
     end
