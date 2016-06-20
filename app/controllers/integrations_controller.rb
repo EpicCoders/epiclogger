@@ -10,4 +10,9 @@ class IntegrationsController < ApplicationController
       redirect_to installations_path(main_tab: 'integrations')
     end
   end
+
+  def create_task
+    task = @integration.create_task(params[:error_id])
+    redirect_to error_path(params[:error_id], task: task)
+  end
 end

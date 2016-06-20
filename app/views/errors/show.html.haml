@@ -6,7 +6,7 @@
       .row
         .col-xs-1.times_seen
           = @error.times_seen
-        .col-xs-7
+        .col-xs-6
           %div.message= @error.message
           %ul.list-inline
             %li
@@ -17,7 +17,11 @@
               %span.badge.badge-environment= @error.environment
             %li
               %span.label.badge= @error.checksum
-        .col-xs-4.text-right
+        .col-xs-5.text-right
+          - github = @website.integrations.find{ |integration| integration.provider == 'github' }
+          - if github
+            .btn-group
+              = button_to 'Create Github Issue',create_task_integration_path(github, error_id: @error.id), class: "btn pull-right btn-primary "
           .btn-group
             = paginate @issues, theme: 'next_prev_theme', param_name: :page_issue
           .btn-group.resolve

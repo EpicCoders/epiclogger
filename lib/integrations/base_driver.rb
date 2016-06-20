@@ -20,6 +20,10 @@ module Integrations
       Integrations.config[type]
     end
 
+    def create_task
+      self.class.create_task(error_id)
+    end
+
     def applications
       self.class.applications
     end

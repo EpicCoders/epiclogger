@@ -16,4 +16,8 @@ class Integration < ActiveRecord::Base
   def get_applications
     driver.driver.applications
   end
+
+  def create_task(error_id)
+    driver.driver.create_task(error_id)
+  end
 end
