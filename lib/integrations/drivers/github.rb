@@ -9,25 +9,46 @@ module Integrations::Drivers
       :github
     end
 
-    def create_task(error_id)
-      issue = GroupedIssue.find(error_id)
-      website = @integration.integration.website
-      configuration = @integration.integration.configuration
-      url =  'https://api.github.com/repos/' + configuration["username"] + '/' + configuration["selected_application"] + '/issues'
-      payload = { title: issue.message }.to_json
-      headers = { "Authorization": "token " + configuration["token"], "Content-Type": "application/json" }
-      response = RestClient.post url, payload, headers
-      response = JSON.parse(response)
+    def api_url
+      'https://api.github.com/'
+    end
+
+    def create_task(title)
+      url =  api_url + 'repos/' + self.configuration["username"].to_s + '/' + self.configuration["selected_application"].to_s + '/issues'
+      data = { title: title }
+      response = post_request(url, data)
+      if response
+        response = JSON.parse(response)
+        response
+      end
     end
 
     def applications
-      config = @integration.integration.configuration
-      response = RestClient.get 'https://api.github.com/users/' + config["username"] + '/repos'
-      repos = []
-      JSON.parse(response).each do |app|
-        repos.push( { title: app["name"] } )
+      url = api_url + 'user/repos?affiliation=owner,organization_member'
+      response = get_request(url)
+      if response
+        repos = { "Owner": [] }
+        JSON.parse(response).each do |repo|
+          if repo['owner']['type'] == 'Organization'
+            if repos[repo['owner']['login']]
+              repos[repo['owner']['login']].push(repo["name"])
+            else
+              repos[repo['owner']['login']] = [repo["name"]]
+            end
+          elsif repo['fork'] == false
+            repos[:Owner].push(repo["name"])
+          end
+        end
+        repos
       end
-      repos
+    end
+
+    def header
+      { "Authorization": "token #{self.configuration["token"]}", "Content-Type": "application/json", "Accept": "application/json" }
+    end
+
+    def selected_application
+      self.configuration['selected_application']
     end
 
     def auth_type

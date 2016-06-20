@@ -42,9 +42,19 @@ class ErrorsController < ApplicationController
 
   def notify_subscribers
     unless params[:message].blank?
-      @message = Message.create( content: params[:message], issue_id: @error.issues.last.id )
-      @error.website.subscribers.each do |subscriber|
-        GroupedIssueMailer.notify_subscriber(@error, subscriber, current_user, @message).deliver_later
+      if params[:intercom]
+        begin
+          current_website.intercom_integration.driver.send_message(params[:users], params[:message])
+          redirect_to error_path(@error), flash: { success: 'Message successfully sent!' }
+        rescue => e
+          redirect_to error_path(@error), flash: { error: 'Operation failed!' }
+        end
+      else
+        @message = Message.create( content: params[:message], issue_id: @error.issues.last.id )
+        @error.subscribers.each do |subscriber|
+          GroupedIssueMailer.notify_subscriber(@error, subscriber, current_user, @message).deliver_later
+        end
+        redirect_to error_path(@error), flash: { success: 'Message successfully sent!' }
       end
     end
   end

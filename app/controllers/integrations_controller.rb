@@ -2,17 +2,27 @@ class IntegrationsController < ApplicationController
   load_and_authorize_resource
 
   def update
-    if params[:application]
-      @integration.configuration["selected_application"] = @integration.configuration["selected_application"] = @integration.get_applications.find{|app| app[:title] == params[:application]}[:title]
-      @integration.save
-      redirect_to installations_path(main_tab: 'integrations', integration_tab: @integration.provider), notice: 'Application added!'
-    else
-      redirect_to installations_path(main_tab: 'integrations')
+    if @integration.update_attributes(integration_params)
+      redirect_to settings_path(main_tab: 'integrations', integration_tab: @integration.provider), notice: 'Integration updated!'
+    end
+  end
+
+  def destroy
+    if @integration.destroy
+      redirect_to settings_path(main_tab: 'integrations', integration_tab: @integration.provider), notice: 'Integration deleted!'
     end
   end
 
   def create_task
-    task = @integration.create_task(params[:error_id])
-    redirect_to error_path(params[:error_id], task: task)
+    begin
+      task = @integration.driver.create_task(params[:title])
+      redirect_to error_path(params[:error_id], task: task)
+    rescue
+      redirect_to error_path(params[:error_id], task: task), flash: { error: "Operation failed!" }
+    end
+  end
+
+  def integration_params
+    @integration_params ||= params.require(:integration).permit(:application)
   end
 end

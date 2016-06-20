@@ -90,6 +90,7 @@ group :development do
 end
 
 group :test do
+  gem 'webmock'
   gem 'database_cleaner'
   gem 'capybara'
   gem 'timecop'

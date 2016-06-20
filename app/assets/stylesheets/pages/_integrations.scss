@@ -1,0 +1,15 @@
+.remove-button{
+  display: inline-block;
+  font-size: 12px;
+  padding: 3px 6px;
+}
+
+.integrations{
+  .panel-heading{
+    min-height: 45px;
+    .button_to{
+      display: inline-block;
+      float: right;
+    }
+  }
+}

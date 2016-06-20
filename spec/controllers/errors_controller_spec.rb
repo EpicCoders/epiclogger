@@ -13,45 +13,94 @@ RSpec.describe ErrorsController, type: :controller do
     context 'if logged in' do
       let(:params) { { message: 'message that is going to create record', id: group.id, format: :js } }
 
-      it 'should email subscribers' do
-        params[:format] = 'js'
-        mailer = double('GroupedIssueMailer')
-        expect(mailer).to receive(:deliver_later)
-        expect(GroupedIssueMailer).to receive(:notify_subscriber).with(group, subscriber, user, an_instance_of(Message)).and_return(mailer).once
+      context 'email' do
+        it 'should email subscribers' do
+          mailer = double('GroupedIssueMailer')
+          expect(mailer).to receive(:deliver_later)
+          expect(GroupedIssueMailer).to receive(:notify_subscriber).with(group, subscriber, user, an_instance_of(Message)).and_return(mailer).once
 
-        post_with user, :notify_subscribers, params
+          post_with user, :notify_subscribers, params
+        end
+
+        it 'should email 2 subscribers' do
+          subscriber2 = create :subscriber, website: website
+          issue2 = create :issue, subscriber: subscriber2, group: group
+          mailer = double('GroupedIssueMailer')
+          expect(mailer).to receive(:deliver_later).twice
+          expect(GroupedIssueMailer).to receive(:notify_subscriber).with(group, an_instance_of(Subscriber), an_instance_of(User), an_instance_of(Message)).and_return(mailer).twice
+          post_with user, :notify_subscribers, params
+        end
+
+        it 'assigns message' do
+          post_with user, :notify_subscribers, params
+          expect(subject.instance_variable_get(:@message)).to be_an_instance_of(Message)
+        end
+
+        it 'redirects to the error path with success message' do
+          post_with user, :notify_subscribers, params
+          expect(response).to redirect_to(error_path(group.slug))
+          expect(flash[:success]).to eq('Message successfully sent!')
+        end
       end
 
-      it 'should email 2 subscribers' do
-        subscriber2 = create :subscriber, website: website
-        mailer = double('GroupedIssueMailer')
-        expect(mailer).to receive(:deliver_later).twice
-        expect(GroupedIssueMailer).to receive(:notify_subscriber).with(group, an_instance_of(Subscriber), an_instance_of(User), an_instance_of(Message)).and_return(mailer).twice
-        post_with user, :notify_subscribers, params
-      end
+      context 'intercom' do
+        let!(:integration) { create :integration, website: website, provider: :intercom }
+        let(:driver) { Integrations.get_driver(integration.provider.to_sym) }
+        let(:integration_driver) { driver.new(Integrations::Integration.new(integration, driver)) }
+        before(:each) do session[:epiclogger_website_id] = website.id end
+        let(:intercom_params) { params.merge( intercom: true, users: [ { 'email' => 'zoro' } ] ) }
 
-      it 'assigns message' do
-        post_with user, :notify_subscribers, params
-        expect(subject.instance_variable_get(:@message)).to be_an_instance_of(Message)
-      end
-    end
+        context 'success' do
+          before(:each) do
+            stub_request(:post, integration_driver.api_url + 'messages')
+            .with(:body => "{\"message_type\":\"inapp\",\"body\":\"message that is going to create record\",\"template\":\"plain\",\"from\":{\"type\":\"admin\",\"id\":\"12345\"},\"to\":{\"type\":\"user\",\"email\":\"zoro\"}}",
+                  :headers => {'Authorization'=>'Basic Og=='})
+            .to_return(:status => 200, :body => web_response_factory('intercom/intercom_post_message'), :headers => {})
+          end
 
-    describe 'GET #index' do
-      let(:params) { { current_issue: issue_error.id } }
+          it 'calls the send_message method in the driver' do
+            expect_any_instance_of(Integrations::Drivers::Intercom).to receive(:send_message)
+            post_with user, :notify_subscribers, intercom_params
+          end
 
-      context 'if logged in' do
-        it 'assigns current_site errors' do
-          get_with user, :index, params, { epiclogger_website_id: website.id}
-          expect(assigns(:errors)).to eq([group])
+          it 'redirects to the error with success message' do
+            post_with user, :notify_subscribers, intercom_params
+            expect(response).to redirect_to(error_path(group.slug))
+            expect(flash[:success]).to eq('Message successfully sent!')
+          end
+        end
+
+        context 'failure' do
+          it 'redirects to error path with error message' do
+            stub_request(:post, integration_driver.api_url + 'messages').
+            with(:body => "{\"message_type\":\"inapp\",\"body\":\"message that is going to create record\",\"template\":\"plain\",\"from\":{\"type\":\"admin\",\"id\":\"12345\"},\"to\":{\"type\":\"user\",\"email\":\"zoro\"}}",
+                 :headers => {'Authorization'=>'Basic Og=='}).
+            to_return(:status => 500, :body => "eroare", :headers => {})
+            post_with user, :notify_subscribers, intercom_params
+            expect(response).to redirect_to(error_path(group.slug))
+            expect(flash[:error]).to eq('Operation failed!')
+          end
         end
       end
     end
+
     context 'not logged in' do
       let(:params) { { current_issue: issue_error.id } }
 
       it 'should give error if not logged in' do
         get :index, params
         expect(response).to have_http_status(302)
+      end
+    end
+  end
+
+  describe 'GET #index' do
+    let(:params) { { current_issue: issue_error.id } }
+
+    context 'if logged in' do
+      it 'assigns current_site errors' do
+        get_with user, :index, params, { epiclogger_website_id: website.id}
+        expect(assigns(:errors)).to eq([group])
       end
     end
   end

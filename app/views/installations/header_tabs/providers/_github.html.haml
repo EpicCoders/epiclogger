@@ -1,0 +1,6 @@
+- if @integration.selected_application.nil?
+  = form_tag integration_path(@integration), :method => 'put' do
+    = select_tag "integration[application]", grouped_options_for_select(@integration.get_applications), { class: "pull-left selectpicker" }
+    = submit_tag "Submit", { class: "pull-right col-sm-4 btn btn-default btn-primary"}
+- else
+  = 'Your repository is ' + @integration.selected_application

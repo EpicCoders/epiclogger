@@ -19,6 +19,19 @@ RSpec.describe Integrations do
     it 'contains all the drivers in the folder' do
       expect(subject.available_drivers.length).to eq(2)
     end
+
+    it 'throws error if file could not be loaded' do
+      path = "lib/integrations/drivers/testing.rb"
+      content = "1/0"
+      File.open(path, "w+") do |f|
+        f.write(content)
+      end
+      expect(Rails.logger).to receive(:error).with("Could not load class testing")
+      subject.find_drivers
+      subject.available_drivers.delete_at(1)
+      subject.available_drivers.delete_at(2)
+      File.delete("lib/integrations/drivers/testing.rb")
+    end
   end
 
   describe 'available_drivers' do

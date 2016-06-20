@@ -1,0 +1,18 @@
+{"type":"company.list",
+ "pages":{"type":"pages", "next":null, "page":1, "per_page":15, "total_pages":1},
+ "companies":
+  [{"type":"company",
+    "company_id":"507383",
+    "id":"575f6d82262409014a00025d",
+    "app_id":"dzi6270o",
+    "name":"TestApp [TEST]",
+    "created_at":1465871746,
+    "updated_at":1466476045,
+    "monthly_spend":0,
+    "session_count":0,
+    "user_count":1,
+    "tags":{"type":"tag.list", "tags":[]},
+    "segments":{"type":"segment.list", "segments":[]},
+    "plan":{},
+    "custom_attributes":{}}],
+ "total_count":1}

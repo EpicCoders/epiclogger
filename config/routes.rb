@@ -23,7 +23,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :integrations, only: [:update] do
+  resources :integrations, only: [:update, :destroy] do
     member do
       post :create_task
     end

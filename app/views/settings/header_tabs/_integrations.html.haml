@@ -1,9 +1,19 @@
-.col-lg-12#client-configuration.main-tabs
-  #custom-bootstrap.navbar.navbar-default{:role => "navigation"}
-    %ul.nav.navbar-nav.navbar-left#platforms-tabs.main-tabs
-      %li{class: @integration_tab == 'github' ? 'active' : ''}
-        = link_to "Github", installations_path('main_tab' => 'integrations', 'integration_tab' => 'github')
-      %li{class: @integration_tab == 'intercom' ? 'active' : ''}
-        = link_to "Intercom", installations_path('main_tab' => 'integrations', 'integration_tab' => 'intercom')
-
-  = render partial: "installations/integration_providers/integration", locals: { provider: @integration_tab }
+.col-lg-12.main-tabs
+  - Integrations.drivers_types.each do |provider|
+    .col-lg-4
+      - @integration = @website.integrations.find_by_provider(provider.to_s)
+      .panel.panel-default.integrations
+        .panel-heading
+          %span
+            =provider.to_s.capitalize + " Integration"
+          - unless @integration.nil?
+            = button_to integration_path(@integration), method: :delete , class: 'btn btn-default remove-button }' do
+              %i.fa.fa-times
+        .panel-body
+          - if @integration.nil?
+            = button_to auths_path(integration: { name: provider.capitalize, provider: provider.to_s } ), class: "btn btn-default btn-block provider-button #{@integration.try(:disabled) ? 'hidden' : ''}" do
+              %span{class: "#{provider.to_s}-button"}
+              = "Integrate " + provider.to_s.capitalize
+          -else
+            .integration-content
+              = render partial: "installations/header_tabs/providers/#{provider.to_s}"

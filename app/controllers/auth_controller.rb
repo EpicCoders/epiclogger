@@ -4,7 +4,7 @@ class AuthController < ApplicationController
 
   def create
     unless Integrations.supports?(integration_params[:provider])
-      redirect_to installations_path(main_tab: 'integrations'), notice: 'Invalid Integration'
+      redirect_to settings_path(main_tab: 'integrations'), notice: 'Invalid Integration'
       return
     end
 
@@ -14,14 +14,17 @@ class AuthController < ApplicationController
       session['integration'] = integration_params
       redirect_to "/auth/#{@integration.provider}"
     else
-      redirect_to installations_path(main_tab: 'integrations'), notice: 'Integration parameters are invalid!'
+      redirect_to settings_path(main_tab: 'integrations'), notice: 'Integration parameters are invalid!'
     end
   end
 
   def success
     unless authenticated?
       user = User.find_by_provider_and_uid(provider, auth_hash['uid']) || User.create_with_omniauth(auth_hash)
-      authenticate!(provider.to_sym) if user
+      if user
+        authenticate!(provider.to_sym)
+        set_website(current_user.websites.first) unless current_user.websites.empty?
+      end
     end
     if integration_session
       # create integration
@@ -30,21 +33,13 @@ class AuthController < ApplicationController
           @integration = current_website.integrations.build(integration_session)
           @integration.assign_configuration(auth_hash)
           @integration.save!
-          redirect_to installations_path(main_tab: 'integrations'), notice: 'Integration created'
+          redirect_to settings_path(main_tab: 'integrations', integration_tab: provider ), notice: 'Integration created'
         end
       rescue
-        redirect_to installations_path(main_tab: 'integrations'), error: 'Error creating integration'
+        redirect_to settings_path(main_tab: 'integrations'), flash: { error: 'Error creating integration' }
       ensure
         session['integration'] = nil
       end
-    else
-      after_login_redirect
-    end
-  end
-
-  def failure
-    if integration_session
-      redirect_to installations_path(main_tab: 'integrations'), error: 'Error creating integration'
     else
       after_login_redirect
     end

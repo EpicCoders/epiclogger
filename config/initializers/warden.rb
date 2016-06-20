@@ -59,8 +59,8 @@ end
 Warden::Strategies.add(:github) do
   def valid?
     return false if auth_hash.nil?
-    (auth_hash.provider == 'github') ? true : false
-    (auth_hash.uid.blank?) ? false : true
+    (auth_hash['provider'] == 'github') ? true : false
+    (auth_hash['uid'].blank?) ? false : true
   end
 
   def auth_hash
@@ -68,10 +68,10 @@ Warden::Strategies.add(:github) do
   end
 
   def authenticate!
-    if usr = User.find_by(:uid => auth_hash.uid)
+    if usr = User.find_by(:uid => auth_hash['uid'])
       success!(usr)
-    elsif usr = User.find_by(:email => auth_hash.info.email)
-      network = Network.new({name:'github', uid:auth_hash.uid, oauth_token:auth_hash.credentials.token})
+    elsif usr = User.find_by(:email => auth_hash['info']['email'])
+      network = Network.new({name:'github', uid:auth_hash['uid'], oauth_token:auth_hash['credentials']['token']})
       usr.networks.push network
       usr.save!
       success!(usr)

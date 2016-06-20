@@ -12,6 +12,7 @@ RSpec.describe Ability do
       let(:subscriber) { create :subscriber, website: website }
       let(:issue) { create :issue, subscriber: subscriber, group: group }
       let(:message) { create :message, issue: issue }
+      let(:integration) { create :integration, website: website }
 
       shared_examples 'it has abilities' do
         it { is_expected.to be_able_to(:manage, group) }
@@ -37,6 +38,7 @@ RSpec.describe Ability do
         it { is_expected.not_to be_able_to(:read, user_website_member_with_user) }
         it { is_expected.not_to be_able_to(:change_current, website) }
         it { is_expected.not_to be_able_to(:update, user_website_member_with_user) }
+        it { is_expected.not_to be_able_to(:manage, integration) }
       end
 
       context 'as owner of website' do
@@ -50,6 +52,7 @@ RSpec.describe Ability do
         it { is_expected.to be_able_to(:change_role, owner_website_member_with_user) }
         it { is_expected.to be_able_to(:change_role, user_website_member_with_user) }
         it { is_expected.to be_able_to(:manage, subscriber) }
+        it { is_expected.to be_able_to(:manage, integration) }
 
         it_behaves_like 'it has abilities'
       end
@@ -65,6 +68,7 @@ RSpec.describe Ability do
         it { is_expected.not_to be_able_to(:change_role, owner_website_member_with_user) }
         it { is_expected.not_to be_able_to(:change_role, user_website_member_with_user) }
         it { is_expected.not_to be_able_to(:manage, subscriber) }
+        it { is_expected.not_to be_able_to(:manage, integration) }
 
         it { is_expected.to be_able_to(:read, website) }
         it { is_expected.to be_able_to(:change_current, website) }

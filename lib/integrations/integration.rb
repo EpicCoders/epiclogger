@@ -3,7 +3,7 @@ module Integrations
     attr_accessor :config
     attr_reader :driver, :integration
 
-    delegate :name, :type, :auth_type, :build_configuration, to: :driver
+    delegate :name, :type, :auth_type, :build_configuration, :applications, :create_task, :list_subscribers, :send_message, :selected_application, to: :driver
     delegate :website, to: :integration
 
     def initialize(integration, driver)

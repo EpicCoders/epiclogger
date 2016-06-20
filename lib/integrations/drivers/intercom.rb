@@ -11,16 +11,47 @@ module Integrations::Drivers
       :intercom
     end
 
-    def applications
-      config = @integration.integration.configuration
-      companies = []
-      resource = RestClient::Resource.new('https://api.intercom.io/companies', config['token'], nil)
-      response = resource.get( :content_type => :json, :accept => :json)
+    def list_subscribers
+      url = api_url + 'users'
+      users = []
+      response = self.get_request(url)
       response = JSON.parse(response)
-      response["companies"].each do |company|
-        companies.push( { title: company["name"], id: company["id"] } )
+      response['users'].each do |user|
+        users.push( { email: user['email'], avatar: user['avatar']['image_url'] } )
       end
-      companies
+      users
+    end
+
+    def send_message(users = [], message)
+      url = api_url + 'messages'
+      responses = []
+      users.each do |user|
+        data = {
+                    "message_type" => "inapp",
+                    "body" => message,
+                    "template" => "plain",
+                    "from" => {
+                      "type" => "admin",
+                      "id" => self.configuration["uid"]
+                    },
+                    "to" => {
+                      "type" => "user",
+                      "email" => user['email']
+                    }
+                  }
+        resource = self.post_request(url, data)
+        responses.push(JSON.parse(resource.body))
+      end
+      responses
+    end
+
+    def header
+      auth = 'Basic ' + Base64.strict_encode64( "#{self.configuration['token']}:" ).chomp
+      { "Authorization": auth , "Content-Type": "application/json", "Accept": "application/json" }
+    end
+
+    def api_url
+      'https://api.intercom.io/'
     end
 
     def auth_type

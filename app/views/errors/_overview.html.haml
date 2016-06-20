@@ -73,17 +73,37 @@
       .panel-heading
         Broadcast
       .panel-body
-        .subscribers
-          - @error.website.users.limit(10).each do |subscriber|
-            = image_tag subscriber.avatar_url(30)
-            - if @error.website.users.size > 10
-              = " and #{@error.website.users.size - 10} more"
-              - break
-          - if @error.website.users.size > 0
-            %h5.pull-right
-              This message will be sent to
-              = @error.website.users.size.to_s + (@error.website.users.size > 1 ? ' users' : ' user')
-          .notify
-            = form_for @error, url: notify_subscribers_error_path(), remote: true, html: { method: :post , class: ' broadcast-textarea'}, :data => {:confirm => 'Are you sure?'} do |f|
-              = text_area_tag 'message', '', placeholder: 'Write a message ...'
-              %button.btn.btn-primary{:type => 'submit'} Send
+        -if current_website.intercom_integration?
+          #custom-bootstrap.navbar.navbar-default{:role => "navigation"}
+            %ul.nav.navbar-nav.navbar-left#details-tabs.main-tabs
+              %li.active
+                %a{ "data-toggle" => "tab", :href => "#email" } E-mail
+              %li
+                %a{ "data-toggle" => "tab", :href => "#intercom" } Intercom
+          .tab-content
+            #email.tab-pane.fade.in.active
+              = render partial: 'errors/notify_form'
+            #intercom.tab-pane.fade
+              - intercom_users = current_website.intercom_integration.driver.list_subscribers
+              .subscribers
+                - intercom_users.each do |subscriber|
+                  -  if subscriber[:avatar]
+                    = image_tag subscriber[:avatar]
+                  - else
+                    - gravatar = Digest::MD5.hexdigest(subscriber[:email]).downcase
+                    = image_tag "http://gravatar.com/avatar/#{gravatar}.png?s=30"
+                  - if intercom_users.size > 10
+                    = " and #{intercom_users.size - 10} more"
+                    - break
+                - if intercom_users.size > 0
+                  %h5.pull-right
+                    This message will be sent to
+                    = intercom_users.size.to_s + (intercom_users.size > 1 ? ' users' : ' user')
+                  .notify
+                    = form_for @error, url: notify_subscribers_error_path(current_website.intercom_integration, users: intercom_users, intercom: true), remote: true, html: { method: :post , class: ' broadcast-textarea'}, :data => {:confirm => 'Are you sure?'} do |f|
+                      = text_area_tag 'message', '', placeholder: 'Write a message ...'
+                      %button.btn.btn-primary{:type => 'submit'} Send
+                - else
+                  %p Sorry, we couldn't find any intercom users.
+        -else
+          = render partial: 'errors/notify_form'

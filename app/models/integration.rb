@@ -1,11 +1,21 @@
 class Integration < ActiveRecord::Base
+  extend Enumerize
+  enumerize :provider, in: Integrations.drivers_types, scope: true, predicates: true
+
   belongs_to :website
-  validates :name, presence: true
-  validates :provider, presence: true
+  validates :name, :provider, presence: true
   store_accessor :configuration
+
+  attr_accessor :application
+
+  before_update :select_application, if: -> { application }
 
   def driver
     Integrations.create(self)
+  end
+
+  def select_application
+    self.configuration["selected_application"] = application
   end
 
   def assign_configuration(auth_hash)
@@ -14,10 +24,10 @@ class Integration < ActiveRecord::Base
   end
 
   def get_applications
-    driver.driver.applications
+    driver.applications
   end
 
-  def create_task(error_id)
-    driver.driver.create_task(error_id)
+  def selected_application
+    driver.selected_application
   end
 end

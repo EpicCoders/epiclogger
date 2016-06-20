@@ -23,6 +23,19 @@ class Website < ActiveRecord::Base
   before_update :generate_api_keys, if: -> { generate }
   before_destroy :website_dependent
 
+  Integrations.drivers_types.each do |integration|
+    class_eval <<-EOF, __FILE__, __LINE__
+      define_method("#{integration.to_s}_integration?") do
+        self.integrations.find_by(provider: integration).present?
+      end
+
+      define_method("#{integration.to_s}_integration") do
+        self.integrations.find_by(provider: integration)
+      end
+    EOF
+  end
+
+
   def website_dependent
     website_members.each(&:delete)
   end

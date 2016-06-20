@@ -18,10 +18,9 @@
             %li
               %span.label.badge= @error.checksum
         .col-xs-5.text-right
-          - github = @website.integrations.find{ |integration| integration.provider == 'github' }
-          - if github
+          - if @error.website.github_integration?
             .btn-group
-              = button_to 'Create Github Issue',create_task_integration_path(github, error_id: @error.id), class: "btn pull-right btn-primary "
+              = button_to 'Create Github Issue', create_task_integration_path(@error.website.github_integration, error_id: @error.id, title: @error.message), class: "btn pull-right btn-primary "
           .btn-group
             = paginate @issues, theme: 'next_prev_theme', param_name: :page_issue
           .btn-group.resolve

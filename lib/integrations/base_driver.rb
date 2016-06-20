@@ -20,12 +20,16 @@ module Integrations
       Integrations.config[type]
     end
 
-    def create_task
-      self.class.create_task(error_id)
-    end
-
     def applications
       self.class.applications
+    end
+
+    def selected_application
+      self.class.selected_application
+    end
+
+    def configuration
+      @integration.integration.configuration
     end
 
     def build_configuration(auth_hash)
@@ -46,6 +50,14 @@ module Integrations
         config[:uid]              = auth_hash['uid'] if auth_hash['uid'].present?
       end
       config
+    end
+
+    def get_request(url)
+      RestClient.get url, header rescue 'Operation failed!'
+    end
+
+    def post_request(url, data)
+      RestClient.post url, data.to_json, header rescue 'Operation failed!'
     end
   end
 end
