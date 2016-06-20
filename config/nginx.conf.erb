@@ -198,12 +198,25 @@ http {
             add_header Cache-Control public;
             add_header ETag "";
             # added configuration for CORS for font assets
+
             <% unless ENV['CORS_ASSET_ORIGINS'].nil? %>
+            set $cors "";
+            <% ENV['CORS_ASSET_ORIGINS'].split(',').each do |origin| %>
+            if ($http_origin = "<%= origin %>") {
+              set $cors "1";
+            }
+            <% end %>
+
             if ($request_filename ~* (\.(woff|woff2|ttf|eot|svg))) {
-                add_header 'Access-Control-Allow-Origin' "<%= ENV['CORS_ASSET_ORIGINS'] %>";
-                add_header 'Access-Control-Allow-Credentials' 'true'; # only needed for SSL
-                add_header 'Access-Control-Allow-Methods' 'GET, HEAD';
-                add_header 'Access-Control-Allow-Headers' 'Accept,Authorization,Cache-Control,Content-Type,DNT,If-Modified-Since,Keep-Alive,Origin,User-Agent,X-Mx-ReqToken,X-Requested-With';
+              add_header 'Vary' 'Origin';
+              set $cors "${cors}1";
+            }
+            if ($cors = "11") {
+              add_header 'Vary' 'Origin'; # we need this in both if blocks, because nginx is stupid
+              add_header 'Access-Control-Allow-Origin' "$http_origin";
+              add_header 'Access-Control-Allow-Credentials' 'true'; # only needed for SSL
+              add_header 'Access-Control-Allow-Methods' 'GET, HEAD';
+              add_header 'Access-Control-Allow-Headers' 'Accept,Authorization,Cache-Control,Content-Type,DNT,If-Modified-Since,Keep-Alive,Origin,User-Agent,X-Mx-ReqToken,X-Requested-With';
             }
             <% end %>
             # end of added configuration

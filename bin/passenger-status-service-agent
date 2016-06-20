@@ -39,7 +39,7 @@ else
 fi
 LOG_PREFIX="passenger-status-service-agent"
 TEMPDIR=`mktemp -d /tmp/passenger-status-service-agent.XXXXXX`
-HOSTNAME=`hostname -f`
+HOSTNAME=$DYNO
 INTERVAL=${INTERVAL:-10}
 
 if [[ "$DYNO" = "" ]]; then
