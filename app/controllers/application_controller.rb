@@ -18,7 +18,6 @@ class ApplicationController < ActionController::Base
 
   def current_admin_user
     return current_user if current_user.admin?
-    return nil
   end
 
   def authenticate_admin_user!

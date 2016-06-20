@@ -70,7 +70,7 @@ ActiveAdmin.register User do
   end
 
   action_item :show, if: proc { !user.confirmed? } do
-    link_to 'Confirm user', confirm_user_url(id: user.id, token: user.confirmation_token), method: :get
+    link_to 'Confirm user', confirm_admin_user_path(user), method: :put
   end
 
   member_action :confirm, method: :put do
