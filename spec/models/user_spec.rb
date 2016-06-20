@@ -56,6 +56,21 @@ RSpec.describe User, type: :model do
     end
   end
 
+  describe "is_user_of?" do
+    it 'should return true' do
+      user2 = create :user, email: 'basescu@putinescu.com', role: 'user'
+      website_member2 = create :website_member, user: user2, website: website
+      expect( user2.is_user_of?(website) ).to be(true)
+    end
+
+    it 'should return false' do
+      user2 = create :user, email: 'user2@email.me'
+      website2 = create :website
+      website_member2 = create :website_member, user: user2, website: website2
+      expect( user.is_user_of?(website2) ).to be(false)
+    end
+  end
+
   describe "default_website" do
     it 'returns first' do
       website2 = create :website

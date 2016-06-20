@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe InvitesController, type: :controller do
-  let(:user) { create :user }
+  let(:user) { create :user, email: 'epic@email.com' }
   let(:website) { create :website }
   let!(:website_member) { create :website_member, user_id: user.id, website_id: website.id }
   let(:invite) { create :invite, website: website, invited_by_id: user.id }
@@ -44,7 +44,13 @@ RSpec.describe InvitesController, type: :controller do
 
     context 'logged in' do
 
+      it 'should assign invite' do
+        get_with user, :accept, params
+        expect(assigns(:invite)).to eq(invite)
+      end
+
       it 'should redirect to errors' do
+        invite.update_attributes(email: user.email)
          expect(get_with user, :accept, params).to redirect_to(errors_url)
       end
 
@@ -68,7 +74,6 @@ RSpec.describe InvitesController, type: :controller do
     end
 
     context 'logged out' do
-
       it 'should redirect to errors' do
          expect(get :accept, params).to redirect_to(signup_url(token: invite.token))
       end

@@ -23,9 +23,6 @@ class InvitesController < ApplicationController
     elsif current_user && @invite.email.casecmp(current_user.email) == 1
       # it will redirect to website wizard url because emails don't match
       after_login_redirect
-    else
-      logout
-      redirect_to signup_url( token: params[:id] )
     end
   end
 
