@@ -15,11 +15,11 @@ class User < ActiveRecord::Base
   before_create { generate_token(:uid) if provider == 'email' }
 
   def is_owner_of?(website)
-    website.website_members.with_role(:owner).where(website: website).map(&:user_id).include?(self.id)
+    website.website_members.with_role(:owner).pluck(:user_id).include?(id)
   end
 
-  def is_member_of?(website)
-    website.website_members.with_role(:user).where(website: website).map(&:user_id).include?(self.id)
+  def is_user_of?(website)
+    website.website_members.pluck(:user_id).include?(id)
   end
 
   def default_website

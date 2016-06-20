@@ -14,14 +14,14 @@ class Ability
         user.is_owner_of?(website)
       end
       can :read, Website do |website|
-        user.is_member_of?(website)
+        user.is_user_of?(website)
       end
       can :create, Website
       can :manage, WebsiteMember do |website_member|
         user.is_owner_of?(website_member.website)
       end
       can :read, WebsiteMember do |website_member|
-        website_member.website.is_member_of?(user)
+        website_member.website.is_user_of?(user)
       end
     end
   end
