@@ -80,6 +80,14 @@ describe Website do
       website.check_release('51bda2437170d7d5fe39fb358db9af51baf92c6e')
       expect(Release.last.version).to eq('51bda2437170d7d5fe39fb358db9af51baf92c6e')
     end
+
+    it 'resolves the errors in the previous release' do
+      error = FactoryGirl.create(:grouped_issue, checksum: SecureRandom.hex(), release: release, website: website, status: GroupedIssue::UNRESOLVED, resolved_at: nil )
+      website.check_release('51bda2437170d7d5fe39fb358db9af51baf92c6e')
+      error.reload
+      expect(error.status).to eq(GroupedIssue::RESOLVED)
+      expect(error.resolved_at).to_not be_nil
+    end
   end
 
   describe 'daily report' do

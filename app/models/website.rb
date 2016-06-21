@@ -40,7 +40,7 @@ class Website < ActiveRecord::Base
     unless version.nil?
       release = releases.create_with(website_id: id).find_or_create_by(version: version)
       unless last_release.nil? || last_release.version == release.version
-        last_release.grouped_issues.update_all(status: GroupedIssue::RESOLVED)
+        last_release.grouped_issues.update_all(status: GroupedIssue::RESOLVED, resolved_at: Time.now.utc)
       end
     end
     release = last_release if version.nil?
