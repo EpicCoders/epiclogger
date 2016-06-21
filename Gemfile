@@ -6,6 +6,8 @@ ruby '2.2.2'
 gem 'rails', '4.2.6'
 # Use postgres as the database for Active Record
 gem 'pg'
+gem 'schema_plus_pg_indexes'
+gem 'schema_plus_foreign_keys'
 # Add enumerize gem
 gem 'enumerize'
 
