@@ -18,7 +18,7 @@ class User < ActiveRecord::Base
     website.website_members.with_role(:owner).pluck(:user_id).include?(id)
   end
 
-  def is_user_of?(website)
+  def is_member_of?(website)
     website.website_members.pluck(:user_id).include?(id)
   end
 

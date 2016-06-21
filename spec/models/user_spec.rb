@@ -56,18 +56,18 @@ RSpec.describe User, type: :model do
     end
   end
 
-  describe "is_user_of?" do
+  describe "is_member_of?" do
     it 'should return true' do
       user2 = create :user, email: 'basescu@putinescu.com', role: 'user'
       website_member2 = create :website_member, user: user2, website: website
-      expect( user2.is_user_of?(website) ).to be(true)
+      expect( user2.is_member_of?(website) ).to be(true)
     end
 
     it 'should return false' do
       user2 = create :user, email: 'user2@email.me'
       website2 = create :website
       website_member2 = create :website_member, user: user2, website: website2
-      expect( user.is_user_of?(website2) ).to be(false)
+      expect( user.is_member_of?(website2) ).to be(false)
     end
   end
 

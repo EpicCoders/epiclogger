@@ -35,7 +35,7 @@ class UsersController < ApplicationController
     logout if logged_in? && user
     if user.nil?
       redirect_to login_url, alert: 'Bad url'
-    elsif !user.confirmed_at.blank?
+    elsif user.confirmed?
       redirect_to login_url, alert: 'You confirmed your email once'
     else
       user.update_attributes(confirmation_token: nil, confirmed_at: Time.now.utc)
