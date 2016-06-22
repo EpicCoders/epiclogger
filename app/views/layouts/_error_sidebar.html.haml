@@ -13,5 +13,14 @@
       = nav_link '', websites_url, {'title' => 'Websites'}, 'list'
       = nav_link '', logout_url, { method: :delete }, 'sign-out'
       %li
-        %a{:href => ""}
-          = image_tag current_user.avatar_url, class: 'avatar'
+        .dropdown
+          %button.btn.btn-link.dropdown-toggle.btn-block{"aria-expanded" => "false", "aria-haspopup" => "true", "data-toggle" => "dropdown", "data-target" => "#icon-dropdown", :type => "button"}
+            = image_tag current_user.avatar_url, class: 'avatar'
+%ul.dropdown-menu#icon-dropdown
+  %li
+    %a{:href => "#{websites_url()}"} Websites
+  %li
+    = link_to "Account", edit_user_path(current_user)
+  %li.divider{:role => "separator"}
+  %li
+    = link_to 'Logout', logout_url, method: :delete
