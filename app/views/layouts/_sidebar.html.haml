@@ -33,7 +33,7 @@
           %span.caret
         %ul.dropdown-menu
           %li
-            %a{:href => "#{websites_url()}"} Websites
+            = link_to "Websites", websites_path()
           %li
             = link_to "Account", edit_user_path(current_user)
           %li.divider{:role => "separator"}

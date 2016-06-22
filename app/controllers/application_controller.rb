@@ -54,9 +54,6 @@ class ApplicationController < ActionController::Base
   def after_login_redirect(url_to_redirect = nil)
     redirect_to(url_to_redirect) && return unless url_to_redirect.nil?
     if current_website
-      redirect_to errors_url, notice: "Logged in"
-    elsif !current_user.websites.empty?
-      set_website(current_user.websites.first)
       redirect_to errors_url
     else
       redirect_to website_wizard_path(:create)
