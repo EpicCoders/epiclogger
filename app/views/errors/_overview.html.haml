@@ -55,6 +55,8 @@
           %dd= @issue.created_at
           %dt First seen at
           %dd= @error.first_seen
+          %dt Url
+          %dd=@issue.get_interfaces(:http)._data[:url]
           %dt File
           %dd= @error.culprit
           %dt ID

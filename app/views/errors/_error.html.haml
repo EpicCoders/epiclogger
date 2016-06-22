@@ -1,7 +1,7 @@
 #grouped-issues.groups
   = link_to error_url(error) do
     .error-count
-      %span= error.id
+      %span= error.times_seen
       - case error.level
       - when "debug"
         %button.btn.btn-default.fa.fa-bug{title: "Level: debug"}

@@ -1,9 +1,10 @@
 #settings
-  = simple_form_for @website, url: "websites/#{@website.id}", method: :put, remote: true, wrapper: :vertical_form do |f|
+  = simple_form_for @website, url: "websites/#{@website.id}", method: :put, wrapper: :vertical_form do |f|
     .col-lg-6
       .panel.panel-default
         .panel-heading Project Details
         .panel-body
+          = render 'shared/flash_messages'
           .form-group
             = f.input :title, placeholder: 'Website name'
             = f.input :domain, placeholder: 'http://www.domain.com'

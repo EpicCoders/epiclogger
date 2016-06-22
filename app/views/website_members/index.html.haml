@@ -23,4 +23,4 @@
               %td= website_member.user.email
               %td= website_member.role
               %td.text-right
-                = link_to ' Delete', "/website_members/#{website_member.id}", :method => :delete, :remote => "true", data: {confirm: "Are you sure?"}, :class => "delete_website btn btn-danger pull-right fa fa-close"
+                = link_to ' Delete', "/website_members/#{website_member.id}", :method => :delete, data: {confirm: "Are you sure?"}, :class => "delete_website btn btn-danger pull-right fa fa-close"

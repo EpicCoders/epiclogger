@@ -1,7 +1,6 @@
 %p This is a email notifying you that 10 errors occurred in last hour.
 %table
   %tr
-    %th.waza ID
     %th Platform
     %th Message
     %th Created At
@@ -10,7 +9,6 @@
     %th Issue Url
   - @last_hour_errors.each_with_index do |issue, index|
     %tr
-      %td #{issue.id}
       %td #{issue.platform}
       %td #{issue.message}
       %td #{issue.created_at}

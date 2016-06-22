@@ -7,7 +7,7 @@ class WebsitesController < ApplicationController
 
   def update
     @website.update_attributes(website_params)
-    redirect_to installations_url, notice: 'Website updated'
+    redirect_to installations_url(details_tab: 'settings', main_tab: 'details'), notice: 'Website updated'
   end
 
   def destroy

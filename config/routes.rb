@@ -39,7 +39,7 @@ Rails.application.routes.draw do
       get :accept
     end
   end
-  resources :subscribers, only: [:index]
+  resources :subscribers, only: [:index, :destroy]
   # resources :accounts, only: [:show]
   resources :installations, only: [:index]
   resources :website_members, only: [:index, :destroy]
