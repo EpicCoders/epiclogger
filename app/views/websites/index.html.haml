@@ -25,6 +25,6 @@
               %td= website.try(:app_key)
               %td= website.try(:app_secret)
               %td.text-right
-                = link_to ' Delete', "/websites/#{website.id}", :method => :delete, :remote => "true", data: {confirm: "Are you sure?"}, :class => "delete_website btn btn-danger pull-right fa fa-close"
+                = link_to ' Delete', "/websites/#{website.id}", :method => :delete, data: {confirm: "Are you sure?"}, :class => "delete_website btn btn-danger pull-right fa fa-close"
 
 

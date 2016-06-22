@@ -19,7 +19,7 @@
                 %td= subscriber.name
                 %td= subscriber.email
                 %td.text-right
-                  = link_to ' Delete', subscriber_url(subscriber), :method => :delete, :remote => "true", data: {confirm: "Are you sure?"}, :class => "delete_website btn btn-danger pull-right fa fa-close"
+                  = link_to ' Delete', subscriber_url(subscriber), :method => :delete, data: {confirm: "Are you sure?"}, :class => "delete_website btn btn-danger pull-right fa fa-close"
     - else
       .bs-example.col-lg-12{"data-example-id" => "simple-alerts"}
         .alert.alert-info{:role => "alert", :align => "center"}

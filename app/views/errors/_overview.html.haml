@@ -59,6 +59,8 @@
           %dd=@issue.get_interfaces(:http)._data[:url]
           %dt File
           %dd= @error.culprit
+          %dt User Agent
+          %dd= @issue.get_headers(:user_agent)
           %dt ID
           %dd= @issue.event_id
           %dt Level

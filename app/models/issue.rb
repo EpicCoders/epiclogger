@@ -18,6 +18,12 @@ class Issue < ActiveRecord::Base
     all_interaces.find { |i| i.type == interface }
   end
 
+  def get_headers(header = nil)
+    all_headers = get_interfaces(:http)._data[:headers]
+    return all_headers if header.nil?
+    all_headers.find { |h| h[header] }.try(:values).try(:first)
+  end
+
   def stacktrace_frames
     #added a switch statement in case errors from different platforms will be saved differenty
     case platform

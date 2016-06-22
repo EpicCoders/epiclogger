@@ -13,19 +13,17 @@ class WebsitesController < ApplicationController
   def destroy
     return false unless WebsiteMember.where(user_id: current_user.id, website_id: @website.id).first.role == "owner"
     @website.destroy
-    respond_to do |format|
-      unless current_user.websites.blank?
-        set_website(current_user.websites.first)
-        format.js { render inline: 'location.reload();' }
-      end
-      format.js { render inline: "location.href='#{website_wizard_path(:create)}';" } if current_user.websites.blank?
+    unless current_user.websites.blank?
+      set_website(current_user.websites.first)
+      redirect_to websites_url
     end
+    website_wizard_url(:create) if current_user.websites.blank?
   end
 
   def revoke
     @website.generate = true
     @website.save
-    redirect_to "/installations?details_tab=api_keys&main_tab=details"
+    redirect_to installations_path(details_tab: 'api_keys', main_tab: 'details')
   end
 
   def change_current

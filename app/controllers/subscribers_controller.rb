@@ -5,10 +5,7 @@ class SubscribersController < ApplicationController
   end
 
   def destroy
-    binding.pry
     @subscriber.destroy
-    respond_to do |format|
-      format.js { render inline: 'location.reload();' }
-    end
+    redirect_to subscribers_url
   end
 end
