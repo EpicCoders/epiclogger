@@ -5,22 +5,23 @@
         Website Subscribers
     .clearfix
     %br/
-    .panel.panel-default
-      %table.table#members-container
-        %thead
-          %tr
-            %th Name
-            %th Email
-            / %th.text-right Actions
-        %tbody.websites
-          - @subscribers.each do |subscriber|
+    - if @subscribers.count > 0
+      .panel.panel-default
+        %table.table#members-container
+          %thead
             %tr
-              %td= subscriber.name
-              %td= subscriber.email
-              / %td.text-right
-              /   = link_to ' Delete', "/subscribers/#{subscriber.id}", :method => :delete, :remote => "true", data: {confirm: "Are you sure?"}, :class => "delete_website btn btn-danger pull-right fa fa-close"
-    - if @subscribers.count == 0
+              %th Name
+              %th Email
+              %th.text-right Actions
+          %tbody.websites
+            - @subscribers.each do |subscriber|
+              %tr
+                %td= subscriber.name
+                %td= subscriber.email
+                %td.text-right
+                  = link_to ' Delete', subscriber_url(subscriber), :method => :delete, :remote => "true", data: {confirm: "Are you sure?"}, :class => "delete_website btn btn-danger pull-right fa fa-close"
+    - else
       .bs-example.col-lg-12{"data-example-id" => "simple-alerts"}
         .alert.alert-info{:role => "alert", :align => "center"}
           %strong There are no subscribers.
-          Website subscribers will be listed in a table as soon as they will appear.
+          Website subscribers will be listed in a table as soon as they will be available.
