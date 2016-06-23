@@ -225,6 +225,7 @@ module ErrorStore
     # Saves an issue to the database.
     class ErrorWorker
       include Sidekiq::Worker
+      sidekiq_options :retry => 3
 
       def perform(cache_key)
         # STEP 3:
