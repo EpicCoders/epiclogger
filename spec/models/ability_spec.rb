@@ -26,7 +26,6 @@ RSpec.describe Ability do
         it { is_expected.to be_able_to(:manage, website) }
         it { is_expected.to be_able_to(:manage, user_website_member_with_user) }
         it { is_expected.to be_able_to(:manage, owner_website_member_with_user) }
-        it { is_expected.to be_able_to(:manage, user_website_member_with_admin) }
         it { is_expected.to be_able_to(:manage, issue) }
         it { is_expected.to be_able_to(:manage, subscriber) }
         it { is_expected.to be_able_to(:manage, message) }
@@ -42,7 +41,6 @@ RSpec.describe Ability do
         it { is_expected.not_to be_able_to(:manage, website) }
         it { is_expected.not_to be_able_to(:manage, user_website_member_with_user) }
         it { is_expected.not_to be_able_to(:manage, owner_website_member_with_user) }
-        it { is_expected.not_to be_able_to(:manage, user_website_member_with_admin) }
         it { is_expected.not_to be_able_to(:manage, issue) }
         it { is_expected.not_to be_able_to(:manage, subscriber) }
         it { is_expected.not_to be_able_to(:manage, message) }
