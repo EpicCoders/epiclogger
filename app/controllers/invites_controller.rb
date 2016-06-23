@@ -15,13 +15,11 @@ class InvitesController < ApplicationController
     if !logged_in?
       # we redirect to signup url because we are not logged in
       redirect_to signup_url( token: params[:id] )
-    elsif @invite.email.casecmp(current_user.email) == 0
+    elsif @invite.email.casecmp(current_user.email) == -1
+      redirect_to :root, notice: 'The email address this invite was sent to does not match yours'
+    else
       @invite.accept(current_user)
       set_website(@invite.website)
-      # it will redirect to errors url because we set the website for the user
-      after_login_redirect
-    elsif @invite.email.casecmp(current_user.email) == 1
-      # it will redirect to website wizard url because emails don't match
       after_login_redirect
     end
   end

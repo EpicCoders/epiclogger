@@ -44,8 +44,8 @@ class ErrorsController < ApplicationController
   def notify_subscribers
     unless params[:message].blank?
       @message = Message.create( content: params[:message], issue_id: @error.issues.last.id )
-      @error.website.subscribers.each do |user|
-        GroupedIssueMailer.notify_subscriber(@error, user, current_user, @message).deliver_later
+      @error.website.subscribers.each do |subscriber|
+        GroupedIssueMailer.notify_subscriber(@error, subscriber, current_user, @message).deliver_later
       end
     end
   end

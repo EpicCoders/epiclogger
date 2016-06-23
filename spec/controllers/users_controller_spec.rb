@@ -43,7 +43,8 @@ RSpec.describe UsersController, :type => :controller do
     end
 
     it "redirects to /create" do
-      expect( get_with user, :new, params ).to redirect_to(website_wizard_path(:create))
+      user2 = create :user
+      expect( get_with user2, :new, params ).to redirect_to(website_wizard_path(:create))
     end
 
     it "redirects to /errors" do

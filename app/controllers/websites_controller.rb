@@ -13,11 +13,12 @@ class WebsitesController < ApplicationController
   def destroy
     return false unless WebsiteMember.where(user_id: current_user.id, website_id: @website.id).first.role == "owner"
     @website.destroy
-    unless current_user.websites.blank?
+    if current_user.websites.blank?
+      website_wizard_url(:create)
+    else
       set_website(current_user.websites.first)
       redirect_to websites_url
     end
-    website_wizard_url(:create) if current_user.websites.blank?
   end
 
   def revoke

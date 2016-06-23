@@ -1,5 +1,5 @@
 class SubscribersController < ApplicationController
-	load_and_authorize_resource
+  load_and_authorize_resource
   def index
     @subscribers = current_website.subscribers
   end

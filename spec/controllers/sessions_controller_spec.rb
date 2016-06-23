@@ -22,7 +22,8 @@ RSpec.describe SessionsController, :type => :controller do
     end
 
     it 'should redirect to create' do
-      expect( get_with user, :new ).to redirect_to(website_wizard_path(:create))
+      user2 = create :user
+      expect( get_with user2, :new ).to redirect_to(website_wizard_path(:create))
     end
   end
 

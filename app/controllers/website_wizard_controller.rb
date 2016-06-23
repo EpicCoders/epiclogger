@@ -26,7 +26,7 @@ class WebsiteWizardController < ApplicationController
         # render_wizard
       else
         #notice with an active model error
-        flash[:notice] =  @website.errors.full_messages.try(:first)
+        flash[:notice] =  @website.errors.full_messages.join(', ')
         render_step wizard_value(step)
       end
     when :choose_platform

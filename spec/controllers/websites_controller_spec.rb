@@ -49,16 +49,14 @@ RSpec.describe WebsitesController, type: :controller do
         website2 = create :website, title: 'Website title', domain: 'http://www.second-website.com'
         create :website_member, user: user, website: website2
         delete_with user, :destroy, params
-        expect(response.body).to eq('location.reload();')
-        expect(response.content_type).to eq('text/javascript')
-        expect(response).to have_http_status(200)
+        expect(response).to redirect_to(websites_url)
+        expect(response).to have_http_status(302)
       end
 
       it 'redirects to new_website_path' do
         delete_with user, :destroy, params
-        expect(response.body).to eq("location.href='/website_wizard/create';")
-        expect(response.content_type).to eq('text/javascript')
-        expect(response).to have_http_status(200)
+        expect(response).to redirect_to(website_wizard_url(:create))
+        expect(response).to have_http_status(302)
       end
     end
 

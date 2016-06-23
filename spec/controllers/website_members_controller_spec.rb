@@ -21,7 +21,7 @@ RSpec.describe WebsiteMembersController, :type => :controller do
   describe "DELETE #destroy" do
     let(:user2) { create :user, email: 'user@email.com' }
     let!(:website_member2) { create :website_member, user: user2, website: website }
-    let(:params) {{ id: website_member2.id }}
+    let(:params) {{ id: website_member2.id}}
 
     it 'should delete record' do
       expect{
@@ -31,7 +31,13 @@ RSpec.describe WebsiteMembersController, :type => :controller do
 
     it 'should redirect' do
       expect( delete_with user, :destroy, params ).to redirect_to(website_members_path)
-      expect( flash[:notice] ).to eq('Member removed')
+    end
+
+    it 'should return false' do
+      delete_with user, :destroy, params
+      expect(subject).to receive(:destroy).and_return(false)
+
+      delete_with user, :destroy, params
     end
   end
 end

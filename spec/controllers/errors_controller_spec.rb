@@ -17,17 +17,16 @@ RSpec.describe ErrorsController, type: :controller do
         params[:format] = 'js'
         mailer = double('GroupedIssueMailer')
         expect(mailer).to receive(:deliver_later)
-        expect(GroupedIssueMailer).to receive(:notify_subscriber).with(group, user, user, an_instance_of(Message)).and_return(mailer).once
+        expect(GroupedIssueMailer).to receive(:notify_subscriber).with(group, subscriber, user, an_instance_of(Message)).and_return(mailer).once
 
         post_with user, :notify_subscribers, params
       end
 
       it 'should email 2 subscribers' do
-        user2 = create :user, provider: "some"
-        create :website_member, website: website, user_id: user2.id
+        subscriber2 = create :subscriber, website: website
         mailer = double('GroupedIssueMailer')
         expect(mailer).to receive(:deliver_later).twice
-        expect(GroupedIssueMailer).to receive(:notify_subscriber).with(group, an_instance_of(User), an_instance_of(User), an_instance_of(Message)).and_return(mailer).twice
+        expect(GroupedIssueMailer).to receive(:notify_subscriber).with(group, an_instance_of(Subscriber), an_instance_of(User), an_instance_of(Message)).and_return(mailer).twice
         post_with user, :notify_subscribers, params
       end
 
