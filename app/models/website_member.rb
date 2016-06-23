@@ -6,6 +6,7 @@ class WebsiteMember < ActiveRecord::Base
   before_create :valid_url
 
   before_destroy :validate_destroy
+  validates :user_id, uniqueness: { scope: [:website_id] }
 
   def valid_url
     valid = (self.website.domain =~ /\A#{URI::regexp(['http', 'https'])}\z/).nil?

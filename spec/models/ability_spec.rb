@@ -53,8 +53,8 @@ RSpec.describe Ability do
         let(:user2) { create :user }
         let(:owner2) { create :user }
         let(:website2) { create :website }
-        let!(:user_website_member_with_user2) { create :website_member, website: website, user: user, role: 2 }
-        let!(:owner_website_member_with_user2) { create :website_member, website: website, user: owner}
+        let!(:user_website_member_with_user2) { create :website_member, website: website2, user: user2, role: 2 }
+        let!(:owner_website_member_with_user2) { create :website_member, website: website2, user: owner2 }
 
         context 'when owner2' do
           subject(:ability){ Ability.new(owner2) }
