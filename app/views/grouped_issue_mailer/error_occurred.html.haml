@@ -1,6 +1,6 @@
 .col-lg-6
   %p.gray_text{:style => 'display:inline'} Project:
-  %small #{@issue.website.domain}
+  %small #{@issue.website.title}
   %hr
   - if @issue.get_interfaces(:exception).present?
     %p An error has just occurred. View full details at:

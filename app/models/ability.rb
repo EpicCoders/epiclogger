@@ -5,8 +5,12 @@ class Ability
     if user
       can :manage, User, id: user.id
       can :manage, GroupedIssue
-      can :manage, Issue
-      can :manage, Message
+      can :manage, Issue do |issue|
+        user.is_owner_of?(issue.website)
+      end
+      can :manage, Message do |message|
+        user.is_owner_of?(message.subscriber.website)
+      end
       can :manage, Subscriber do |subscriber|
         user.is_owner_of?(subscriber.website)
       end
