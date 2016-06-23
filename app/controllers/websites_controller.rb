@@ -14,7 +14,7 @@ class WebsitesController < ApplicationController
     return false unless WebsiteMember.where(user_id: current_user.id, website_id: @website.id).first.role == "owner"
     @website.destroy
     if current_user.websites.blank?
-      website_wizard_url(:create)
+      redirect_to website_wizard_url(:create)
     else
       set_website(current_user.websites.first)
       redirect_to websites_url

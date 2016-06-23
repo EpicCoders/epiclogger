@@ -30,14 +30,13 @@ RSpec.describe WebsiteMembersController, :type => :controller do
     end
 
     it 'should redirect' do
-      expect( delete_with user, :destroy, params ).to redirect_to(website_members_path)
+      expect( delete_with user, :destroy, params ).to redirect_to(website_members_url)
     end
 
     it 'should return false' do
       delete_with user, :destroy, params
-      expect(subject).to receive(:destroy).and_return(false)
-
-      delete_with user, :destroy, params
+      expect( delete_with user, :destroy, params ).to redirect_to(website_members_url)
+      expect( flash[:notice] ).to eq('Website must have at least one owner')
     end
   end
 end

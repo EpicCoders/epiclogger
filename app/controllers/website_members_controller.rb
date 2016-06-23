@@ -6,7 +6,10 @@ class WebsiteMembersController < ApplicationController
 
   def destroy
     @website_member.destroy
-    return false unless @website_member.errors.full_messages.blank?
-    redirect_to website_members_url
+    if @website_member.errors.full_messages.blank?
+	    redirect_to website_members_url
+	  else
+	    redirect_to website_members_url, notice: @website_member.errors.full_messages.join(', ')
+	  end
   end
 end
