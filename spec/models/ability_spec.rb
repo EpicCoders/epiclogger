@@ -17,6 +17,7 @@ RSpec.describe Ability do
         it { is_expected.to be_able_to(:manage, group) }
         it { is_expected.to be_able_to(:create, Website.new) }
         it { is_expected.to be_able_to(:manage, message) }
+        it { is_expected.to be_able_to(:manage, issue) }
       end
 
       context 'as owner of website' do
@@ -27,7 +28,6 @@ RSpec.describe Ability do
         it { is_expected.to be_able_to(:manage, website) }
         it { is_expected.to be_able_to(:manage, user_website_member_with_user) }
         it { is_expected.to be_able_to(:manage, owner_website_member_with_user) }
-        it { is_expected.to be_able_to(:manage, issue) }
         it { is_expected.to be_able_to(:manage, subscriber) }
 
         it_behaves_like 'it has abilities'
@@ -41,13 +41,50 @@ RSpec.describe Ability do
         it { is_expected.not_to be_able_to(:manage, website) }
         it { is_expected.not_to be_able_to(:manage, user_website_member_with_user) }
         it { is_expected.not_to be_able_to(:manage, owner_website_member_with_user) }
-        it { is_expected.not_to be_able_to([:read, :update], issue) }
         it { is_expected.not_to be_able_to(:manage, subscriber) }
 
         it { is_expected.to be_able_to(:read, website) }
         it { is_expected.to be_able_to(:read, user_website_member_with_user) }
 
         it_behaves_like 'it has abilities'
+      end
+
+      context 'not member of website' do
+        let(:user2) { create :user }
+        let(:owner2) { create :user }
+        let(:website2) { create :website }
+        let!(:user_website_member_with_user2) { create :website_member, website: website, user: user, role: 2 }
+        let!(:owner_website_member_with_user2) { create :website_member, website: website, user: owner}
+
+        context 'when owner2' do
+          subject(:ability){ Ability.new(owner2) }
+
+          it { is_expected.not_to be_able_to(:manage, group) }
+          it { is_expected.not_to be_able_to(:manage, message) }
+          it { is_expected.not_to be_able_to(:manage, issue) }
+          it { is_expected.not_to be_able_to(:manage, owner) }
+          it { is_expected.not_to be_able_to(:manage, user) }
+          it { is_expected.not_to be_able_to(:manage, website) }
+          it { is_expected.not_to be_able_to(:manage, user_website_member_with_user) }
+          it { is_expected.not_to be_able_to(:manage, owner_website_member_with_user) }
+          it { is_expected.not_to be_able_to(:manage, subscriber) }
+        end
+        context 'when user2' do
+          subject(:ability){ Ability.new(user2) }
+
+          it { is_expected.not_to be_able_to(:manage, group) }
+          it { is_expected.not_to be_able_to(:manage, message) }
+          it { is_expected.not_to be_able_to(:manage, issue) }
+          it { is_expected.not_to be_able_to(:manage, owner) }
+          it { is_expected.not_to be_able_to(:manage, user) }
+          it { is_expected.not_to be_able_to(:manage, website) }
+          it { is_expected.not_to be_able_to(:manage, user_website_member_with_user) }
+          it { is_expected.not_to be_able_to(:manage, owner_website_member_with_user) }
+          it { is_expected.not_to be_able_to(:manage, subscriber) }
+
+          it { is_expected.not_to be_able_to(:read, website) }
+          it { is_expected.not_to be_able_to(:read, user_website_member_with_user) }
+        end
       end
     end
   end

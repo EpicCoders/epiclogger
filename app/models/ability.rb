@@ -8,9 +8,6 @@ class Ability
         user.is_member_of?(group.website)
       end
       can :manage, Issue do |issue|
-        user.is_owner_of?(issue.website)
-      end
-      can [:read, :update], Issue do |issue|
         user.is_member_of?(issue.website)
       end
       can :manage, Message do |message|
