@@ -15,17 +15,17 @@ RSpec.describe SubscribersController, :type => :controller do
 
   describe "GET #index" do
     it 'should get subscribers' do
-    	get_with user, :index
-    	expect(assigns(:subscribers)).to eq([subscriber])
+      get_with user, :index
+      expect(assigns(:subscribers)).to eq([subscriber])
     end
   end
 
   describe "DELETE #destroy" do
     it 'should delete record' do
-    	subscriber2 = create :subscriber, website: website
+      subscriber2 = create :subscriber, website: website
       expect{
         delete_with user, :destroy, id: subscriber2.id
-        }.to change(Subscriber, :count).by(-1)
+      }.to change(Subscriber, :count).by(-1)
     end
 
     it 'should redirect' do

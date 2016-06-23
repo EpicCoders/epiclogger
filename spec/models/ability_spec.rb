@@ -16,6 +16,7 @@ RSpec.describe Ability do
       shared_examples 'it has abilities' do
         it { is_expected.to be_able_to(:manage, group) }
         it { is_expected.to be_able_to(:create, Website.new) }
+        it { is_expected.to be_able_to(:manage, message) }
       end
 
       context 'as owner of website' do
@@ -28,7 +29,6 @@ RSpec.describe Ability do
         it { is_expected.to be_able_to(:manage, owner_website_member_with_user) }
         it { is_expected.to be_able_to(:manage, issue) }
         it { is_expected.to be_able_to(:manage, subscriber) }
-        it { is_expected.to be_able_to(:manage, message) }
 
         it_behaves_like 'it has abilities'
       end
@@ -41,9 +41,8 @@ RSpec.describe Ability do
         it { is_expected.not_to be_able_to(:manage, website) }
         it { is_expected.not_to be_able_to(:manage, user_website_member_with_user) }
         it { is_expected.not_to be_able_to(:manage, owner_website_member_with_user) }
-        it { is_expected.not_to be_able_to(:manage, issue) }
+        it { is_expected.not_to be_able_to([:read, :update], issue) }
         it { is_expected.not_to be_able_to(:manage, subscriber) }
-        it { is_expected.not_to be_able_to(:manage, message) }
 
         it { is_expected.to be_able_to(:read, website) }
         it { is_expected.to be_able_to(:read, user_website_member_with_user) }

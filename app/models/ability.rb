@@ -4,12 +4,17 @@ class Ability
   def initialize(user)
     if user
       can :manage, User, id: user.id
-      can :manage, GroupedIssue
+      can :manage, GroupedIssue do |group|
+        user.is_member_of?(group.website)
+      end
       can :manage, Issue do |issue|
         user.is_owner_of?(issue.website)
       end
+      can [:read, :update], Issue do |issue|
+        user.is_member_of?(issue.website)
+      end
       can :manage, Message do |message|
-        user.is_owner_of?(message.subscriber.website)
+        user.is_member_of?(message.subscriber.website)
       end
       can :manage, Subscriber do |subscriber|
         user.is_owner_of?(subscriber.website)

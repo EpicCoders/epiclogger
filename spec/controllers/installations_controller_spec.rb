@@ -8,12 +8,12 @@ RSpec.describe InstallationsController, type: :controller do
 
   describe '#index' do
   	it 'should assign website' do
-  		get_with user, :index
+      get_with user, :index
       expect(assigns(:website)).to eq(website)
   	end
 
   	it 'should assign default tabs' do
-  		get_with user, :index
+      get_with user, :index
       expect(assigns(:main_tab)).to eq('details')
       expect(assigns(:details_tab)).to eq('settings')
       expect(assigns(:configuration_tab)).to eq('all_platforms')
@@ -21,7 +21,7 @@ RSpec.describe InstallationsController, type: :controller do
   	end
 
   	it 'should assign from params' do
-  		get_with user, :index, main_tab: 'configuration', details_tab: 'api_keys', configuration_tab: 'ruby', platform_tab: 'rails_3'
+      get_with user, :index, main_tab: 'configuration', details_tab: 'api_keys', configuration_tab: 'ruby', platform_tab: 'rails_3'
       expect(assigns(:main_tab)).to eq('configuration')
       expect(assigns(:details_tab)).to eq('api_keys')
       expect(assigns(:configuration_tab)).to eq('ruby')
