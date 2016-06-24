@@ -4,8 +4,7 @@ class ErrorsController < ApplicationController
   def index
     @filter = params[:filter] || "recent"
     errors_per_page = params[:error_count].to_i || 10
-    current_error = params[:current_issue]
-    @page = params[:page] || 1 if current_error
+    @page = params[:page] || 1
     case @filter
     when "recent"
       @errors = current_website.grouped_issues.order('last_seen DESC').page(@page).per(errors_per_page)

@@ -25,7 +25,8 @@
       .row
         .col-xs-4.side
         .col-xs-5.buttons
-          = paginate @errors, theme: 'next_prev_theme'
+          .pagination-buttons
+            = paginate @errors, theme: 'next_prev_theme'
           %span.pagination-text= page_entries_info @errors, entry_name: 'error'
       %br/
     - if @errors.blank?
