@@ -36,10 +36,10 @@ RSpec.describe ErrorStore do
   describe 'find_interfaces' do
     it 'contains all the interfaces in the folder' do
       check = subject.available_interfaces.map do |i|
-        true if %w(query frame message exception stacktrace template user single_exception http sdk).include?(i[:type].to_s)
+        true if %w(query frame message exception stacktrace template user single_exception http sdk breadcrumbs).include?(i[:type].to_s)
       end.uniq
       expect(check).to eq([true])
-      expect(subject.available_interfaces.length).to eq(10)
+      expect(subject.available_interfaces.length).to eq(11)
     end
   end
 
@@ -54,7 +54,7 @@ RSpec.describe ErrorStore do
 
     it 'gives the interfaces with all of them if find_interfaces called' do
       expect(subject.available_interfaces).to be_kind_of(Array)
-      expect(subject.available_interfaces.length).to eq(10)
+      expect(subject.available_interfaces.length).to eq(11)
       expect(subject.available_interfaces).to eq(subject.class_variable_get(:@@interfaces_list))
     end
   end
@@ -64,7 +64,7 @@ RSpec.describe ErrorStore do
       subject.class_variable_set(:@@interfaces_list, []) # reset the interfaces list
       subject.find_interfaces
 
-      expect(subject.interfaces_types).to eq([:exception, :frame, :http, :message, :query, :sdk, :single_exception, :stacktrace, :template, :user])
+      expect(subject.interfaces_types).to eq([:breadcrumbs,:exception, :frame, :http, :message, :query, :sdk, :single_exception, :stacktrace, :template, :user])
     end
   end
 
@@ -92,6 +92,7 @@ RSpec.describe ErrorStore do
           :csp=>:csp,
           :http=>:http,
           :sdk=>:sdk,
+          :breadcrumbs=>:breadcrumbs,
           :"sentry.interfaces.Exception"=>:exception,
           :"sentry.interfaces.Message"=>:message,
           :"sentry.interfaces.Stacktrace"=>:stacktrace,
@@ -99,7 +100,8 @@ RSpec.describe ErrorStore do
           :"sentry.interfaces.Query"=>:query,
           :"sentry.interfaces.Http"=>:http,
           :"sentry.interfaces.User"=>:user,
-          :"sentry.interfaces.Csp"=>:csp
+          :"sentry.interfaces.Csp"=>:csp,
+          :"sentry.interfaces.Breadcrumbs"=>:breadcrumbs
         }
       )
     end
