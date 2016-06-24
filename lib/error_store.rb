@@ -62,6 +62,7 @@ module ErrorStore
     'csp': :csp,
     'http': :http,
     'sdk': :sdk,
+    'breadcrumbs': :breadcrumbs,
 
     'sentry.interfaces.Exception': :exception,
     'sentry.interfaces.Message': :message,
@@ -70,7 +71,8 @@ module ErrorStore
     'sentry.interfaces.Query': :query,
     'sentry.interfaces.Http': :http,
     'sentry.interfaces.User': :user,
-    'sentry.interfaces.Csp': :csp
+    'sentry.interfaces.Csp': :csp,
+    'sentry.interfaces.Breadcrumbs': :breadcrumbs
   }
 
   CLIENT_RESERVED_ATTRS = [
