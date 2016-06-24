@@ -7,15 +7,19 @@
       %table.table#members-container
         %thead
           %tr
-            %th=type
+            %th=attribute.capitalize
             %th # of notices
             %th First seen at
             %th Last seen at
         %tbody.websites
           - data.each do |element|
             %tr
-              %td
-                =element["title"]
+              - if defined?(secondary)
+                %td
+                  =element[attribute][secondary]
+              - else
+                %td
+                  =element[attribute]
               %td
                 =element["count"]
               %td

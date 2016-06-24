@@ -39,6 +39,7 @@
             #aggregations.tab-pane{ class: "#{params[:current_tab] == 'aggregations' ? 'active' : ''}" }
             - if params[:current_tab] == 'aggregations'
               #accordion.panel-group
-                = render partial: 'errors/aggregations', locals: { title: 'Messages', type: "Message", data: @error.aggregations[:messages], panel: "One" }
-                = render partial: 'errors/aggregations', locals: { title: 'Subscribers', type: "Name", data: @error.aggregations[:subscribers], panel: "Two" }
-                = render partial: 'errors/aggregations', locals: { title: 'Browsers', type: "Browser", data: @error.aggregations[:browsers], panel: "Three" }
+                = render partial: 'errors/aggregations', locals: { title: 'Messages', attribute: "message", data: @error.aggregations("message"), panel: "One" }
+                // use secondary if the returned item is a hash
+                = render partial: 'errors/aggregations', locals: { title: 'Subscribers', attribute: "subscriber", secondary: "name", data: @error.aggregations("subscriber"), panel: "Two" }
+                = render partial: 'errors/aggregations', locals: { title: 'Browsers', attribute: "browser", data: @error.aggregations("browser"), panel: "Three" }

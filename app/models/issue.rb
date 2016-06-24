@@ -58,14 +58,13 @@ class Issue < ActiveRecord::Base
     error.data[:environment]
   end
 
-  def user_agent
+  def browser
     headers = error.data.try(:[], :interfaces).try(:[], :http).try(:[], :headers)
     unless headers.nil?
       headers.each do |hash|
-        return UserAgent.parse(hash[:user_agent]) if hash[:user_agent]
+        return UserAgent.parse(hash[:user_agent]).browser if hash[:user_agent]
       end
     end
-    nil
   rescue => e
     "Could not parse data!"
   end

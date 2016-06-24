@@ -23,34 +23,16 @@ class GroupedIssue < ActiveRecord::Base
     subscribers.count
   end
 
-  def aggregations
-    data = { messages: [], subscribers: [], browsers: [] }
+  def aggregations (attribute)
+    data = []
     self.issues.each do |issue|
-      found_message = data[:messages].index { |x| x["title"] == issue.message }
-      if found_message
-        data[:messages][found_message]["count"] += 1
-      else
-        item = {"count" => 1, "created_at" => issue.created_at, "updated_at" => issue.updated_at, "title" => issue.message}
-        data[:messages].push(item)
-      end
-
-      found_subscriber = data[:subscribers].index { |x| x["id"] == issue.subscriber.try(:id) }
-      if found_subscriber
-        data[:subscribers][found_subscriber]["count"] += 1
-      else
-        unless issue.subscriber.nil?
-          item = {"count" => 1, "created_at" => issue.created_at, "updated_at" => issue.updated_at, "title" => issue.subscriber.try(:name), "id" => issue.subscriber.try(:id)}
-          data[:subscribers].push(item)
-        end
-      end
-
-      found_browser = data[:browsers].index { |x| x["title"] == issue.user_agent.try(:browser) }
-      if found_browser
-        data[:browsers][found_browser]["count"] += 1
-      else
-        unless issue.user_agent.nil?
-          item = {"count" => 1, "created_at" => issue.created_at, "updated_at" => issue.updated_at, "title" => issue.user_agent.try(:browser)}
-          data[:browsers].push(item)
+      value = issue.public_send(attribute)
+      unless value.nil?
+        found = data.index { |x| x[attribute] == value }
+        if found
+          data[found]["count"] += 1
+        else
+          data.push( { attribute => value, "count" => 0, "created_at" => issue.created_at, "updated_at" => issue.updated_at } )
         end
       end
     end
