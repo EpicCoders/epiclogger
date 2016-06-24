@@ -28,7 +28,7 @@ module ErrorStore
   end
 
   def self.interface_class(type)
-    "ErrorStore::Interfaces::#{type.to_s.classify}".constantize
+    "ErrorStore::Interfaces::#{type.to_s.camelize}".constantize
   end
 
   def self.register_interface(interface)
