@@ -49,7 +49,7 @@ module ErrorStore::Interfaces
       end
 
       if crumb[:data].present?
-        hash[:data] = trim(crumb[:data], 4096)
+        hash[:data] = trim(crumb[:data], max_size: 4096)
       end
 
       return hash

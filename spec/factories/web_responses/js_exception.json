@@ -9,6 +9,16 @@
       },
       "url":"http://ravenjs.site/example/index.html"
    },
+   "breadcrumbs":{
+      "values":[
+        {
+          "timestamp": 1466758175.063,
+          "category": "ui.click",
+          "message": " > html.gr__192_168_2_2",
+          "event_id": "f22f7d9ec1b348a1aa2688c09533814c"
+        }
+      ]
+    },
    "exception":{
       "type":"ReferenceError",
       "value":"fdasfds is not defined"
