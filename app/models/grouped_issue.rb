@@ -1,5 +1,6 @@
 class GroupedIssue < ActiveRecord::Base
   extend Enumerize
+  extend FriendlyId
   belongs_to :website
   belongs_to :release
   has_many :subscribers, -> { uniq }, through: :issues, foreign_key: 'group_id'
@@ -8,7 +9,7 @@ class GroupedIssue < ActiveRecord::Base
   enumerize :level, in: [:debug, :error, :fatal, :info, :warning], default: :error
   # enumerize :issue_logger, in: { javascript: 1, php: 2 }, default: :javascript
   enumerize :status, in: { muted: 1, resolved: 2, unresolved: 3 }, default: :unresolved, predicates: true, scope: true
-
+  friendly_id :message, use: :slugged
   before_save :check_fields
 
   def first_issue

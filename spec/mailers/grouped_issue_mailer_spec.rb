@@ -78,7 +78,7 @@ describe GroupedIssueMailer do
 
     it 'renders the body' do
       days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
-      expect(mail.body.parts.first.body.raw_source).to eq("Title\nDomain\nPlatform\nCreated At\n#{website.title}\n#{website.domain}\n\n#{website.created_at}\nUpdates available on #{days[Time.now.wday-1]}\nMessage\nTimes seen\nCulprit\nMore details\n#{group.message}\n#{group.times_seen}\n#{group.culprit}\n<a href=\"#{error_url(group.id)}\">#{error_url(group.id)}</a>\n\n")
+      expect(mail.body.parts.first.body.raw_source).to eq("Title\nDomain\nPlatform\nCreated At\n#{website.title}\n#{website.domain}\n\n#{website.created_at}\nUpdates available on #{days[Time.now.wday-1]}\nMessage\nTimes seen\nCulprit\nMore details\n#{group.message}\n#{group.times_seen}\n#{group.culprit}\n<a href=\"#{error_url(group)}\">#{error_url(group)}</a>\n\n")
     end
   end
 end

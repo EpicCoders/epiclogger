@@ -178,13 +178,13 @@ RSpec.describe ErrorsController, type: :controller do
       it 'redirects to errors#show after resolving' do
         new_error  = FactoryGirl.create(:grouped_issue, { website: website, checksum: SecureRandom.hex(), status: 'resolved', resolved_at: DateTime.now } )
         params[:error_ids] = [new_error.id]
-        expect(put_with user, :resolve, params).to redirect_to(error_path(id: group.id))
+        expect(put_with user, :resolve, params).to redirect_to(error_url(group))
       end
 
       it 'redirects to errors#show after unresolving' do
         new_error  = FactoryGirl.create(:grouped_issue, { website: website, checksum: SecureRandom.hex(), status: 'resolved', resolved_at: DateTime.now } )
         params[:error_ids] = [new_error.id]
-        expect(put_with user, :unresolve, params).to redirect_to(error_path(id: group.id))
+        expect(put_with user, :unresolve, params).to redirect_to(error_url(group))
       end
     end
   end

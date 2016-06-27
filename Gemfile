@@ -72,6 +72,9 @@ gem 'wicked'
 #parsing the user_agent string
 gem 'useragent'
 
+#better urls
+gem 'friendly_id', '~> 5.0.0'
+
 #group objects by time frames
 gem 'groupdate'
 #gem for charts

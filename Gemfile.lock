@@ -121,6 +121,8 @@ GEM
     formtastic (3.1.4)
       actionpack (>= 3.2.13)
     formtastic_i18n (0.6.0)
+    friendly_id (5.0.5)
+      activerecord (>= 4.0.0)
     globalid (0.3.6)
       activesupport (>= 4.1.0)
     gon (6.0.1)
@@ -407,6 +409,7 @@ DEPENDENCIES
   faker
   figaro
   font-awesome-sass
+  friendly_id (~> 5.0.0)
   gon
   groupdate
   haml-rails
@@ -444,9 +447,6 @@ DEPENDENCIES
   useragent
   warden_omniauth
   wicked
-
-RUBY VERSION
-   ruby 2.2.2p95
 
 BUNDLED WITH
    1.12.5
