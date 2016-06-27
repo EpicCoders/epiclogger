@@ -18,7 +18,9 @@ class GroupedIssueMailer < ApplicationMailer
   def more_than_10_errors(website)
     @website = website
     @last_hour_errors = @website.issues.where('issues.created_at > ?', Time.now - 1.hour)
-    mail to: website_owners_emails(@website), subject: 'EpicLogger Constant Error'
+    if @last_hour_errors.count >= 10
+      mail to: website_owners_emails(@website), subject: 'EpicLogger Constant Error'
+    end
   end
 
   def event_occurred(group)

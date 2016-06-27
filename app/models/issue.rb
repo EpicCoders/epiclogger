@@ -63,11 +63,11 @@ class Issue < ActiveRecord::Base
     "Could not parse data!"
   end
 
+  def self.more_than_10_errors(site)
+    GroupedIssueMailer.more_than_10_errors(site).deliver_later
+  end
+
   def issue_created
-    if website.issues.where('issues.created_at > ?', Time.now - 1.hour).count > 10
-      GroupedIssueMailer.more_than_10_errors(website).deliver_later
-    else
-      GroupedIssueMailer.error_occurred(self).deliver_later
-    end
+    GroupedIssueMailer.error_occurred(self).deliver_later
   end
 end
