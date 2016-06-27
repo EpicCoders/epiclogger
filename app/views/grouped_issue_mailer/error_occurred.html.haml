@@ -28,7 +28,7 @@
     %p.gray_text Url
     %pre
       %code
-        %small #{@issue.get_interfaces(:http)._data[:url]}
+        %small #{@issue.http_data(:url)}
     %p.gray_text Backtrace Summary
     - @issue.get_platform_frames.first(5).each_with_index do |frame, index|
       %pre

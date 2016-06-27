@@ -19,7 +19,7 @@ class Issue < ActiveRecord::Base
   end
 
   def get_headers(header = nil)
-    all_headers = get_interfaces(:http)._data[:headers]
+    all_headers = http_data(:headers)
     return all_headers if header.nil?
     all_headers.find { |h| h[header] }.try(:values).try(:first)
   end
@@ -28,6 +28,25 @@ class Issue < ActiveRecord::Base
     breadcrumbs = get_interfaces(:breadcrumbs)
     return false if breadcrumbs.blank?
     breadcrumbs._data[:values].flatten.reverse!
+  end
+
+  def http_data(key = nil)
+    all_data = get_interfaces(:http)._data
+    return '<no information>' if all_data.blank?
+    return all_data if key.nil?
+    all_data[key]
+  end
+
+  def stacktrace_frames
+    #added a switch statement in case errors from different platforms will be saved differenty
+    case platform
+    when 'javascript'
+      frames = get_interfaces(:stacktrace)._data[:frames]
+      frames = [] if frames.blank?
+    else
+      frames = get_platform_frames
+    end
+    frames
   end
 
   def get_platform_frames
@@ -68,6 +87,6 @@ class Issue < ActiveRecord::Base
   end
 
   def issue_created
-    GroupedIssueMailer.error_occurred(self).deliver_later
+    GroupedIssueMailer.error_occurred(self).deliver_later if website.realtime
   end
 end

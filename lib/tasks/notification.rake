@@ -10,7 +10,7 @@ namespace :notification do
   desc 'verify hourly'
   task :hourly => :environment do
     puts "Email website users where more than 10 errors happened in the last hour"
-    Website.joins(:issues).where('issues.created_at > ?', Time.now - 1.hour).uniq.each do |website|
+    Website.where(frequent_event: true).joins(:issues).where('issues.created_at > ?', Time.now - 1.hour).uniq.each do |website|
       Issue.more_than_10_errors(website)
     end
   end

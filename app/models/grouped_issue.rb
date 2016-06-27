@@ -13,7 +13,7 @@ class GroupedIssue < ActiveRecord::Base
   before_save :check_fields
 
   def group_created
-    GroupedIssueMailer.event_occurred(self).deliver_later
+    GroupedIssueMailer.event_occurred(self).deliver_later if website.new_event
   end
 
   def first_issue
