@@ -173,5 +173,40 @@ module ErrorStore
         value.encode!('UTF-8', invalid: :replace, undef: :replace)
       end
     end
+
+    #####
+    # Force the provided time string into a timestamp
+    # - checks if the provided timestapm is blank and returns today
+    # - checks if the timestamp matches a numeric time or a datetime
+    # - checks if the timestamp is too old or in the future and raises errors
+    #####
+    def process_timestamp!(timestamp)
+      # This will happen everytime when coming from clients like raven-js
+      if timestamp.blank?
+        return Time.zone.now.to_i
+      end
+
+      begin
+        if is_numeric? timestamp
+          timestamp = Time.zone.at(timestamp.to_i).to_datetime
+        elsif !timestamp.is_a?(DateTime)
+          timestamp = timestamp.chomp('Z') if timestamp.end_with?('Z')
+          timestamp = DateTime.strptime(timestamp, '%Y-%m-%dT%H:%M:%S')
+        end
+      rescue
+        raise ErrorStore::InvalidTimestamp.new(self), "We could not process timestamp #{timestamp}"
+      end
+
+      today = Time.zone.now
+      if timestamp > today + 1.minute
+        raise ErrorStore::InvalidTimestamp.new(self), "We could not process timestamp is in the future #{timestamp}"
+      end
+
+      if timestamp < today - 30.days
+        raise ErrorStore::InvalidTimestamp.new(self), "We could not process timestamp is too old #{timestamp}"
+      end
+
+      timestamp.strftime('%s').to_i
+    end
   end
 end

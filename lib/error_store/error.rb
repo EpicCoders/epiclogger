@@ -117,7 +117,7 @@ module ErrorStore
 
       # process timestamp data
       begin
-        process_timestamp!(data)
+        data[:timestamp] = process_timestamp!(data[:timestamp])
       rescue ErrorStore::InvalidTimestamp => e
         Rails.logger.error("Timestamp had an issue while processing #{e.message}")
         data[:errors] << { type: 'invalid_data', name: 'timestamp', value: data[:timestamp] }
@@ -315,39 +315,6 @@ module ErrorStore
         result << section
       end
       result
-    end
-
-    def process_timestamp!(data)
-      timestamp = data[:timestamp]
-
-      # This will happen everytime when coming from clients like raven-js
-      if timestamp.blank?
-        data[:timestamp] = Time.zone.now.to_i
-        return data
-      end
-
-      begin
-        if is_numeric? timestamp
-          timestamp = Time.zone.at(timestamp.to_i).to_datetime
-        elsif !timestamp.is_a?(DateTime)
-          timestamp = timestamp.chomp('Z') if timestamp.end_with?('Z')
-          timestamp = DateTime.strptime(timestamp, '%Y-%m-%dT%H:%M:%S')
-        end
-      rescue
-        raise ErrorStore::InvalidTimestamp.new(self), "We could not process timestamp #{data[:timestamp]}"
-      end
-
-      today = Time.zone.now
-      if timestamp > today + 1.minute
-        raise ErrorStore::InvalidTimestamp.new(self), "We could not process timestamp is in the future #{data[:timestamp]}"
-      end
-
-      if timestamp < today - 30.days
-        raise ErrorStore::InvalidTimestamp.new(self), "We could not process timestamp is too old #{data[:timestamp]}"
-      end
-
-      data[:timestamp] = timestamp.strftime('%s').to_i
-      data
     end
 
     def get_origin

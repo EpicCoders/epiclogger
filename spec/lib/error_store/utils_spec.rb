@@ -236,4 +236,74 @@ RSpec.describe ErrorStore::Utils do
       expect( dummy_class.remove_function_outliers("example_2") ).to eq("example_2")
     end
   end
+
+  describe 'process_timestamp!' do
+    let(:current_datetime) { '2015-07-15T11:40:30Z' }
+
+    it 'converts the iso timestamp' do
+      Timecop.freeze(current_datetime) do
+        timestamp = '2015-07-15T11:40:30'
+        value = DateTime.strptime('2015-07-15T11:40:30', '%Y-%m-%dT%H:%M:%S')
+        expect( dummy_class.process_timestamp!(timestamp) ).to eq(value.strftime('%s').to_i)
+      end
+    end
+
+    it 'converts the iso timestamp with Z' do
+      Timecop.freeze(current_datetime) do
+        timestamp = current_datetime
+        value = DateTime.strptime(current_datetime, '%Y-%m-%dT%H:%M:%S')
+        expect( dummy_class.process_timestamp!(timestamp) ).to eq(value.strftime('%s').to_i)
+      end
+    end
+
+    it 'raises InvalidTimestamp if invalid data' do
+      timestamp = 'giberish'
+      expect { dummy_class.process_timestamp!(timestamp) }.to raise_exception(ErrorStore::InvalidTimestamp, 'We could not process timestamp giberish')
+    end
+
+
+    it 'raises InvalidTimestamp if timestamp is in the future' do
+      Timecop.freeze(current_datetime) do
+        timestamp = (Time.zone.now + 10.minutes).strftime('%Y-%m-%dT%H:%M:%S')
+        expect { dummy_class.process_timestamp!(timestamp) }.to raise_exception(ErrorStore::InvalidTimestamp, "We could not process timestamp is in the future 2015-07-15T11:50:30+00:00")
+      end
+    end
+
+    it 'raises InvalidTimestamp if timestamp is in the past' do
+      Timecop.freeze(current_datetime) do
+        timestamp = (Time.zone.now - 31.days).strftime('%Y-%m-%dT%H:%M:%S')
+        expect { dummy_class.process_timestamp!(timestamp) }.to raise_exception(ErrorStore::InvalidTimestamp, "We could not process timestamp is too old 2015-06-14T11:40:30+00:00")
+      end
+    end
+
+    it 'raises InvalidTimestamp if invalid numeric timestamp' do
+      Timecop.freeze(current_datetime) do
+        timestamp = 100000000000000000000.0
+        expect { dummy_class.process_timestamp!(timestamp) }.to raise_exception(ErrorStore::InvalidTimestamp, 'We could not process timestamp 1.0e+20')
+      end
+    end
+
+    it 'returns the right timestamp when numeric' do
+      Timecop.freeze(current_datetime) do
+        timestamp = Time.parse(current_datetime).to_i
+        expect( dummy_class.process_timestamp!(timestamp) ).to eq(1436960430)
+      end
+    end
+
+    it 'returns the current timestamp when nil provided' do
+      Timecop.freeze(current_datetime) do
+        timestamp = nil
+        expect( dummy_class.process_timestamp!(timestamp) ).to eq(1436960430)
+      end
+    end
+
+    it 'returns unix timestamp of given date' do
+      Timecop.freeze('2015-07-15T11:40Z') do
+        timestamp = '2015-07-15T11:39:37.0341297Z'
+        value = DateTime.strptime('2015-07-15T11:39:37', '%Y-%m-%dT%H:%M:%S')
+        expect( dummy_class.process_timestamp!(timestamp) ).to eq(value.strftime('%s').to_i)
+      end
+    end
+  end
+
 end
