@@ -1,23 +1,42 @@
-%p Daily report email provides you some information about changes on your website.
-%table
-  %tr
-    %th Title
-    %th Domain
-    %th Platform
-    %th Created At
-  %tr
-    %td #{@website.title}
-    %td #{@website.domain}
-    %td #{@website.platform}
-    %td #{@website.created_at}
-  %tr
-    %th#gray_th Message
-    %th#gray_th Level
-    %th#gray_th Times seen
-    %th#gray_th Culprit
-  - @grouped_issues.each do |group|
+.col-lg-6
+  %p.gray_text{:style => 'display:inline'} Project:
+  %small [#{@website.title}] Daily report email provides you some information about changes on your website.
+  %hr
+  %table
     %tr
-      %td #{group.message}
-      %td #{group.level}
-      %td #{group.times_seen}
-      %td #{group.culprit}
+      %th Title
+      %th Domain
+      %th Platform
+      %th Created At
+    %tr
+      %td
+        %pre
+          %code #{@website.title}
+      %td
+        %pre
+          %code #{@website.domain}
+      %td
+        %pre
+          %code #{@website.platform}
+      %td
+        %pre
+          %code #{@website.created_at}
+    %tr
+      %th#gray_th Message
+      %th#gray_th Level
+      %th#gray_th Times seen
+      %th#gray_th Culprit
+    - @grouped_issues.each do |group|
+      %tr
+        %td
+          %pre
+            %code #{group.message}
+        %td
+          %pre
+            %code #{group.level}
+        %td
+          %pre
+            %code #{group.times_seen}
+        %td
+          %pre
+            %code #{group.culprit}

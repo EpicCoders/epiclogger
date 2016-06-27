@@ -4,7 +4,6 @@ class GroupedIssueMailer < ApplicationMailer
     @sender = sender
     @group = group
     @message = message
-    @website = @group.website
     @user = user
     mail to: @user.email, subject: 'Epic Logger Subscriber notification'
   end

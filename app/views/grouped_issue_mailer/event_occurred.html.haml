@@ -1,9 +1,16 @@
 .col-lg-6
+  %p.gray_text{:style => 'display:inline'} Project:
+  %small [#{@group.website.title}] #{truncate(@group.message, length: 40)}
   %hr
-  %h4 #{@group.message}
-  %hr
-  %p A event has just occurred at #{@group.created_at}.
+  %p{:style => 'display:inline'} A event has just occurred at
+  %pre
+    %code
+      %small #{@group.created_at}.
   %p.gray_text Error message
-  %p #{@group.message}
+  %pre
+    %code
+      %small #{@group.message}
   %p.gray_text Culprit
-  %p #{@group.culprit}
+  %pre
+    %code
+      %small #{@group.culprit}
