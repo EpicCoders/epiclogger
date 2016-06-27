@@ -11,7 +11,7 @@ module ErrorStore::Interfaces
     def sanitize_data(data)
       values = []
       data[:values].each do |value|
-        values << Breadcrumbs.new(@error).normalize_crumb(value)
+        values << normalize_crumb(value)
       end
       self._data[:values] = values
 
@@ -20,7 +20,7 @@ module ErrorStore::Interfaces
 
     def normalize_crumb(crumb)
       type = crumb[:type] || 'default'
-      timestamp = @error.process_timestamp!(crumb)[:timestamp]
+      timestamp = process_timestamp!(crumb[:timestamp])
 
       hash =
       {
@@ -33,12 +33,12 @@ module ErrorStore::Interfaces
         hash[:level] = level
       end
 
-      message = crumb[:message]
+      message = fix_encoding(crumb[:message])
       unless message.blank?
          hash[:message] = trim(message, max_size: 4096)
       end
 
-      category = crumb[:category]
+      category = fix_encoding(crumb[:category])
       unless category.blank?
          hash[:category] = trim(category, max_size: 256)
       end
