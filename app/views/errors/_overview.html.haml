@@ -26,41 +26,7 @@
         %h5.text-center{style: "display:#{valid_stacktrace ? 'none' : 'block'}"} Missing stacktrace
         %p.read-more.text-center{style: "display:#{valid_stacktrace ? 'block' : 'none'}"}
           %a.btn.btn-default{:href => "#"} View full backtrace
-.row
-  .col-sm-7.col-md-8
-    .panel.panel-default.breadcrumbs
-      .panel-heading Breadcrumbs
-      - valid_stacktrace = @issue.breadcrumbs_stacktrace != 'Missing crumbs' && @issue.breadcrumbs_stacktrace.present?
-      .panel-body{ class: "#{valid_stacktrace ? 'expand-box' : ''}" }
-        - if valid_stacktrace
-          #frame.accordion
-            - @issue.breadcrumbs_stacktrace.each_with_index do |crumb, index|
-              %pre
-                %code
-                  = crumb[:type] + ' ' + crumb[:message] + ' at ' +  Time.at(crumb[:timestamp]).strftime("%H:%M:%S %d/%m/%Y")
-        %h5.text-center{style: "display:#{valid_stacktrace ? 'none' : 'block'}"} Missing crumbs
-        %p.read-more.text-center{style: "display:#{valid_stacktrace ? 'block' : 'none'}"}
-          %a.btn.btn-default{:href => "#"} View full backtrace
-
-    .panel.panel-default.broadcast{ :style => "display:#{ @error.website.users.empty? ? 'none' : 'block' }" }
-      .panel-heading
-        Broadcast
-      .panel-body
-        .subscribers
-          - @error.website.users.limit(10).each do |subscriber|
-            = image_tag subscriber.avatar_url(30)
-            - if @error.website.users.size > 10
-              = " and #{@error.website.users.size - 10} more"
-              - break
-          - if @error.website.users.size > 0
-            %h5.pull-right
-              This message will be sent to
-              = @error.website.users.size.to_s + (@error.website.users.size > 1 ? ' users' : ' user')
-          .notify
-            = form_for @error, url: notify_subscribers_error_path(), remote: true, html: { method: :post , class: ' broadcast-textarea'}, :data => {:confirm => 'Are you sure?'} do |f|
-              = text_area_tag 'message', '', placeholder: 'Write a message ...'
-              %button.btn.btn-primary{:type => 'submit'} Send
-  .col-sm-5.col-md-4
+  .col-sm-5.col-md-4.pull-right
     .panel.panel-default
       .panel-heading Details
       .panel-body
@@ -81,3 +47,42 @@
           %dd= @error.level
           %dt Logger
           %dd= @error.platform
+  - valid_stacktrace = @issue.breadcrumbs_stacktrace != 'Missing crumbs' && @issue.breadcrumbs_stacktrace.present?
+  - if valid_stacktrace
+    .col-sm-7.col-md-8
+      .panel.panel-default
+        .panel-heading Breadcrumbs
+        .panel-body{ class: "#{valid_stacktrace ? 'expand-box' : ''}" }
+          #frame.accordion
+            %pre
+              %code
+                %table.table
+                  - @issue.breadcrumbs_stacktrace.each_with_index do |crumb, index|
+                    %tr
+                      - level = crumb[:level].present?
+                      %td{ class: level ? "#{crumb[:level]}-line" : "log-line"}= crumb[:category]
+                      %td= crumb[:message]
+                      %td= Time.at(crumb[:timestamp]).strftime("%H:%M:%S")
+          %h5.text-center{style: "display:#{valid_stacktrace ? 'none' : 'block'}"} Missing crumbs
+          %p.read-more.text-center{style: "display:#{valid_stacktrace ? 'block' : 'none'}"}
+            %a.btn.btn-default{:href => "#"} View full backtrace
+
+  .col-sm-7.col-md-8
+    .panel.panel-default.broadcast{ :style => "display:#{ @error.website.users.empty? ? 'none' : 'block' }" }
+      .panel-heading
+        Broadcast
+      .panel-body
+        .subscribers
+          - @error.website.users.limit(10).each do |subscriber|
+            = image_tag subscriber.avatar_url(30)
+            - if @error.website.users.size > 10
+              = " and #{@error.website.users.size - 10} more"
+              - break
+          - if @error.website.users.size > 0
+            %h5.pull-right
+              This message will be sent to
+              = @error.website.users.size.to_s + (@error.website.users.size > 1 ? ' users' : ' user')
+          .notify
+            = form_for @error, url: notify_subscribers_error_path(), remote: true, html: { method: :post , class: ' broadcast-textarea'}, :data => {:confirm => 'Are you sure?'} do |f|
+              = text_area_tag 'message', '', placeholder: 'Write a message ...'
+              %button.btn.btn-primary{:type => 'submit'} Send
