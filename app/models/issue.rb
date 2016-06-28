@@ -24,16 +24,10 @@ class Issue < ActiveRecord::Base
     all_headers.find { |h| h[header] }.try(:values).try(:first)
   end
 
-  def stacktrace_frames
-    #added a switch statement in case errors from different platforms will be saved differenty
-    case platform
-    when 'javascript'
-      frames = get_interfaces(:stacktrace)._data[:frames]
-      frames = [] if frames.blank?
-    else
-      frames = get_platform_frames
-    end
-    frames
+  def breadcrumbs_stacktrace
+    breadcrumbs = get_interfaces(:breadcrumbs)
+    return 'Missing crumbs' if breadcrumbs.blank?
+    breadcrumbs._data[:values].flatten.reverse!
   end
 
   def get_platform_frames
@@ -48,9 +42,9 @@ class Issue < ActiveRecord::Base
   end
 
   def get_frames(frame = nil)
-    frames = stacktrace_frames.first
+    frames = get_platform_frames.first
     return frames if frame.nil?
-    stacktrace_frames.first._data[frame]
+    frames._data[frame]
   end
 
   def environment

@@ -5,11 +5,11 @@
   .col-sm-7.col-md-8
     .panel.panel-default.exception
       .panel-heading Exception
-      - valid_stacktrace = @issue.stacktrace_frames != 'Missing stacktrace' && @issue.stacktrace_frames.present?
+      - valid_stacktrace = @issue.get_platform_frames != 'Missing stacktrace' && @issue.get_platform_frames.present?
       .panel-body{ class: "#{valid_stacktrace ? 'expand-box' : ''}" }
         - if valid_stacktrace
           #frame.accordion
-            - @issue.stacktrace_frames.each_with_index do |frame, index|
+            - @issue.get_platform_frames.each_with_index do |frame, index|
               .accordion-group
                 .accordion-heading.heading
                   %a.accordion-toggle.collapsed{ href: '#' }
@@ -23,11 +23,25 @@
                         = frame._data[:context_line] ? simple_format(frame._data[:context_line], class: 'error-line').html_safe : ''
                         = frame._data[:post_context] ? simple_format(frame._data[:post_context].join('')).html_safe : ''
 
-
-
         %h5.text-center{style: "display:#{valid_stacktrace ? 'none' : 'block'}"} Missing stacktrace
         %p.read-more.text-center{style: "display:#{valid_stacktrace ? 'block' : 'none'}"}
           %a.btn.btn-default{:href => "#"} View full backtrace
+.row
+  .col-sm-7.col-md-8
+    .panel.panel-default.breadcrumbs
+      .panel-heading Breadcrumbs
+      - valid_stacktrace = @issue.breadcrumbs_stacktrace != 'Missing crumbs' && @issue.breadcrumbs_stacktrace.present?
+      .panel-body{ class: "#{valid_stacktrace ? 'expand-box' : ''}" }
+        - if valid_stacktrace
+          #frame.accordion
+            - @issue.breadcrumbs_stacktrace.each_with_index do |crumb, index|
+              %pre
+                %code
+                  = crumb[:type] + ' ' + crumb[:message] + ' at ' +  Time.at(crumb[:timestamp]).strftime("%H:%M:%S %d/%m/%Y")
+        %h5.text-center{style: "display:#{valid_stacktrace ? 'none' : 'block'}"} Missing crumbs
+        %p.read-more.text-center{style: "display:#{valid_stacktrace ? 'block' : 'none'}"}
+          %a.btn.btn-default{:href => "#"} View full backtrace
+
     .panel.panel-default.broadcast{ :style => "display:#{ @error.website.users.empty? ? 'none' : 'block' }" }
       .panel-heading
         Broadcast
