@@ -1,5 +1,5 @@
 #notifications.tab
-  = simple_form_for @website, url: "websites/#{@website.id}", method: :put, remote: true, wrapper: :vertical_form do |f|
+  = simple_form_for @website_member, url: "websites_members/#{@website_member.id}", method: :put, remote: true, wrapper: :vertical_form do |f|
     .col-lg-12
       .panel.panel-default
         .panel-heading Notifications
@@ -9,14 +9,14 @@
             .alert.alert-info
               Epiclogger will automatically notify you whenever an event is first seen, or its state changes from resolved to unresolved.
             %p
-              = f.check_box :daily
+              = f.check_box :daily_reporting
               = f.label "Recieve daily reports"
             %p
               = f.check_box :realtime
               = f.label "Receive realtime error emails"
             %p
-              = f.check_box :new_event
-              = f.label "Receive emails when a new event happens"
+              = f.check_box :weekly_reporting
+              = f.label "Receive weekly reports"
             %p
               = f.check_box :frequent_event
               = f.label "Recieve another email if an event/error happens more than 10 times in a certain time interval."

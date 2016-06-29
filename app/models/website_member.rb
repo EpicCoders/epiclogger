@@ -2,6 +2,8 @@ class WebsiteMember < ActiveRecord::Base
   extend Enumerize
   belongs_to :website
   belongs_to :user
+  scope :with_realtime, -> { where(realtime: true) }
+  scope :with_frequent_event, -> { where(frequent_event: true) }
   enumerize :role, in: { owner: 1, user: 2 }, default: :user, scope: true
   before_create :valid_url
 

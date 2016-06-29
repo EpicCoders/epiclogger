@@ -82,11 +82,13 @@ class Issue < ActiveRecord::Base
     "Could not parse data!"
   end
 
-  def self.more_than_10_errors(site)
-    GroupedIssueMailer.more_than_10_errors(site).deliver_later
+  def self.more_than_10_errors(member)
+    GroupedIssueMailer.more_than_10_errors(member).deliver_later
   end
 
   def issue_created
-    GroupedIssueMailer.error_occurred(self).deliver_later if website.realtime
+    website.website_members.with_realtime.each do |member|
+      GroupedIssueMailer.error_occurred(self, member).deliver_later
+    end
   end
 end

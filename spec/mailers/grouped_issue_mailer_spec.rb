@@ -6,8 +6,8 @@ describe GroupedIssueMailer do
   let!(:website_member) { create :website_member, website: website, user: user }
   let(:group) { create :grouped_issue, website: website, last_seen: Time.now - 1.day, culprit: 'index.php:Raven_ErrorHandler in handleError', message: 'Undefined variable: ex', created_at: Time.now, checksum: '5ae79a60e5a97b0977e01b525c779e49'  }
   let(:subscriber) { create :subscriber, website: website }
-  let!(:issue) { create :issue, subscriber: subscriber, group: group, platform: 'ruby', event_id: '7663e5a972341e047cd2820fd00c518d', message: 'Message that something went wrong', created_at: Time.now, data: '{"server_name":"sergiu-Lenovo-IdeaPad-Y510P","modules":{"rake":"10.4.2","i18n":"0.7.0","json":"1.8.3","minitest":"5.8.2","thread_safe":"0.3.5","tzinfo":"1.2.2","activesupport":"4.2.1","builder":"3.2.2","erubis":"2.7.0","mini_portile":"0.6.2","nokogiri":"1.6.6.2","rails-deprecated_sanitizer":"1.0.3","rails-dom-testing":"1.0.7","loofah":"2.0.3","rails-html-sanitizer":"1.0.2","actionview":"4.2.1","rack":"1.6.4","rack-test":"0.6.3","actionpack":"4.2.1","globalid":"0.3.6","activejob":"4.2.1","mime-types":"2.6.2","mail":"2.6.3","actionmailer":"4.2.1","activemodel":"4.2.1","arel":"6.0.3","activerecord":"4.2.1","debug_inspector":"0.0.2","binding_of_caller":"0.7.2","bundler":"1.11.2","coderay":"1.1.0","coffee-script-source":"1.10.0","execjs":"2.6.0","coffee-script":"2.4.1","thor":"0.19.1","railties":"4.2.1","coffee-rails":"4.1.0","multipart-post":"2.0.0","faraday":"0.9.2","multi_json":"1.11.2","jbuilder":"2.3.2","jquery-rails":"4.0.5","method_source":"0.8.2","slop":"3.6.0","pry":"0.10.3","sprockets":"3.4.0","sprockets-rails":"2.3.3","rails":"4.2.1","rdoc":"4.2.0","sass":"3.4.19","tilt":"2.0.1","sass-rails":"5.0.4","sdoc":"0.4.1","sentry-raven":"0.15.2","spring":"1.4.1","sqlite3":"1.3.11","turbolinks":"2.5.3","uglifier":"2.7.2","web-console":"2.2.1"},"extra":{},"tags":{},"errors":[{"type":"invalid_data","name":"timestamp","value":"2016-02-15T06:01:29"}],"interfaces":{"exception":{"values":[{"type":"ZeroDivisionError","value":"\"divided by 0\"","module":"","stacktrace":{"frames":[{"abs_path":"\/home\/sergiu\/.rvm\/rubies\/ruby-2.2.2\/lib\/ruby\/2.2.0\/webrick\/server.rb","filename":"webrick\/server.rb","function":"block in start_thread","context_line":"          block ? block.call(sock) : run(sock)\n","pre_context":["module ActionController\n","  module ImplicitRender\n","    def send_action(method, *args)\n"],"post_context":["      default_render unless performed?\n","      ret\n","    end\n"],"lineno":4},{"abs_path":"\/home\/sergiu\/ravenapp\/app\/controllers\/home_controller.rb","filename":"app\/controllers\/home_controller.rb","function":"index","context_line":"    1\/0\n","pre_context":["  # Prevent CSRF attacks by raising an exception.\n","  # For APIs, you may want to use :null_session instead.\n","  def index\n"],"post_context":["  end\n","end\n",""],"lineno":5},{"abs_path":"\/home\/sergiu\/ravenapp\/app\/controllers\/home_controller.rb","filename":"app\/controllers\/home_controller.rb","function":"\/","context_line":"    1\/0\n","pre_context":["  # Prevent CSRF attacks by raising an exception.\n","  # For APIs, you may want to use :null_session instead.\n","  def index\n"],"post_context":["  end\n","end\n",""],"lineno":5}],"frames_omitted":null,"has_frames":true}}],"exc_omitted":null},"http":{"env":{"REMOTE_ADDR":"127.0.0.1","SERVER_NAME":"localhost","SERVER_PORT":"3001"},"headers":[{"host":"localhost:3001"},{"connection":"keep-alive"},{"accept":"text\/html,application\/xhtml+xml,application\/xml;q=0.9,image\/webp,*\/*;q=0.8"},{"upgrade_insecure_requests":"1"},{"user_agent":"Mozilla\/5.0 (X11; Linux x86_64) Gecko\/20100101 Firefox\/46.0"},{"accept_encoding":"gzip, deflate, sdch"},{"accept_language":"en-US,en;q=0.8"},{"cookie":"currentConfigName=%22default%22; pickedWebsite=1; _epiclogger_session=NTIwU2prYUd2T0dEd3FGQWE0WUFaL3RDY0huRGFnV1Z5TEhOQ3RtWUZZTTVRSzgvRTZvdEI2SFRsSVQ0ajVidHRWQnA5ck9wT3ZQU095N0dkWjEza0dpYWlmekxyRzFJbEFVNk5zRExmMzg3Q2c2MFBWdi9UYVUyWjdkWHVMNUFaWFJzZ2pEMGdwd3JJSGpSNjlEK2o3ZjlWZEhISEprK1hXOFNvaGdRdHg2MkFxN0lrcmlIdUtQazVWUjNGaWJvUGVYTHJncEc2OWhpaHBZbXNqcVhUcjM0ZWQ5bDFnWDBVSGlaOE5rdGxiOHNDU2NUS3BaSjd4eUZSRklzVnU5M3Z0TmJLUzF6ZWxjOGUrRmF2NkZ6ZCtGMUdoQVdFUSt0am9KT2lDODRMckJwbWQ1ZU5hV1hhZmt2bHdDZHZibEFmMExXNTI5Tmt..."},{"version":"HTTP\/1.1"}],"url":"http:\/\/localhost\/\/"}},"site":null,"environment":null,"version":"5"}' }
-let(:message) { create :message, issue: issue}
+  let!(:issue1) { create :issue, subscriber: subscriber, group: group, platform: 'ruby', event_id: '7663e5a972341e047cd2820fd00c518d', message: 'Message that something went wrong', created_at: Time.now, data: '{"server_name":"sergiu-Lenovo-IdeaPad-Y510P","modules":{"rake":"10.4.2","i18n":"0.7.0","json":"1.8.3","minitest":"5.8.2","thread_safe":"0.3.5","tzinfo":"1.2.2","activesupport":"4.2.1","builder":"3.2.2","erubis":"2.7.0","mini_portile":"0.6.2","nokogiri":"1.6.6.2","rails-deprecated_sanitizer":"1.0.3","rails-dom-testing":"1.0.7","loofah":"2.0.3","rails-html-sanitizer":"1.0.2","actionview":"4.2.1","rack":"1.6.4","rack-test":"0.6.3","actionpack":"4.2.1","globalid":"0.3.6","activejob":"4.2.1","mime-types":"2.6.2","mail":"2.6.3","actionmailer":"4.2.1","activemodel":"4.2.1","arel":"6.0.3","activerecord":"4.2.1","debug_inspector":"0.0.2","binding_of_caller":"0.7.2","bundler":"1.11.2","coderay":"1.1.0","coffee-script-source":"1.10.0","execjs":"2.6.0","coffee-script":"2.4.1","thor":"0.19.1","railties":"4.2.1","coffee-rails":"4.1.0","multipart-post":"2.0.0","faraday":"0.9.2","multi_json":"1.11.2","jbuilder":"2.3.2","jquery-rails":"4.0.5","method_source":"0.8.2","slop":"3.6.0","pry":"0.10.3","sprockets":"3.4.0","sprockets-rails":"2.3.3","rails":"4.2.1","rdoc":"4.2.0","sass":"3.4.19","tilt":"2.0.1","sass-rails":"5.0.4","sdoc":"0.4.1","sentry-raven":"0.15.2","spring":"1.4.1","sqlite3":"1.3.11","turbolinks":"2.5.3","uglifier":"2.7.2","web-console":"2.2.1"},"extra":{},"tags":{},"errors":[{"type":"invalid_data","name":"timestamp","value":"2016-02-15T06:01:29"}],"interfaces":{"exception":{"values":[{"type":"ZeroDivisionError","value":"\"divided by 0\"","module":"","stacktrace":{"frames":[{"abs_path":"\/home\/sergiu\/.rvm\/rubies\/ruby-2.2.2\/lib\/ruby\/2.2.0\/webrick\/server.rb","filename":"webrick\/server.rb","function":"block in start_thread","context_line":"          block ? block.call(sock) : run(sock)\n","pre_context":["module ActionController\n","  module ImplicitRender\n","    def send_action(method, *args)\n"],"post_context":["      default_render unless performed?\n","      ret\n","    end\n"],"lineno":4},{"abs_path":"\/home\/sergiu\/ravenapp\/app\/controllers\/home_controller.rb","filename":"app\/controllers\/home_controller.rb","function":"index","context_line":"    1\/0\n","pre_context":["  # Prevent CSRF attacks by raising an exception.\n","  # For APIs, you may want to use :null_session instead.\n","  def index\n"],"post_context":["  end\n","end\n",""],"lineno":5},{"abs_path":"\/home\/sergiu\/ravenapp\/app\/controllers\/home_controller.rb","filename":"app\/controllers\/home_controller.rb","function":"\/","context_line":"    1\/0\n","pre_context":["  # Prevent CSRF attacks by raising an exception.\n","  # For APIs, you may want to use :null_session instead.\n","  def index\n"],"post_context":["  end\n","end\n",""],"lineno":5}],"frames_omitted":null,"has_frames":true}}],"exc_omitted":null},"http":{"env":{"REMOTE_ADDR":"127.0.0.1","SERVER_NAME":"localhost","SERVER_PORT":"3001"},"headers":[{"host":"localhost:3001"},{"connection":"keep-alive"},{"accept":"text\/html,application\/xhtml+xml,application\/xml;q=0.9,image\/webp,*\/*;q=0.8"},{"upgrade_insecure_requests":"1"},{"user_agent":"Mozilla\/5.0 (X11; Linux x86_64) Gecko\/20100101 Firefox\/46.0"},{"accept_encoding":"gzip, deflate, sdch"},{"accept_language":"en-US,en;q=0.8"},{"cookie":"currentConfigName=%22default%22; pickedWebsite=1; _epiclogger_session=NTIwU2prYUd2T0dEd3FGQWE0WUFaL3RDY0huRGFnV1Z5TEhOQ3RtWUZZTTVRSzgvRTZvdEI2SFRsSVQ0ajVidHRWQnA5ck9wT3ZQU095N0dkWjEza0dpYWlmekxyRzFJbEFVNk5zRExmMzg3Q2c2MFBWdi9UYVUyWjdkWHVMNUFaWFJzZ2pEMGdwd3JJSGpSNjlEK2o3ZjlWZEhISEprK1hXOFNvaGdRdHg2MkFxN0lrcmlIdUtQazVWUjNGaWJvUGVYTHJncEc2OWhpaHBZbXNqcVhUcjM0ZWQ5bDFnWDBVSGlaOE5rdGxiOHNDU2NUS3BaSjd4eUZSRklzVnU5M3Z0TmJLUzF6ZWxjOGUrRmF2NkZ6ZCtGMUdoQVdFUSt0am9KT2lDODRMckJwbWQ1ZU5hV1hhZmt2bHdDZHZibEFmMExXNTI5Tmt..."},{"version":"HTTP\/1.1"}],"url":"http:\/\/localhost\/\/"}},"site":null,"environment":null,"version":"5"}' }
+let(:message) { create :message, issue: issue1}
 
   describe 'notify_subscriber' do
     let(:sender) { create :user, email: 'sender@email.com', provider: 'coca-cola' }
@@ -25,7 +25,7 @@ let(:message) { create :message, issue: issue}
   end
 
   describe 'error_occurred' do
-    let(:mail) { described_class.error_occurred(issue) }
+    let(:mail) { described_class.error_occurred(issue1, website_member) }
 
     it 'renders the headers' do
       expect(mail.subject).to eq('Epic Logger Realtime Error')
@@ -34,12 +34,13 @@ let(:message) { create :message, issue: issue}
     end
 
     it 'renders the body' do
-      expect(mail.body.parts.first.body.raw_source).to eq("An error has just occurred:\nID\n#{issue.event_id}\nError type\nZeroDivisionError\nError message\n&quot;divided by 0&quot;\nWhen\n#{issue.created_at}\nWhere\n/home/sergiu/ravenapp/app/controllers/home_controller.rb\nFile\napp/controllers/home_controller.rb:5 in /\nUrl\nno content\nBacktrace Summary\n[&quot;  # Prevent CSRF attacks by raising an exception.\\n&quot;, &quot;  # For APIs, you may want to use :null_session instead.\\n&quot;, &quot;  def index\\n&quot;]\n    1/0\n\n[&quot;  end\\n&quot;, &quot;end\\n&quot;, &quot;&quot;]\n\n")
+      expect(mail.body.parts.first.body.raw_source).to eq("An error has just occurred:\nID\n#{issue1.event_id}\nError type\nZeroDivisionError\nError message\n&quot;divided by 0&quot;\nWhen\n#{issue1.created_at}\nWhere\n/home/sergiu/ravenapp/app/controllers/home_controller.rb\nFile\napp/controllers/home_controller.rb:5 in /\nUrl\nno content\nBacktrace Summary\n[&quot;  # Prevent CSRF attacks by raising an exception.\\n&quot;, &quot;  # For APIs, you may want to use :null_session instead.\\n&quot;, &quot;  def index\\n&quot;]\n    1/0\n\n[&quot;  end\\n&quot;, &quot;end\\n&quot;, &quot;&quot;]\n\n")
     end
   end
 
   describe 'more_than_10_errors' do
-    let(:mail) { described_class.more_than_10_errors(website) }
+    let(:mail) { described_class.more_than_10_errors(website_member) }
+    before(:each) { create_list(:issue, 11, group: group) }
 
     it 'renders the headers' do
       expect(mail.subject).to eq('EpicLogger Constant Error')
@@ -48,26 +49,12 @@ let(:message) { create :message, issue: issue}
     end
 
     it 'renders the body' do
-      expect(mail.body.parts.first.body.raw_source).to eq("This is a email notifying you that 10 errors occurred in last hour.\nID\nPlatform\nMessage\nCreated At\nWebsite\nEvent id\nIssue Url\n#{issue.id}\n#{issue.platform}\n#{issue.message}\n#{issue.created_at}\n#{website.domain}\n#{issue.event_id}\n<a href=\"http://localhost:3000/errors/#{issue.id}?unresolved=true\">Follow url for more details</a>\n\n")
-    end
-  end
-
-  describe 'event_occurred' do
-    let(:mail) { described_class.event_occurred(group) }
-
-    it 'renders the headers' do
-      expect(mail.subject).to eq('Epic Logger Event Occurred')
-      expect(mail.to).to eq([user.email])
-      expect(mail.from).to eq(["admin@epiclogger.com"])
-    end
-
-    it 'renders the body' do
-      expect(mail.body.parts.first.body.raw_source).to eq("#{group.message}\nA event has just occurred at #{group.created_at}.\nError message\n#{group.message}\nCulprit\n#{group.culprit}\n\n")
+      expect(mail.body.parts.first.body.raw_source).not_to be_nil
     end
   end
 
   describe 'notify_daily' do
-    let(:mail) { described_class.notify_daily(website) }
+    let(:mail) { described_class.notify_daily(website_member) }
 
     it 'renders the headers' do
       expect(mail.subject).to eq('Epic Logger Daily Reports')

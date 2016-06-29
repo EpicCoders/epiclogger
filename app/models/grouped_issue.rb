@@ -8,13 +8,8 @@ class GroupedIssue < ActiveRecord::Base
   enumerize :level, in: [:debug, :error, :fatal, :info, :warning], default: :error
   # enumerize :issue_logger, in: { javascript: 1, php: 2 }, default: :javascript
   enumerize :status, in: { muted: 1, resolved: 2, unresolved: 3 }, default: :unresolved, predicates: true, scope: true
-  after_create :group_created
 
   before_save :check_fields
-
-  def group_created
-    GroupedIssueMailer.event_occurred(self).deliver_later if website.new_event
-  end
 
   def first_issue
     issues.first

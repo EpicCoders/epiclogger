@@ -4,7 +4,7 @@ describe Website do
 
   let(:user) { create :user }
   let!(:website) { create :website }
-  let!(:website_member) { create :website_member, website: website, user: user }
+  let!(:website_member) { create :website_member, website: website, user: user, daily_reporting: true, weekly_reporting: true }
   let!(:release) { create :release, website: website }
   let!(:group) { create :grouped_issue, website: website }
 
@@ -90,13 +90,23 @@ describe Website do
     end
   end
 
-  describe 'daily report' do
+  describe 'custom_report' do
     it 'should email users' do
       mailer = double('GroupedIssueMailer')
       expect(mailer).to receive(:deliver_later)
-      expect(GroupedIssueMailer).to receive(:notify_daily).with(website).and_return(mailer).once
+      expect(GroupedIssueMailer).to receive(:notify_daily).with(website_member).and_return(mailer).once
 
-      Website.daily_report
+      date = Time.now - 1.day
+      Website.custom_report(date, 'daily_reporting')
+    end
+
+    it 'should email users' do
+      mailer = double('GroupedIssueMailer')
+      expect(mailer).to receive(:deliver_later)
+      expect(GroupedIssueMailer).to receive(:notify_daily).with(website_member).and_return(mailer).once
+
+      date = Time.now - 1.week
+      Website.custom_report(date, 'weekly_reporting')
     end
   end
 

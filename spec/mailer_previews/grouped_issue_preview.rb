@@ -2,7 +2,7 @@
 class GroupedIssueMailerPreview < ActionMailer::Preview
   def error_occurred
     show_email do
-      @mail = GroupedIssueMailer.error_occurred(@issue).message
+      @mail = GroupedIssueMailer.error_occurred(@issue, @website_member).message
     end
   end
 
@@ -14,19 +14,13 @@ class GroupedIssueMailerPreview < ActionMailer::Preview
 
   def more_than_10_errors
     show_email do
-      @mail = GroupedIssueMailer.more_than_10_errors(@website).message
-    end
-  end
-
-  def event_occurred
-    show_email do
-      @mail = GroupedIssueMailer.event_occurred(@group).message
+      @mail = GroupedIssueMailer.more_than_10_errors(@website_member).message
     end
   end
 
   def notify_daily
     show_email do
-      @mail = GroupedIssueMailer.notify_daily(@website).message
+      @mail = GroupedIssueMailer.notify_daily(@website_member).message
     end
   end
   protected

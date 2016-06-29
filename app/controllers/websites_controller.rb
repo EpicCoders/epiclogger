@@ -35,6 +35,6 @@ class WebsitesController < ApplicationController
   private
 
   def website_params
-    params.require(:website).permit(:domain, :platform, :generate, :title, :id, :new_event, :frequent_event, :daily, :realtime)
+    params.require(:website).permit(:domain, :platform, :generate, :title, :id)
   end
 end

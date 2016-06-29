@@ -1,6 +1,6 @@
 class InstallationsController < ApplicationController
   def index
-    @website = current_website
+    @website_member = WebsiteMember.find_by_user_id_and_website_id(current_user.id, current_website.id)
     @main_tab = params[:main_tab] || "details"
 
     @details_tab = params[:details_tab] || "settings"
