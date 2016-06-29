@@ -11,11 +11,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160623085812) do
+ActiveRecord::Schema.define(version: 20160629054525) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-  enable_extension "hstore"
 
   create_table "active_admin_comments", force: :cascade do |t|
     t.string   "namespace",     :index=>{:name=>"index_active_admin_comments_on_namespace"}
@@ -29,18 +28,14 @@ ActiveRecord::Schema.define(version: 20160623085812) do
   end
 
   create_table "websites", force: :cascade do |t|
-    t.string   "title",          :null=>false
-    t.string   "domain",         :null=>false
-    t.datetime "created_at",     :null=>false
-    t.datetime "updated_at",     :null=>false
+    t.string   "title",      :null=>false
+    t.string   "domain",     :null=>false
+    t.datetime "created_at", :null=>false
+    t.datetime "updated_at", :null=>false
     t.string   "app_key"
-    t.boolean  "new_event",      :default=>true
-    t.boolean  "frequent_event", :default=>false
-    t.boolean  "daily",          :default=>false
-    t.boolean  "realtime",       :default=>false
     t.string   "app_secret"
     t.string   "platform"
-    t.text     "origins",        :default=>"*"
+    t.text     "origins",    :default=>"*"
   end
 
   create_table "releases", force: :cascade do |t|
@@ -73,17 +68,6 @@ ActiveRecord::Schema.define(version: 20160623085812) do
     t.integer  "release_id",       :index=>{:name=>"index_grouped_issues_on_release_id"}, :foreign_key=>{:references=>"releases", :name=>"fk_grouped_issues_release_id", :on_update=>:restrict, :on_delete=>:cascade}
   end
   add_index "grouped_issues", ["website_id", "checksum"], :name=>"index_grouped_issues_on_website_id_and_checksum", :unique=>true
-
-  create_table "integrations", force: :cascade do |t|
-    t.integer  "website_id",    :index=>{:name=>"index_integrations_on_website_id"}, :foreign_key=>{:references=>"websites", :name=>"fk_rails_ef5f282bb0", :on_update=>:no_action, :on_delete=>:no_action}
-    t.string   "provider",      :null=>false
-    t.text     "configuration"
-    t.string   "name",          :null=>false
-    t.boolean  "disabled",      :default=>false
-    t.text     "error"
-    t.datetime "created_at",    :null=>false
-    t.datetime "updated_at",    :null=>false
-  end
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                  :null=>false, :index=>{:name=>"index_users_on_email", :unique=>true}
@@ -153,9 +137,13 @@ ActiveRecord::Schema.define(version: 20160623085812) do
   end
 
   create_table "website_members", force: :cascade do |t|
-    t.integer "user_id",    :index=>{:name=>"index_website_members_on_user_id"}, :foreign_key=>{:references=>"users", :name=>"fk_website_members_user_id", :on_update=>:restrict, :on_delete=>:cascade}
-    t.integer "website_id", :index=>{:name=>"index_website_members_on_website_id"}, :foreign_key=>{:references=>"websites", :name=>"fk_website_members_website_id", :on_update=>:restrict, :on_delete=>:cascade}
-    t.integer "role",       :default=>1
+    t.integer "user_id",          :index=>{:name=>"index_website_members_on_user_id"}, :foreign_key=>{:references=>"users", :name=>"fk_website_members_user_id", :on_update=>:restrict, :on_delete=>:cascade}
+    t.integer "website_id",       :index=>{:name=>"index_website_members_on_website_id"}, :foreign_key=>{:references=>"websites", :name=>"fk_website_members_website_id", :on_update=>:restrict, :on_delete=>:cascade}
+    t.integer "role",             :default=>1
+    t.boolean "realtime",         :default=>false
+    t.boolean "frequent_event",   :default=>false
+    t.boolean "daily_reporting",  :default=>false
+    t.boolean "weekly_reporting", :default=>true
   end
   add_index "website_members", ["user_id", "website_id"], :name=>"index_website_members_on_user_id_and_website_id", :unique=>true
 
