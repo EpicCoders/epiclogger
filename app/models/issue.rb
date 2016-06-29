@@ -26,7 +26,7 @@ class Issue < ActiveRecord::Base
 
   def breadcrumbs_stacktrace
     breadcrumbs = get_interfaces(:breadcrumbs)
-    return 'Missing crumbs' if breadcrumbs.blank?
+    return 'Missing breadcrumbs' if breadcrumbs.blank?
     breadcrumbs._data[:values].flatten.reverse!
   end
 

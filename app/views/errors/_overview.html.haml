@@ -47,7 +47,7 @@
           %dd= @error.level
           %dt Logger
           %dd= @error.platform
-  - valid_stacktrace = @issue.breadcrumbs_stacktrace != 'Missing crumbs' && @issue.breadcrumbs_stacktrace.present?
+  - valid_stacktrace = @issue.breadcrumbs_stacktrace != 'Missing breadcrumbs' && @issue.breadcrumbs_stacktrace.present?
   - if valid_stacktrace
     .col-sm-7.col-md-8
       .panel.panel-default
@@ -59,11 +59,14 @@
                 %table.table
                   - @issue.breadcrumbs_stacktrace.each_with_index do |crumb, index|
                     %tr
-                      - level = crumb[:level].present?
-                      %td{ class: level ? "#{crumb[:level]}-line" : "log-line"}= crumb[:category]
-                      %td= crumb[:message]
+                      %td{ class: crumb[:level].present? ? "#{crumb[:level]}-line" : "log-line"}= crumb[:category]
+                      - data = crumb[:data]
+                      - if data.blank?
+                        %td= crumb[:message]
+                      - else
+                        %td #{data[:method]} #{data[:url]} [#{data[:status_code]}]
                       %td= Time.at(crumb[:timestamp]).strftime("%H:%M:%S")
-          %h5.text-center{style: "display:#{valid_stacktrace ? 'none' : 'block'}"} Missing crumbs
+          %h5.text-center{style: "display:#{valid_stacktrace ? 'none' : 'block'}"} Missing breadcrumbs
           %p.read-more.text-center{style: "display:#{valid_stacktrace ? 'block' : 'none'}"}
             %a.btn.btn-default{:href => "#"} View full backtrace
 
