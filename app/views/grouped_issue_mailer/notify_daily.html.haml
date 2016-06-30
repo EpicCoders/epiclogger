@@ -1,6 +1,6 @@
 .col-lg-6
   %p.gray_text{:style => 'display:inline'} Project:
-  %small [#{@website.title}] Daily report email provides you some information about changes on your website.
+  %small [#{@member.website.title}] Daily report email provides you some information about changes on your website.
   %hr
   %table
     %tr
@@ -11,16 +11,16 @@
     %tr
       %td
         %pre
-          %code #{@website.title}
+          %code #{@member.website.title}
       %td
         %pre
-          %code #{@website.domain}
+          %code #{@member.website.domain}
       %td
         %pre
-          %code #{@website.platform}
+          %code #{@member.website.platform}
       %td
         %pre
-          %code #{@website.created_at}
+          %code #{@member.website.created_at}
     %tr
       %th#gray_th Message
       %th#gray_th Level

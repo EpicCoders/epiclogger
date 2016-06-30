@@ -1,0 +1,21 @@
+Project [#{@member.website.title}] Weekly report email provides you some information about changes on your website.
+Title
+Domain
+Platform
+Created At
+#{@member.website.title}
+#{@member.website.domain}
+#{@member.website.platform}
+#{@member.website.created_at}
+- @weekly_updates.each_with_index do |daily_updates, index|
+  - unless daily_updates.blank?
+    Updates available on #{@days[index]}
+    - daily_updates.first(5).each do |group|
+      Message
+      Times seen
+      Culprit
+      More details
+      #{group.message}
+      #{group.times_seen}
+      #{group.culprit}
+      #{link_to error_url(group), error_url(group)}

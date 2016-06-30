@@ -1,0 +1,46 @@
+.col-lg-6
+  %p.gray_text{:style => 'display:inline'} Project:
+  %small [#{@member.website.title}] Weekly report email provides you some information about changes on your website.
+  %hr
+  %table
+    %tr
+      %th Title
+      %th Domain
+      %th Platform
+      %th Created At
+    %tr
+      %td
+        %pre
+          %code #{@member.website.title}
+      %td
+        %pre
+          %code #{@member.website.domain}
+      %td
+        %pre
+          %code #{@member.website.platform}
+      %td
+        %pre
+          %code #{@member.website.created_at}
+    %tr
+      - @weekly_updates.each_with_index do |daily_updates, index|
+        - unless daily_updates.blank?
+          %th{:colspan => "4"} Updates available on #{@days[index]}
+          - daily_updates.first(5).each do |group|
+            %tr
+              %th#gray_th Message
+              %th#gray_th Times seen
+              %th#gray_th Culprit
+              %th#gray_th More details
+            %tr
+              %td
+                %pre
+                  %code #{group.message}
+              %td
+                %pre
+                  %code #{group.times_seen}
+              %td
+                %pre
+                  %code #{group.culprit}
+              %td
+                %pre
+                  %code #{link_to error_url(group), error_url(group)}

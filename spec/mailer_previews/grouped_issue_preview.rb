@@ -23,6 +23,12 @@ class GroupedIssueMailerPreview < ActionMailer::Preview
       @mail = GroupedIssueMailer.notify_daily(@website_member).message
     end
   end
+
+  def notify_weekly
+    show_email do
+      @mail = GroupedIssueMailer.notify_weekly(@website_member).message
+    end
+  end
   protected
 
   def show_email(&block)

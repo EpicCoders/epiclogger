@@ -66,4 +66,19 @@ let(:message) { create :message, issue: issue1}
       expect(mail.body.parts.first.body.raw_source).to eq( "Daily report email provides you some information about changes on your website.\nTitle\nDomain\nPlatform\nCreated At\n#{website.title}\n#{website.domain}\n\n#{website.created_at}\nMessage\nLevel\nTimes seen\nCulprit\n#{group.message}\n#{group.level}\n#{group.times_seen}\n#{group.culprit}\n\n")
     end
   end
+
+  describe 'notify_weekly' do
+    let(:mail) { described_class.notify_weekly(website_member) }
+
+    it 'renders the headers' do
+      expect(mail.subject).to eq('Epic Logger Weekly Reports')
+      expect(mail.to).to eq([user.email])
+      expect(mail.from).to eq(["admin@epiclogger.com"])
+    end
+
+    it 'renders the body' do
+      days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
+      expect(mail.body.parts.first.body.raw_source).to eq("Project [#{website.title}] Weekly report email provides you some information about changes on your website.\nTitle\nDomain\nPlatform\nCreated At\n#{website.title}\n#{website.domain}\n\n#{website.created_at}\nUpdates available on #{days[Time.now.wday-1]}\nMessage\nTimes seen\nCulprit\nMore details\n#{group.message}\n#{group.times_seen}\n#{group.culprit}\n<a href=\"#{error_url(group.id)}\">#{error_url(group.id)}</a>\n\n")
+    end
+  end
 end
