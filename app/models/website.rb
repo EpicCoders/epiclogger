@@ -48,8 +48,8 @@ class Website < ActiveRecord::Base
     return release
   end
 
-   def self.custom_report(date, field)
-    WebsiteMember.where("website_members.#{field} = ?", true).joins(website: :grouped_issues).where('grouped_issues.updated_at > ?', date).uniq.each do |member|
+  def self.custom_report(date, field)
+    WebsiteMember.where("website_members.#{field} = ?", true).joins(website: :grouped_issues).where('grouped_issues.updated_at > ? AND muted = ?', date, false).uniq.each do |member|
       if field == 'daily_reporting'
         GroupedIssueMailer.notify_daily(member).deliver_later
       else

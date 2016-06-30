@@ -1,7 +1,4 @@
 .col-lg-6
-  %p.gray_text{:style => 'display:inline'} Project:
-  %small [#{@issue.website.title}] #{truncate(@issue.message, length: 40)}
-  %hr
   - if @issue.get_interfaces(:exception).present?
     %p An error has just occurred. View full details at:
     %p #{link_to error_url(@issue.group), error_url(@issue.group)}

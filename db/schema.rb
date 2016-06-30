@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160629054525) do
+ActiveRecord::Schema.define(version: 20160630123854) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -66,6 +66,7 @@ ActiveRecord::Schema.define(version: 20160629054525) do
     t.string   "checksum",         :limit=>32
     t.integer  "time_spent_total", :default=>0
     t.integer  "release_id",       :index=>{:name=>"index_grouped_issues_on_release_id"}, :foreign_key=>{:references=>"releases", :name=>"fk_grouped_issues_release_id", :on_update=>:restrict, :on_delete=>:cascade}
+    t.boolean  "muted",            :default=>false
   end
   add_index "grouped_issues", ["website_id", "checksum"], :name=>"index_grouped_issues_on_website_id_and_checksum", :unique=>true
 
