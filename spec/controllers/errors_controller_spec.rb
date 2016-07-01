@@ -85,9 +85,9 @@ RSpec.describe ErrorsController, type: :controller do
           expect(assigns(:selected_errors).map(&:resolved?)).to all(be true)
         end
 
-        it 'assigns chart_data' do
+        it 'assigns chart_data and counts as 1 error' do
           get_with user, :show, params
-          expect(assigns(:chart_data).count).to eq(32)
+          expect(assigns(:chart_data).sum(&:second)).to eq(1)
         end
 
         it "displays the page we request via param" do
