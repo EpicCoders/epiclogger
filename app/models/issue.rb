@@ -26,13 +26,13 @@ class Issue < ActiveRecord::Base
 
   def breadcrumbs_stacktrace
     breadcrumbs = get_interfaces(:breadcrumbs)
-    return 'Missing breadcrumbs' if breadcrumbs.blank?
+    return false if breadcrumbs.blank?
     breadcrumbs._data[:values].flatten.reverse!
   end
 
   def get_platform_frames
     exception = get_interfaces(:exception)
-    return 'Missing stacktrace' if exception.blank?
+    return false if exception.blank?
     frames = []
     exception._data[:values].each do |value|
       next unless value._data[:stacktrace]

@@ -5,7 +5,7 @@
   .col-sm-7.col-md-8
     .panel.panel-default.exception
       .panel-heading Exception
-      - valid_stacktrace = @issue.get_platform_frames != 'Missing stacktrace' && @issue.get_platform_frames.present?
+      - valid_stacktrace = @issue.get_platform_frames && @issue.get_platform_frames.present?
       .panel-body{ class: "#{valid_stacktrace ? 'expand-box' : ''}" }
         - if valid_stacktrace
           #frame.accordion
@@ -47,7 +47,7 @@
           %dd= @error.level
           %dt Logger
           %dd= @error.platform
-  - valid_stacktrace = @issue.breadcrumbs_stacktrace != 'Missing breadcrumbs' && @issue.breadcrumbs_stacktrace.present?
+  - valid_stacktrace = @issue.breadcrumbs_stacktrace && @issue.breadcrumbs_stacktrace.present?
   - if valid_stacktrace
     .col-sm-7.col-md-8
       .panel.panel-default
