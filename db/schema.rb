@@ -15,6 +15,7 @@ ActiveRecord::Schema.define(version: 20160630123854) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "hstore"
 
   create_table "active_admin_comments", force: :cascade do |t|
     t.string   "namespace",     :index=>{:name=>"index_active_admin_comments_on_namespace"}
@@ -69,6 +70,17 @@ ActiveRecord::Schema.define(version: 20160630123854) do
     t.boolean  "muted",            :default=>false
   end
   add_index "grouped_issues", ["website_id", "checksum"], :name=>"index_grouped_issues_on_website_id_and_checksum", :unique=>true
+
+  create_table "integrations", force: :cascade do |t|
+    t.integer  "website_id",    :index=>{:name=>"index_integrations_on_website_id"}, :foreign_key=>{:references=>"websites", :name=>"fk_rails_ef5f282bb0", :on_update=>:no_action, :on_delete=>:no_action}
+    t.string   "provider",      :null=>false
+    t.text     "configuration"
+    t.string   "name",          :null=>false
+    t.boolean  "disabled",      :default=>false
+    t.text     "error"
+    t.datetime "created_at",    :null=>false
+    t.datetime "updated_at",    :null=>false
+  end
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                  :null=>false, :index=>{:name=>"index_users_on_email", :unique=>true}

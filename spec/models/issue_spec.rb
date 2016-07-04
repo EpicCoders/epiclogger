@@ -65,4 +65,24 @@ describe Issue do
       expect(issue.user_agent).to eq('Could not parse data!')
     end
   end
+
+  describe 'more_than_10_errors' do
+    it 'should email users' do
+      create_list(:issue, 11, group: grouped_issue)
+      mailer = double('GroupedIssueMailer')
+      expect(mailer).to receive(:deliver_later)
+      expect(GroupedIssueMailer).to receive(:more_than_10_errors).with(website_member).and_return(mailer).once
+
+      Issue.more_than_10_errors(website_member)
+    end
+
+    it 'should email users' do
+      mailer = double('GroupedIssueMailer')
+      expect(mailer).to receive(:deliver_later)
+      expect(GroupedIssueMailer).to receive(:notify_weekly).with(website_member).and_return(mailer).once
+
+      date = Time.now - 1.week
+      Website.custom_report(date, 'weekly_reporting')
+    end
+  end
 end

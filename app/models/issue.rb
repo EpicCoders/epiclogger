@@ -37,18 +37,6 @@ class Issue < ActiveRecord::Base
     all_data[key]
   end
 
-  def stacktrace_frames
-    #added a switch statement in case errors from different platforms will be saved differenty
-    case platform
-    when 'javascript'
-      frames = get_interfaces(:stacktrace)._data[:frames]
-      frames = [] if frames.blank?
-    else
-      frames = get_platform_frames
-    end
-    frames
-  end
-
   def get_platform_frames
     exception = get_interfaces(:exception)
     return false if exception.blank?

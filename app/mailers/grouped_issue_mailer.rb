@@ -12,14 +12,14 @@ class GroupedIssueMailer < ApplicationMailer
   def error_occurred(issue, member)
     @issue = issue
     @member = member
-    mail to: @member.user.email, subject: "Project: [#{@issue.website.title}] #{truncate(@issue.message, length: 40)}"
+    mail to: @member.user.email, subject: "[#{@issue.website.title}] #{truncate(@issue.message, length: 40)}"
   end
 
   def more_than_10_errors(member)
     @member = member
     @last_hour_errors = @member.website.issues.where('issues.created_at > ?', Time.now - 1.hour)
     if @last_hour_errors.count >= 10
-      mail to: @member.user.email, subject: "Project: [#{@member.website.title}] This is a email notifying you that 10 errors occurred in last hour."
+      mail to: @member.user.email, subject: "[#{@member.website.title}] This is a email notifying you that 10 errors occurred in last hour."
     end
   end
 
@@ -27,7 +27,7 @@ class GroupedIssueMailer < ApplicationMailer
     date = Time.now - 1.day
     @member = member
     @grouped_issues = find_grouped_issues(member, date)
-    mail to: @member.user.email, subject: "Project: [#{@member.website.title}] Daily report email provides you some information about changes on your website."
+    mail to: @member.user.email, subject: "[#{@member.website.title}] Daily report email provides you some information about changes on your website."
   end
 
   def notify_weekly(member)
@@ -41,7 +41,7 @@ class GroupedIssueMailer < ApplicationMailer
       @weekly_updates.push(grouped_issues.select { |group| group.updated_at.public_send(day+'?') })
     end
 
-    mail to: @member.user.email, subject: "Project: [#{@member.website.title}] Weekly report email provides you some information about changes on your website."
+    mail to: @member.user.email, subject: "[#{@member.website.title}] Weekly report email provides you some information about changes on your website."
   end
 
   def find_grouped_issues(member, date)
