@@ -20,7 +20,7 @@ class Issue < ActiveRecord::Base
 
   def get_headers(header = nil)
     all_headers = http_data(:headers)
-    return all_headers if header.nil?
+    return all_headers if header.nil? || all_headers == "<no information>"
     all_headers.find { |h| h[header] }.try(:values).try(:first)
   end
 
@@ -31,7 +31,7 @@ class Issue < ActiveRecord::Base
   end
 
   def http_data(key = nil)
-    all_data = get_interfaces(:http)._data
+    all_data = get_interfaces(:http).try(:_data)
     return '<no information>' if all_data.blank?
     return all_data if key.nil?
     all_data[key]
