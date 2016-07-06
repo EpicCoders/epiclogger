@@ -3,25 +3,25 @@ source 'https://rubygems.org'
 ruby '2.3.0'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.2.6'
+gem 'rails', '5.0.0'
 # Use postgres as the database for Active Record
 gem 'pg'
-gem 'schema_plus_pg_indexes'
-gem 'schema_plus_foreign_keys'
+gem 'schema_plus_core', github: 'SchemaPlus/schema_plus_core', branch: 'activerecord-5.0'
+# gem 'schema_plus_foreign_keys', github: 'SchemaPlus/schema_plus_foreign_keys', branch: 'activerecord-5.0'
 # Add enumerize gem
-gem 'enumerize'
+gem 'enumerize', github: 'brainspec/enumerize', branch: 'rails-5'
 
 # Use bootstrap
 gem 'bootstrap-sass', '~> 3.3.6'
 gem 'font-awesome-sass'
 # Use SCSS for stylesheets
-gem 'sass-rails', '~> 5.0.1'
+gem 'sass-rails' #, '~> 5.0.1'
 # Sprokets
 gem 'sprockets-rails'
 # Use Uglifier as compressor for JavaScript assets
-gem 'uglifier', '>= 1.3.0'
+gem 'uglifier' #, '>= 1.3.0'
 # Use CoffeeScript for .coffee assets and views
-gem 'coffee-rails', '~> 4.2.1'
+gem 'coffee-rails' #, '~> 4.1.0'
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
 gem 'haml-rails'
@@ -29,6 +29,14 @@ gem 'haml-rails'
 # jquery form validation plugin
 gem 'jquery-validation-rails'
 gem 'activeadmin', '~> 1.0.0.pre4'
+# TODO remove these once activeamdin is rails 5 ready
+# activeadmin dependencies that have rails 5 support
+gem 'inherited_resources', github: 'activeadmin/inherited_resources'
+gem 'ransack',    github: 'activerecord-hackery/ransack'
+gem 'formtastic', github: 'justinfrench/formtastic'
+gem 'activemodel-serializers-xml', github: 'rails/activemodel-serializers-xml'
+gem 'draper',     github: 'audionerd/draper', branch: 'rails5' #, ref: 'e816e0e587'
+# END depedencies
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
@@ -99,6 +107,7 @@ group :test do
   gem 'timecop'
   gem 'shoulda-matchers', require: false
   gem 'codecov', require: false
+  gem 'rails-controller-testing'
 end
 
 group :development, :test do
