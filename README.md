@@ -6,7 +6,13 @@
 
 ## EpicLogger engage developers with users to solve errors
 
-I would love if we could build a product that helps developers talk to users of a product and notify them when errors are fixed or talk to them and get information about an issue they might have. I find myself, in cases of bigger companies, where i have to get to support to get that information or in cases of small companies where i have to use multiple products to find what users are having a certain problem and then notify them when it's fixed.
+EpicLogger is the open source product that offers error logging and customer support with ease. You can add integrations like intercom and github to manage the errors you are getting from your application and then notify your customers when those errors are fixed.
+
+## EpicLogger website
+
+You don't want to install the app on your server? You can use our installed app here: [http://epiclogger.com](http://epiclogger.com) and make an account. We are currently in beta and evolving day by day.
+
+[![Epiclogger](http://i.imgur.com/VYTFliv.png?1)](http://epiclogger.com)
 
 ## Contributing
 
