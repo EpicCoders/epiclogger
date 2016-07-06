@@ -28,7 +28,7 @@ gem 'haml-rails'
 
 # jquery form validation plugin
 gem 'jquery-validation-rails'
-gem 'activeadmin', '~> 1.0.0.pre2'
+gem 'activeadmin', '~> 1.0.0.pre4'
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
@@ -98,7 +98,7 @@ group :development, :test do
 
   gem 'faker'
   gem 'pry'
-  gem 'rspec-rails', '~> 3.4.2'
+  gem 'rspec-rails', '~> 3.5'
   gem 'factory_girl_rails'
 
   gem 'brakeman', require: false
