@@ -19,7 +19,7 @@ class Ability
       can :manage, Website do |website|
         user.is_owner_of?(website)
       end
-      can :read, Website do |website|
+      can [:change_current, :read], Website do |website|
         user.is_member_of?(website)
       end
       can :create, Website

@@ -44,6 +44,7 @@ RSpec.describe Ability do
         it { is_expected.not_to be_able_to(:manage, subscriber) }
 
         it { is_expected.to be_able_to(:read, website) }
+        it { is_expected.to be_able_to(:change_current, website) }
         it { is_expected.to be_able_to(:read, user_website_member_with_user) }
 
         it_behaves_like 'it has abilities'
@@ -83,6 +84,7 @@ RSpec.describe Ability do
           it { is_expected.not_to be_able_to(:manage, subscriber) }
 
           it { is_expected.not_to be_able_to(:read, website) }
+          it { is_expected.not_to be_able_to(:change_current, website) }
           it { is_expected.not_to be_able_to(:read, user_website_member_with_user) }
         end
       end

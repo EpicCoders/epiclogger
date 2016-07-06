@@ -36,7 +36,7 @@
           %dt First seen at
           %dd= @error.first_seen
           %dt Url
-          %dd=@issue.http_data(:url)
+          %dd #{@issue.http_data(:url) || '<no information>'}
           %dt File
           %dd= @error.culprit
           %dt User Agent

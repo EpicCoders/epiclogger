@@ -21,7 +21,7 @@
     %p.gray_text File
     %pre
       %code
-        %small #{@issue.get_frames(:filename)}
+        %small #{@issue.get_frames(:filename) || '<no information>'}
     %p.gray_text Url
     %pre
       %code
