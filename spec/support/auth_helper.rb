@@ -1,7 +1,7 @@
 module Authorization
   def request_with(user, http_method, action, parameters = {}, session = {}, flash = {} )
     warden.set_user user
-    process action, http_method.to_s.upcase, parameters, session, flash
+    process action, method: http_method.to_s.upcase, params: parameters, session: session, flash: flash
   end
 
   [:get, :put, :post, :delete].each do |method|
