@@ -1,4 +1,4 @@
-require File.expand_path('../boot', __FILE__)
+require_relative 'boot'
 
 require 'rails/all'
 
@@ -29,9 +29,6 @@ module Epiclogger
       username: ENV['MEMCACHEDCLOUD_USERNAME'],
       password: ENV['MEMCACHEDCLOUD_PASSWORD']
     }
-
-    # Do not swallow errors in after_commit/after_rollback callbacks.
-    config.active_record.raise_in_transactional_callbacks = true
 
     config.action_dispatch.default_headers.merge!({
       'Access-Control-Allow-Origin' => '*',
