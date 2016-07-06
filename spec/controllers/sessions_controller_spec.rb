@@ -34,21 +34,21 @@ RSpec.describe SessionsController, :type => :controller do
       allow(request.env['warden']).to receive(:authenticate!).and_return(user)
       allow(controller).to receive(:current_user).and_return(user)
 
-      post :create, params
+      post :create, params: params
     end
 
     it 'should set current_website' do
-      post :create, params
+      post :create, params: params
       expect(session[:epiclogger_website_id]).to eq(website.id)
     end
 
     it 'should redirect to create' do
       user2 = create :user, email: "user@email.com"
-      expect( post :create, user: { email: user2.email, password: user2.password } ).to redirect_to(website_wizard_path(:create))
+      expect( post :create, params: { user: { email: user2.email, password: user2.password } } ).to redirect_to(website_wizard_path(:create))
     end
 
     it 'should redirect to errors' do
-      expect( post :create, user: { email: user.email, password: user.password } ).to redirect_to(errors_path)
+      expect( post :create, params: { user: { email: user.email, password: user.password } } ).to redirect_to(errors_path)
     end
   end
 end

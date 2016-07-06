@@ -75,7 +75,7 @@ RSpec.describe InvitesController, type: :controller do
 
     context 'logged out' do
       it 'should redirect to errors' do
-         expect(get :accept, params).to redirect_to(signup_url(token: invite.token))
+         expect(get :accept, params: params).to redirect_to(signup_url(token: invite.token))
       end
     end
   end

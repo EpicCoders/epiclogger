@@ -97,7 +97,7 @@ RSpec.describe ErrorsController, type: :controller do
       let(:params) { { current_issue: issue_error.id } }
 
       it 'should give error if not logged in' do
-        get :index, params
+        get :index, params: params
         expect(response).to have_http_status(302)
       end
     end
@@ -269,7 +269,7 @@ RSpec.describe ErrorsController, type: :controller do
     end
 
     it 'should give error if not logged in' do
-      get :show, params, { epiclogger_website_id: website.id}
+      get :show, params: params, session: { epiclogger_website_id: website.id}
       expect(response).to have_http_status(302)
     end
   end
@@ -297,7 +297,7 @@ RSpec.describe ErrorsController, type: :controller do
     context 'not logged in' do
       let(:params) { { status: 'resolved', id: group.id, website_id: website.id } }
       it 'throws unauthorized' do
-        get :update, params
+        get :update, params: params
         expect(response).to have_http_status(302)
       end
     end

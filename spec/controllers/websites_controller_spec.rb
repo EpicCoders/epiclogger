@@ -61,7 +61,7 @@ RSpec.describe WebsitesController, type: :controller do
     end
 
     it 'gives error if not logged in' do
-      delete :destroy, params
+      delete :destroy, params: params
       expect(response).to have_http_status(302)
     end
   end

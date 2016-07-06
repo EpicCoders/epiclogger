@@ -18,7 +18,7 @@ RSpec.describe ResetPasswordController, :type => :controller do
   describe "POST #create" do
     context 'blank email field' do
       it "should notice and render new" do
-        post :create, { user: { email: '' } }
+        post :create, params: { user: { email: '' } }
         expect(flash[:alert]).to eq('Specify an email address')
         expect(response).to render_template('new')
       end
@@ -29,14 +29,14 @@ RSpec.describe ResetPasswordController, :type => :controller do
 
       it 'should generate token' do
         expect{
-          post :create, params
+          post :create, params: params
           user.reload
           }.to change(user, :reset_password_token).from(nil)
       end
 
       it 'should update reset_password_sent_at column' do
         expect{
-          post :create, params
+          post :create, params: params
           user.reload
           }.to change(user, :reset_password_sent_at).from(nil)
       end
@@ -46,22 +46,22 @@ RSpec.describe ResetPasswordController, :type => :controller do
         expect(mailer).to receive(:deliver_later)
         expect(UserMailer).to receive(:reset_password).with(user).and_return(mailer).once
 
-        post :create, params
+        post :create, params: params
       end
 
       it 'should redirect to login' do
-        expect(post :create, params).to redirect_to(login_url)
+        expect(post :create, params: params).to redirect_to(login_url)
       end
 
       it 'should flash' do
-        post :create, params
+        post :create, params: params
         expect(flash[:alert]).to eq('Email sent with password reset instructions')
       end
     end
 
     context 'user not found' do
       it "should notice and render new" do
-        post :create, { user: { email: 'user@not-existent.com' } }
+        post :create, params: { user: { email: 'user@not-existent.com' } }
         expect(flash[:alert]).to eq('No such user here')
         expect(response).to render_template('new')
       end
@@ -71,12 +71,12 @@ RSpec.describe ResetPasswordController, :type => :controller do
   describe "GET #edit" do
     let(:user2) { create :user, reset_password_token: 'vJq2UGPUDBZYcO7RiuxkAw', reset_password_sent_at: Time.now }
     it 'assigns user' do
-      get :edit, id: user2.reset_password_token
+      get :edit, params: { id: user2.reset_password_token }
       expect(assigns(:user)).to eq(user2)
     end
 
     it 'should redirect and notice' do
-      expect( get :edit, id: 'random-token' ).to redirect_to(login_url)
+      expect( get :edit, params: { id: 'random-token' } ).to redirect_to(login_url)
       expect(flash[:alert]).to eq('User not found')
     end
   end
@@ -87,30 +87,30 @@ RSpec.describe ResetPasswordController, :type => :controller do
       let(:params) { { id: user2.reset_password_token, user: { password: 'password', password_confirmation: 'password' } } }
 
       it 'assigns user' do
-        get :update, params
+        get :update, params: params
         expect(assigns(:user)).to eq(user2)
       end
 
       it 'should update password' do
         expect{
-          put :update, params
+          put :update, params: params
           user2.reload
         }.to change(user2, :password_digest)
       end
 
       it 'should redirect' do
-        expect( put :update, params ).to redirect_to(login_url)
+        expect( put :update, params: params ).to redirect_to(login_url)
       end
 
       it 'should notice' do
-        put :update, params
+        put :update, params: params
         expect(flash[:alert]).to eq('Your password has been changed')
       end
     end
 
     context 'user not found or period expired' do
       it 'should redirect and notice' do
-        put :update, id: 'random-token'
+        put :update, params: { id: 'random-token' }
         expect(flash[:alert]).to eq("Period expired or Password don't match")
       end
     end
