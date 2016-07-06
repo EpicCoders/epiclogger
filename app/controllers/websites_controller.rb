@@ -7,7 +7,7 @@ class WebsitesController < ApplicationController
 
   def update
     @website.update_attributes(website_params)
-    redirect_to installations_url(details_tab: 'settings', main_tab: 'details'), notice: 'Website updated'
+    redirect_to settings_url(details_tab: 'settings', main_tab: 'details'), notice: 'Website updated'
   end
 
   def destroy
@@ -24,7 +24,7 @@ class WebsitesController < ApplicationController
   def revoke
     @website.generate = true
     @website.save
-    redirect_to installations_path(details_tab: 'api_keys', main_tab: 'details')
+    redirect_to settings_path(details_tab: 'api_keys', main_tab: 'details')
   end
 
   def change_current

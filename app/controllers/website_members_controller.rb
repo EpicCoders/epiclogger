@@ -6,7 +6,7 @@ class WebsiteMembersController < ApplicationController
 
   def update
     @website_member.update_attributes(website_member_params)
-    redirect_to installations_url(details_tab: 'notifications', main_tab: 'details'), notice: 'Successfully updated'
+    redirect_to settings_url(details_tab: 'notifications', main_tab: 'details'), notice: 'Successfully updated'
   end
 
   def destroy

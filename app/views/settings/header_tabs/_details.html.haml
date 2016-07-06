@@ -1,0 +1,15 @@
+.col-lg-12
+  #custom-bootstrap.navbar.navbar-default{:role => "navigation"}
+    %ul.nav.navbar-nav.navbar-left#details-tabs.main-tabs
+      %li{class: @details_tab == 'settings' ? 'active' : ''}
+        = link_to "Settings", settings_path('main_tab' => 'details', 'details_tab' => 'settings')
+      %li{class: @details_tab == 'notifications' ? 'active' : ''}
+        = link_to "Notifications", settings_path('main_tab' => 'details', 'details_tab' => 'notifications')
+      / %li{class: @details_tab == 'rate_limits' ? 'active' : ''}
+      /   = link_to "Rate limits", settings_path('main_tab' => 'details', 'details_tab' => 'rate_limits')
+      / %li{class: @details_tab == 'tags' ? 'active' : ''}
+      /   = link_to "Tags", settings_path('main_tab' => 'details', 'details_tab' => 'tags')
+      %li{class: @details_tab == 'api_keys' ? 'active' : ''}
+        = link_to "Api Keys", settings_path('main_tab' => 'details', 'details_tab' => 'api_keys')
+  %br
+  = render partial: "settings/details/#{@details_tab}"

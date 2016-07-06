@@ -1,0 +1,28 @@
+.col-md-12.pagecontainer.tab#node_js_tab
+  .pagetitle.text-center
+    %h3 Configuring Node.js
+    = @tab
+  #custom-bootstrap.navbar.navbar-default{:role => "navigation"}
+    %ul.nav.navbar-nav.navbar-left
+      - if params[:controller] == "settings"
+        %li{class: @platform_tab == 'node_js' ? 'active' : ''}
+          = link_to "Node.js", settings_path('main_tab' => 'configuration', 'configuration_tab' => 'node_js', 'platform_tab' => 'node_js')
+        %li{class: @platform_tab == 'express' ? 'active' : ''}
+          = link_to "Express", settings_path('main_tab' => 'configuration', 'configuration_tab' => 'node_js', 'platform_tab' => 'express')
+        %li{class: @platform_tab == 'connect' ? 'active' : ''}
+          = link_to "Connect", settings_path('main_tab' => 'configuration', 'configuration_tab' => 'node_js', 'platform_tab' => 'connect')
+      - else
+        %li{class: @website.platform == 'Node js' ? 'active' : ''}
+          = link_to "Node js", website_wizard_path(:choose_platform, 'tab' => 'node_js'), method: :put
+        %li{class: @website.platform == 'Express' ? 'active' : ''}
+          = link_to "Express", website_wizard_path(:choose_platform, 'tab' => 'express'), method: :put
+        %li{class: ( @website.platform == 'Connect' ? 'active' : '')}
+          = link_to "Connect", website_wizard_path(:choose_platform, 'tab' => 'connect'), method: :put
+  .panel.panel-default.codeview
+    .panel-heading
+    - if params[:controller] == "settings"
+      = render partial: "settings/platforms/node_js/#{@platform_tab}"
+    - else
+      = render partial: 'settings/platforms/node_js/node_js'
+      = render partial: 'settings/platforms/node_js/express'
+      = render partial: 'settings/platforms/node_js/connect'

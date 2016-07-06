@@ -2,10 +2,10 @@
   #custom-bootstrap-menu.navbar.navbar-default{:role => "navigation"}
     %ul.nav.navbar-nav.navbar-left#top-tabs
       %li{class: @main_tab == 'details' ? 'active' : ''}
-        = link_to "Details" ,installations_path('main_tab' => 'details')
+        = link_to "Details" ,settings_path('main_tab' => 'details')
       %li{class: @main_tab == 'configuration' ? 'active' : ''}
-        = link_to "Configuration" ,installations_path('main_tab' => 'configuration')
+        = link_to "Configuration" ,settings_path('main_tab' => 'configuration')
       %li{class: @main_tab == 'integrations' ? 'active' : ''}
-        = link_to "Integrations" ,installations_path('main_tab' => 'integrations')
+        = link_to "Integrations" ,settings_path('main_tab' => 'integrations')
 
-  = render partial: "installations/header_tabs/#{@main_tab}"
+  = render partial: "settings/header_tabs/#{@main_tab}"

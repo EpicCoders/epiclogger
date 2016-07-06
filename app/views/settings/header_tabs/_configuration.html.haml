@@ -1,0 +1,21 @@
+.col-lg-12#client-configuration.main-tabs
+  #custom-bootstrap.navbar.navbar-default{:role => "navigation"}
+    %ul.nav.navbar-nav.navbar-left#platforms-tabs.main-tabs
+      %li{class: @configuration_tab == 'all_platforms' ? 'active' : ''}
+        = link_to "All Platforms", settings_path('main_tab' => 'configuration', 'configuration_tab' => 'all_platforms')
+      %li{class: @configuration_tab == 'javascript' ? 'active' : ''}
+        = link_to "Javascript", settings_path('main_tab' => 'configuration', 'configuration_tab' => 'javascript')
+      %li{class: @configuration_tab == 'python' ? 'active' : ''}
+        = link_to "Python", settings_path('main_tab' => 'configuration', 'configuration_tab' => 'python')
+      %li{class: @configuration_tab == 'php' ? 'active' : ''}
+        = link_to "PHP", settings_path('main_tab' => 'configuration', 'configuration_tab' => 'php')
+      %li{class: @configuration_tab == 'ruby' ? 'active' : ''}
+        = link_to "Ruby", settings_path('main_tab' => 'configuration', 'configuration_tab' => 'ruby')
+      %li{class: @configuration_tab == 'node_js' ? 'active' : ''}
+        = link_to "Node.js", settings_path('main_tab' => 'configuration', 'configuration_tab' => 'node_js')
+      %li{class: @configuration_tab == 'java' ? 'active' : ''}
+        = link_to "Java", settings_path('main_tab' => 'configuration', 'configuration_tab' => 'java')
+      %li{class: @configuration_tab == 'ios' ? 'active' : ''}
+        = link_to "IOS", settings_path('main_tab' => 'configuration', 'configuration_tab' => 'ios')
+
+  = render partial: "settings/platforms/#{@configuration_tab}_tab"

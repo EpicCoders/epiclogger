@@ -4,6 +4,7 @@
       .panel.panel-default
         .panel-heading Notifications
         .panel-body
+          = render 'shared/flash_messages'
           %small
             Epiclogger will automatically notify you whenever an event is first seen, or its state changes from resolved to unresolved.
             = f.input :realtime, label: "Receive realtime error emails", wrapper: :vertical_boolean

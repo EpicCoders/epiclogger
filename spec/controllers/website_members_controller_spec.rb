@@ -32,7 +32,7 @@ RSpec.describe WebsiteMembersController, :type => :controller do
     end
 
     it 'should redirect to notifications tab' do
-      expect( put_with user, :update, params ).to redirect_to(redirect_to installations_url(details_tab: 'notifications', main_tab: 'details'))
+      expect( put_with user, :update, params ).to redirect_to(redirect_to settings_url(details_tab: 'notifications', main_tab: 'details'))
       expect( flash[:notice] ).to eq('Successfully updated')
     end
   end

@@ -40,10 +40,8 @@ Rails.application.routes.draw do
     end
   end
   resources :subscribers, only: [:index, :destroy]
-  # resources :accounts, only: [:show]
-  resources :installations, only: [:index]
   resources :website_members, only: [:index, :update, :destroy]
-  # resources :settings, only: [:index]
+  resources :settings, only: [:index]
 
   resources :website_wizard
 
