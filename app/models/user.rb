@@ -2,7 +2,7 @@ class User < ActiveRecord::Base
   # include the TokenGenerator extension
   extend Enumerize
   include TokenGenerator
-  has_many :website_members, -> { uniq }, dependent: :destroy, autosave: true
+  has_many :website_members, -> { distinct }, dependent: :destroy, autosave: true
   has_many :websites, through: :website_members
   has_many :invites, foreign_key: :invited_by_id
 
