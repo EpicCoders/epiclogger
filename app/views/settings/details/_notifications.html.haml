@@ -1,15 +1,14 @@
-#notifications.tab
-  = simple_form_for @website_member, wrapper: :vertical_form do |f|
-    .col-lg-12
-      .panel.panel-default
-        .panel-heading Notifications
-        .panel-body
-          = render 'shared/flash_messages'
-          %small
-            Epiclogger will automatically notify you whenever an event is first seen, or its state changes from resolved to unresolved.
-            = f.input :realtime, label: "Receive realtime error emails", wrapper: :vertical_boolean
-            = f.input :daily_reporting, label: "Recieve daily reports", wrapper: :vertical_boolean
-            = f.input :weekly_reporting, label: "Receive weekly reports", wrapper: :vertical_boolean
-            = f.input :frequent_event, label: "Recieve another email if an event/error happens more than 10 times in a certain time interval", wrapper: :vertical_boolean
-          .col-lg-3.pull-right
-            = f.submit 'Save Settings', class: 'btn btn-primary pull-right'
+= simple_form_for @website_member, wrapper: :vertical_form do |f|
+  .col-lg-12
+    .panel.panel-default
+      .panel-heading Notifications
+      .panel-body
+        = render 'shared/flash_messages'
+        %small
+          Epiclogger will automatically notify you whenever an event is first seen, or its state changes from resolved to unresolved.
+          = f.input :realtime, label: "Receive realtime error emails", wrapper: :vertical_boolean
+          = f.input :daily_reporting, label: "Recieve daily reports", wrapper: :vertical_boolean
+          = f.input :weekly_reporting, label: "Receive weekly reports", wrapper: :vertical_boolean
+          = f.input :frequent_event, label: "Recieve another email if an event/error happens more than 10 times in a certain time interval", wrapper: :vertical_boolean
+        .col-lg-3.pull-right
+          = f.submit 'Save Settings', class: 'btn btn-primary pull-right'

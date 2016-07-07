@@ -20,6 +20,25 @@ RSpec.describe Ability do
         it { is_expected.to be_able_to(:manage, issue) }
       end
 
+      shared_examples 'it cannot' do
+        it { is_expected.not_to be_able_to(:manage, group) }
+        it { is_expected.not_to be_able_to(:manage, message) }
+        it { is_expected.not_to be_able_to(:manage, issue) }
+        it { is_expected.not_to be_able_to(:manage, owner) }
+        it { is_expected.not_to be_able_to(:manage, user) }
+        it { is_expected.not_to be_able_to(:manage, website) }
+        it { is_expected.not_to be_able_to(:manage, user_website_member_with_user) }
+        it { is_expected.not_to be_able_to(:manage, owner_website_member_with_user) }
+        it { is_expected.not_to be_able_to(:change_role, user_website_member_with_user) }
+        it { is_expected.not_to be_able_to(:change_role, owner_website_member_with_user) }
+        it { is_expected.not_to be_able_to(:manage, subscriber) }
+
+        it { is_expected.not_to be_able_to(:read, website) }
+        it { is_expected.not_to be_able_to(:read, user_website_member_with_user) }
+        it { is_expected.not_to be_able_to(:change_current, website) }
+        it { is_expected.not_to be_able_to(:update, user_website_member_with_user) }
+      end
+
       context 'as owner of website' do
         subject(:ability){ Ability.new(owner) }
 
@@ -28,6 +47,8 @@ RSpec.describe Ability do
         it { is_expected.to be_able_to(:manage, website) }
         it { is_expected.to be_able_to(:manage, user_website_member_with_user) }
         it { is_expected.to be_able_to(:manage, owner_website_member_with_user) }
+        it { is_expected.to be_able_to(:change_role, owner_website_member_with_user) }
+        it { is_expected.to be_able_to(:change_role, user_website_member_with_user) }
         it { is_expected.to be_able_to(:manage, subscriber) }
 
         it_behaves_like 'it has abilities'
@@ -41,11 +62,14 @@ RSpec.describe Ability do
         it { is_expected.not_to be_able_to(:manage, website) }
         it { is_expected.not_to be_able_to(:manage, user_website_member_with_user) }
         it { is_expected.not_to be_able_to(:manage, owner_website_member_with_user) }
+        it { is_expected.not_to be_able_to(:change_role, owner_website_member_with_user) }
+        it { is_expected.not_to be_able_to(:change_role, user_website_member_with_user) }
         it { is_expected.not_to be_able_to(:manage, subscriber) }
 
         it { is_expected.to be_able_to(:read, website) }
         it { is_expected.to be_able_to(:change_current, website) }
         it { is_expected.to be_able_to(:read, user_website_member_with_user) }
+        it { is_expected.to be_able_to(:update, user_website_member_with_user) }
 
         it_behaves_like 'it has abilities'
       end
@@ -60,32 +84,12 @@ RSpec.describe Ability do
         context 'when owner2' do
           subject(:ability){ Ability.new(owner2) }
 
-          it { is_expected.not_to be_able_to(:manage, group) }
-          it { is_expected.not_to be_able_to(:manage, message) }
-          it { is_expected.not_to be_able_to(:manage, issue) }
-          it { is_expected.not_to be_able_to(:manage, owner) }
-          it { is_expected.not_to be_able_to(:manage, user) }
-          it { is_expected.not_to be_able_to(:manage, website) }
-          it { is_expected.not_to be_able_to(:manage, user_website_member_with_user) }
-          it { is_expected.not_to be_able_to(:manage, owner_website_member_with_user) }
-          it { is_expected.not_to be_able_to(:manage, subscriber) }
+          it_behaves_like 'it cannot'
         end
         context 'when user2' do
           subject(:ability){ Ability.new(user2) }
 
-          it { is_expected.not_to be_able_to(:manage, group) }
-          it { is_expected.not_to be_able_to(:manage, message) }
-          it { is_expected.not_to be_able_to(:manage, issue) }
-          it { is_expected.not_to be_able_to(:manage, owner) }
-          it { is_expected.not_to be_able_to(:manage, user) }
-          it { is_expected.not_to be_able_to(:manage, website) }
-          it { is_expected.not_to be_able_to(:manage, user_website_member_with_user) }
-          it { is_expected.not_to be_able_to(:manage, owner_website_member_with_user) }
-          it { is_expected.not_to be_able_to(:manage, subscriber) }
-
-          it { is_expected.not_to be_able_to(:read, website) }
-          it { is_expected.not_to be_able_to(:change_current, website) }
-          it { is_expected.not_to be_able_to(:read, user_website_member_with_user) }
+          it_behaves_like 'it cannot'
         end
       end
     end

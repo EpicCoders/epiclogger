@@ -1,22 +1,19 @@
-#api-keys.tab
-  .col-lg-12
-    .panel.panel-default
-      .panel-heading.clearfix
-        %h4.panel-title.pull-left{:style => "padding-top: 7.5px;"} API Keys
-        .btn-group.pull-right
-          = link_to revoke_website_path(id: @website.id), method: :get, :class => "btn btn-primary pull-right" do
-            %span.fa.fa-key
-            Generate new key
-      .panel-body
-        #current-website.row
-          .codeview
-            .codepanel
-              .col-lg-1
-                %h5 App Id:
-                %h5 App Key:
-              .col-lg-8
-                %h5 #{@website.app_secret}
-                %h5 #{@website.app_key}
-              .col-lg-3
-                %br
-                = link_to "Revoke", revoke_website_path(id: @website.id), method: :get, :class => "btn btn-danger pull-right"
+.col-lg-12
+  %p To send data to Epiclogger you will need to configure an SDK with a client key.
+  .panel.panel-default
+    .panel-heading.clearfix
+      %h4.panel-title.pull-left{:style => "padding-top: 7.5px;"} API Keys
+      .btn-group.pull-right
+        = link_to revoke_website_path(id: @website.id), method: :get, :class => "btn btn-primary pull-right" do
+          %span.fa.fa-key
+          Generate new key
+    .panel-body
+      %table.table-condensed
+        %tr
+          %td App Key:
+          %td= @website.app_key
+          %td{:rowspan => '2'}
+        %tr
+          %td App Secret:
+          %td= @website.app_secret
+        = link_to "Revoke", revoke_website_path(id: @website.id), method: :get, :class => "btn btn-danger pull-right"

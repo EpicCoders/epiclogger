@@ -1,28 +1,27 @@
-#settings
-  = simple_form_for @website, url: "websites/#{@website.id}", method: :put, wrapper: :vertical_form do |f|
-    .col-lg-6
-      .panel.panel-default
-        .panel-heading Project Details
-        .panel-body
-          = render 'shared/flash_messages'
-          .form-group
-            = f.input :title, placeholder: 'Website name'
-            = f.input :domain, placeholder: 'http://www.domain.com'
-            .dropdown
-              = f.select :platform, @options, {}, prompt: '#{@website.platform}', :class => "btn btn-default cust-dropdown dropdown-toggle"
-      .form-group
-        = f.submit 'Save Changes', class: 'btn btn-success'
-        = link_to ' Remove Project', "/websites/#{@website.id}", :method => :delete, :class => "btn btn-danger"
+= simple_form_for @website, url: "websites/#{@website.id}", method: :put, wrapper: :vertical_form do |f|
   .col-lg-6
-    .panel.panel-info.codeview
-      .panel-heading Project Details
+    .panel.panel-default
+      .panel-heading Project Settings
       .panel-body
-        .well.wel-sm
-          %p After adding the website domain we are going to offer you a javascript code to add to your error pages so the users will get recorded when they receive errors.
-          %p You will be able to get in contact with your users after the errors are received and send them messages to let them know the issues are resolved.
-        / %p Configure origin URLs which Epiclogger should accept events from. This is used for communication with clients like raven-js.
-        / %p This will restrict requirements based on the Origin and Referrer headers.
-        / .form-group
-        /   %label{:for => "comment"} Allowed Domains:
-        /   %textarea#comment.form-control{:placeholder => "e.g. example.com or https://example.com", :rows => "7"}
-        / %small Separate multiple entries with a newline.
+        = render 'shared/flash_messages'
+        .form-group
+          = f.input :title, placeholder: 'Website name'
+          = f.input :domain, placeholder: 'http://www.domain.com'
+          .dropdown
+            = f.select :platform, @options, {}, prompt: '#{@website.platform}', :class => "btn btn-default cust-dropdown dropdown-toggle"
+    .form-group
+      = f.submit 'Save Changes', class: 'btn btn-success'
+      = link_to ' Remove Project', "/websites/#{@website.id}", :method => :delete, :class => "btn btn-danger"
+.col-lg-6
+  .panel.panel-info.codeview
+    .panel-heading Details
+    .panel-body
+      .well.wel-sm
+        %p After adding the website domain we are going to offer you a javascript code to add to your error pages so the users will get recorded when they receive errors.
+        %p You will be able to get in contact with your users after the errors are received and send them messages to let them know the issues are resolved.
+      / %p Configure origin URLs which Epiclogger should accept events from. This is used for communication with clients like raven-js.
+      / %p This will restrict requirements based on the Origin and Referrer headers.
+      / .form-group
+      /   %label{:for => "comment"} Allowed Domains:
+      /   %textarea#comment.form-control{:placeholder => "e.g. example.com or https://example.com", :rows => "7"}
+      / %small Separate multiple entries with a newline.
