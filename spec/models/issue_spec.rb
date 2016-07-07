@@ -82,12 +82,12 @@ describe Issue do
 
     context 'when http has no data' do
       before(:each) do issue.update_attributes(data: missing_http) end
-      it 'should return <no information>' do
-        expect(issue.get_headers).to eq('<no information>')
+      it 'should return false' do
+        expect(issue.get_headers).to eq(false)
       end
 
-      it 'should return <no information> even if param is given' do
-        expect(issue.get_headers(:http)).to eq('<no information>')
+      it 'should return false even if param is given' do
+        expect(issue.get_headers(:http)).to eq(false)
       end
     end
   end
@@ -103,12 +103,12 @@ describe Issue do
 
     context 'when http has no data' do
       before(:each) do issue.update_attributes(data: missing_http) end
-      it 'should return <no information>' do
-        expect(issue.http_data).to eq('<no information>')
+      it 'should return false' do
+        expect(issue.http_data).to eq(false)
       end
 
-      it 'should return <no information> even if param is given' do
-        expect(issue.http_data(:headers)).to eq('<no information>')
+      it 'should return false even if param is given' do
+        expect(issue.http_data(:headers)).to eq(false)
       end
     end
   end
