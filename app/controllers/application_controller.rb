@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
   before_action :authenticate!
 
   rescue_from CanCan::AccessDenied do |exception|
-    redirect_to root_url, :alert => exception.message
+    redirect_to settings_url, :alert => exception.message
   end
 
   rescue_from CanCan::AuthorizationNotPerformed do |exception|

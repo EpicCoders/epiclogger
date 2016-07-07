@@ -26,9 +26,7 @@ class Ability
       can :manage, WebsiteMember do |website_member|
         user.is_owner_of?(website_member.website)
       end
-      can [:read, :update], WebsiteMember, [user_id: user.id] do |website_member|
-        user.is_member_of?(website_member.website)
-      end
+      can [:read, :update], WebsiteMember, user_id: user.id
       cannot :change_role, WebsiteMember do |website_member|
         user.is_member_of?(website_member.website)
       end
