@@ -9,6 +9,11 @@ class WebsiteMembersController < ApplicationController
     redirect_to settings_url(details_tab: 'notifications', main_tab: 'details'), notice: 'Successfully updated'
   end
 
+  def change_role
+    @website_member.update_attributes(website_member_role_params) if website_member_role_params[:role].present?
+    redirect_to settings_url, notice: 'Role updated'
+  end
+
   def destroy
     @website_member.destroy
     if @website_member.errors.full_messages.blank?
@@ -21,5 +26,9 @@ class WebsiteMembersController < ApplicationController
 
   def website_member_params
     params.require(:website_member).permit(:realtime, :frequent_event, :daily_reporting, :weekly_reporting)
+  end
+
+  def website_member_role_params
+    params.require(:website_member_role).permit(:role)
   end
 end

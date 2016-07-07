@@ -40,7 +40,11 @@ Rails.application.routes.draw do
     end
   end
   resources :subscribers, only: [:index, :destroy]
-  resources :website_members, only: [:index, :update, :destroy]
+  resources :website_members, only: [:index, :update, :destroy] do
+    member do
+      put :change_role
+    end
+  end
   resources :settings, only: [:index]
 
   resources :website_wizard

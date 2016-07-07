@@ -31,9 +31,45 @@ RSpec.describe WebsiteMembersController, :type => :controller do
        .and change{ website_member.frequent_event }.from(false).to(true)
     end
 
+    it "should not update role" do
+      expect{
+        put_with user, :update, id: website_member.id, website_member: { role: 2 }
+        website_member.reload
+      }.not_to change{ website_member.role }.from('owner')
+    end
+
+    it "should not update role" do
+      website_member.update_attributes(role: 2)
+      expect{
+        put_with user, :update, id: website_member.id, website_member: { role: 1 }
+        website_member.reload
+      }.not_to change{ website_member.role }.from('user')
+    end
+
     it 'should redirect to notifications tab' do
       expect( put_with user, :update, params ).to redirect_to(redirect_to settings_url(details_tab: 'notifications', main_tab: 'details'))
       expect( flash[:notice] ).to eq('Successfully updated')
+    end
+  end
+
+  describe "PUT #change_role" do
+    context 'when owner' do
+      it "should update role" do
+        expect{
+          put_with user, :change_role, id: website_member.id, website_member_role: { role: 2 }
+          website_member.reload
+        }.to change{ website_member.role }.from('owner')
+      end
+    end
+
+    context 'when user' do
+      it "should not update role" do
+        website_member.update_attributes(role: 2)
+        expect{
+          put_with user, :change_role, id: website_member.id, website_member_role: { role: 1 }
+          website_member.reload
+        }.not_to change{ website_member.role }.from('user')
+      end
     end
   end
 

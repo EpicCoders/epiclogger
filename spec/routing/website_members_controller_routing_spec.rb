@@ -14,6 +14,10 @@ RSpec.describe WebsiteMembersController, type: :routing do
       expect(put("/website_members/#{website_member.id}")).to route_to('website_members#update', id: "#{website_member.id}")
     end
 
+    it 'routes to #website_members/change_role' do
+      expect(put("/website_members/#{website_member.id}/change_role")).to route_to('website_members#change_role', id: "#{website_member.id}")
+    end
+
     it 'routes to #website_members/destroy' do
       expect(delete("/website_members/#{website_member.id}")).to route_to('website_members#destroy', id: "#{website_member.id}")
     end
