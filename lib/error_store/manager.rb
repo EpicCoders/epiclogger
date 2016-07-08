@@ -79,7 +79,7 @@ module ErrorStore
       issue.group_id = group.id
 
       # save the issue unless its been sampled
-      db_store(:issue) { issue.save } unless is_sample
+      db_store(:issue) { issue.save! } unless is_sample
 
       issue
     end

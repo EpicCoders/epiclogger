@@ -5,7 +5,7 @@ class Issue < ActiveRecord::Base
   belongs_to :group, class_name: 'GroupedIssue', foreign_key: 'group_id'
   delegate :website, to: :group
   accepts_nested_attributes_for :messages
-  validates :message, presence: true, length: {minimum: 10}
+  validates :message, presence: true
   after_create :issue_created
 
   def error
