@@ -2,31 +2,7 @@
   - max_value = @chart_data.values.max
   = line_chart @chart_data , id: "chart", height: "200px", label: "Occurences", colors: ["black", "#000"], min: 0, max: max_value > 0 ? max_value : 10
 .row
-  .col-sm-7.col-md-8
-    .panel.panel-default.exception
-      .panel-heading Exception
-      - valid_stacktrace = @issue.get_platform_frames && @issue.get_platform_frames.present?
-      .panel-body{ class: "#{valid_stacktrace ? 'expand-box' : ''}" }
-        - if valid_stacktrace
-          #frame.accordion
-            - @issue.get_platform_frames.each_with_index do |frame, index|
-              .accordion-group
-                .accordion-heading.heading
-                  %a.accordion-toggle.collapsed{ href: '#' }
-                    %i.icon-fixed-width.fa.fa-plus{"data-parent" => "#frame", "data-toggle" => "collapse", :href => "#collapse#{index}"}
-                    = frame.get_culprit_string(with_lineno: true)
-                .accordion-body.collapse{:style => "height: 0px;", :id => "collapse#{index}"}
-                  .accordion-inner.content
-                    %pre
-                      %code{ class: @error.platform }
-                        = frame._data[:pre_context] ? simple_format(frame._data[:pre_context].join('')).html_safe : ''
-                        = frame._data[:context_line] ? simple_format(frame._data[:context_line], class: 'error-line').html_safe : ''
-                        = frame._data[:post_context] ? simple_format(frame._data[:post_context].join('')).html_safe : ''
-
-        %h5.text-center{style: "display:#{valid_stacktrace ? 'none' : 'block'}"} Missing stacktrace
-        %p.read-more.text-center{style: "display:#{valid_stacktrace ? 'block' : 'none'}"}
-          %a.btn.btn-default{:href => "#"} View full backtrace
-  .col-sm-5.col-md-4.pull-right
+  .col-sm-10.col-md-12
     .panel.panel-default
       .panel-heading Details
       .panel-body
@@ -47,9 +23,32 @@
           %dd= @error.level
           %dt Logger
           %dd= @error.platform
+  - valid_stacktrace = @issue.get_platform_frames && @issue.get_platform_frames.present?
+  - if valid_stacktrace
+    .col-sm-10.col-md-12
+      .panel.panel-default.exception
+        .panel-heading Exception
+        .panel-body.expand-box
+          #frame.accordion
+            - @issue.get_platform_frames.each_with_index do |frame, index|
+              .accordion-group
+                .accordion-heading.heading
+                  %a.accordion-toggle.collapsed{ href: '#' }
+                    %i.icon-fixed-width.fa.fa-plus{"data-parent" => "#frame", "data-toggle" => "collapse", :href => "#collapse#{index}"}
+                    = frame.get_culprit_string(with_lineno: true)
+                .accordion-body.collapse{:style => "height: 0px;", :id => "collapse#{index}"}
+                  .accordion-inner.content
+                    %pre
+                      %code{ class: @error.platform }
+                        = frame._data[:pre_context] ? simple_format(frame._data[:pre_context].join('')).html_safe : ''
+                        = frame._data[:context_line] ? simple_format(frame._data[:context_line], class: 'error-line').html_safe : ''
+                        = frame._data[:post_context] ? simple_format(frame._data[:post_context].join('')).html_safe : ''
+
+          %p.read-more.text-center{style: "display:block"}
+            %a.btn.btn-default{:href => "#"} View full backtrace
   - valid_stacktrace = @issue.breadcrumbs_stacktrace && @issue.breadcrumbs_stacktrace.present?
   - if valid_stacktrace
-    .col-sm-7.col-md-8
+    .col-sm-10.col-md-12
       .panel.panel-default
         .panel-heading Breadcrumbs
         .panel-body{ class: "#{valid_stacktrace ? 'expand-box' : ''}" }
@@ -66,11 +65,10 @@
                       - else
                         %td #{data[:method]} #{data[:url]} [#{data[:status_code]}]
                       %td= Time.at(crumb[:timestamp]).strftime("%H:%M:%S")
-          %h5.text-center{style: "display:#{valid_stacktrace ? 'none' : 'block'}"} Missing breadcrumbs
           %p.read-more.text-center{style: "display:#{valid_stacktrace ? 'block' : 'none'}"}
             %a.btn.btn-default{:href => "#"} View full backtrace
 
-  .col-sm-7.col-md-8
+  .col-sm-10.col-md-12
     .panel.panel-default.broadcast{ :style => "display:#{ @error.website.users.empty? ? 'none' : 'block' }" }
       .panel-heading
         Broadcast
