@@ -254,6 +254,7 @@
       width: 821px;
       margin: auto;
       .item {
+        height: 640px;
         margin: 5px auto 0 auto;
         .carousel-caption {
           position: relative;
@@ -388,6 +389,30 @@
 @media (max-width: 768px) {
   #slider .carousel .carousel-inner {
     width: 100%;
+  }
+}
+
+@media (max-width: 1200px) {
+  #slider .carousel .carousel-inner .item {
+    height: 486px;
+  }
+}
+
+@media (max-width: 992px) {
+  #slider .carousel .carousel-inner .item {
+    height: 426px;
+  }
+}
+
+@media (max-width: 768px) {
+  #slider .carousel .carousel-inner .item {
+    height: 426px;
+  }
+}
+
+@media (max-width: 480px) {
+  #slider .carousel .carousel-inner .item {
+    height: 325px;
   }
 }
 
@@ -709,61 +734,116 @@
 }
 
 #social {
-  padding: 60px 0;
+  padding: 15px 0 15px 0;
   text-align: center;
-  h3 {
-    padding-bottom: 20px;
-  }
-  p {
-    margin-bottom: 50px;
-  }
-  a {
-    display: inline-block;
-    width: 85px;
-    height: 85px;
-    border-radius: 45px;
-    border: 2px solid white;
-    &.twitter {
-      border-color: #40a7ff;
-      background: asset-url("twitter.png") no-repeat top;
-      &:hover {
-        background-color: #40a7ff;
-        background-position: bottom;
-      }
-    }
-    &.facebook {
-      border-color: #3b5998;
-      background: asset-url("facebook.png") no-repeat top;
-      margin-right: 100px;
-      &:hover {
-        background-color: #3b5998;
-        background-position: bottom;
+  ul{
+    li {
+      float: left;
+      list-style-type: none;
+      padding: 5px;
+      position:relative;
+      left:20%;
+      margin-right: 5%;
+      img{
+        width: 48px;
+        height: 48px;
       }
     }
   }
-}
-
-@media (max-width: 992px) {
-  #social {
-    padding: 20px 0 40px 0;
+  #links{
+    h3 {
+      padding-bottom: 20px;
+    }
+    p {
+      margin-bottom: 30px;
+    }
+    a {
+      display: inline-block;
+      width: 85px;
+      height: 85px;
+      border-radius: 45px;
+      border: 2px solid white;
+      &.github {
+        border-color: #000000;
+        background: asset-url("github-black.png") no-repeat center;
+        margin-right: 15px;
+        &:hover {
+          background: asset-url("github-white.png") no-repeat center;
+          background-color: #000000;
+        }
+      }
+      &.dribble {
+        border-color: #F26798;
+        background: asset-url("dribble-pink.png") no-repeat center;
+        margin-right: 15px;
+        &:hover {
+          background: asset-url("dribble-white.png") no-repeat center;
+          background-color: #F26798;
+        }
+      }
+      &.twitter {
+        border-color: #40a7ff;
+        background: asset-url("twitter.png") no-repeat top;
+        &:hover {
+          background-color: #40a7ff;
+          background-position: bottom;
+        }
+      }
+      &.facebook {
+        border-color: #3b5998;
+        background: asset-url("facebook.png") no-repeat top;
+        margin-right: 15px;
+        &:hover {
+          background-color: #3b5998;
+          background-position: bottom;
+        }
+      }
+    }
+  }
+  #integrations{
+    text-align: center;
+    ul{
+      padding-bottom: 110px;
+      margin-left: 26%;
+    }
+    h3{
+      padding-bottom: 10px;
+    }
+  }
+  #support{
+    padding-bottom: 170px;
+    h3{
+      padding-bottom: 10px;
+    }
   }
 }
 
 @media (max-width: 992px) {
-  #social h3 {
-    padding: 0;
+  #social #integrations {
+    padding-bottom: 30px;
   }
 }
 
 @media (max-width: 992px) {
-  #social p {
-    margin-bottom: 40px;
+  #social #support {
+    padding-bottom: 120px;
+    h3{
+      pading-bottom: 10px;
+    }
+    ul{
+      float: left;
+    }
   }
 }
 
-@media (max-width: 768px) {
-  #social a.facebook {
-    margin-right: 40px;
+@media (max-width: 992px) {
+  #social #links{
+    h3{
+      padding: 0;
+    }
+    p{
+      margin-bottom: 40px;
+    }
   }
 }
 
