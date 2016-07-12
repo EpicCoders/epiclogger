@@ -20,7 +20,7 @@ class ErrorsController < ApplicationController
   def show
     page_issue = params[:page_issue] || 1
     page = params[:page] || 1
-    errors_per_page = 5
+    errors_per_page = 25
     errors = current_website.grouped_issues.order('last_seen DESC')
     if !params[:tab].present? && params[:page].nil?
       errors = @error.resolved? ? errors.with_status(:resolved) : errors.with_status(:unresolved)
