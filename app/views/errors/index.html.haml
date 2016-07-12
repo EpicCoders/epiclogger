@@ -19,7 +19,8 @@
 
 .row
   #grouped-issuescontainer.col-lg-12.pagecontainer
-    = render partial: 'error', collection: @errors
+    - subscribers = @errors.includes(:subscribers).map{ |x| { x.id => x.subscribers.size } }.reduce( { }, :merge)
+    = render partial: 'error', collection: @errors, locals: { subscribers: subscribers }
 
     #pagination
       .row
