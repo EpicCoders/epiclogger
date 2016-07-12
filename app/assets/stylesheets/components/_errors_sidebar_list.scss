@@ -5,6 +5,10 @@ $list-error-height: 100%;
   bottom: 0;
 }
 .errors-sidebar-list{
+  position: fixed;
+  z-index: 999;
+  width: 24.5%;
+  border-right: 1px solid #ddd;
   .header {
     @include error-header();
     padding-top: 25px;
@@ -32,6 +36,13 @@ $list-error-height: 100%;
       }
     }
   }
+
+  .tab-content{
+    max-height: 920px;
+    overflow-y: auto;
+    padding-bottom: 60px;
+  }
+
   .sidebar-tabs{
     margin-bottom:2px;
     height:50px;
@@ -79,6 +90,13 @@ $list-error-height: 100%;
         padding:4px 6px;
       }
     }
+  }
+}
+
+@media (max-width: 767px){
+  .errors-sidebar-list{
+    position: static;
+    width: 100%;
   }
 }
 
