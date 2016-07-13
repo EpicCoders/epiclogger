@@ -40,6 +40,19 @@ class Website < ActiveRecord::Base
     website_members.each(&:delete)
   end
 
+  def ensure_valid_protocol_for_origins(origins, string_origins: "", protocols: ["http", "https", "ftp", "ftps", "sftp"])
+    return origins if origins == "*"
+    return "*" if origins.blank?
+
+    unless origins == '*'
+      origins.split("\n").each do |origin|
+        origin = "http://#{origin.squish}" unless protocols.any? { |protocol| origin.include? protocol }
+        string_origins += origin + " "
+      end
+      return string_origins.split.join("\n")
+    end
+  end
+
   def unique_domain
     domain = URI.parse(self.domain)
     website_cases = ["http://#{domain.host}", "https://#{domain.host}", "ftp://#{domain.host}", self.domain]

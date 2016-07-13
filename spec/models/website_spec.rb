@@ -57,7 +57,42 @@ describe Website do
     end
   end
 
-  describe 'unique domain' do
+  describe 'ensure_valid_protocol_for_origins' do
+    it 'should return asterik' do
+      expect( website.ensure_valid_protocol_for_origins("*") ).to eq("*")
+    end
+    context 'with protocol' do
+      it 'returns unchanged' do
+        expect( website.ensure_valid_protocol_for_origins("http://gicu-boevicu.com") ).to eq("http://gicu-boevicu.com")
+        expect( website.ensure_valid_protocol_for_origins("https://gicu-boevicu.com") ).to eq("https://gicu-boevicu.com")
+
+        expect( website.ensure_valid_protocol_for_origins("http://gicu-boevicu.com\nhttp://epiclogger.com") ).to eq("http://gicu-boevicu.com\nhttp://epiclogger.com")
+      end
+    end
+    context 'without protocol' do
+      it 'returns * if balnk origins' do
+        expect( website.ensure_valid_protocol_for_origins("") ).to eq("*")
+      end
+
+      it 'should add http to origin' do
+        expect( website.ensure_valid_protocol_for_origins("website.com") ).to include("http://")
+      end
+
+      it 'adds protocol where protocol is needed' do
+        expect( website.ensure_valid_protocol_for_origins("website.com\nhttp://gicu-boevicu.com\nhttps://epiclogger.com") ).to eq("http://website.com\nhttp://gicu-boevicu.com\nhttps://epiclogger.com")
+      end
+
+      it 'should include http twice' do
+        expect( website.ensure_valid_protocol_for_origins("website1.com\nwebsite2.com").scan(/(?=#{'http://'})/).count ).to eq(2)
+      end
+
+      it 'should split and join new line' do
+        expect( website.ensure_valid_protocol_for_origins("website1.com\nwebsite2.com") ).to eq("http://website1.com\nhttp://website2.com")
+      end
+    end
+  end
+
+  describe 'unique_domain' do
     it 'should raise exception' do
       expect { create :website, domain: website.domain }.to raise_exception(ActiveRecord::RecordInvalid)
     end

@@ -108,7 +108,11 @@ $list-error-height: 100%;
     margin-bottom:0px;
   }
   .message{
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
     overflow: hidden;
+    text-overflow: ellipsis;
   }
   // input[type="checkbox"]{ display: none; }
 }

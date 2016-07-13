@@ -6,7 +6,9 @@ class WebsitesController < ApplicationController
   end
 
   def update
-    @website.update_attributes(website_params)
+    strong_params = website_params
+    strong_params[:origins] = current_website.ensure_valid_protocol_for_origins(website_params[:origins])
+    @website.update_attributes(strong_params)
     redirect_to settings_url(details_tab: 'settings', main_tab: 'details'), notice: 'Website updated'
   end
 
@@ -35,6 +37,6 @@ class WebsitesController < ApplicationController
   private
 
   def website_params
-    params.require(:website).permit(:domain, :platform, :generate, :title, :id)
+    params.require(:website).permit(:domain, :platform, :generate, :title, :origins)
   end
 end
