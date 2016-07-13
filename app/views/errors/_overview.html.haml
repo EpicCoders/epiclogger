@@ -11,6 +11,8 @@
           %dd= @issue.created_at
           %dt First seen at
           %dd= @error.first_seen
+          %dt Message
+          %dd= @issue.message
           %dt Url
           %dd #{@issue.http_data(:url) || '<no information>'}
           %dt File
