@@ -10,7 +10,7 @@
           .dropdown
             = f.select :platform, @options, {}, prompt: '#{@website.platform}', :class => "btn btn-default cust-dropdown dropdown-toggle"
         .form-group
-          = f.input :origins, as: :text, label: 'Allowed Domains', hint: "e.g. example.com or https://example.com", input_html: {:rows => "7"}, class: 'form-control'
+          = f.input :origins, as: :text, label: 'Allowed Domains', hint: "e.g. https://example.com", input_html: {:rows => "7"}, class: 'form-control'
         %small Separate multiple entries with a newline.
     .form-group
       = f.submit 'Save Changes', class: 'btn btn-success'

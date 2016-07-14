@@ -19,8 +19,10 @@ class Website < ActiveRecord::Base
 
   attr_accessor :generate
 
+  before_validation :check_origins
   before_create :generate_api_keys
   before_update :generate_api_keys, if: -> { generate }
+  before_update :check_required
   before_destroy :website_dependent
 
   Integrations.drivers_types.each do |integration|
@@ -40,17 +42,21 @@ class Website < ActiveRecord::Base
     website_members.each(&:delete)
   end
 
-  def ensure_valid_protocol_for_origins(origins, string_origins: "", protocols: ["http", "https", "ftp", "ftps", "sftp"])
-    return origins if origins == "*"
-    return "*" if origins.blank?
-
-    unless origins == '*'
-      origins.split("\n").each do |origin|
-        origin = "http://#{origin.squish}" unless protocols.any? { |protocol| origin.include? protocol }
-        string_origins += origin + " "
+  def check_origins
+    return true if origins == '*'
+    schemes = ["http://", "https://", "ftp://", "ftps://", "sftp://"]
+    origins.split("\n").each do |origin|
+      unless schemes.any? { |scheme| origin.include? scheme }
+        errors.add(:origins, 'Please add origin urls with http/https')
+      elsif origin =~ URI::regexp
+        errors.add(:origins, 'Please enter a valid origin')
+        return false
       end
-      return string_origins.split.join("\n")
     end
+  end
+
+  def check_required
+    self.origins = '*' if origins.blank?
   end
 
   def unique_domain

@@ -48,6 +48,56 @@ describe Website do
     end
    end
 
+   describe "ActiveRecord callbacks" do
+    context 'validate' do
+      it 'calls check_origins' do
+        expect(website).to receive(:check_origins)
+
+        website.valid?
+      end
+    end
+
+    context '#create' do
+      it 'calls generate_api_keys in befor_create' do
+        website1 = build :website
+        expect(website1).to receive(:generate_api_keys)
+
+        website1.save
+      end
+    end
+
+    context '#update' do
+      let(:update_subject) { website.update_attributes(origins: '') }
+
+      it 'calls check_required before_update' do
+        expect(website).to receive(:check_required)
+
+        update_subject
+      end
+
+      it 'calls generate_api_keys before_update if attr_accessor is present' do
+        website.generate = true
+        expect(website).to receive(:generate_api_keys)
+
+        update_subject
+      end
+
+      it 'should not call generate_api_keys in before_update' do
+        expect(website).not_to receive(:generate_api_keys)
+
+        update_subject
+      end
+    end
+
+    context '#destroy' do
+      it 'should call website_dependent' do
+        expect(website).to receive(:website_dependent)
+
+        website.destroy
+      end
+    end
+   end
+
   describe 'before create' do
     it 'should add app_key and app_secret to website' do
       website = Website.new(domain: 'domain@example.com', title: 'title for page')
@@ -57,38 +107,40 @@ describe Website do
     end
   end
 
-  describe 'ensure_valid_protocol_for_origins' do
-    it 'should return asterik' do
-      expect( website.ensure_valid_protocol_for_origins("*") ).to eq("*")
+  describe 'check_origins' do
+    it 'should return true' do
+      expect(website).to receive(:update_attributes).and_return true
+      website.update_attributes(origins: '*')
     end
-    context 'with protocol' do
-      it 'returns unchanged' do
-        expect( website.ensure_valid_protocol_for_origins("http://gicu-boevicu.com") ).to eq("http://gicu-boevicu.com")
-        expect( website.ensure_valid_protocol_for_origins("https://gicu-boevicu.com") ).to eq("https://gicu-boevicu.com")
 
-        expect( website.ensure_valid_protocol_for_origins("http://gicu-boevicu.com\nhttp://epiclogger.com") ).to eq("http://gicu-boevicu.com\nhttp://epiclogger.com")
-      end
+    it 'should not update_attributes' do
+      expect{
+          website.update_attributes(origins: '*')
+        }.not_to change{website.origins}
     end
-    context 'without protocol' do
-      it 'returns * if balnk origins' do
-        expect( website.ensure_valid_protocol_for_origins("") ).to eq("*")
-      end
 
-      it 'should add http to origin' do
-        expect( website.ensure_valid_protocol_for_origins("website.com") ).to include("http://")
-      end
+    it 'should return false' do
+      expect(website).to receive(:update_attributes).and_return false
+      website.update_attributes(origins: 'gicu-boevicu.com')
+    end
 
-      it 'adds protocol where protocol is needed' do
-        expect( website.ensure_valid_protocol_for_origins("website.com\nhttp://gicu-boevicu.com\nhttps://epiclogger.com") ).to eq("http://website.com\nhttp://gicu-boevicu.com\nhttps://epiclogger.com")
-      end
+    it 'should add error' do
+      website.update_attributes(origins: 'gicu-boevicu.com')
+      expect( website.errors.full_messages ).to eq(["Origins Please enter a valid origin"])
+    end
+  end
 
-      it 'should include http twice' do
-        expect( website.ensure_valid_protocol_for_origins("website1.com\nwebsite2.com").scan(/(?=#{'http://'})/).count ).to eq(2)
-      end
-
-      it 'should split and join new line' do
-        expect( website.ensure_valid_protocol_for_origins("website1.com\nwebsite2.com") ).to eq("http://website1.com\nhttp://website2.com")
-      end
+  describe 'check_required' do
+    it 'should retun asterik' do
+      website1 = create :website, origins: ''
+      expect{
+        website1.check_required
+        }.to change{ website1.origins }.from('').to('*')
+    end
+    it 'should not change origins' do
+      expect{
+        website.check_required
+        }.not_to change{ website.origins }.from('*')
     end
   end
 
@@ -151,8 +203,8 @@ describe Website do
     end
 
     it 'returns false if blank origins' do
-      website.update_attributes(origins: '')
-      expect(website.valid_origin?('http://192.168.2.3')).to eq(false)
+      website1 = create :website, origins: ''
+      expect(website1.valid_origin?('http://192.168.2.3')).to eq(false)
     end
 
     it 'returns false if blank value' do

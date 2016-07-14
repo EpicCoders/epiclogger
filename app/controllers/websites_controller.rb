@@ -6,10 +6,11 @@ class WebsitesController < ApplicationController
   end
 
   def update
-    strong_params = website_params
-    strong_params[:origins] = current_website.ensure_valid_protocol_for_origins(website_params[:origins])
-    @website.update_attributes(strong_params)
-    redirect_to settings_url(details_tab: 'settings', main_tab: 'details'), notice: 'Website updated'
+    if @website.update_attributes(website_params)
+      redirect_to settings_url, notice: 'Website updated'
+    else
+      redirect_to settings_url, notice: @website.errors.full_messages.join(', ')
+    end
   end
 
   def destroy

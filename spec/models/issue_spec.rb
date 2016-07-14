@@ -30,6 +30,8 @@ describe Issue do
     :url=>"http://localhost///",
     :fragment=>nil}}
 
+  it { is_expected.to be_kind_of(ErrorStore::Utils) }
+
   it "has a valid factory" do
     expect(build(:issue, group: nil)).to be_valid
   end
@@ -57,6 +59,17 @@ describe Issue do
 
     it 'should have message' do
       expect(subject).to validate_presence_of(:message)
+    end
+  end
+
+  describe "ActiveRecord callbacks" do
+    context '#create' do
+      it 'calls issue_created in after_create' do
+        issue1 = build :issue, group: grouped_issue
+        expect(issue1).to receive(:issue_created)
+
+        issue1.save
+      end
     end
   end
 

@@ -61,6 +61,20 @@ RSpec.describe ErrorStore::Utils do
     end
   end
 
+  describe 'encode_and_compress' do
+    it 'does inflate of base64 data' do
+      expect( dummy_class.encode_and_compress('random_data') ).to eq("eJwrSsxLyc+NT0ksSQQAGycEew==\n")
+    end
+    it 'does base64.decode if zlib error' do
+      expect(Base64).to receive(:encode64).with(Zlib::Deflate.deflate('random_data'))
+
+      dummy_class.encode_and_compress('random_data')
+    end
+    it 'raises BadData if invalid' do
+      expect{ dummy_class.decode_and_decompress({key: 'value'}) }.to raise_exception(ErrorStore::BadData)
+    end
+  end
+
   describe 'decode_and_decompress' do
     it 'does inflate of base64 data' do
       encoded_data = StringIO.new(Base64.strict_encode64(Zlib::Deflate.deflate('random_string')))

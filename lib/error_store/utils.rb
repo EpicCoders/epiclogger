@@ -10,6 +10,16 @@ module ErrorStore
       raise ErrorStore::BadData.new(self), 'We could not decompress your request'
     end
 
+    def encode_and_compress(data)
+      begin
+        Base64.encode64(Zlib::Deflate.deflate(data))
+      rescue Base64::Error
+        Zlib::Deflate.deflate(data)
+      end
+    rescue
+      raise ErrorStore::BadData.new(self), 'We could not compress your data'
+    end
+
     def decode_and_decompress(data)
       begin
         Zlib::Inflate.inflate(Base64.decode64(data))

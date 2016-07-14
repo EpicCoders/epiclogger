@@ -1,5 +1,5 @@
 class Issue < ActiveRecord::Base
-  extend Enumerize
+  include ErrorStore::Utils
   has_many :messages
   belongs_to :subscriber
   belongs_to :group, class_name: 'GroupedIssue', foreign_key: 'group_id'
@@ -10,6 +10,14 @@ class Issue < ActiveRecord::Base
 
   def error
     ErrorStore.find(self)
+  end
+
+  def data=(data)
+    super(encode_and_compress(data))
+  end
+
+  def data
+    decode_and_decompress(super)
   end
 
   def get_interfaces(interface = nil)
