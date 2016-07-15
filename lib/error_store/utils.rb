@@ -1,5 +1,7 @@
 module ErrorStore
   module Utils
+    SCHEMES = %w(http https ftp ftps sftp).freeze
+
     def is_numeric?(nr_string)
       nr_string.to_s.match(/\A[+-]?\d+?(\.\d+)?\Z/).nil? ? false : true
     end
@@ -112,6 +114,13 @@ module ErrorStore
 
     def is_url?(filename)
       filename.start_with?('file:', 'http:', 'https:')
+    end
+
+    def valid_url?(url)
+      parsed = Addressable::URI.parse(url) or return false
+      SCHEMES.include?(parsed.scheme)
+    rescue Addressable::URI::InvalidURIError
+      false
     end
 
     def handle_nan(value)

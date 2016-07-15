@@ -126,7 +126,7 @@ describe Website do
 
     it 'should add error' do
       website.update_attributes(origins: 'gicu-boevicu.com')
-      expect( website.errors.full_messages ).to eq(["Origins Please enter a valid origin"])
+      expect( website.errors[:origins] ).to eq(['Please add a valid origin (gicu-boevicu.com). It must include http, https, ftp, ftps, sftp'])
     end
   end
 

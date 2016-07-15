@@ -72,6 +72,7 @@ gem 'simple_form'
 gem 'wicked'
 #parsing the user_agent string
 gem 'useragent'
+gem 'addressable'
 
 #better urls
 gem 'friendly_id', '~> 5.0.0'

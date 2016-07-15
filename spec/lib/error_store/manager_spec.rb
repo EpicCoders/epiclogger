@@ -113,7 +113,7 @@ RSpec.describe ErrorStore::Manager do
       req = post_error_request(web_response_factory('ruby_exception'), website)
       data = validated_request(req)
       ErrorStore::Manager.new(data).store_error
-      expect{
+      expect {
         subject
       }.to change(Issue, :count).by(1)
     end

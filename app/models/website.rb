@@ -1,5 +1,6 @@
 class Website < ActiveRecord::Base
   include ModelUtils::URIField
+  include ErrorStore::Utils
   # include the TokenGenerator extension
   include TokenGenerator
   has_many :subscribers, dependent: :destroy
@@ -37,22 +38,19 @@ class Website < ActiveRecord::Base
     EOF
   end
 
-
   def website_dependent
     website_members.each(&:delete)
   end
 
   def check_origins
     return true if origins == '*'
-    schemes = ["http://", "https://", "ftp://", "ftps://", "sftp://"]
-    origins.split("\n").each do |origin|
-      unless schemes.any? { |scheme| origin.include? scheme }
-        errors.add(:origins, 'Please add origin urls with http/https')
-      elsif origin =~ URI::regexp
-        errors.add(:origins, 'Please enter a valid origin')
+    origins.split('\n').each do |origin|
+      unless valid_url?(origin)
+        errors.add(:origins, "Please add a valid origin (#{origin}). It must include #{SCHEMES.join(', ')}")
         return false
       end
     end
+    true
   end
 
   def check_required

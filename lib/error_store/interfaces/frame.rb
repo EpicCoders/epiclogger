@@ -29,7 +29,7 @@ module ErrorStore::Interfaces
 
       if !filename && abs_path
         if is_url?(abs_path)
-          urlparts = URI(abs_path)
+          urlparts = Addressable::URI.parse(abs_path)
           if urlparts.path
             filename = urlparts.path
           else

@@ -19,7 +19,7 @@ module ErrorStore::Interfaces
         self._data[:method] = nil # TODO, check this is not used
       end
 
-      url_uri      = URI(data[:url])
+      url_uri      = Addressable::URI.parse(data[:url])
       query_string = data[:query_string] || url_uri.query
       if query_string
         # if querystring was a hash, convert it to a string
