@@ -1,7 +1,7 @@
 .col-lg-6
+  %p An error has just occurred. View full details at:
+  %p #{link_to error_url(@issue.group.id), error_url(@issue.group.id), target: '_blank'}
   - if @issue.get_interfaces(:exception).present?
-    %p An error has just occurred. View full details at:
-    %p #{link_to error_url(@issue.group), error_url(@issue.group)}
     %p.gray_text Error type
     %pre
       %code
@@ -22,14 +22,36 @@
     %pre
       %code
         %small #{@issue.get_frames(:filename) || '<no information>'}
-    %p.gray_text Url
-    %pre
-      %code
-        %small #{@issue.http_data(:url)}
+  %p.gray_text Url
+  %pre
+    %code
+      %small #{@issue.http_data(:url)}
+  - if @issue.get_interfaces(:exception).present?
     %p.gray_text Backtrace Summary
     - @issue.get_platform_frames.first(5).each_with_index do |frame, index|
       %pre
         %code
           %small #{frame.get_culprit_string(with_lineno: true)}
   - else
-    %p No exception defined
+    %p.gray_text Message
+    %pre
+      %code
+        %small #{@issue.message}
+    %p.gray_text User Agent
+    %pre
+      %code
+        %small #{@issue.get_headers(:user_agent)}
+    - if @issue.breadcrumbs_stacktrace
+      %p.gray_text Breadcrumbs
+      %pre
+        %code
+          %table
+            - @issue.breadcrumbs_stacktrace.each_with_index do |crumb, index|
+              %tr
+                %td= crumb[:category]
+                - data = crumb[:data]
+                - if data.blank?
+                  %td= crumb[:message]
+                - else
+                  %td #{data[:method]} #{data[:url]} [#{data[:status_code]}]
+                %td= Time.at(crumb[:timestamp]).strftime("%H:%M:%S")

@@ -21,7 +21,7 @@
     %tr
       - @weekly_updates.each_with_index do |daily_updates, index|
         - unless daily_updates.blank?
-          %th{:colspan => "4"} Updates available on #{@days[index]}
+          %th{:colspan => "4"} Errors available on #{@days[index]}
           - daily_updates.first(5).each do |group|
             %tr
               %th#gray_th Message
