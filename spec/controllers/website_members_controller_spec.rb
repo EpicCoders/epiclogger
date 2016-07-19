@@ -12,9 +12,16 @@ RSpec.describe WebsiteMembersController, :type => :controller do
       get_with user, :index
     end
 
-    it 'should get website_members' do
+    it 'returns blank website_members' do
       get_with user, :index
-      expect(assigns(:website_members)).to eq(user.website_members)
+      expect(assigns(:website_members)).to eq([])
+    end
+
+    it 'should get website_members' do
+      user2 = create :user
+      website_member2 = create :website_member, website: website, user: user2
+      get_with user, :index
+      expect(assigns(:website_members)).to eq([website_member2])
     end
   end
 

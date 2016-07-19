@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   ActiveAdmin.routes(self)
-  root 'home#index'
+  root 'settings#index'
 
   get 'login' => 'sessions#new', :as => :login
   post 'login' => 'sessions#create'

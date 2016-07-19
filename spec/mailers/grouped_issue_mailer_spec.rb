@@ -34,7 +34,7 @@ describe GroupedIssueMailer do
     end
 
     it 'renders the body' do
-      expect(mail.body.parts.first.body.raw_source).to eq("An error has just occurred:\nID\n#{issue1.event_id}\nError type\nZeroDivisionError\nError message\n&quot;divided by 0&quot;\nWhen\n#{issue1.created_at}\nWhere\n/home/sergiu/ravenapp/app/controllers/home_controller.rb\nFile\napp/controllers/home_controller.rb:5 in /\nUrl\nno content\nBacktrace Summary\n[&quot;  # Prevent CSRF attacks by raising an exception.\\n&quot;, &quot;  # For APIs, you may want to use :null_session instead.\\n&quot;, &quot;  def index\\n&quot;]\n    1/0\n\n[&quot;  end\\n&quot;, &quot;end\\n&quot;, &quot;&quot;]\n\n")
+      expect(mail.body.parts.first.body.raw_source).to eq("An error has just occurred. View full details at:\n<a target=\"_blank\" href=\"http://localhost:3000/errors/#{issue1.id}\">http://localhost:3000/errors/#{issue1.id}</a>\nError type\nZeroDivisionError\nError message\n&quot;divided by 0&quot;\nWhen\n#{issue1.created_at}\nWhere\n#{issue1.get_frames(:abs_path) || '<no information>' }\nFile\n#{issue1.get_frames(:filename) || '<no information>'}\nUrl\n#{issue1.http_data(:url)}\nBacktrace Summary\napp/controllers/home_controller.rb:5 in /\napp/controllers/home_controller.rb:5 in index\nwebrick/server.rb:4 in block in start_thread\n\n")
     end
   end
 
@@ -78,7 +78,7 @@ describe GroupedIssueMailer do
 
     it 'renders the body' do
       days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
-      expect(mail.body.parts.first.body.raw_source).to eq("Title\nDomain\nPlatform\nCreated At\n#{website.title}\n#{website.domain}\n\n#{website.created_at}\nUpdates available on #{days[Time.now.wday-1]}\nMessage\nTimes seen\nCulprit\nMore details\n#{group.message}\n#{group.times_seen}\n#{group.culprit}\n<a href=\"#{error_url(group)}\">#{error_url(group)}</a>\n\n")
+      expect(mail.body.parts.first.body.raw_source).to eq("Title\nDomain\nPlatform\nCreated At\n#{website.title}\n#{website.domain}\n\n#{website.created_at}\nErrors available on #{days[Time.now.wday-1]}\nMessage\nTimes seen\nCulprit\nMore details\n#{group.message}\n#{group.times_seen}\n#{group.culprit}\n<a href=\"#{error_url(group)}\">#{error_url(group)}</a>\n\n")
     end
   end
 end

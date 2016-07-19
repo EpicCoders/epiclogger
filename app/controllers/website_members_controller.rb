@@ -1,7 +1,8 @@
 class WebsiteMembersController < ApplicationController
 	load_and_authorize_resource
   def index
-    @website_members = current_website.website_members
+    @website_members = current_website.website_members.where.not(user_id: current_user.id)
+    @current_website_member = WebsiteMember.find_by_user_id_and_website_id(current_user.id, current_website.id)
   end
 
   def update
@@ -10,8 +11,12 @@ class WebsiteMembersController < ApplicationController
   end
 
   def change_role
-    @website_member.update_attributes(website_member_role_params) if website_member_role_params[:role].present?
-    redirect_to settings_url, notice: 'Role updated'
+    current_website_member = WebsiteMember.find_by_user_id_and_website_id(current_user.id, current_website.id)
+    if current_website_member.role.owner?
+      @website_member.update_attributes(website_member_role_params)
+      flash.now[:alert] = "Role updated"
+      render json: @website_member
+    end
   end
 
   def destroy

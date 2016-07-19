@@ -9,6 +9,7 @@
     .clearfix
     %br/
     .panel.panel-default
+      = render 'shared/flash_messages'
       %table.table#members-container
         %thead
           %tr
@@ -21,6 +22,7 @@
             %tr
               %td= website_member.user.name
               %td= website_member.user.email
-              %td= website_member.role
+              %td
+                = select_tag 'website_member_role[role]', options_for_select([['Owner', 1], ['User', 2]], selected: website_member.role.value), id: nil, style: 'max-width: 90px;', data: { remote: true, url: change_role_website_member_path(website_member), method: 'put', params: '_method=put', type: 'json' }
               %td.text-right
-                = link_to ' Delete', "/website_members/#{website_member.id}", :method => :delete, data: {confirm: "Are you sure?"}, :class => "delete_website btn btn-danger pull-right fa fa-close"
+                = link_to ' Delete', website_member_url(website_member), :method => :delete, data: {confirm: "Are you sure?"}, :class => "delete_website btn btn-danger pull-right fa fa-close"
