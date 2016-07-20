@@ -2,7 +2,6 @@ class WebsiteMembersController < ApplicationController
 	load_and_authorize_resource
   def index
     @website_members = current_website.website_members.where.not(user_id: current_user.id)
-    @current_website_member = WebsiteMember.find_by_user_id_and_website_id(current_user.id, current_website.id)
   end
 
   def update

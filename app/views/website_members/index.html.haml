@@ -8,21 +8,27 @@
           Add member
     .clearfix
     %br/
-    .panel.panel-default
-      = render 'shared/flash_messages'
-      %table.table#members-container
-        %thead
-          %tr
-            %th Name
-            %th Email
-            %th Role
-            %th.text-right Actions
-        %tbody.websites
-          - @website_members.each do |website_member|
+    - if @website_members.count > 0
+      .panel.panel-default
+        = render 'shared/flash_messages'
+        %table.table#members-container
+          %thead
             %tr
-              %td= website_member.user.name
-              %td= website_member.user.email
-              %td
-                = select_tag 'website_member_role[role]', options_for_select([['Owner', 1], ['User', 2]], selected: website_member.role.value), id: nil, style: 'max-width: 90px;', data: { remote: true, url: change_role_website_member_path(website_member), method: 'put', params: '_method=put', type: 'json' }
-              %td.text-right
-                = link_to ' Delete', website_member_url(website_member), :method => :delete, data: {confirm: "Are you sure?"}, :class => "delete_website btn btn-danger pull-right fa fa-close"
+              %th Name
+              %th Email
+              %th Role
+              %th.text-right Actions
+          %tbody.websites
+            - @website_members.each do |website_member|
+              %tr
+                %td= website_member.user.name
+                %td= website_member.user.email
+                %td
+                  = select_tag 'website_member_role[role]', options_for_select([['Owner', 1], ['User', 2]], selected: website_member.role.value), id: nil, style: 'max-width: 90px;', data: { remote: true, url: change_role_website_member_path(website_member), method: 'put', params: '_method=put', type: 'json' }
+                %td.text-right
+                  = link_to ' Delete', website_member_url(website_member), :method => :delete, data: {confirm: "Are you sure?"}, :class => "delete_website btn btn-danger pull-right fa fa-close"
+    - else
+      .bs-example.col-lg-12{"data-example-id" => "simple-alerts"}
+        .alert.alert-info{:role => "alert", :align => "center"}
+          %strong Current Website has no members.
+          Website members will be listed in a table as soon as they will be available.
