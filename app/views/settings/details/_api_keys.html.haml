@@ -1,5 +1,4 @@
 .col-lg-12
-  %p To send data to Epiclogger you will need to configure an SDK with a client key.
   .panel.panel-default
     .panel-heading.clearfix
       %h4.panel-title.pull-left{:style => "padding-top: 7.5px;"} API Keys
@@ -16,4 +15,4 @@
         %tr
           %td App Secret:
           %td= @website.app_secret
-        = link_to "Revoke", revoke_website_path(id: @website.id), method: :get, :class => "btn btn-danger pull-right"
+  %p To send data to Epiclogger you will need to configure an SDK with a client key.

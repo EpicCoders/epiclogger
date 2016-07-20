@@ -5,13 +5,13 @@
   %br
   %pre
     %code.language-html
-      %p gem install sentry-epiclogger
+      %p gem install sentry-raven
   %div
     %h5{:style => 'display:inline'} Or add it to your
     %code Gemfile:
   %pre
     %code.language-html
-      %p gem "sentry-epiclogger", :git => "https://github.com/getsentry/epiclogger-ruby.git"
+      %p gem "sentry-raven", :git => "https://github.com/getsentry/epiclogger-ruby.git"
   %div
     %h5{:style => 'display:inline'} Add a
     %code{:style => 'display:inline'} config/initializers/epiclogger.rb
@@ -22,7 +22,7 @@
         :escaped
           require 'epiclogger'
 
-          Epiclogger.configure do |config|
+          Raven.configure do |config|
             config.dsn = 'https://#{@website.app_key}:#{@website.app_secret}@#{app_domain}/#{@website.id}'
           end
   %h5 That's it! epiclogger automatically installs an error handling hook to pipe all uncaught exceptions to Sentry.

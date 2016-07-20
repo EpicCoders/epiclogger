@@ -37,13 +37,13 @@
       =preserve do
         :escaped
           *record a simple message
-          Epiclogger.captureMessage('hello world!')
+          Raven.captureMessage('hello world!')
 
           *capture an exception
           try {
             errorThrowingCode();
           } catch(err) {
-            Epiclogger.captureException(err);
+            Raven.captureException(err);
           }
   %div
     %h5{:style => 'display:inline'}For more information on other uses of Epiclogger with Javascript, please see the official documentation for
