@@ -85,6 +85,9 @@ gem 'chartkick'
 # add a rest client to call apis
 gem 'rest-client'
 
+#error reporting
+gem "sentry-raven"
+
 group :development do
   gem 'better_errors'
   gem 'binding_of_caller'

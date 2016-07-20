@@ -344,6 +344,8 @@ GEM
     sdoc (0.4.1)
       json (~> 1.7, >= 1.7.7)
       rdoc (~> 4.0)
+    sentry-raven (1.0.0)
+      faraday (>= 0.7.6)
     sexp_processor (4.7.0)
     shoulda-matchers (3.1.1)
       activesupport (>= 4.0.0)
@@ -458,6 +460,7 @@ DEPENDENCIES
   schema_plus_foreign_keys
   schema_plus_pg_indexes
   sdoc (~> 0.4.0)
+  sentry-raven
   shoulda-matchers
   sidekiq
   simple_form
@@ -471,3 +474,9 @@ DEPENDENCIES
   warden_omniauth
   webmock
   wicked
+
+RUBY VERSION
+   ruby 2.2.2p95
+
+BUNDLED WITH
+   1.12.5
