@@ -1,6 +1,5 @@
 .col-md-12.pagecontainer
   .pagetitle.text-center
-    %h3 Configuring Python
     = @tab
   #custom-bootstrap.navbar.navbar-default{:role => "navigation"}
     %ul.nav.navbar-nav.navbar-left
@@ -23,7 +22,7 @@
         %li{class: @website.platform == 'Tornado' ? 'active' : ''}
           = link_to "Tornado", website_wizard_path(:choose_platform, 'tab' => 'tornado'), method: :put
   .panel.panel-default.codeview
-    .panel-heading
+    .panel-heading.text-center Configure #{@platform_tab.try(:humanize) || @website.platform}
     - if params[:controller] == "settings"
       = render partial: "settings/platforms/python/#{@platform_tab}"
     - else

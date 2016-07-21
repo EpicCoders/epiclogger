@@ -1,32 +1,3 @@
-.panel-body.tabs#ios{:style => "display:#{(@website.platform == 'Ios' || @platform_tab == 'ios') ? 'block' : 'none'};"}
-  %div
-    %h5{:style => 'display:inline'} Start by installing
-    %a{:href => 'https://github.com/EpicCoders/epiclogger-objc'}epiclogger-objc.
-  %pre
-    %code.language-html
-      =preserve do
-        :escaped
-          cd [your project root]
-          git submodule add git://github.com/getsentry/epiclogger-objc
-  %h6 (Installing the client as a git submodule will make future updates easier)
-  %div
-    %h5{:style => 'display:inline'} Initialize the client. This is usually done in your app delegate's
-    %code application:didFinishLaunchingWithOptions:
-  %pre
-    %code.language-html
-      =preserve do
-        :escaped
-          - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-            // Configure the Sentry client
-            [RavenClient clientWithDSN:@"https://#{@website.app_key}:#{@website.app_secret}@#{app_domain}/#{@website.id}"];
-
-            // Install the global error handler
-            [[RavenClient sharedClient] setupExceptionHandler];
-
-            return YES;
-        }
-  %hr
-  %h5 That's it! epiclogger automatically installs an error handling hook to pipe all uncaught exceptions to Sentry.
-  %div
-    %h5{:style => 'display:inline'}For more information on other uses of Epiclogger with IOS, please see the
-    %a{:href => 'https://github.com/EpicCoders/epiclogger-objc'}official documentation for epiclogger-objc.
+.panel-body{:style => "display:#{(@website.platform == 'Ios' || @platform_tab == 'ios') ? 'block' : 'none'};"}
+  %a For in-depth instructions on integration with Objective-C, view the
+  %a.text-primary{:href => "https://docs.getsentry.com/hosted/clients/objc/", :target => "_blank"} complete documentation here.

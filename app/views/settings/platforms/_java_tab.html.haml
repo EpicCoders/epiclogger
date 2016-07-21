@@ -1,38 +1,37 @@
-.col-md-12.pagecontainer.tab#java_tab
+.col-md-12.pagecontainer
   .pagetitle.text-center
-    %h3 Configuring Java
     = @tab
   #custom-bootstrap.navbar.navbar-default{:role => "navigation"}
     %ul.nav.navbar-nav.navbar-left
       - if params[:controller] == "settings"
         %li{class: @platform_tab == 'java' ? 'active' : ''}
           = link_to "Java", settings_path('main_tab' => 'configuration', 'configuration_tab' => 'java', 'platform_tab' => 'java')
-        %li{class: @platform_tab == 'java_util_logging' ? 'active' : ''}
-          = link_to "Java util logging", settings_path('main_tab' => 'configuration', 'configuration_tab' => 'java', 'platform_tab' => 'java_util_logging')
+        %li{class: @platform_tab == 'google_app_engine' ? 'active' : ''}
+          = link_to "Google App Engine", settings_path('main_tab' => 'configuration', 'configuration_tab' => 'java', 'platform_tab' => 'google_app_engine')
         %li{class: @platform_tab == 'log4j' ? 'active' : ''}
           = link_to "Log4j", settings_path('main_tab' => 'configuration', 'configuration_tab' => 'java', 'platform_tab' => 'log4j')
-        %li{class: @platform_tab == 'log4j2' ? 'active' : ''}
-          = link_to "Log4j2", settings_path('main_tab' => 'configuration', 'configuration_tab' => 'java', 'platform_tab' => 'log4j2')
+        %li{class: @platform_tab == 'log4j_2' ? 'active' : ''}
+          = link_to "Log4j 2", settings_path('main_tab' => 'configuration', 'configuration_tab' => 'java', 'platform_tab' => 'log4j_2')
         %li{class: @platform_tab == 'logback' ? 'active' : ''}
           = link_to "Logback", settings_path('main_tab' => 'configuration', 'configuration_tab' => 'java', 'platform_tab' => 'logback')
       - else
         %li{class: @website.platform == 'Java' ? 'active' : ''}
           = link_to "Java", website_wizard_path(:choose_platform, 'tab' => 'java'), method: :put
-        %li{class: @website.platform == 'Java util logging' ? 'active' : ''}
-          = link_to "Java util logging", website_wizard_path(:choose_platform, 'tab' => 'java_util_logging'), method: :put
+        %li{class: @website.platform == 'Google app engine' ? 'active' : ''}
+          = link_to "Google App Engine", website_wizard_path(:choose_platform, 'tab' => 'google_app_engine'), method: :put
         %li{ class: ( @website.platform == 'Log4j' ? 'active' : '')}
           = link_to "Log4j", website_wizard_path(:choose_platform, 'tab' => 'log4j'), method: :put
-        %li{class: @website.platform == 'Log4j2' ? 'active' : ''}
-          = link_to "Log4j2", website_wizard_path(:choose_platform, 'tab' => 'log4j2'), method: :put
+        %li{class: @website.platform == 'Log4j 2' ? 'active' : ''}
+          = link_to "Log4j 2", website_wizard_path(:choose_platform, 'tab' => 'log4j_2'), method: :put
         %li{class: @website.platform == 'Logback' ? 'active' : ''}
           = link_to "Logback", website_wizard_path(:choose_platform, 'tab' => 'logback'), method: :put
   .panel.panel-default.codeview
-    .panel-heading
+    .panel-heading.text-center Configure #{@platform_tab.try(:humanize) || @website.platform}
     - if params[:controller] == "settings"
       = render partial: "settings/platforms/java/#{@platform_tab}"
     - else
       = render partial: 'settings/platforms/java/java'
-      = render partial: 'settings/platforms/java/java_util_logging'
+      = render partial: 'settings/platforms/java/google_app_engine'
       = render partial: 'settings/platforms/java/log4j'
-      = render partial: 'settings/platforms/java/log4j2'
+      = render partial: 'settings/platforms/java/log4j_2'
       = render partial: 'settings/platforms/java/logback'

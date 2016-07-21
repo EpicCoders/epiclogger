@@ -1,16 +1,28 @@
-.panel-body.tabs#php{:style => "display:#{(@website.platform == 'Php' || @platform_tab == 'php') ? 'block' : 'none'};"}
-  %div
-    %h5{:style => 'display:inline'} Start by installing
-    %a{:href => 'https://github.com/EpicCoders/epiclogger-php'}epiclogger-php.
-  %h5 Register the autoloader:
+.panel-body{:style => "display:#{(@website.platform == 'Php' || @platform_tab == 'php') ? 'block' : 'none'};"}
+  %a There are various ways to install the PHP integration for Epiclogger. The recommended way is to use
+  %a.text-primary{:href => "https://getcomposer.org/", :target => "_blank"} Composer:
   %pre
     %code.language-html
       =preserve do
         :escaped
-          require('/path/to/Raven/Autoloader.php');
+          $ composer require "raven/raven"
+  %h5 Alternatively you can manually install it:
+  %ul
+    %li
+      %a Download and extract the latest
+      %a.text-primary{:href => "https://github.com/getsentry/raven-php/archive/master.zip", :target => "_blank"}raven-php
+      %a archive to your PHP project.
+    %li Require the autoloader in your application:
+    %li
+      %pre
+        %code.language-html
+          =preserve do
+            :escaped
+              require_once '/path/to/Raven/library/Raven/Autoloader.php';
 
-          Raven_Autoloader::register();
-  %h5 Create an instance of the client:
+              Raven_Autoloader::register();
+  %hr
+  %h5 The most important part is the creation of the raven client. Create it once and reference it from anywhere you want to interface with Epiclogger:
   %pre
     %code.language-html
       $client = new Raven_Client('https://#{@website.app_key}:#{@website.app_secret}@#{app_domain}/#{@website.id}');
@@ -43,6 +55,3 @@
   %div
     %h4{:style => 'display:inline'} Note:
     %h5{:style => 'display:inline'} We dont recommend registering the generic error handler as it can be quite noisey.
-  %div
-    %h5{:style => 'display:inline'}For more information on other uses of Epiclogger with PHP, please see the
-    %a{:href => 'https://github.com/EpicCoders/epiclogger-php'}official documentation for epiclogger-php.

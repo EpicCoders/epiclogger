@@ -8,6 +8,6 @@ class SettingsController < ApplicationController
     @integration_tab = params[:integration_tab] || "github"
     @platform_tab = params[:platform_tab] || @configuration_tab
 
-    @options = ["Javascript", "Python", "Django", "Flask", "Tornado", "Php", "Ruby", "Rails 3", "Rails 4", "Sinatra", "Sidekiq", "Node js", "Express", "Connect", "Java", "Java util logging", "Log4j", "Log4j2", "Logback", "Ios"]
+    @options = ["Javascript", "Python", "Django", "Flask", "Tornado", "Php", "Ruby", "Rails 3", "Rails 4", "Sinatra", "Sidekiq", "Node js", "Express", "Connect", "Java", "Google app engine", "Log4j", "Log4j 2", "Logback", "Ios"]
   end
 end

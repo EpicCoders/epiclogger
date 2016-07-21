@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   ActiveAdmin.routes(self)
-  root 'settings#index'
+  root 'home#index'
 
   get 'login' => 'sessions#new', :as => :login
   post 'login' => 'sessions#create'
@@ -15,6 +15,7 @@ Rails.application.routes.draw do
   get '/auth/:provider/callback' => 'auth#success'
   resources :auth, as: :auths, only: [:create, :update]
 
+  resources :home, only: [:index]
   resources :errors, only: [:show, :index, :update] do
     member do
       post :notify_subscribers

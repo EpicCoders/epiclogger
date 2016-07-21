@@ -1,27 +1,3 @@
-.panel-body.tabs#log4j{:style => "display:#{(@website.platform == 'Log4j' || @platform_tab == 'log4j') ? 'block' : 'none'};"}
-  %div
-    %h5{:style => 'display:inline'} Start by installing
-    %a{:href => 'https://github.com/EpicCoders/epiclogger-java'}epiclogger-java.
-  %h5 The easiest way to add the Raven dependency is with Maven:
-  %pre
-    %code.language-html
-      =preserve do
-        :escaped
-          <dependency>
-            <groupId>net.kencochrane.raven</groupId>
-            <artifactId>raven</artifactId>
-            <version>4.0</version>
-          </dependency>
-  %h5 You'll need to configure the SentryAppender in your logging configuration:
-  %pre
-    %code.language-html
-      =preserve do
-        :escaped
-          log4j.rootLogger=DEBUG, SentryAppender
-          log4j.appender.SentryAppender=net.kencochrane.raven.log4j.SentryAppender
-          log4j.appender.SentryAppender.dsn=https://#{@website.app_key}:#{@website.app_secret}@#{app_domain}/#{@website.id}
-          level=ERROR
-  %hr
-  %div
-    %h5{:style => 'display:inline'}For more information on other uses of Epiclogger with Java, please see the
-    %a{:href => 'https://github.com/EpicCoders/epiclogger-php'}official documentation for epiclogger-java.
+.panel-body{:style => "display:#{(@website.platform == 'Log4j' || @platform_tab == 'log4j') ? 'block' : 'none'};"}
+  %a For in-depth instructions on integration with Log4j, view the
+  %a.text-primary{:href => "https://docs.getsentry.com/hosted/clients/java/modules/log4j/", :target => "_blank"} complete documentation here.

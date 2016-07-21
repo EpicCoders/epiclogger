@@ -1,17 +1,15 @@
-.panel-body.tabs#javascript{:style => "display:#{(@website.platform == 'Javascript' || @platform_tab == 'javascript') ? 'block' : 'none'};"}
+.panel-body{:style => "display:#{(@website.platform == 'Javascript' || @platform_tab == 'javascript') ? 'block' : 'none'};"}
   %div
-    %h5{:style => 'display:inline'} Start by installing
-    %a{:href => 'https://github.com/EpicCoders/epiclogger-js'}epiclogger-js.
-  %br
+    %h4{:style => 'display:inline'} Note:
+    %a If you’re using Node on the server, you’ll need
+    %a{:href => "https://github.com/getsentry/raven-node"} raven-node.
+  %hr
+  %h5 Raven.js is distributed in a few different methods, and should get included after any other libraries are included, but before your own scripts.
   %pre
     %code.language-html
-      %p &lt;script src="//cdn.epicloggerjs.com/1.1.2/jquery,native/epiclogger.min.js"&gt;&lt;/script&gt;
+      %p &lt;script src="https://cdn.ravenjs.com/3.2.1/raven.min.js"&gt;&lt;/script&gt;
   %hr
-  %h5 Add the any URLs which will be logging errors in your project's settings under Client Security:
-  %br
-  %img{:src => asset_path("epiclogger-js.png")}
-  %hr
-  %h5 Configure the client
+  %h5 Configure the client:
   %pre
     %code.language-html
       =preserve do
@@ -28,8 +26,8 @@
       =preserve do
         :escaped
           Raven.setUser({
-              email: '<?php echo $_SESSION['email'] ?>',
-              id: '<?php echo $_SESSION['id'] ?>'
+              email: 'user@example.com',
+              id: '123'
           });
   %h5 Now call out to the epiclogger client to capture events:
   %pre
@@ -45,6 +43,3 @@
           } catch(err) {
             Raven.captureException(err);
           }
-  %div
-    %h5{:style => 'display:inline'}For more information on other uses of Epiclogger with Javascript, please see the official documentation for
-    %a{:href => 'https://github.com/EpicCoders/epiclogger-js'}epiclogger-js.

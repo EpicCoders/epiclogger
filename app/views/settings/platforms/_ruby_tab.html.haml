@@ -1,6 +1,5 @@
-.col-md-12.pagecontainer.tab#ruby_tab
+.col-md-12.pagecontainer
   .pagetitle.text-center
-    %h3 Configuring Ruby
     = @tab
   #custom-bootstrap.navbar.navbar-default{:role => "navigation"}
     %ul.nav.navbar-nav.navbar-left
@@ -18,7 +17,7 @@
       - else
         %li{class: @website.platform == 'Ruby' ? 'active' : ''}
           = link_to "Ruby", website_wizard_path(:choose_platform, 'tab' => 'ruby'), method: :put
-        %li{class: @website.platform == 'Rails 3' ? 'active' : ''}
+        %li{class: ( @website.platform == 'Rails 3' ? 'active' : '')}
           = link_to "Rails 3", website_wizard_path(:choose_platform, 'tab' => 'rails_3'), method: :put
         %li{class: ( @website.platform == 'Rails 4' ? 'active' : '')}
           = link_to "Rails 4", website_wizard_path(:choose_platform, 'tab' => 'rails_4'), method: :put
@@ -27,7 +26,7 @@
         %li{class: @website.platform == 'Sidekiq' ? 'active' : ''}
           = link_to "Sidekiq", website_wizard_path(:choose_platform, 'tab' => 'sidekiq'), method: :put
   .panel.panel-default.codeview
-    .panel-heading
+    .panel-heading.text-center Configure #{@platform_tab.try(:humanize) || @website.platform}
     - if params[:controller] == "settings"
       = render partial: "settings/platforms/ruby/#{@platform_tab}"
     - else

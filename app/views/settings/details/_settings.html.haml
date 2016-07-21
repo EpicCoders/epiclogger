@@ -10,6 +10,8 @@
           .dropdown
             = f.select :platform, @options, {}, prompt: '#{@website.platform}', :class => "btn btn-default cust-dropdown dropdown-toggle"
         .form-group
+          %br
+          %small This will restrict reuirements based on the Origin and Referrer headers.
           = f.input :origins, as: :text, label: 'Allowed Domains', hint: "e.g. https://example.com", input_html: {:rows => "7"}, class: 'form-control'
         %small Separate multiple entries with a newline.
     .form-group

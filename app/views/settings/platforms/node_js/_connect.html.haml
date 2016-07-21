@@ -1,30 +1,3 @@
-.panel-body.tabs#connect{:style => "display:#{(@website.platform == 'Connect' || @platform_tab == 'connect') ? 'block' : 'none'};"}
-  %div
-    %h5{:style => 'display:inline'} Start by installing
-    %a{:href => 'https://github.com/EpicCoders/epiclogger-node'}epiclogger-node.
-  %br
-  %pre
-    %code.language-html
-      %p npm install epiclogger
-  %h5 Register an instance of the Connect middleware after your main application handler:
-  %pre
-    %code.language-html
-      =preserve do
-        :escaped
-          connect(
-            connect.bodyParser(),
-            connect.cookieParser(),
-            mainHandler,
-            raven.middleware.connect('https://#{@website.app_key}:#{@website.app_secret}@#{app_domain}/#{@website.id}'),
-          ).listen(3000);
-  %div
-    %h5{:style => 'display:inline'} Ensure Node is run with
-    %code NODE_ENV=production:
-  %pre
-    %code.language-html
-      %p NODE_ENV=production node script.js
-  %hr
-  %h5 That's it! Epiclogger automatically installs an error handling hook to pipe all uncaught exceptions to Epiclogger.
-  %div
-    %h5{:style => 'display:inline'}For more information on other uses of Epiclogger with Node.js, please see the
-    %a{:href => 'https://github.com/EpicCoders/epiclogger-node'}official documentation for epiclogger-node.
+.panel-body{:style => "display:#{(@website.platform == 'Connect' || @platform_tab == 'connect') ? 'block' : 'none'};"}
+  %a For in-depth instructions on integration with Connect, view the
+  %a.text-primary{:href => "https://docs.getsentry.com/hosted/clients/node/integrations/connect/", :target => "_blank"} complete documentation here.

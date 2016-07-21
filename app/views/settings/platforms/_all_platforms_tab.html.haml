@@ -6,12 +6,12 @@
       %code.markdown
         %h5.platform-code https://#{@website.app_key}:#{@website.app_secret}@#{app_domain}/#{@website.id}
     %br
-      %h5 If this is a client that only needs public access (like epiclogger-js), you can use the following public DSN:
+      %h5 If this is a client that only needs public access (like raven-js), you can use the following public DSN:
       %pre
         %code.markdown
           %h5.platform-code https://#{@website.app_key}@#{app_domain}/#{@website.id}
 .panel.panel-default.tileview
-  .panel-heading Platforms
+  .panel-heading Languages
   .panel-body#platform{:style => 'cursor: pointer'}
     = link_to settings_path('main_tab' => 'configuration', 'configuration_tab' => 'javascript'), class: 'tile text-center resize-a' do
       %img.resize-img{:src => image_path("icon_javascript.png")}/
@@ -34,7 +34,7 @@
     = link_to settings_path('main_tab' => 'configuration', 'configuration_tab' => 'java', 'platform_tab' => 'java'), class: 'tile text-center resize-a' do
       %img.resize-img{:src => image_path("icon_java.png")}/
       %span Java
-.panel.panel-default.tileview#client-frameworks
+.panel.panel-default.tileview
   .panel-heading Frameworks
   .panel-body{:style => 'cursor: pointer'}
     = link_to settings_path('main_tab' => 'configuration', 'configuration_tab' => 'ruby', 'platform_tab' => 'rails_3'), class: 'tile text-center resize-a' do
@@ -46,6 +46,3 @@
     = link_to settings_path('main_tab' => 'configuration', 'configuration_tab' => 'python', 'platform_tab' => 'django'), class: 'tile text-center resize-a' do
       %img.resize-img{:src => image_path("icon_django.png")}/
       %span Django
-%div
-  %h5{:style => "display:inline"} For more information on developing clients and the Sentry API, see the
-  %a{:href => "#"} documentation.

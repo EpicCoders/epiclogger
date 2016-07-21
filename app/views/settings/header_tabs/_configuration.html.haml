@@ -16,6 +16,6 @@
       %li{class: @configuration_tab == 'java' ? 'active' : ''}
         = link_to "Java", settings_path('main_tab' => 'configuration', 'configuration_tab' => 'java')
       %li{class: @configuration_tab == 'ios' ? 'active' : ''}
-        = link_to "IOS", settings_path('main_tab' => 'configuration', 'configuration_tab' => 'ios')
+        = link_to "Objective-C", settings_path('main_tab' => 'configuration', 'configuration_tab' => 'ios')
 
   = render partial: "settings/platforms/#{@configuration_tab}_tab"

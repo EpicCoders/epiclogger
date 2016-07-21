@@ -1,6 +1,6 @@
 #installation.row
   #custom-bootstrap-menu.navbar.navbar-default{:role => "navigation"}
-    %ul.nav.navbar-nav.navbar-left#top-tabs
+    %ul.nav.navbar-nav.navbar-left
       %li{class: @main_tab == 'details' ? 'active' : ''}
         = link_to "Details" ,settings_path('main_tab' => 'details')
       %li{class: @main_tab == 'configuration' ? 'active' : ''}
