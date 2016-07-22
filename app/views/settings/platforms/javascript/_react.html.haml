@@ -1,10 +1,10 @@
-.panel-body{:style => "display:#{(@website.platform == 'Javascript' || @platform_tab == 'javascript') ? 'block' : 'none'};"}
+.panel-body{:style => "display:#{(@website.platform == 'React' || @platform_tab == 'react') ? 'block' : 'none'};"}
   %div
     %h4{:style => 'display:inline'} Note:
     %a If you’re using Node on the server, you’ll need
     %a{:href => "https://github.com/getsentry/raven-node"} raven-node.
   %hr
-  %h5 Raven.js is distributed in a few different methods, and should get included after any other libraries are included, but before your own scripts.
+  %h5 Start by adding the raven.js script tag to our page. You’ll want to position it after you load all other external libraries (like jQuery), but before your code.
   %pre
     %code.language-html
       =preserve do

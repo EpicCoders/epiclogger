@@ -1,0 +1,24 @@
+%br
+%h5 Add additional user context if it's available:
+%pre
+  %code.language-html
+    =preserve do
+      :escaped
+        Raven.setUser({
+            email: 'user@example.com',
+            id: '123'
+        });
+%h5 Now call out to the epiclogger client to capture events:
+%pre
+  %code.language-html
+    =preserve do
+      :escaped
+        *record a simple message
+        Raven.captureMessage('hello world!')
+
+        *capture an exception
+        try {
+          errorThrowingCode();
+        } catch(err) {
+          Raven.captureException(err);
+        }

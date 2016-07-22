@@ -16,24 +16,15 @@
     = link_to settings_path('main_tab' => 'configuration', 'configuration_tab' => 'javascript'), class: 'tile text-center resize-a' do
       %img.resize-img{:src => image_path("icon_javascript.png")}/
       %span Javascript
-    = link_to settings_path('main_tab' => 'configuration', 'configuration_tab' => 'node_js', 'platform_tab' => 'node_js'), class: 'tile text-center resize-a' do
-      %img.resize-img{:src => image_path("icon_nodejs.png")}/
-      %span Node Js
     = link_to settings_path('main_tab' => 'configuration', 'configuration_tab' => 'ruby', 'platform_tab' => 'ruby'), class: 'tile text-center resize-a' do
       %img.resize-img{:src => image_path("icon_ruby.png")}/
       %span Ruby
-    = link_to settings_path('main_tab' => 'configuration', 'configuration_tab' => 'python', 'platform_tab' => 'python'), class: 'tile text-center resize-a' do
-      %img.resize-img{:src => image_path("icon_python.png")}/
-      %span Python
-    = link_to settings_path('main_tab' => 'configuration', 'configuration_tab' => 'ios'), class: 'tile text-center resize-a' do
-      %img.resize-img{:src => image_path("icon_ios.png")}/
-      %span IOS
     = link_to settings_path('main_tab' => 'configuration', 'configuration_tab' => 'php'), class: 'tile text-center resize-a' do
       %img.resize-img{:src => image_path("icon_php.png")}/
       %span PHP
-    = link_to settings_path('main_tab' => 'configuration', 'configuration_tab' => 'java', 'platform_tab' => 'java'), class: 'tile text-center resize-a' do
-      %img.resize-img{:src => image_path("icon_java.png")}/
-      %span Java
+    = link_to settings_path('main_tab' => 'configuration', 'configuration_tab' => 'other'), class: 'tile text-center resize-a' do
+      %img.resize-img{:src => image_path("icon_code.png")}/
+      %span Other
 .panel.panel-default.tileview
   .panel-heading Frameworks
   .panel-body{:style => 'cursor: pointer'}
@@ -43,6 +34,3 @@
     = link_to settings_path('main_tab' => 'configuration', 'configuration_tab' => 'ruby', 'platform_tab' => 'rails_4'), class: 'tile text-center resize-a' do
       %img.resize-img{:src => image_path("icon_rails.png")}/
       %span Rails 4
-    = link_to settings_path('main_tab' => 'configuration', 'configuration_tab' => 'python', 'platform_tab' => 'django'), class: 'tile text-center resize-a' do
-      %img.resize-img{:src => image_path("icon_django.png")}/
-      %span Django

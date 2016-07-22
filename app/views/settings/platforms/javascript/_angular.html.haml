@@ -1,0 +1,40 @@
+.panel-body{:style => "display:#{(@website.platform == 'Angular' || @platform_tab == 'angular') ? 'block' : 'none'};"}
+  %div
+    %h4{:style => 'display:inline'} Note:
+    %a If you’re using Node on the server, you’ll need
+    %a{:href => "https://github.com/getsentry/raven-node"} raven-node.
+  %hr
+  %h5 Start by adding the raven.js script tag to your page. It should go before your application code.
+  %pre
+    %code.language-html
+      =preserve do
+        :escaped
+          <script src="https://cdn.ravenjs.com/2.0.0/angular/raven.min.js"></script>
+
+          <!-- your application code below -->
+          <script src="static/app.js"></script>
+  %br
+  %h5 Additionally, inside your main Angular application module, you need to declare ngRaven as a module dependency:
+  %pre
+    %code.language-html
+      =preserve do
+        :escaped
+          var myApp = angular.module('myApp', [
+            'ngRaven',
+            'ngRoute',
+            'myAppControllers',
+            'myAppFilters'
+          ]);
+  %br
+  %h5 Configure the client:
+  %pre
+    %code.language-html
+      =preserve do
+        :escaped
+          <script>
+            Raven.config('https://#{@website.app_key}@#{app_domain}/#{@website.id}', {
+                # we highly recommend restricting exceptions to a domain in order to filter out clutter
+                whitelistUrls: [/example\.com/]
+            }).install();
+            </script>
+  = render partial: 'settings/platforms/javascript/additional'

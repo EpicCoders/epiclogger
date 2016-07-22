@@ -1,6 +1,37 @@
 .col-md-12.pagecontainer
   .pagetitle.text-center
     = @tab
+  #custom-bootstrap.navbar.navbar-default{:role => "navigation"}
+    %ul.nav.navbar-nav.navbar-left
+      - if params[:controller] == "settings"
+        %li{class: @platform_tab == 'javascript' ? 'active' : ''}
+          = link_to "Javascript", settings_path('main_tab' => 'configuration', 'configuration_tab' => 'javascript', 'platform_tab' => 'javascript')
+        %li{class: @platform_tab == 'angular' ? 'active' : ''}
+          = link_to "Angular", settings_path('main_tab' => 'configuration', 'configuration_tab' => 'javascript', 'platform_tab' => 'angular')
+        %li{class: @platform_tab == 'backbone' ? 'active' : ''}
+          = link_to "Backbone", settings_path('main_tab' => 'configuration', 'configuration_tab' => 'javascript', 'platform_tab' => 'backbone')
+        %li{class: @platform_tab == 'ember' ? 'active' : ''}
+          = link_to "Ember", settings_path('main_tab' => 'configuration', 'configuration_tab' => 'javascript', 'platform_tab' => 'ember')
+        %li{class: @platform_tab == 'react' ? 'active' : ''}
+          = link_to "React", settings_path('main_tab' => 'configuration', 'configuration_tab' => 'javascript', 'platform_tab' => 'react')
+      - else
+        %li{class: @website.platform == 'Javascript' ? 'active' : ''}
+          = link_to "Javascript", website_wizard_path(:choose_platform, 'tab' => 'javascript'), method: :put
+        %li{class: ( @website.platform == 'Angular' ? 'active' : '')}
+          = link_to "Angular", website_wizard_path(:choose_platform, 'tab' => 'angular'), method: :put
+        %li{class: ( @website.platform == 'Backbone' ? 'active' : '')}
+          = link_to "Backbone", website_wizard_path(:choose_platform, 'tab' => 'backbone'), method: :put
+        %li{class: ( @website.platform == 'Ember' ? 'active' : '')}
+          = link_to "Ember", website_wizard_path(:choose_platform, 'tab' => 'ember'), method: :put
+        %li{class: ( @website.platform == 'React' ? 'active' : '')}
+          = link_to "React", website_wizard_path(:choose_platform, 'tab' => 'react'), method: :put
   .panel.panel-default.codeview
-    .panel-heading.text-center Configure Javascript
-    = render partial: 'settings/platforms/javascript/javascript'
+    .panel-heading.text-center Configure #{@platform_tab.try(:humanize) || @website.platform}
+    - if params[:controller] == "settings"
+      = render partial: "settings/platforms/javascript/#{@platform_tab}"
+    - else
+      = render partial: 'settings/platforms/javascript/javascript'
+      = render partial: 'settings/platforms/javascript/angular'
+      = render partial: 'settings/platforms/javascript/ember'
+      = render partial: 'settings/platforms/javascript/react'
+      = render partial: 'settings/platforms/javascript/backbone'
