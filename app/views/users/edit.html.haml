@@ -1,45 +1,47 @@
-%br
 .row
   .col-md-12.pagecontainer
+    .pagetitle
+      %h3
+        Edit User
     = simple_form_for @user, wrapper: :vertical_form do |f|
-      .col-lg-8
+      .col-md-8
         .panel.panel-default
           .panel-heading User Details
           .panel-body
             .form-group
               = f.input :name, placeholder: 'User name', value: @user.name
               = f.input :email, placeholder: 'email@example.com', value: @user.email
-        .form-group
-          = f.submit 'Save Changes', class: 'btn btn-success'
+            .form-group.pull-right
+              = f.submit 'Save Changes', class: 'btn btn-success'
 
-    .col-md-4
-      .panel.panel-default
-        .panel-heading Profile Details
-        .panel-body
-          %table
-            %thead
-              %tr
-                %td
-                  %p Name:
-                %td
-                  %h5 #{@user.name}
-              %tr
-                %td
-                  %p Email:
-                %td
-                  %h5 #{@user.email}
-              %tr
-                %td
-                  %p Provider:
-                %td
-                  %h5 #{@user.provider}
-              %tr
-                %td
-                  %p Created at:
-                %td
-                  %h5 #{@user.created_at}
-              %tr
-                %td
-                  %p Uid:
-                %td
-                  %h5 #{@user.uid}
+      .col-md-4
+        .panel.panel-default
+          .panel-heading Profile Details
+          .panel-body
+            %table
+              %thead
+                %tr
+                  %td
+                    %p Name:
+                  %td
+                    %h5 #{@user.name}
+                %tr
+                  %td
+                    %p Email:
+                  %td
+                    %h5 #{@user.email}
+                %tr
+                  %td
+                    %p Provider:
+                  %td
+                    %h5 #{@user.provider}
+                %tr
+                  %td
+                    %p Created at:
+                  %td
+                    %h5 #{@user.created_at}
+                %tr
+                  %td
+                    %p Uid:
+                  %td
+                    %h5 #{@user.uid}

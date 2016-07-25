@@ -36,6 +36,7 @@
 
 .wizard {
   > .steps {
+    margin-top: 5%;
     position: relative;
     display: block;
     width: 100%;
@@ -72,7 +73,6 @@
         font-size: 1.429em;
       }
       > ul > li {
-        width: 25%;
         float: left;
         display: block;
         margin: 0 0.5em 0.5em;

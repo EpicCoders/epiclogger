@@ -90,6 +90,10 @@ strong, label, .table > tbody > tr > th {
   background-color:#e98b39;
 }
 
+#other .table > tbody > tr > td {
+  vertical-align: top;
+}
+
 .table > tbody > tr > td {
   vertical-align: middle;
 }
