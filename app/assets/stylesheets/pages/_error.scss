@@ -47,26 +47,27 @@
         padding:0px;
         margin: 0;
       }
-
-      .error-line{
+      .line{
+        padding-top: 5px;
+        min-width: 80px;
+      }
+      .error{
         background-color:#ffecec;
-        padding-top: 5px;
       }
-      .info-line{
+      .info{
         background-color: #E0FFFF;
-        padding-top: 5px;
       }
-      .warn-line{
+      .warn{
         background-color: #FFF8C6;
-        padding-top: 5px;
       }
-      .debug-line{
+      .debug{
         background-color: #EFEEEC;
-        padding-top: 5px;
       }
-      .log-line{
+      .log{
         background-color: #C3FDB8;
-        padding-top: 5px;
+      }
+      .timestamp{
+        min-width: 80px;
       }
     }
   }

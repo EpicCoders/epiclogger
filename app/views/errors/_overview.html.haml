@@ -60,13 +60,13 @@
                 %table.table
                   - @issue.breadcrumbs_stacktrace.each_with_index do |crumb, index|
                     %tr
-                      %td{ class: crumb[:level].present? ? "#{crumb[:level]}-line" : "log-line"}= crumb[:category]
+                      %td.line{ class: crumb[:level].present? ? "#{crumb[:level]}" : "log"}= crumb[:category]
                       - data = crumb[:data]
                       - if data.blank?
                         %td= crumb[:message]
                       - else
                         %td #{data[:method]} #{data[:url]} [#{data[:status_code]}]
-                      %td= Time.at(crumb[:timestamp]).strftime("%H:%M:%S")
+                      %td.timestamp= Time.at(crumb[:timestamp]).strftime("%H:%M:%S")
           %p.read-more.text-center{style: "display:#{valid_stacktrace ? 'block' : 'none'}"}
             %a.btn.btn-default{:href => "#"} View full backtrace
 
