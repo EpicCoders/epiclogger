@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   ActiveAdmin.routes(self)
   root 'home#index'
 
+  get "home/privacy"
   get 'login' => 'sessions#new', :as => :login
   post 'login' => 'sessions#create'
   get 'signup' => 'users#new', :as => :signup
@@ -15,6 +16,7 @@ Rails.application.routes.draw do
   get '/auth/:provider/callback' => 'auth#success'
   resources :auth, as: :auths, only: [:create, :update]
 
+  resources :invites, only: [:show]
   resources :errors, only: [:show, :index, :update] do
     member do
       post :notify_subscribers
