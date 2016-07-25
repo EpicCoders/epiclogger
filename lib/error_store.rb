@@ -20,7 +20,8 @@ module ErrorStore
               interface: klass
           })
         end
-      rescue
+      rescue => exception
+        Raven.capture_exception(exception)
         Rails.logger.error("Could not load class #{base}")
       end
     end

@@ -35,7 +35,8 @@ class AuthController < ApplicationController
           @integration.save!
           redirect_to settings_path(main_tab: 'integrations', integration_tab: provider ), notice: 'Integration created'
         end
-      rescue
+      rescue => exception
+        Raven.capture_exception(exception)
         redirect_to settings_path(main_tab: 'integrations'), flash: { error: 'Error creating integration' }
       ensure
         session['integration'] = nil

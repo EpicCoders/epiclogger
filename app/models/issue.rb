@@ -74,7 +74,8 @@ class Issue < ActiveRecord::Base
       end
     end
   rescue => e
-    "Could not parse data!"
+    Raven.capture_exception(e)
+    'Could not parse data!'
   end
 
   def self.more_than_10_errors(member)

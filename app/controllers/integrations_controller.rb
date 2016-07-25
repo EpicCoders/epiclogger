@@ -17,7 +17,8 @@ class IntegrationsController < ApplicationController
     begin
       task = @integration.driver.create_task(params[:title])
       redirect_to error_path(params[:error_id], task: task)
-    rescue
+    rescue => exception
+      Raven.capture_exception(exception)
       redirect_to error_path(params[:error_id], task: task), flash: { error: "Operation failed!" }
     end
   end

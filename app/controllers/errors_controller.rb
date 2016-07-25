@@ -47,6 +47,7 @@ class ErrorsController < ApplicationController
           current_website.intercom_integration.driver.send_message(params[:users], params[:message])
           redirect_to error_path(@error), flash: { success: 'Message successfully sent!' }
         rescue => e
+          Raven.capture_exception(e)
           redirect_to error_path(@error), flash: { error: 'Operation failed!' }
         end
       else
