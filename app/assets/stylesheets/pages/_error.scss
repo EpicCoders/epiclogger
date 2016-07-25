@@ -40,36 +40,32 @@
       padding-left:5px;
     }
   }
-  pre{
-    background-color:#ffffff;
-    code{
-      p{
-        padding:0px;
-        margin: 0;
-      }
-      .line{
-        padding-top: 5px;
-        min-width: 80px;
-      }
-      .error{
-        background-color:#ffecec;
-      }
-      .info{
-        background-color: #E0FFFF;
-      }
-      .warn{
-        background-color: #FFF8C6;
-      }
-      .debug{
-        background-color: #EFEEEC;
-      }
-      .log{
-        background-color: #C3FDB8;
-      }
-      .timestamp{
-        min-width: 80px;
-      }
-    }
+  background-color:#ffffff;
+  p{
+    padding:0px;
+    margin: 0;
+  }
+  .line{
+    padding-top: 5px;
+    min-width: 80px;
+  }
+  .error{
+    background-color:#ffecec;
+  }
+  .info{
+    background-color: #E0FFFF;
+  }
+  .warn{
+    background-color: #FFF8C6;
+  }
+  .debug{
+    background-color: #EFEEEC;
+  }
+  .log{
+    background-color: #C3FDB8;
+  }
+  .timestamp{
+    min-width: 80px;
   }
 }
 
