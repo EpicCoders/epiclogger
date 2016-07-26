@@ -6,10 +6,11 @@ RSpec.describe ErrorStore::Interfaces::Breadcrumbs do
   let(:get_request) { get_error_request(web_response_factory('js_exception'), website) }
   let(:error) { ErrorStore::Error.new(request: get_request) }
   let(:breadcrumbs) { ErrorStore::Interfaces::Breadcrumbs.new(error) }
+  let(:time_now) { 'Fri, 24 Jun 2016 08:49:35 +0000'.to_time }
   let(:breadcrumbs_data) {
     {"values":[
         {
-          "timestamp": 1466758175.063,
+          "timestamp": time_now.to_f,
           "category": "ui.click",
           "message": " > html.gr__192_168_2_2",
           "event_id": "f22f7d9ec1b348a1aa2688c09533814c"
@@ -25,7 +26,7 @@ RSpec.describe ErrorStore::Interfaces::Breadcrumbs do
   end
 
   describe 'sanitize_data' do
-    subject { breadcrumbs.sanitize_data(breadcrumbs_data) }
+    subject { Timecop.freeze(time_now.to_time) do breadcrumbs.sanitize_data(breadcrumbs_data) end }
 
     it 'sets _data to be a hash with values and array of data' do
       expect( subject._data ).to be_kind_of(Hash)
@@ -48,44 +49,62 @@ RSpec.describe ErrorStore::Interfaces::Breadcrumbs do
 
     it 'returns type' do
       crumb[:type] = 'test'
-      expect(breadcrumbs.normalize_crumb(crumb)[:type]).to eq("test")
+      Timecop.freeze(time_now.to_time) do
+        expect(breadcrumbs.normalize_crumb(crumb)[:type]).to eq("test")
+      end
     end
 
     it "returns 'default' type if type is not present " do
-      expect(subject[:type]).to eq("default")
+      Timecop.freeze(time_now.to_time) do
+        expect(subject[:type]).to eq("default")
+      end
     end
 
     it 'has level' do
       crumb1 = crumb[:level] = 'error'
-      expect(breadcrumbs.normalize_crumb(crumb)[:level]).to eq('error')
+      Timecop.freeze(time_now.to_time) do
+        expect(breadcrumbs.normalize_crumb(crumb)[:level]).to eq('error')
+      end
     end
 
     it 'processes timestamp' do
-      expect(crumb[:timestamp].is_a? Float).to eq(true)
-      expect( subject[:timestamp].is_a? Integer ).to eq(true)
+      Timecop.freeze(time_now.to_time) do
+        expect(crumb[:timestamp].is_a? Float).to eq(true)
+        expect( subject[:timestamp].is_a? Integer ).to eq(true)
+      end
     end
 
     it 'trims message' do
       crumb[:message] = web_response_factory('ruby_exception')
-      expect(breadcrumbs.normalize_crumb(crumb)[:message].length).to eq(4096)
+      Timecop.freeze(time_now.to_time) do
+        expect(breadcrumbs.normalize_crumb(crumb)[:message].length).to eq(4096)
+      end
     end
 
     it 'trims category' do
       crumb[:category] = web_response_factory('ruby_exception')
-      expect(breadcrumbs.normalize_crumb(crumb)[:category].length).to eq(256)
+      Timecop.freeze(time_now.to_time) do
+        expect(breadcrumbs.normalize_crumb(crumb)[:category].length).to eq(256)
+      end
     end
 
     it 'has event_id' do
-      expect(breadcrumbs.normalize_crumb(crumb)[:event_id]).to eq(crumb[:event_id])
+      Timecop.freeze(time_now.to_time) do
+        expect(breadcrumbs.normalize_crumb(crumb)[:event_id]).to eq(crumb[:event_id])
+      end
     end
 
     it 'trims data if present' do
       crumb[:data] = web_response_factory('ruby_exception')
-      expect(breadcrumbs.normalize_crumb(crumb)[:data].length).to eq(4096)
+      Timecop.freeze(time_now.to_time) do
+        expect(breadcrumbs.normalize_crumb(crumb)[:data].length).to eq(4096)
+      end
     end
 
     it 'returns a hash' do
-      expect( subject ).to be_kind_of(Hash)
+      Timecop.freeze(time_now.to_time) do
+        expect( subject ).to be_kind_of(Hash)
+      end
     end
   end
 end

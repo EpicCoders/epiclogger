@@ -30,7 +30,7 @@ RSpec.describe SettingsController, type: :controller do
 
     it 'should assign options' do
       get_with user, :index
-      expect(assigns(:options)).to eq(["Javascript", "Angular", "Backbone", "Ember", "React" "Python", "Django", "Flask", "Tornado", "Php", "Ruby", "Rails 3", "Rails 4", "Sinatra", "Sidekiq", "Node js", "Express", "Connect", "Java", "Google app engine", "Log4j", "Log4j 2", "Logback", "Ios", "Other"])
+      expect(assigns(:options)).to eq(["Javascript", "Angular", "Backbone", "Ember", "React", "Python", "Django", "Flask", "Tornado", "Php", "Ruby", "Rails 3", "Rails 4", "Sinatra", "Sidekiq", "Node js", "Express", "Connect", "Java", "Google app engine", "Log4j", "Log4j 2", "Logback", "Ios", "Other"])
     end
   end
 end
