@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   ActiveAdmin.routes(self)
   root 'home#index'
 
-  get "home/privacy"
+  get "privacy" => 'home#privacy'
   get 'login' => 'sessions#new', :as => :login
   post 'login' => 'sessions#create'
   get 'signup' => 'users#new', :as => :signup
