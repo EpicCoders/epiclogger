@@ -19,19 +19,20 @@
                     %input.icon{:name => "commit", :type => "submit"}
 
 .row
-  #grouped-issuescontainer.col-lg-12.pagecontainer
-    = render partial: 'error', collection: @errors
+  - unless @missing_errors
+    #grouped-issuescontainer.col-lg-12.pagecontainer
+      = render partial: 'error', collection: @errors
 
-    #pagination
-      .row
-        .col-xs-4.side
-        .col-xs-5.buttons
-          .pagination-buttons
-            = paginate @errors, theme: 'next_prev_theme'
-          %span.pagination-text= page_entries_info @errors, entry_name: 'error'
-      %br/
-    - if @missing_errors
-      #missing-errors.bs-example.col-lg-12
-        .alert.alert-info{:role => "alert", :align => "center"}
-          %strong There are no errors.
-          They will appear here as soon as something happens to your website.
+      #pagination
+        .row
+          .col-xs-4.side
+          .col-xs-5.buttons
+            .pagination-buttons
+              = paginate @errors, theme: 'next_prev_theme'
+            %span.pagination-text= page_entries_info @errors, entry_name: 'error'
+  - else @missing_errors
+    %br/
+    #missing-errors.bs-example.col-lg-12
+      .alert.alert-info{:role => "alert", :align => "center"}
+        %strong There are no errors.
+        They will appear here as soon as something happens to your website.

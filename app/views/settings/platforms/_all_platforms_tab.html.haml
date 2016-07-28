@@ -4,12 +4,12 @@
     %h5 To start sending events, configure your client with the following DSN value:
     %pre
       %code.markdown
-        %h5.platform-code https://#{@website.app_key}:#{@website.app_secret}@#{app_domain}/#{@website.id}
+        %h5.platform-code http://#{@website.app_key}:#{@website.app_secret}@#{app_domain}/#{@website.id}
     %br
       %h5 If this is a client that only needs public access (like raven-js), you can use the following public DSN:
       %pre
         %code.markdown
-          %h5.platform-code https://#{@website.app_key}@#{app_domain}/#{@website.id}
+          %h5.platform-code http://#{@website.app_key}@#{app_domain}/#{@website.id}
 .panel.panel-default.tileview
   .panel-heading Languages
   .panel-body#platform{:style => 'cursor: pointer'}

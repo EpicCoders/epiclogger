@@ -10,7 +10,7 @@
         :escaped
 
           Raven.configure do |config|
-            config.dsn = 'https://#{@website.app_key}:#{@website.app_secret}@#{app_domain}/#{@website.id}'
+            config.dsn = 'http://#{@website.app_key}:#{@website.app_secret}@#{app_domain}/#{@website.id}'
           end
   %h5 Now wrap your application to capture events:
   %pre

@@ -25,7 +25,7 @@
   %h5 The most important part is the creation of the raven client. Create it once and reference it from anywhere you want to interface with Epiclogger:
   %pre
     %code.language-html
-      $client = new Raven_Client('https://#{@website.app_key}:#{@website.app_secret}@#{app_domain}/#{@website.id}');
+      $client = new Raven_Client('http://#{@website.app_key}:#{@website.app_secret}@#{app_domain}/#{@website.id}');
   %h5 Now call out to the raven client to capture events:
   %pre
     %code.language-html

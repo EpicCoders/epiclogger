@@ -10,6 +10,8 @@
 
     = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
     = javascript_include_tag 'https://cdn.ravenjs.com/2.0.5/raven.min.js'
+    :javascript
+      Raven.config("#{ENV['JS_DSN']}").install();
     = javascript_include_tag 'application', 'data-turbolinks-eval' => false
 
     = csrf_meta_tags
