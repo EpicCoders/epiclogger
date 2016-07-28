@@ -56,7 +56,7 @@ module ErrorStore::Interfaces
         env:       trim_hash(data[:env] || {}),
         headers:   trim_pairs(headers),
         data:      body,
-        url:       "#{url_uri.scheme}://#{url_uri.host}/#{url_uri.path}",
+        url:       url_uri.omit(:query).to_s,
         fragment:  trim(fragment, max_size: 1024)
       )
       self
