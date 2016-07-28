@@ -1,6 +1,6 @@
-if ENV['RUBY_DSN'].present? && !Rails.env.test?
+if ENV['EPICLOGGER_FULL_DSN'].present? && !Rails.env.test?
   Raven.configure do |config|
-    config.dsn = ENV['RUBY_DSN']
+    config.dsn = ENV['EPICLOGGER_FULL_DSN']
     config.current_environment = Rails.env
     config.tags = { environment: Rails.env }
   end
