@@ -5,6 +5,7 @@ class ErrorsController < ApplicationController
     @filter = params[:filter] || "recent"
     errors_per_page = params[:error_count].to_i || 10
     @page = params[:page] || 1
+    @missing_errors = current_website.grouped_issues.blank?
     case @filter
     when "recent"
       @errors = current_website.grouped_issues.order('last_seen DESC').page(@page).per(errors_per_page)

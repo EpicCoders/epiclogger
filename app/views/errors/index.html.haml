@@ -1,21 +1,22 @@
 .row.col-lg-12
-  #custom-bootstrap.navbar.navbar-default.col-lg-12
-    %ul.nav.navbar-nav.navbar-left.pull-right.error-sections
-      %li{class: @filter == 'recent' ? 'active' : ''}
-        = link_to "Recent", errors_path('filter' => 'recent')
-      %li{class: @filter == 'resolved' ? 'active' : ''}
-        = link_to "Resolved", errors_path('filter' => 'resolved')
-      %li{class: @filter == 'unresolved' ? 'active' : ''}
-        = link_to "Unresolved", errors_path('filter' => 'unresolved')
-      %li{class: @filter == 'most_encountered' ? 'active' : ''}
-        = link_to "Most encountered", errors_path('filter' => 'most_encountered')
-      %li
-        .box
-          .search-box
-            %form{"accept-charset" => "UTF-8", :action => "/errors", :method => "get"}
-              %input{:name => "utf8", :type => "hidden", :value => "✓"}
-                %input#search{:name => "search", :placeholder => "Search...", :type => "text"}
-                  %input.icon{:name => "commit", :type => "submit"}
+  - unless @missing_errors
+    #custom-bootstrap.navbar.navbar-default.col-lg-12
+      %ul.nav.navbar-nav.navbar-left.pull-right.error-sections
+        %li{class: @filter == 'recent' ? 'active' : ''}
+          = link_to "Recent", errors_path('filter' => 'recent')
+        %li{class: @filter == 'resolved' ? 'active' : ''}
+          = link_to "Resolved", errors_path('filter' => 'resolved')
+        %li{class: @filter == 'unresolved' ? 'active' : ''}
+          = link_to "Unresolved", errors_path('filter' => 'unresolved')
+        %li{class: @filter == 'most_encountered' ? 'active' : ''}
+          = link_to "Most encountered", errors_path('filter' => 'most_encountered')
+        %li
+          .box
+            .search-box
+              %form{"accept-charset" => "UTF-8", :action => "/errors", :method => "get"}
+                %input{:name => "utf8", :type => "hidden", :value => "✓"}
+                  %input#search{:name => "search", :placeholder => "Search...", :type => "text"}
+                    %input.icon{:name => "commit", :type => "submit"}
 
 .row
   #grouped-issuescontainer.col-lg-12.pagecontainer
@@ -29,7 +30,7 @@
             = paginate @errors, theme: 'next_prev_theme'
           %span.pagination-text= page_entries_info @errors, entry_name: 'error'
       %br/
-    - if @errors.blank?
+    - if @missing_errors
       #missing-errors.bs-example.col-lg-12
         .alert.alert-info{:role => "alert", :align => "center"}
           %strong There are no errors.
