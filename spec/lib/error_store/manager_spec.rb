@@ -274,7 +274,7 @@ RSpec.describe ErrorStore::Manager do
 
     it 'takes culprit from http' do
       validated_post_data[:interfaces].delete(:exception)
-      expect(subject).to eq('http://localhost//')
+      expect(subject).to eq('http://localhost:3001/')
     end
 
     it 'calls get_culprit_string on the stacktrace' do

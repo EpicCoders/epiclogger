@@ -27,7 +27,7 @@ describe Issue do
       {:accept_language=>"en-US,en;q=0.8"},
       {:version=>"HTTP/1.1"}],
     :data=>nil,
-    :url=>"http://localhost///",
+    :url=>"http://localhost//",
     :fragment=>nil}}
 
   it { is_expected.to be_kind_of(ErrorStore::Utils) }
