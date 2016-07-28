@@ -9,6 +9,7 @@
     %meta{:content => "Engage developers with users to solve errors", :name => "description"}/
 
     = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
+    = javascript_include_tag 'https://cdn.ravenjs.com/2.0.5/raven.min.js'
     = javascript_include_tag 'application', 'data-turbolinks-eval' => false
 
     = csrf_meta_tags
