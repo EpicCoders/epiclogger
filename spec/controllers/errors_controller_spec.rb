@@ -114,7 +114,7 @@ RSpec.describe ErrorsController, type: :controller do
         before(:each) do session[:epiclogger_website_id] = website.id end
         let!(:errors) do
           array = []
-          number_of_errors = 5
+          number_of_errors = 25
           number_of_errors.times do |index|
             unresolved_error = FactoryGirl.create(:grouped_issue, { website: website, checksum: SecureRandom.hex(), status: 'unresolved', resolved_at: nil, last_seen: Time.now } )
             resolved_error = FactoryGirl.create(:grouped_issue, { website: website, checksum: SecureRandom.hex(), status: 'resolved', resolved_at: Time.now, last_seen: Time.now } )
