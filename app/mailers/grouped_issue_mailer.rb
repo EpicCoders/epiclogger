@@ -12,7 +12,7 @@ class GroupedIssueMailer < ApplicationMailer
   def error_occurred(issue, member)
     @issue = issue
     @member = member
-    mail to: @member.user.email, subject: "[#{@issue.website.title}] #{truncate(@issue.message, length: 40)}"
+    mail to: @member.user.email, subject: "[#{@issue.website.title}] #{truncate(@issue.message, length: 60)}"
   end
 
   def more_than_10_errors(member)

@@ -1,6 +1,6 @@
 .col-lg-6
   %p An error has just occurred. View full details at:
-  %p #{link_to error_url(@issue.group.id), error_url(@issue.group.id), target: '_blank'}
+  %p #{link_to error_url(@issue.group.slug), error_url(@issue.group.slug), target: '_blank'}
   - if @issue.get_interfaces(:exception).present?
     %p.gray_text Error type
     %pre
