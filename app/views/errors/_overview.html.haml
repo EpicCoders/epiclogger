@@ -43,7 +43,7 @@
                     %pre
                       %code{ class: @error.platform }
                         = frame._data[:pre_context] ? simple_format(frame._data[:pre_context].join('')).html_safe : ''
-                        = frame._data[:context_line] ? simple_format(frame._data[:context_line], class: 'error-line').html_safe : ''
+                        = frame._data[:context_line] ? simple_format(frame._data[:context_line], class: 'error').html_safe : ''
                         = frame._data[:post_context] ? simple_format(frame._data[:post_context].join('')).html_safe : ''
 
           %p.read-more.text-center{style: "display:block"}
