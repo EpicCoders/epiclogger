@@ -5,6 +5,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :null_session
   before_filter :set_gon
   before_action :authenticate!
+  before_action :set_raven_context
 
   rescue_from CanCan::AccessDenied do |exception|
     redirect_to settings_url, :alert => exception.message
@@ -12,6 +13,10 @@ class ApplicationController < ActionController::Base
 
   rescue_from CanCan::AuthorizationNotPerformed do |exception|
     redirect_to login_url, :alert => exception.message
+  end
+
+  def set_raven_context
+    Raven.user_context({ id: current_user.id, email: current_user.email }) if current_user
   end
 
   protected
