@@ -84,8 +84,7 @@
                 - break
             - if subscribers.size > 0
               %h5.pull-right
-                This message will be sent to
-                = subscribers.size.to_s + (subscribers.size > 1 ? ' users' : ' user')
+                = t('subscribers.count', count: subscribers.size)
             .notify
               = text_area_tag 'message', '', placeholder: 'Write a message ...'
               - if current_website.intercom_integration?

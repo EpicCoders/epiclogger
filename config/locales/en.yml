@@ -27,6 +27,10 @@ en:
   create: 'Add website'
   choose_platform: 'Choose platform'
   configuration: 'Configuration'
+  subscribers:
+    count:
+      one: 'This message will be sent to %{count} user'
+      other: 'This message will be sent to %{count} users'
   helpers:
     page_entries_info:
       one_page:
