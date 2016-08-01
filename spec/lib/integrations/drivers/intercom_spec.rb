@@ -33,13 +33,13 @@ RSpec.describe Integrations::Drivers::Intercom do
     end
 
     context 'send_mesage' do
-      let(:message_users) { [ { "email"=>"ungureanu.bogdan.sorin@gmail.com", :avatar=>nil } ] }
+      let(:message_users) { ["ungureanu.bogdan.sorin@gmail.com"] }
       it 'sends message to intercom users' do
         stub_request(:post, "https://api.intercom.io/messages").
          with(:body => "{\"message_type\":\"inapp\",\"body\":\"test\",\"template\":\"plain\",\"from\":{\"type\":\"admin\",\"id\":\"12345\"},\"to\":{\"type\":\"user\",\"email\":\"ungureanu.bogdan.sorin@gmail.com\"}}",
               :headers => {'Authorization'=>'Basic Og=='}).
          to_return(:status => 200, :body => web_response_factory('intercom/intercom_post_message'), :headers => {})
-        expect(integration_driver.send_message(message_users, 'test').any? { |response|  response['owner']['email'] == message_users.first['email'] } ).to be true
+        expect(integration_driver.send_message(message_users, 'test').any? { |response| response['owner']['email'] == message_users.first } ).to be true
       end
     end
   end

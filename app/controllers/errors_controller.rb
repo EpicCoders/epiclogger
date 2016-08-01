@@ -42,9 +42,10 @@ class ErrorsController < ApplicationController
 
   def notify_subscribers
     unless params[:message].blank?
+      return redirect_to error_path(@error), flash: { error: 'Message too short!' } if params[:message].length < 10
       if params[:intercom]
         begin
-          current_website.intercom_integration.driver.send_message(params[:users], params[:message])
+          current_website.intercom_integration.driver.send_message(@error.subscribers.pluck(:email), params[:message])
           redirect_to error_path(@error), flash: { success: 'Message successfully sent!' }
         rescue => e
           Raven.capture_exception(e)
