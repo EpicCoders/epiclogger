@@ -1,8 +1,7 @@
 # Change Log
 
-## [Unreleased](https://github.com/epiccoders/epiclogger/tree/HEAD)
-
-[Full Changelog](https://github.com/epiccoders/epiclogger/compare/1.0...HEAD)
+## [1.1](https://github.com/epiccoders/epiclogger/tree/1.1) (2016-08-01)
+[Full Changelog](https://github.com/epiccoders/epiclogger/compare/1.0...1.1)
 
 **Implemented enhancements:**
 
