@@ -146,6 +146,18 @@
           overflow:hidden;
         }
 
+        .intercom-check {
+          label {
+            padding: 5px 0px;
+            cursor: pointer;
+            font-size: 14px;
+          }
+
+          input {
+            margin-right: 10px;
+          }
+        }
+
         .notify{
           margin-top:15px;
 

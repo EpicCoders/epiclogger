@@ -48,22 +48,19 @@ RSpec.describe ErrorsController, type: :controller do
         let(:driver) { Integrations.get_driver(integration.provider.to_sym) }
         let(:integration_driver) { driver.new(Integrations::Integration.new(integration, driver)) }
         before(:each) do session[:epiclogger_website_id] = website.id end
-        let(:intercom_params) { params.merge( intercom: true, users: [ { 'email' => 'zoro' } ] ) }
+        let(:intercom_params) { params.merge( intercom: true ) }
 
         context 'success' do
-          before(:each) do
-            stub_request(:post, integration_driver.api_url + 'messages')
-            .with(:body => "{\"message_type\":\"inapp\",\"body\":\"message that is going to create record\",\"template\":\"plain\",\"from\":{\"type\":\"admin\",\"id\":\"12345\"},\"to\":{\"type\":\"user\",\"email\":\"zoro\"}}",
-                  :headers => {'Authorization'=>'Basic Og=='})
-            .to_return(:status => 200, :body => web_response_factory('intercom/intercom_post_message'), :headers => {})
-          end
-
           it 'calls the send_message method in the driver' do
             expect_any_instance_of(Integrations::Drivers::Intercom).to receive(:send_message)
             post_with user, :notify_subscribers, intercom_params
           end
 
           it 'redirects to the error with success message' do
+            stub_request(:post, integration_driver.api_url + 'messages')
+            .with(:body => "{\"message_type\":\"inapp\",\"body\":\"message that is going to create record\",\"template\":\"plain\",\"from\":{\"type\":\"admin\",\"id\":\"12345\"},\"to\":{\"type\":\"user\",\"email\":\"" + group.subscribers.first.email + "\"}}",
+                  :headers => {'Authorization'=>'Basic Og=='})
+            .to_return(:status => 200, :body => web_response_factory('intercom/intercom_post_message'), :headers => {})
             post_with user, :notify_subscribers, intercom_params
             expect(response).to redirect_to(error_path(group.slug))
             expect(flash[:success]).to eq('Message successfully sent!')
@@ -71,9 +68,21 @@ RSpec.describe ErrorsController, type: :controller do
         end
 
         context 'failure' do
-          it 'redirects to error path with error message' do
+
+          it 'redirects to error path with error message if the message does not meet the criteria' do
             stub_request(:post, integration_driver.api_url + 'messages').
-            with(:body => "{\"message_type\":\"inapp\",\"body\":\"message that is going to create record\",\"template\":\"plain\",\"from\":{\"type\":\"admin\",\"id\":\"12345\"},\"to\":{\"type\":\"user\",\"email\":\"zoro\"}}",
+            with(:body => "{\"message_type\":\"inapp\",\"body\":\"smallmsg\",\"template\":\"plain\",\"from\":{\"type\":\"admin\",\"id\":\"12345\"},\"to\":{\"type\":\"user\",\"email\":\"" + group.subscribers.first.email + "\"}}",
+                 :headers => {'Authorization'=>'Basic Og=='}).
+            to_return(:status => 500, :body => "eroare", :headers => {})
+            intercom_params[:message] = 'smallmsg'
+            post_with user, :notify_subscribers, intercom_params
+            expect(response).to redirect_to(error_path(group.slug))
+            expect(flash[:error]).to eq('Message too short!')
+          end
+
+          it 'redirects to error path with error message if sending the message fails' do
+            stub_request(:post, integration_driver.api_url + 'messages').
+            with(:body => "{\"message_type\":\"inapp\",\"body\":\"message that is going to create record\",\"template\":\"plain\",\"from\":{\"type\":\"admin\",\"id\":\"12345\"},\"to\":{\"type\":\"user\",\"email\":\"" + group.subscribers.first.email + "\"}}",
                  :headers => {'Authorization'=>'Basic Og=='}).
             to_return(:status => 500, :body => "eroare", :headers => {})
             post_with user, :notify_subscribers, intercom_params

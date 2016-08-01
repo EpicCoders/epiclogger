@@ -8,11 +8,11 @@
       .panel-body
         %dl
           %dt Occured at
-          %dd= @issue.created_at
+          %dd= @issue.try(:created_at)
           %dt First seen at
           %dd= @error.first_seen
           %dt Message
-          %dd= @issue.message
+          %dd= @issue.try(:message)
           %dt Url
           %dd #{@issue.http_data(:url) || '<no information>'}
           %dt File
@@ -68,42 +68,29 @@
           %p.read-more.text-center{style: "display:#{valid_stacktrace ? 'block' : 'none'}"}
             %a.btn.btn-default{:href => "#"} View full backtrace
 
+  - subscribers = @error.subscribers
   .col-sm-10.col-md-12
-    .panel.panel-default.broadcast{ :style => "display:#{ @error.website.users.empty? ? 'none' : 'block' }" }
+    .panel.panel-default.broadcast{ :style => "display:#{ subscribers.empty? ? 'none' : 'block' }" }
       .panel-heading
         Broadcast
       .panel-body
-        -if current_website.intercom_integration?
-          #custom-bootstrap.navbar.navbar-default{:role => "navigation"}
-            %ul.nav.navbar-nav.navbar-left#details-tabs.main-tabs
-              %li.active
-                %a{ "data-toggle" => "tab", :href => "#email" } E-mail
-              %li
-                %a{ "data-toggle" => "tab", :href => "#intercom" } Intercom
-          .tab-content
-            #email.tab-pane.fade.in.active
-              = render partial: 'errors/notify_form'
-            #intercom.tab-pane.fade
-              - intercom_users = current_website.intercom_integration.driver.list_subscribers
-              .subscribers
-                - intercom_users.each do |subscriber|
-                  -  if subscriber[:avatar]
-                    = image_tag subscriber[:avatar]
-                  - else
-                    - gravatar = Digest::MD5.hexdigest(subscriber[:email]).downcase
-                    = image_tag "http://gravatar.com/avatar/#{gravatar}.png?s=30"
-                  - if intercom_users.size > 10
-                    = " and #{intercom_users.size - 10} more"
-                    - break
-                - if intercom_users.size > 0
-                  %h5.pull-right
-                    This message will be sent to
-                    = intercom_users.size.to_s + (intercom_users.size > 1 ? ' users' : ' user')
-                  .notify
-                    = form_for @error, url: notify_subscribers_error_path(current_website.intercom_integration, users: intercom_users, intercom: true), remote: true, html: { method: :post , class: ' broadcast-textarea'}, :data => {:confirm => 'Are you sure?'} do |f|
-                      = text_area_tag 'message', '', placeholder: 'Write a message ...'
-                      %button.btn.btn-primary{:type => 'submit'} Send
-                - else
-                  %p Sorry, we couldn't find any intercom users.
-        -else
-          = render partial: 'errors/notify_form'
+        .subscribers
+          = form_for @error, url: notify_subscribers_error_path(), remote: true, html: { method: :post , class: ' broadcast-textarea'}, :data => {:confirm => 'Are you sure?'} do |f|
+            = render partial: 'shared/flash_messages'
+            - subscribers.each do |subscriber|
+              = image_tag subscriber.avatar_url(30)
+              - if subscribers.size > 10
+                = " and #{subscribers.size - 10} more"
+                - break
+            - if subscribers.size > 0
+              %h5.pull-right
+                This message will be sent to
+                = subscribers.size.to_s + (subscribers.size > 1 ? ' users' : ' user')
+            .notify
+              = text_area_tag 'message', '', placeholder: 'Write a message ...'
+              - if current_website.intercom_integration?
+                .intercom-check.pull-left
+                  %label.intercom-message
+                    = check_box_tag 'intercom'
+                    Send with Intercom
+              %button.btn.btn-primary{:type => 'submit'} Send

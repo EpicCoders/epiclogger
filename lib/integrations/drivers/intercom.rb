@@ -27,18 +27,18 @@ module Integrations::Drivers
       responses = []
       users.each do |user|
         data = {
-                    "message_type" => "inapp",
-                    "body" => message,
-                    "template" => "plain",
-                    "from" => {
-                      "type" => "admin",
-                      "id" => self.configuration["uid"]
-                    },
-                    "to" => {
-                      "type" => "user",
-                      "email" => user['email']
-                    }
+                  "message_type" => "inapp",
+                  "body" => message,
+                  "template" => "plain",
+                  "from" => {
+                    "type" => "admin",
+                    "id" => self.configuration["uid"]
+                  },
+                  "to" => {
+                    "type" => "user",
+                    "email" => user
                   }
+                }
         resource = self.post_request(url, data)
         responses.push(JSON.parse(resource.body))
       end
