@@ -12,6 +12,18 @@ $(function () {
   $('#resolve-button').click(removeFromSidebar);
   $('#unresolve-button').click(removeFromSidebar);
 
+  $( ".sidebar-filters button" ).click(function() {
+    uri = window.location.href
+    var re = new RegExp("([?&])search=[^&#]*", "i");
+    if (re.test(uri)) {
+      uri = uri.replace(re, "$1search=" + $('#search-input').val());
+    } else {
+      var separator = /\?/.test(uri) ? "&" : "?";
+      uri = uri + separator + "search=" + $('#search-input').val();
+    }
+    window.location.href = uri;
+  });
+
   $('#resolve-form').submit(function(){
     var checked;
     checked = $('.list-group input:checked');

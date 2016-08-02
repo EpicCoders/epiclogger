@@ -1,6 +1,6 @@
 .col-lg-12
   #custom-bootstrap.navbar.navbar-default{:role => "navigation"}
-    %ul.nav.navbar-nav.navbar-left#details-tabs.main-tabs
+    %ul.nav.navbar-nav.navbar-left
       %li{class: @details_tab == 'settings' ? 'active' : ''}
         = link_to "Settings", settings_path('main_tab' => 'details', 'details_tab' => 'settings')
       %li{class: @details_tab == 'notifications' ? 'active' : ''}

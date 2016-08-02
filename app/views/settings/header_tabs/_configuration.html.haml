@@ -1,6 +1,6 @@
-.col-lg-12#client-configuration.main-tabs
+.col-lg-12
   #custom-bootstrap.navbar.navbar-default{:role => "navigation"}
-    %ul.nav.navbar-nav.navbar-left#platforms-tabs.main-tabs
+    %ul.nav.navbar-nav.navbar-left
       %li{class: @configuration_tab == 'all_platforms' ? 'active' : ''}
         = link_to "All Platforms", settings_path('main_tab' => 'configuration', 'configuration_tab' => 'all_platforms')
       %li{class: @configuration_tab == 'javascript' ? 'active' : ''}

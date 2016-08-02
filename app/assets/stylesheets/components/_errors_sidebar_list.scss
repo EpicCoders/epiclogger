@@ -5,10 +5,6 @@ $list-error-height: 100%;
   bottom: 0;
 }
 .errors-sidebar-list{
-  position: fixed;
-  z-index: 999;
-  width: 24.5%;
-  border-right: 1px solid #ddd;
   .header {
     @include error-header();
     padding-top: 25px;
@@ -36,13 +32,6 @@ $list-error-height: 100%;
       }
     }
   }
-
-  .tab-content{
-    max-height: 920px;
-    overflow-y: auto;
-    padding-bottom: 60px;
-  }
-
   .sidebar-tabs{
     margin-bottom:2px;
     height:50px;
@@ -52,8 +41,9 @@ $list-error-height: 100%;
       padding:0px;
       width:100%;
       li{
+        text-align: center;
         float:left;
-        width:49.9%;
+        width:33.3%;
         height:100%;
         margin:0px;
         padding:0px;
@@ -93,13 +83,6 @@ $list-error-height: 100%;
   }
 }
 
-@media (max-width: 767px){
-  .errors-sidebar-list{
-    position: static;
-    width: 100%;
-  }
-}
-
 .errors-sidebar-elements{
   .list-group-item{
     border-radius: 0;
@@ -133,4 +116,11 @@ $list-error-height: 100%;
     text-overflow: ellipsis;
   }
   // input[type="checkbox"]{ display: none; }
+}
+
+.sidebar-filters {
+  padding: 3%;
+  .filter-element{
+    margin: 4% 4%;
+  }
 }

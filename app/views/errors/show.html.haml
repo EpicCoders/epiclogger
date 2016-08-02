@@ -30,7 +30,7 @@
       .row
         .col-lg-12
           #custom-bootstrap.navbar.navbar-default{:role => "navigation"}
-            %ul.nav.navbar-nav.navbar-left.main-tabs
+            %ul.nav.navbar-nav.navbar-left
               %li{ class: "#{params[:current_tab] == 'overview' || params[:current_tab].nil? ? 'active' : ''}" }
                 = link_to "Overview", request.parameters.merge({current_tab: 'overview'})
               %li{ class: "#{params[:current_tab] == 'aggregations' ? 'active' : ''}" }

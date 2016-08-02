@@ -1,0 +1,34 @@
+.sidebar-filters
+  .filter-element
+    .input-group
+      %input.form-control#search-input{:placeholder => "Search for..."}
+        %span.input-group-btn
+          %button.btn.btn-default{:type => 'button'} Go!
+  - unless params[:search].blank?
+    .filter-element
+      .col-sm-9
+        = render 'shared/flash_messages'
+      .error_pagination.text-right
+        .btn-group.sidebar_pagination_buttons{style: 'margin-top: -4%'}
+          = paginate @selected_errors, theme: 'next_prev_theme'
+    / .filter-element
+    %br
+    = render partial: 'sidebar_elements', collection: @selected_errors, as: :error
+
+  / .filter-element
+  /   .form-group
+  /     %label Environment:
+  /     %select.form-control
+  /       %option All
+  /       %option{:value => 'staging'} Staging
+  /       %option{:value => 'production'} Production
+  / .filter-element
+  /   .form-group
+  /     %label.radio-inline
+  /       %input{:name => "status", :type => "radio"}>/
+  /       Unresolved
+  /     %label.radio-inline
+  /       %input{:name => "status", :type => "radio"}>/
+  /       Resolved
+
+

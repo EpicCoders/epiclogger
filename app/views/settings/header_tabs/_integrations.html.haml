@@ -1,4 +1,4 @@
-.col-lg-12.main-tabs
+.col-lg-12
   - Integrations.drivers_types.each do |provider|
     .col-lg-4
       - @integration = @website.integrations.find_by_provider(provider.to_s)

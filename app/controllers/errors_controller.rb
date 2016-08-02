@@ -13,19 +13,26 @@ class ErrorsController < ApplicationController
     when "most_encountered"
       @errors = current_website.grouped_issues.joins(:issues).group("grouped_issues.id").order("count(grouped_issues.id) DESC").page(@page).per(errors_per_page)
     end
-    @errors = current_website.grouped_issues.where('lower(message) ILIKE ? OR lower(culprit) ILIKE ?', "%#{params[:search].downcase}%", "%#{params[:search].downcase}%").page(@page).per(errors_per_page) if params[:search]
+    @errors = matching_elements.page(@page).per(errors_per_page) if params[:search]
     @pages = @errors.total_pages
   end
 
   def show
     page_issue = params[:page_issue] || 1
     page = params[:page] || 1
-    errors_per_page = 25
+    errors_per_page = 5
     errors = current_website.grouped_issues.order('last_seen DESC')
     if !params[:tab].present? && params[:page].nil?
       errors = @error.resolved? ? errors.with_status(:resolved) : errors.with_status(:unresolved)
       position = errors.where("last_seen >= ?", @error.last_seen).count
       page = (position.to_f/errors_per_page).ceil
+    elsif params[:tab] == 'filters'
+      errors = matching_elements unless params[:search].blank?
+      if errors.blank?
+        flash[:notice] = "Could not find errors"
+      else
+        flash[:notice] = "All matches below"
+      end
     else
       errors = params[:tab] == 'resolved' ? errors.with_status(:resolved) : errors.with_status(:unresolved)
     end
@@ -42,10 +49,9 @@ class ErrorsController < ApplicationController
 
   def notify_subscribers
     unless params[:message].blank?
-      return redirect_to error_path(@error), flash: { error: 'Message too short!' } if params[:message].length < 10
       if params[:intercom]
         begin
-          current_website.intercom_integration.driver.send_message(@error.subscribers.pluck(:email), params[:message])
+          current_website.intercom_integration.driver.send_message(params[:users], params[:message])
           redirect_to error_path(@error), flash: { success: 'Message successfully sent!' }
         rescue => e
           Raven.capture_exception(e)
@@ -59,6 +65,10 @@ class ErrorsController < ApplicationController
         redirect_to error_path(@error), flash: { success: 'Message successfully sent!' }
       end
     end
+  end
+
+  def matching_elements
+    current_website.grouped_issues.where('lower(message) ILIKE ? OR lower(culprit) ILIKE ? OR lower(platform) ILIKE ? OR lower(level) ILIKE ?', "%#{params[:search].downcase}%", "%#{params[:search].downcase}%", "%#{params[:search].downcase}%", "%#{params[:search].downcase}%")
   end
 
   def resolve

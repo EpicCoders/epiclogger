@@ -6,27 +6,30 @@
           .btn.btn-default.btn-sm{'data-toggle'=>'button','aria-pressed'=>"false"}
             %input.all{:title => "toggle all", :type => "checkbox"}/
         = f.submit "#{params['tab'] == 'resolved' || @selected_errors.try(:first).try(:resolved?).present? ? 'Unresolve' : 'Resolve'}", class: "btn header-resolve #{params['tab'] == 'resolved' || @selected_errors.try(:first).try(:resolved?).present? ? 'btn-danger' : 'btn-primary'}", id: "multiple-resolve", remote:true, method: :put
-        .error_pagination.text-right
-          .btn-group.sidebar_pagination_buttons
-            = paginate @selected_errors, theme: 'next_prev_theme'
+        - if params[:search].blank?
+          .error_pagination.text-right
+            .btn-group.sidebar_pagination_buttons
+              = paginate @selected_errors, theme: 'next_prev_theme'
       .row
         .col-sm-12
           %span.sidebar_pagination_text= page_entries_info @selected_errors, entry_name: 'error'
     #custom-bootstrap.navbar.navbar-default.sidebar-tabs{:role => "navigation"}
-      %ul.nav.navbar-nav.navbar-left.main-tabs
-        %li{:class => "#{params[:tab] == 'unresolved' || @selected_errors.try(:first).try(:unresolved?).present? ? 'active' : ''}"}
+      %ul.nav.navbar-nav.navbar-left
+        %li{:class => "#{(params[:tab] == 'unresolved' || @selected_errors.try(:first).try(:unresolved?).present?) && params[:tab] != 'filters'  ? 'active' : ''}"}
           %a{:href => "#{request.path}?tab=unresolved"}
             Unresolved
         %li{:class => "#{params[:tab] == 'resolved' || @selected_errors.try(:first).try(:resolved?).present? ? 'active' : ''}"}
           %a{:href => "#{request.path}?tab=resolved"}
             Resolved
+        %li{:class => "#{params[:tab] == 'filters' ? 'active' : ''}"}
+          %a{:href => "#{request.path}?tab=filters"}
+            Filters
     .tab-content
-      - if params[:tab] == 'unresolved' || @selected_errors.try(:first).try(:unresolved?).present?
-        #resolved.tab-pane.unresolved-error-container.active
-          = render partial: 'sidebar_elements', collection: @selected_errors, as: :error
-      - elsif params[:tab] == 'resolved' || @selected_errors.try(:first).try(:resolved?).present?
-        #unresolved.tab-pane.resolved-error-container.active
-          = render partial: 'sidebar_elements', collection: @selected_errors, as: :error
+      - if params[:tab] == 'filters'
+        = render partial: 'sidebar_filters'
+      - else
+        = render partial: 'sidebar_elements', collection: @selected_errors, as: :error
+
 
 
 
