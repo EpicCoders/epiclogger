@@ -21,7 +21,7 @@ gem 'sprockets-rails'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 # Use CoffeeScript for .coffee assets and views
-gem 'coffee-rails', '~> 4.1.0'
+gem 'coffee-rails', '~> 4.2.1'
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
 gem 'haml-rails'
@@ -75,7 +75,7 @@ gem 'useragent'
 gem 'addressable'
 
 #better urls
-gem 'friendly_id', '~> 5.0.0'
+gem 'friendly_id', '~> 5.1.0'
 
 #group objects by time frames
 gem 'groupdate'
