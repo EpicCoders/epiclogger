@@ -211,7 +211,6 @@ GEM
     nokogiri (1.6.8)
       mini_portile2 (~> 2.1.0)
       pkg-config (~> 1.1.7)
-    nprogress-rails (0.2.0.1)
     oauth2 (1.2.0)
       faraday (>= 0.8, < 0.10)
       jwt (~> 1.0)
@@ -447,7 +446,6 @@ DEPENDENCIES
   kaminari
   letter_opener
   momentjs-rails
-  nprogress-rails
   omniauth-github
   omniauth-intercom
   passenger
