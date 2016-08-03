@@ -87,7 +87,7 @@ module ErrorStore
     # here we save the grouped issue with all details
     def _save_aggregate(issue, hash, **args)
       # attempt to find a matching hash
-      group = GroupedIssue.find_by(checksum: hash)
+      group = GroupedIssue.find_by(checksum: hash, website_id: args[:website].id)
       existing_group_id = group.try(:id)
 
       group_is_new = if existing_group_id.nil?

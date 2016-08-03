@@ -139,12 +139,22 @@ RSpec.describe ErrorStore::Manager do
       group, _ = subject
       expect(group).to be_a(GroupedIssue)
     end
-    it 'returns the existing group by hash/checksum' do
+    it 'returns the existing group by hash/checksum and website_id' do
       existing_group = create :grouped_issue, website: website, checksum: 'somehashhere'
       group, _ = subject
       expect(GroupedIssue.count).to eq(1)
       expect(group).to be_a(GroupedIssue)
       expect(group).to eq(existing_group)
+    end
+    it 'creates a new group if a group exists with the same hash but different website_id' do
+      existing_group = create :grouped_issue, website: website, checksum: 'somehashhere'
+      new_website = create :website
+      new_website_member = create :website_member, user: user, website: new_website
+      group_params[:website] = new_website
+      expect{ subject }.to change{ GroupedIssue.count }.by(1)
+      group, _ = subject
+      expect(group).to be_a(GroupedIssue)
+      expect(group.website).to eq(new_website)
     end
     it 'returns is_sample false if group new' do
       _, is_sample = subject
