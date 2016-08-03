@@ -16,7 +16,7 @@ $(function () {
   var end = moment();
 
   function cb(start, end) {
-    $('#datetimepicker').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+    $('#datetimepicker').html(start.format('D MMMM, YYYY') + ' - ' + end.format('D MMMM, YYYY'));
   }
 
   $('#datetimepicker').daterangepicker({
@@ -36,7 +36,7 @@ $(function () {
       }
   }, cb);
   $('#datetimepicker').on('apply.daterangepicker', function(ev, picker) {
-    $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
+    $(this).val(picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format('DD/MM/YYYY'));
   });
 
   $('#datetimepicker').on('cancel.daterangepicker', function(ev, picker) {
