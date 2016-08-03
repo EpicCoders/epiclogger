@@ -3,32 +3,56 @@
     .input-group
       %input.form-control#search-input{:placeholder => "Search for..."}
         %span.input-group-btn
-          %button.btn.btn-default{:type => 'button'} Go!
-  - unless params[:search].blank?
-    .filter-element
-      .col-sm-9
-        = render 'shared/flash_messages'
-      .error_pagination.text-right
-        .btn-group.sidebar_pagination_buttons{style: 'margin-top: -4%'}
-          = paginate @selected_errors, theme: 'next_prev_theme'
-    / .filter-element
+          %button.btn.btn-info#search-button{:type => 'button'}
+            %span.glyphicon.glyphicon-search
+            Submit
+  .filter-element
+    .form-group
+      %label Environment:
+      %select.form-control#env-filter
+        %option{:value => 'all'} All
+        / %option{:value => 'api-staging'} api-staging
+        / %option{:value => 'api-production'} api-production
+        / %option{:value => 'lab'} lab
+        %option{:value => 'production'} Production
+        / %option{:value => 'public-api-production'} public-api-production
+        / %option{:value => 'review'} review
+        / %option{:value => 'sandbox'} sandbox
+        %option{:value => 'staging'} Staging
+  .filter-element
+    .form-group
+      %label From:
+      #datetimepicker-from.input-group.date
+        %input.form-control{:type => "text"}/
+        %span.input-group-addon
+          %span.glyphicon.glyphicon-calendar
+  .filter-element
+    .form-group
+      %label Until:
+      #datetimepicker-until.input-group.date
+        %input.form-control{:type => "text"}/
+        %span.input-group-addon
+          %span.glyphicon.glyphicon-calendar
+
+  .filter-element
+    .form-group#status-filter
+      %label.radio-inline
+        %input{:value => 'unresolved',:name => "status", :type => "radio"}>/
+        Unresolved
+      %label.radio-inline
+        %input{:value => 'resolved',:name => "status", :type => "radio"}>/
+        Resolved
+  .filter-element
+    %button.btn.btn-warning.btn-sm.pull-right#find-matchings{:type => 'button'} Search for matching groups
+  - if params[:search].present? || params[:status].present?
     %br
+    %br
+    %hr
+    .filter-element
+      .error_pagination.text-right
+        %span.sidebar_pagination_text.pull-left= page_entries_info @selected_errors, entry_name: 'error'
+        .btn-group.sidebar_pagination_buttons.btn-xs{style: 'margin-top: -8%'}
+          = paginate @selected_errors, theme: 'next_prev_theme'
+      / # = render 'shared/flash_messages'
     = render partial: 'sidebar_elements', collection: @selected_errors, as: :error
-
-  / .filter-element
-  /   .form-group
-  /     %label Environment:
-  /     %select.form-control
-  /       %option All
-  /       %option{:value => 'staging'} Staging
-  /       %option{:value => 'production'} Production
-  / .filter-element
-  /   .form-group
-  /     %label.radio-inline
-  /       %input{:name => "status", :type => "radio"}>/
-  /       Unresolved
-  /     %label.radio-inline
-  /       %input{:name => "status", :type => "radio"}>/
-  /       Resolved
-
 

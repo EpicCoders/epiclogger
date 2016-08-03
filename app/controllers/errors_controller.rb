@@ -28,11 +28,7 @@ class ErrorsController < ApplicationController
       page = (position.to_f/errors_per_page).ceil
     elsif params[:tab] == 'filters'
       errors = matching_elements unless params[:search].blank?
-      if errors.blank?
-        flash[:notice] = "Could not find errors"
-      else
-        flash[:notice] = "All matches below"
-      end
+      errors = errors.with_status(params[:status].to_sym) unless params[:status].blank?
     else
       errors = params[:tab] == 'resolved' ? errors.with_status(:resolved) : errors.with_status(:unresolved)
     end
@@ -49,9 +45,10 @@ class ErrorsController < ApplicationController
 
   def notify_subscribers
     unless params[:message].blank?
+      return redirect_to error_path(@error), flash: { error: 'Message too short!' } if params[:message].length < 10
       if params[:intercom]
         begin
-          current_website.intercom_integration.driver.send_message(params[:users], params[:message])
+          current_website.intercom_integration.driver.send_message(@error.subscribers.pluck(:email), params[:message])
           redirect_to error_path(@error), flash: { success: 'Message successfully sent!' }
         rescue => e
           Raven.capture_exception(e)

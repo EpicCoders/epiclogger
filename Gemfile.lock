@@ -66,6 +66,8 @@ GEM
     bootstrap-sass (3.3.6)
       autoprefixer-rails (>= 5.2.1)
       sass (>= 3.3.4)
+    bootstrap3-datetimepicker-rails (4.14.30)
+      momentjs-rails (>= 2.8.1)
     bourbon (4.2.7)
       sass (~> 3.4)
       thor (~> 0.19)
@@ -419,6 +421,7 @@ DEPENDENCIES
   better_errors
   binding_of_caller
   bootstrap-sass (~> 3.3.6)
+  bootstrap3-datetimepicker-rails (~> 4.14.30)
   brakeman
   cancancan (~> 1.10)
   capybara
@@ -474,3 +477,9 @@ DEPENDENCIES
   warden_omniauth
   webmock
   wicked
+
+RUBY VERSION
+   ruby 2.2.2p95
+
+BUNDLED WITH
+   1.12.5
