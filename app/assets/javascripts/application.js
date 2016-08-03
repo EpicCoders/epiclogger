@@ -16,7 +16,6 @@
 //= require turbolinks
 //= require bootstrap
 //= require moment
-//= require bootstrap-datetimepicker
 
 //= require jquery.validate
 //= require jquery.validate.additional-methods
@@ -26,6 +25,7 @@
 //= require highlightjs
 //= require chartkick
 //= require highcharts
+//= require daterangepicker
 
 //= require prism
 

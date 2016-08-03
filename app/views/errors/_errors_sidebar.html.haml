@@ -1,5 +1,5 @@
 .errors-sidebar-list.no-margin
-  = form_for @error, url: { action: "#{params[:tab] == 'unresolved' || @selected_errors.try(:first).try(:unresolved?).present? ? 'resolve' : 'unresolve'}",  params: { page: params[:page], tab: "#{params[:tab] == 'unresolved' || @selected_errors.try(:first).try(:unresolved?).present? ? 'resolved' : 'unresolved'}" } }, method: :put, html: { :update_target => 'error-container', id: "resolve-form" } do |f|
+  = simple_form_for @error, url: error_url(@error), method: :get, html: { :update_target => 'error-container', id: "resolve-form" } do |f|
     .header
       .row
         .pull-left.error_select
@@ -25,7 +25,8 @@
           %a{:href => "#{request.path}?tab=filters"}
             Filters
     .tab-content
-      - if params[:tab] == 'filters'
+      //TODO find a way to simplify this
+      - unless params[:tab] == 'resolved' || params[:tab] == 'unresolved' || params[:tab] == 'default' || params[:tab].nil?
         = render partial: 'sidebar_filters'
       - else
         = render partial: 'sidebar_elements', collection: @selected_errors, as: :error
