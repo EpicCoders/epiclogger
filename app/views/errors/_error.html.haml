@@ -1,5 +1,5 @@
 #grouped-issues.groups
-  = link_to error_url(error) do
+  = link_to error_url(id: error, tab: 'default') do
     .error-count
       %span= error.times_seen
       - case error.level

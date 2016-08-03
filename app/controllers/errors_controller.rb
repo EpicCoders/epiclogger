@@ -22,15 +22,17 @@ class ErrorsController < ApplicationController
     page = params[:page] || 1
     errors_per_page = 5
     errors = current_website.grouped_issues.order('last_seen DESC')
-    if !params[:tab].present? && params[:page].nil?
+    resolve if params[:commit] == 'Resolve'
+    unresolve if params[:commit] == 'Unresolve'
+    errors = errors.with_status(:resolved) if params[:tab] == 'resolved'
+    errors = errors.with_status(:unresolved) if (params[:tab] == 'unresolved'
+    #below all others
+    errors = matching_elements if params[:commit] == 'search-button'
+    if params[:tab] == 'default' && params[:page].nil?
       errors = @error.resolved? ? errors.with_status(:resolved) : errors.with_status(:unresolved)
       position = errors.where("last_seen >= ?", @error.last_seen).count
       page = (position.to_f/errors_per_page).ceil
-    elsif params[:tab] == 'filters'
-      errors = matching_elements unless params[:search].blank?
       errors = errors.with_status(params[:status].to_sym) unless params[:status].blank?
-    else
-      errors = params[:tab] == 'resolved' ? errors.with_status(:resolved) : errors.with_status(:unresolved)
     end
     @selected_errors = errors.page(page).per(errors_per_page)
     @issues = @error.issues.page(page_issue).per(1)
