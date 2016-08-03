@@ -37,7 +37,6 @@ gem 'turbolinks'
 gem 'gon'
 gem 'jquery-turbolinks'
 gem 'momentjs-rails'
-gem 'bootstrap3-datetimepicker-rails', '~> 4.14.30'
 gem 'nprogress-rails' # loading for turbolinks
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.0'
