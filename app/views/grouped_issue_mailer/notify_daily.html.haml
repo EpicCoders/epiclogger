@@ -1,39 +1,32 @@
-.col-lg-6
-  %table
-    %tr
-      %th Title
-      %th Domain
-      %th Platform
-      %th Created At
-    %tr
-      %td
-        %pre
-          %code #{@member.website.title}
-      %td
-        %pre
-          %code #{@member.website.domain}
-      %td
-        %pre
-          %code #{@member.website.platform}
-      %td
-        %pre
-          %code #{@member.website.created_at}
-    %tr
-      %th#gray_th Message
-      %th#gray_th Level
-      %th#gray_th Times seen
-      %th#gray_th Culprit
-    - @grouped_issues.each do |group|
+- @data.each do |website|
+  .striped-table
+    %table.grid-container
+      %tr.website-header
+        %th.center-text.col-2 Title
+        %th.center-text.col-1 Domain
+        %th.center-text.col-1 Platform
+        %th.center-text.col-2 Created At
       %tr
-        %td
-          %pre
-            %code #{group.message}
-        %td
-          %pre
-            %code #{group.level}
-        %td
-          %pre
-            %code #{group.times_seen}
-        %td
-          %pre
-            %code #{group.culprit}
+        %td.center-text
+          = website[:title]
+        %td.center-text
+          = website[:domain]
+        %td.center-text
+          = website[:platform]
+        %td.center-text
+          = website[:created_at]
+      %tr
+        %th#gray_th.col-2 Message
+        %th#gray_th.center-text.col-1 Level
+        %th#gray_th.center-text.col-1 Times seen
+        %th#gray_th.col-2 Culprit
+      - website[:issues].each do |group|
+        %tr
+          %td
+            = group.message
+          %td.center-text
+            = group.level
+          %td.center-text
+            = group.times_seen
+          %td
+            = group.culprit

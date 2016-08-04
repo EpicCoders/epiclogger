@@ -1,18 +1,11 @@
-Title
-Domain
-Platform
-Created At
-#{@member.website.title}
-#{@member.website.domain}
-#{@member.website.platform}
-#{@member.website.created_at}
-
-Message
-Level
-Times seen
-Culprit
-- @grouped_issues.each do |group|
-  #{group.message}
-  #{group.level}
-  #{group.times_seen}
-  #{group.culprit}
+- @data.each do |website|
+  Title: #{website[:title]}
+  Domain: #{website[:domain]}
+  Platform: #{website[:platform]}
+  Created At: #{website[:created_at]}
+  - website[:issues].each do |group|
+    Message: #{group.message}
+    Level: #{group.level}
+    Times seen: #{group.times_seen}
+    Culprit: #{group.culprit}
+    ++++++++++++++++++++++++++++++++

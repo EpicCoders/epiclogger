@@ -1,20 +1,58 @@
 %hmtl
   %head
     :css
-      table tr:nth-child(even) {
-          background-color: #eee;
+      .striped-table table tr:nth-child(even) {
+        background-color: #eee;
       }
-      table tr:nth-child(odd) {
-         background-color:#fff;
+      .striped-table table tr:nth-child(odd) {
+        background-color:#fff;
       }
       table th {
-          background-color: #0E0E10;
-          color: white;
+        background-color: #00789a;
       }
       table th#gray_th {
-          background-color: #4B4A4A;
-          color: white;
+        background-color: #ddeef6;
+        line-height: 25px;
       }
+      table tr td {
+        text-align: left;
+        box-sizing: border-box;
+        padding: 10px 15px;
+      }
+      .day-title{
+        line-height: 20px;
+        color: #fff;
+      }
+      .website-header th{
+        line-height: 35px;
+        color: #fff;
+      }
+      .grid-container{
+        margin-bottom: 30px;
+        max-width: 1600px;
+        width: 100%;
+        border: 1px solid #eee;
+      }
+      .center-text {
+        text-align: center;
+      }
+
+      .col-1{ width: 16.66%; }
+      .col-2{ width: 33.33%; }
+      .col-3{ width: 50%;    }
+      .col-4{ width: 66.66%; }
+      .col-5{ width: 83.33%; }
+      .col-6{ width: 100%;   }
+
+      /*-- some extra column content styling --*/
+      [class*='col-'] > p {
+       background-color: #FFC2C2;
+       padding: 0;
+       margin: 0;
+       text-align: center;
+       color: white;
+      }
+
       .gray_text {
         color: #A3948D;
       }

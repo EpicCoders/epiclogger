@@ -1,29 +1,23 @@
-.col-lg-6
+.striped-table
   %table
-    %tr
-      %th Platform
-      %th Message
-      %th Created At
-      %th Website
-      %th Event id
-      %th Issue Url
+    %tr.website-header
+      %th.center-text Platform
+      %th.center-text Message
+      %th.center-text Created At
+      %th.center-text Website
+      %th.center-text Event id
+      %th.center-text Issue Url
     - @last_hour_errors.each_with_index do |issue, index|
       %tr
+        %td.center-text
+          #{issue.platform}
         %td
-          %pre
-            %code #{issue.platform}
+          #{issue.message}
+        %td.center-text
+          #{issue.created_at}
+        %td.center-text
+          #{issue.website.domain}
+        %td.center-text
+          #{issue.event_id}
         %td
-          %pre
-            %code #{issue.message}
-        %td
-          %pre
-            %code #{issue.created_at}
-        %td
-          %pre
-            %code #{issue.website.domain}
-        %td
-          %pre
-            %code #{issue.event_id}
-        %td
-          %pre
-            %code #{link_to 'Follow url for more details', error_url(issue.group.id, unresolved: :true)}
+          #{link_to 'Follow url for more details', error_url(issue.group.id, unresolved: :true)}

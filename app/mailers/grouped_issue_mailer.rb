@@ -23,28 +23,37 @@ class GroupedIssueMailer < ApplicationMailer
     end
   end
 
-  def notify_daily(member)
+  def notify_daily(user, websites)
     date = Time.now - 1.day
-    @member = member
-    @grouped_issues = find_grouped_issues(member, date)
-    mail to: @member.user.email, subject: "[#{@member.website.title}] Daily report email provides you some information about changes on your website."
+    user = User.find(user)
+    @data = find_grouped_issues(websites, date)
+    mail to: user.email, subject: "Daily report email provides you some information about changes on your website."
   end
 
-  def notify_weekly(member)
+  def notify_weekly(user, websites)
     date = Time.now - 1.week
-    @member = member
-    grouped_issues = find_grouped_issues(member, date)
+    user = User.find(user)
+    @data = find_grouped_issues(websites, date)
 
-    @weekly_updates = []
     @days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
-    @days.each do |day|
-      @weekly_updates.push(grouped_issues.select { |group| group.updated_at.public_send(day+'?') })
+    weekly_updates = []
+    @data.each do |website|
+      @days.each do |day|
+        weekly_updates.push(website[:issues].select { |group| group.updated_at.public_send(day+'?') })
+      end
+      website[:issues] = weekly_updates
+      weekly_updates = []
     end
-
-    mail to: @member.user.email, subject: "[#{@member.website.title}] Weekly report email provides you some information about changes on your website."
+    mail to: user.email, subject: "Weekly report email provides you some information about changes on your website."
   end
 
-  def find_grouped_issues(member, date)
-    return member.website.grouped_issues.where('updated_at > ? AND muted = ?', date, false)
+  def find_grouped_issues(websites, date)
+    data = []
+    websites.each do |website_id|
+      website = Website.find(website_id)
+      issues = website.grouped_issues.where('updated_at > ? AND muted = ?', date, false)
+      data.push( { title: website.title, domain: website.domain, platform: website.platform, created_at: website.created_at, issues: issues } )
+    end
+    data
   end
 end

@@ -53,32 +53,35 @@ describe GroupedIssueMailer do
     end
   end
 
-  describe 'notify_daily' do
-    let(:mail) { described_class.notify_daily(website_member) }
+  context 'issues from all websites in one mail' do
+    let(:websites) { user.websites }
+    describe 'notify_daily' do
+      let(:mail) { described_class.notify_daily(user, websites) }
 
-    it 'renders the headers' do
-      expect(mail.subject).to eq("[#{website.title}] Daily report email provides you some information about changes on your website.")
-      expect(mail.to).to eq([user.email])
-      expect(mail.from).to eq(["admin@epiclogger.com"])
+      it 'renders the headers' do
+        expect(mail.subject).to eq("Daily report email provides you some information about changes on your website.")
+        expect(mail.to).to eq([user.email])
+        expect(mail.from).to eq(["admin@epiclogger.com"])
+      end
+
+      it 'renders the body' do
+        expect(mail.body.parts.first.body.raw_source).to eq( "Title: #{website.title}\nDomain: #{website.domain}\nPlatform: #{website.platform}\nCreated At: #{website.created_at}\nMessage: #{group.message}\nLevel: #{group.level}\nTimes seen: #{group.times_seen}\nCulprit: #{group.culprit}\n++++++++++++++++++++++++++++++++\n\n")
+      end
     end
 
-    it 'renders the body' do
-      expect(mail.body.parts.first.body.raw_source).to eq( "Title\nDomain\nPlatform\nCreated At\n#{website.title}\n#{website.domain}\n\n#{website.created_at}\nMessage\nLevel\nTimes seen\nCulprit\n#{group.message}\n#{group.level}\n#{group.times_seen}\n#{group.culprit}\n\n")
-    end
-  end
+    describe 'notify_weekly' do
+      let(:mail) { described_class.notify_weekly(user, websites) }
 
-  describe 'notify_weekly' do
-    let(:mail) { described_class.notify_weekly(website_member) }
+      it 'renders the headers' do
+        expect(mail.subject).to eq("Weekly report email provides you some information about changes on your website.")
+        expect(mail.to).to eq([user.email])
+        expect(mail.from).to eq(["admin@epiclogger.com"])
+      end
 
-    it 'renders the headers' do
-      expect(mail.subject).to eq("[#{website.title}] Weekly report email provides you some information about changes on your website.")
-      expect(mail.to).to eq([user.email])
-      expect(mail.from).to eq(["admin@epiclogger.com"])
-    end
-
-    it 'renders the body' do
-      days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
-      expect(mail.body.parts.first.body.raw_source).to eq("Title\nDomain\nPlatform\nCreated At\n#{website.title}\n#{website.domain}\n\n#{website.created_at}\nErrors available on #{days[Time.now.wday-1]}\nMessage\nTimes seen\nCulprit\nMore details\n#{group.message}\n#{group.times_seen}\n#{group.culprit}\n<a href=\"#{error_url(group)}\">#{error_url(group)}</a>\n\n")
+      it 'renders the body' do
+        days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
+        expect(mail.body.parts.first.body.raw_source).to eq("Title: #{website.title}\nDomain: #{website.domain}\nPlatform: #{website.platform}\nCreated At: #{website.created_at}\nErrors that occurred on #{days[Time.now.wday-1].capitalize}\n''''''''''''''''''''''''''''''''''''''''''''''''''\nMessage: #{group.message}\nLevel: #{group.level}\nTimes seen: #{group.times_seen}\nCulprit: #{group.culprit}\nMore details: <a href=\"#{error_url(group)}\">#{error_url(group)}</a>\n++++++++++++++++++++++++++++++++\n\n")
+      end
     end
   end
 end

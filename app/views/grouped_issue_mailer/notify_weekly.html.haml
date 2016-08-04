@@ -1,43 +1,35 @@
-.col-lg-6
-  %table
+- @data.each do |website|
+  %table.grid-container
+    %tr.website-header
+      %th.center-text.col-2 Title
+      %th.center-text.col-1 Domain
+      %th.center-text.col-1 Platform
+      %th.center-text.col-2 Created At
     %tr
-      %th Title
-      %th Domain
-      %th Platform
-      %th Created At
-    %tr
-      %td
-        %pre
-          %code #{@member.website.title}
-      %td
-        %pre
-          %code #{@member.website.domain}
-      %td
-        %pre
-          %code #{@member.website.platform}
-      %td
-        %pre
-          %code #{@member.website.created_at}
-    %tr
-      - @weekly_updates.each_with_index do |daily_updates, index|
+      %td.center-text
+        = website[:title]
+      %td.center-text
+        = website[:domain]
+      %td.center-text
+        = website[:platform]
+      %td.center-text
+        = website[:created_at]
+    %tr.weekly-content
+      - website[:issues].each_with_index do |daily_updates, index|
         - unless daily_updates.blank?
-          %th{:colspan => "4"} Errors available on #{@days[index]}
+          %th.day-title{:colspan => "4"} Errors that occurred on #{@days[index].capitalize}
           - daily_updates.first(5).each do |group|
             %tr
-              %th#gray_th Message
-              %th#gray_th Times seen
-              %th#gray_th Culprit
-              %th#gray_th More details
+              %th#gray_th.col-2.center-text Message
+              %th#gray_th.col-1.center-text Times seen
+              %th#gray_th.col-1.center-text Culprit
+              %th#gray_th.col-2.center-text More details
             %tr
               %td
-                %pre
-                  %code #{group.message}
+                = group.message
+              %td.center-text
+                = group.times_seen
+              %td.center-text
+                = group.culprit
               %td
-                %pre
-                  %code #{group.times_seen}
-              %td
-                %pre
-                  %code #{group.culprit}
-              %td
-                %pre
-                  %code #{link_to error_url(group), error_url(group)}
+                = link_to error_url(group), error_url(group)

@@ -4,7 +4,7 @@ class Notification < Thor
   def report_weekly
     puts 'Starting..'
     t = Time.now.utc
-    Website.custom_report(t - 1.week, 'weekly_reporting') if t.sunday?
+    Website.custom_report(t - 1.week, :weekly) if t.sunday?
     puts 'End. Success.'
   end
 
@@ -12,7 +12,7 @@ class Notification < Thor
   def report_daily
     puts 'Starting..'
     date = Time.now.utc
-    Website.custom_report(date - 1.day, 'daily_reporting')
+    Website.custom_report(date - 1.day, :daily)
     puts 'End. Success.'
   end
 

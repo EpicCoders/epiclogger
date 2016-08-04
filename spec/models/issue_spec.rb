@@ -156,10 +156,10 @@ describe Issue do
     it 'should email users' do
       mailer = double('GroupedIssueMailer')
       expect(mailer).to receive(:deliver_later)
-      expect(GroupedIssueMailer).to receive(:notify_weekly).with(website_member).and_return(mailer).once
+      expect(GroupedIssueMailer).to receive(:notify_weekly).with(user.id, user.websites.pluck(:id)).and_return(mailer).once
 
       date = Time.now - 1.week
-      Website.custom_report(date, 'weekly_reporting')
+      Website.custom_report(date, :weekly)
     end
   end
 end
