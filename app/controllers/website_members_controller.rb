@@ -13,7 +13,7 @@ class WebsiteMembersController < ApplicationController
     current_website_member = WebsiteMember.find_by_user_id_and_website_id(current_user.id, current_website.id)
     if current_website_member.role.owner?
       @website_member.update_attributes(website_member_role_params)
-      flash.now[:alert] = "Role updated"
+      flash[:alert] = "Role updated"
       render json: @website_member
     end
   end

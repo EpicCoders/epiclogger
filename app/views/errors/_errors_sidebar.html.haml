@@ -5,31 +5,31 @@
         .pull-left.error_select
           .btn.btn-default.btn-sm{'data-toggle'=>'button','aria-pressed'=>"false"}
             %input.all{:title => "toggle all", :type => "checkbox"}/
-        = f.submit "#{params['tab'] == 'resolved' || @selected_errors.try(:first).try(:resolved?).present? ? 'Unresolve' : 'Resolve'}", class: "btn header-resolve #{params['tab'] == 'resolved' || @selected_errors.try(:first).try(:resolved?).present? ? 'btn-danger' : 'btn-primary'}", id: "multiple-resolve", remote:true, method: :put
-        - if params[:search].blank?
-          .error_pagination.text-right
-            .btn-group.sidebar_pagination_buttons
-              = paginate @selected_errors, theme: 'next_prev_theme'
+        = f.submit "#{params['tab'] == 'resolved' || @selected_errors.try(:first).try(:resolved?).present? ? 'Unresolve' : 'Resolve'}", class: "btn btn-sm header-resolve #{params['tab'] == 'resolved' || @selected_errors.try(:first).try(:resolved?).present? ? 'btn-danger' : 'btn-primary'}", id: "multiple-resolve", remote:true, method: :put
+        .error_pagination.text-right
+          .btn-group.sidebar_pagination_buttons
+            = paginate @selected_errors, theme: 'next_prev_theme'
+        %button.btn.btn-default.btn-sm{"data-target" => "#filters", "data-toggle" => "collapse", :type => "button", :title => 'Filters'}
+          %span.glyphicon.glyphicon-filter
       .row
         .col-sm-12
           %span.sidebar_pagination_text= page_entries_info @selected_errors, entry_name: 'error'
     #custom-bootstrap.navbar.navbar-default.sidebar-tabs{:role => "navigation"}
       %ul.nav.navbar-nav.navbar-left
-        %li{:class => "#{(params[:tab] == 'unresolved' || @selected_errors.try(:first).try(:unresolved?).present?) && params[:tab] != 'filters'  ? 'active' : ''}"}
+        - filtered = params[:commit] == 'search-button' || params[:commit] == 'find-matchings'
+        %li{:class => "#{(params[:tab] == 'unresolved' || @selected_errors.try(:first).try(:unresolved?).present?) && !filtered ? 'active' : ''}"}
           %a{:href => "#{request.path}?tab=unresolved"}
             Unresolved
-        %li{:class => "#{params[:tab] == 'resolved' || @selected_errors.try(:first).try(:resolved?).present? ? 'active' : ''}"}
+        %li{:class => "#{(params[:tab] == 'resolved' || @selected_errors.try(:first).try(:resolved?).present?) && !filtered ? 'active' : ''}"}
           %a{:href => "#{request.path}?tab=resolved"}
             Resolved
-        %li{:class => "#{params[:tab] == 'filters' ? 'active' : ''}"}
-          %a{:href => "#{request.path}?tab=filters"}
-            Filters
+
     .tab-content
-      //TODO find a way to simplify this
-      - unless params[:tab] == 'resolved' || params[:tab] == 'unresolved' || params[:tab] == 'default' || params[:tab].nil?
+      #filters.collapse
         = render partial: 'sidebar_filters'
-      - else
-        = render partial: 'sidebar_elements', collection: @selected_errors, as: :error
+      = render 'shared/flash_messages'
+      = render partial: 'sidebar_elements', collection: @selected_errors, as: :error
+
 
 
 

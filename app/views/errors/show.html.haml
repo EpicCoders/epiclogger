@@ -10,13 +10,13 @@
           %div.message= @error.message
           %ul.list-inline
             %li
-              %span.badge.badge-subscribers
+              %span.badge.badge-subscribers{:title => 'Subscribers'}
                 = icon('users')
                 = @error.users_affected
             %li
-              %span.badge.badge-environment= @error.environment
+              %span.badge.badge-environment{:title => 'Environment'}= @error.environment
             %li
-              %span.label.badge= @error.checksum
+              %span.label.badge{:title => 'Checksum'}= @error.checksum
         .col-xs-5.text-right
           - if @error.website.github_integration?
             .btn-group

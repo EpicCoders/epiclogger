@@ -24,19 +24,21 @@ class ErrorsController < ApplicationController
     errors = current_website.grouped_issues.order('last_seen DESC')
     resolve if params[:commit] == 'Resolve'
     unresolve if params[:commit] == 'Unresolve'
-    errors = errors.with_status(:resolved) if params[:tab] == 'resolved' || params[:filter].try(:[], 'status') == 'resolved'
-    errors = errors.with_status(:unresolved) if params[:tab] == 'unresolved'  || params[:filter].try(:[], 'status') == 'unresolved'
     if params[:tab] == 'default' && params[:page].nil?
       errors = @error.resolved? ? errors.with_status(:resolved) : errors.with_status(:unresolved)
       position = errors.where("last_seen >= ?", @error.last_seen).count
       page = (position.to_f/errors_per_page).ceil
       errors = errors.with_status(params[:status].to_sym) unless params[:status].blank?
-    elsif !params[:filter].try(:[], 'datepicker').blank?
-      range = params[:filter][:datepicker].split(/\ - /).map {|t| Time.parse(t)}
-      errors = errors.all{ |e| e.first_seen >= range.first } if range.first == range.last
-      errors = errors.all{ |e| e.first_seen >= range.first && e.last_seen <= range.last} if range.first != range.last
+    elsif params[:commit] == 'search-button' && !params[:search].blank?
+      errors = matching_elements
+    elsif !params[:datepicker].blank?
+      range = params[:datepicker].split(/\ - /).map {|t| Time.parse(t)}
+      errors = GroupedIssue.where('first_seen = ?', range.first).order('last_seen DESC') if range.first == range.last
+      errors = GroupedIssue.where('first_seen >= ? AND last_seen <= ?', range.first, range.last).order('last_seen DESC') if range.first != range.last
     end
-    errors = matching_elements if params[:commit] == 'search-button'
+    errors = errors.with_status(:resolved) if params[:tab] == 'resolved' || params[:status] == 'resolved'
+    errors = errors.with_status(:unresolved) if params[:tab] == 'unresolved'  || params[:status] == 'unresolved'
+    flash[:notice] = "No matches" if errors.blank?
     @selected_errors = errors.page(page).per(errors_per_page)
     @issues = @error.issues.page(page_issue).per(1)
     @chart_data = @error.issues.group_by_day(:created_at, range: Date.today.beginning_of_day - 1.months..Date.today.end_of_day).count

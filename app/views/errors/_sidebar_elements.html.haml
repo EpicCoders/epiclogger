@@ -5,14 +5,14 @@
         .col-xs-1.list-check
           = check_box_tag 'error_ids[]', value = "#{error.id}", checked = false
         .col-xs-11.error-details
-          = link_to error_url(error, page: params[:page], tab: "#{error.unresolved? ? 'unresolved' : 'resolved'}") do
+          = link_to error_url(error, page: params[:page], commit: params[:commit], tab: params[:tab], status: params[:status], datepicker: params[:datepicker], search: params[:search]) do
             .row
               .col-xs-3
-                %span.badge
+                %span.badge{:title => 'Times seen'}
                   = error.times_seen
               .col-xs-9.text-right
-                %span.badge.badge-environment= error.environment
-                %span.badge.badge-subscribers
+                %span.badge.badge-environment{:title => 'Environment'}= error.environment
+                %span.badge.badge-subscribers{:title => 'Subscribers'}
                   = icon('users')
                   = error.users_affected
                 %small= "#{distance_of_time_in_words_to_now error.last_seen} ago"

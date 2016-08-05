@@ -134,7 +134,7 @@ RSpec.describe ErrorsController, type: :controller do
 
         it "displays the page of the current error when no other url params are present" do
           get_with user, :show, params
-          expect(assigns(:selected_errors).current_page).to eq(2)
+          expect(assigns(:selected_errors).current_page).to eq(1)
         end
 
         it "displays resolved issues when on the resolved tab" do
@@ -149,7 +149,7 @@ RSpec.describe ErrorsController, type: :controller do
         end
 
         it "displays the page we request via param" do
-          params[:tab] = 'unresolved'
+          params[:tab] = 'resolved'
           params[:page] = 2
           get_with user, :show, params
           expect(assigns(:selected_errors).current_page).to eq(2)
