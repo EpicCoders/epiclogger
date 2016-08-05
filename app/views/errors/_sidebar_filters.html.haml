@@ -1,51 +1,29 @@
 .sidebar-filters
   .filter-element
     .input-group
-      %input.form-control#search-input{:name => 'search', :placeholder => "Search for..."}
+      %input.form-control{:name => 'search', :placeholder => "Search for..."}
         %span.input-group-btn
-          %button.btn.btn-info#search-button{:type => 'submit', :value => "search-button", :name => 'commit'}
+          %button.btn.btn-info{:type => 'submit', :value => "search-button", :name => 'commit'}
             %span.glyphicon.glyphicon-search
             Submit
   .filter-element
     .form-group
-      %label Environment:
-      %select.form-control#env-filter{:name => 'filter[env]'}
-        %option{:value => 'all'} All
-        / %option{:value => 'api-staging'} api-staging
-        / %option{:value => 'api-production'} api-production
-        / %option{:value => 'lab'} lab
-        %option{:value => 'production'} Production
-        / %option{:value => 'public-api-production'} public-api-production
-        / %option{:value => 'review'} review
-        / %option{:value => 'sandbox'} sandbox
-        %option{:value => 'staging'} Staging
-  .filter-element
-    .form-group
       %label Date:
       .input-group.date
-        %input.form-control#datetimepicker{:name => 'filter[datepicker]', :type => "text"}/
+        %input.form-control#datetimepicker{:name => 'datepicker', :value => params[:datepicker], :type => "text"}/
         %span.input-group-addon
           %span.glyphicon.glyphicon-calendar
 
   .filter-element
-    .form-group#status-filter
+    .form-group
       %label.radio-inline
-        %input{:value => 'unresolved',:name => "filter[status]", :type => "radio"}>/
+        %input{:value => 'unresolved', :name => "status", :type => "radio", :checked => params[:status] == 'unresolved' ? true : false}
         Unresolved
       %label.radio-inline
-        %input{:value => 'resolved',:name => "filter[status]", :type => "radio"}>/
+        %input{:value => 'resolved', :name => "status", :type => "radio", :checked => params[:status] == 'resolved' ? true : false}
         Resolved
   .filter-element
-    %button.btn.btn-warning.btn-sm.pull-right#find-matchings{:type => 'submit', :value => "find-matchings", :name => 'commit'} Search for matching groups
-  - if params[:search].present? || params[:status].present?
-    %br
-    %br
-    %hr
-    .filter-element
-      .error_pagination.text-right
-        %span.sidebar_pagination_text.pull-left= page_entries_info @selected_errors, entry_name: 'error'
-        .btn-group.sidebar_pagination_buttons.btn-xs{style: 'margin-top: -8%'}
-          = paginate @selected_errors, theme: 'next_prev_theme'
-      / # = render 'shared/flash_messages'
-    = render partial: 'sidebar_elements', collection: @selected_errors, as: :error
+    %button.btn.btn-warning.btn-sm.pull-right{:type => 'submit', :value => "find-matchings", :name => 'commit'} Search for matching groups
+%br
+%hr
 
