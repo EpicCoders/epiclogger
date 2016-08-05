@@ -58,8 +58,8 @@ RSpec.describe Integrations::Drivers::Intercom do
   describe 'create_task' do
     it 'returns successfull response' do
       stub_request(:post, integration_driver.api_url + 'repos/' + integration.configuration["username"].to_s + '/' + integration.configuration["selected_application"].to_s + '/issues')
-        .with(:body => {"title" => "test"}.to_json,
-        :headers => {'Accept'=>'application/json', 'Accept-Encoding'=>'gzip, deflate', 'Authorization'=>'token', 'Content-Type'=>'application/json'} )
+        .with(:body => "{\"title\":\"test\"}",
+              :headers => {'Accept'=>'application/json', 'Accept-Encoding'=>'gzip, deflate', 'Authorization'=>'token', 'Content-Type'=>'application/json' } )
         .to_return(status: 200, body: web_response_factory('github/github_task'))
       expect(integration.driver.create_task('test')).to_not be_nil
     end
