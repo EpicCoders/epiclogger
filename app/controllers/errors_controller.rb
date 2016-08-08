@@ -33,7 +33,7 @@ class ErrorsController < ApplicationController
       errors = matching_elements
     elsif !params[:datepicker].blank?
       range = params[:datepicker].split(/\ - /).map {|t| Time.parse(t)}
-      errors = GroupedIssue.where('first_seen = ?', range.first).order('last_seen DESC') if range.first == range.last
+      errors = GroupedIssue.where('first_seen > ?', range.first).order('last_seen DESC') if range.first == range.last
       errors = GroupedIssue.where('first_seen >= ? AND last_seen <= ?', range.first, range.last).order('last_seen DESC') if range.first != range.last
     end
     errors = errors.with_status(:resolved) if params[:tab] == 'resolved' || params[:status] == 'resolved'

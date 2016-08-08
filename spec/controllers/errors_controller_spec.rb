@@ -4,7 +4,7 @@ RSpec.describe ErrorsController, type: :controller do
   let(:user) { create :user }
   let(:website) { create :website }
   let!(:website_member) { create :website_member, website: website, user: user }
-  let(:group) { create :grouped_issue, website: website, last_seen: Time.now - 1.day }
+  let(:group) { create :grouped_issue, website: website, platform: 'ruby', last_seen: Time.now - 1.day }
   let(:subscriber) { create :subscriber, website: website }
   let!(:issue_error) { create :issue, subscriber: subscriber, group: group }
   let(:message) { create :message, issue: issue_error }
@@ -154,6 +154,99 @@ RSpec.describe ErrorsController, type: :controller do
           get_with user, :show, params
           expect(assigns(:selected_errors).current_page).to eq(2)
           expect(assigns(:selected_errors)).to_not be_empty
+        end
+        context 'filters' do
+          context 'search' do
+            let(:params) { { id: group.id, website_id: website.id, commit: 'search-button'  } }
+            it 'should return one match' do
+              params[:search] = 'ruby'
+              get_with user, :show, params
+              expect(assigns(:selected_errors).count).to eq(1)
+            end
+            it 'should return 50 matches' do
+              params[:search] = 'javascript'
+              get_with user, :show, params
+              expect(subject.matching_elements.count).to eq(50)
+
+              expect(assigns(:selected_errors).count).to eq(5)
+            end
+
+            it 'should contain a flash message and return nil' do
+              params[:search] = 'dorin chirtoaca'
+              get_with user, :show, params
+              expect(subject.matching_elements.count).to eq(0)
+              expect(flash[:notice]).to eq("No matches")
+            end
+          end
+          context 'datepicker' do
+            before(:each) do
+              errors[0].update_attributes(first_seen: errors[0].last_seen)
+              errors[1].update_attributes(first_seen: errors[1].last_seen)
+              errors[3].update_attributes(first_seen: errors[3].first_seen - 5.months, last_seen: errors[3].first_seen - 1.year)
+            end
+            context 'when range matches' do
+              it 'should return 2 errors' do
+                params[:status] = ''
+                params[:datepicker] = "#{Date.today.strftime("%d/%m/%Y")} - #{Date.today.strftime("%d/%m/%Y")}"
+
+                get_with user, :show, params
+                expect(assigns(:selected_errors).count).to eq(2)
+              end
+
+              it 'should return nil' do
+                params[:status] = ''
+                params[:datepicker] = "#{(Date.today + 1.day).strftime("%d/%m/%Y")} - #{(Date.today + 1.day).strftime("%d/%m/%Y")}"
+
+                get_with user, :show, params
+                expect(assigns(:selected_errors).count).to eq(0)
+              end
+            end
+
+            context 'when range does not match' do
+              it 'should return 1 error' do
+                params[:status] = ''
+                params[:datepicker] = "#{(Date.today - 2.years ).strftime("%d/%m/%Y")} - #{(Date.today - 4.months).strftime("%d/%m/%Y")}"
+
+                get_with user, :show, params
+                expect(assigns(:selected_errors).count).to eq(1)
+              end
+
+              it 'should return nil' do
+                params[:status] = ''
+                params[:datepicker] = "#{(Date.today - 5.years ).strftime("%d/%m/%Y")} - #{(Date.today - 6.years).strftime("%d/%m/%Y")}"
+
+                get_with user, :show, params
+                expect(assigns(:selected_errors).count).to eq(0)
+              end
+            end
+          end
+          context 'when params[:status]' do
+            it 'should filter resolved errors' do
+              params[:status] = 'resolved'
+              get_with user, :show, params
+
+              expect(assigns(:selected_errors).find_all{ |e| e.status == 'resolved' }.count).to eq(5)
+            end
+
+            it 'should filter unresolved errors' do
+              params[:status] = 'unresolved'
+              get_with user, :show, params
+
+              expect(assigns(:selected_errors).find_all{ |e| e.status == 'unresolved' }.count).to eq(5)
+            end
+
+            it 'should return nil' do
+              params[:status] = 'unresolved'
+              get_with user, :show, params
+
+              expect(assigns(:selected_errors).find_all{ |e| e.status == 'resolved' }.count).to eq(0)
+
+              params[:status] = 'resolved'
+              get_with user, :show, params
+
+              expect(assigns(:selected_errors).find_all{ |e| e.status == 'unresolved' }.count).to eq(0)
+            end
+          end
         end
       end
     end
