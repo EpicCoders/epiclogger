@@ -5,7 +5,7 @@
         .col-xs-1.list-check
           = check_box_tag 'error_ids[]', value = "#{error.id}", checked = false
         .col-xs-11.error-details
-          = link_to error_url(error, page: params[:page], commit: params[:commit], status: params[:status], datepicker: params[:datepicker], search: params[:search]) do
+          = link_to error_url(error, page: params[:page], commit: params[:commit], tab: params[:tab], status: params[:status], datepicker: params[:datepicker], search: params[:search]) do
             .row
               .col-xs-3
                 %span.badge{:title => 'Times seen'}
