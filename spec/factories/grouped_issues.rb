@@ -12,5 +12,6 @@ FactoryGirl.define do
     status GroupedIssue::UNRESOLVED
     culprit 'app/controllers/home_controller.rb in / at line 5'
     checksum 'bba2f06a21e44216df5a1bfccda72e8e'
+    environment 'development'
   end
 end

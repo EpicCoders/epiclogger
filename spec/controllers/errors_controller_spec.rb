@@ -178,7 +178,7 @@ RSpec.describe ErrorsController, type: :controller do
               expect(flash[:notice]).to eq("No matches")
             end
           end
-          context 'datepicker' do
+          context 'filter by date' do
             before(:each) do
               errors[0].update_attributes(first_seen: errors[0].last_seen)
               errors[1].update_attributes(first_seen: errors[1].last_seen)
@@ -220,7 +220,7 @@ RSpec.describe ErrorsController, type: :controller do
               end
             end
           end
-          context 'when params[:status]' do
+          context 'filter by status' do
             it 'should filter resolved errors' do
               params[:status] = 'resolved'
               get_with user, :show, params
@@ -245,6 +245,23 @@ RSpec.describe ErrorsController, type: :controller do
               get_with user, :show, params
 
               expect(assigns(:selected_errors).find_all{ |e| e.status == 'unresolved' }.count).to eq(0)
+            end
+          end
+          context 'filter by env' do
+            it 'should return matches' do
+              params[:status] = ''
+              params[:env] = 'development'
+
+              get_with user, :show, params
+              expect(assigns(:selected_errors).count).to eq(5)
+            end
+
+            it 'should return nil' do
+              params[:status] = ''
+              params[:env] = 'staging'
+
+              get_with user, :show, params
+              expect(assigns(:selected_errors).count).to eq(0)
             end
           end
         end
