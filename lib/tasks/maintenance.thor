@@ -1,4 +1,4 @@
-class Environment < Thor
+class Maintenance < Thor
   require File.expand_path('config/environment.rb')
   desc 'add_environment', 'update columns with the missing environment'
   def add_environment

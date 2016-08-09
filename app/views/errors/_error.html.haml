@@ -1,7 +1,7 @@
 #grouped-issues.groups
   = link_to error_url(error, tab: 'default') do
     .error-count
-      %span= error.times_seen
+      %span{:title => 'Times seen'}= error.times_seen
       - case error.level
       - when "debug"
         %button.btn.btn-default.fa.fa-bug{title: "Level: debug"}
@@ -28,4 +28,4 @@
           %span.bigger-text= error.culprit
       .error-last-occurence.col-sm-2
         %span.last Last occurrence
-        %span.last_occurrence= distance_of_time_in_words_to_now error.last_seen
+        %span.last_occurrence #{distance_of_time_in_words_to_now error.last_seen} ago

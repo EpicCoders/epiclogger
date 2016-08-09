@@ -6,20 +6,11 @@
           %button.btn.btn-info{:type => 'submit', :value => "search-button", :name => 'commit'}
             %span.glyphicon.glyphicon-search
             Submit
-  .filter-element
-    .form-group
-    %label Environment:
-    %select.form-control{:name => 'env'}
-      %option{:value => ''} All
-      %option{:value => 'api-staging'} api-staging
-      %option{:value => 'api-production'} api-production
-      %option{:value => 'lab'} lab
-      %option{:value => 'production'} Production
-      %option{:value => 'development'} Development
-      %option{:value => 'public-api-production'} public-api-production
-      %option{:value => 'review'} review
-      %option{:value => 'sandbox'} sandbox
-      %option{:value => 'staging'} Staging
+  - unless current_website.unique_environments.blank?
+    .filter-element
+      .form-group
+      %label Environment:
+      = select_tag 'env', options_for_select(current_website.unique_environments), prompt: 'All environments', class: 'form-control'
   .filter-element
     .form-group
       %label Date:
