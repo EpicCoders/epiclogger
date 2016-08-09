@@ -1,5 +1,6 @@
 .row
   .col-sm-3#error-sidebar
+    - current_website.unique_environments
     = render partial: 'errors_sidebar'
   .col-sm-9#error-details
     .header.no-margin
