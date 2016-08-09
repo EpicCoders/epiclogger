@@ -44,7 +44,7 @@ class Website < ActiveRecord::Base
 
   def unique_environments
     Rails.cache.fetch('unique_envs') do
-     grouped_issues.select('distinct environment').pluck(:environment).compact.uniq
+      grouped_issues.pluck('DISTINCT environment').compact
     end
   end
 
