@@ -36,6 +36,7 @@ class ErrorsController < ApplicationController
       errors = GroupedIssue.where('first_seen > ?', range.first).order('last_seen DESC') if range.first == range.last
       errors = GroupedIssue.where('first_seen >= ? AND last_seen <= ?', range.first, range.last).order('last_seen DESC') if range.first != range.last
     end
+    errors = errors.where("environment = ?", params[:env]) unless params[:env].blank?
     errors = errors.with_status(:resolved) if params[:tab] == 'resolved' || params[:status] == 'resolved'
     errors = errors.with_status(:unresolved) if params[:tab] == 'unresolved'  || params[:status] == 'unresolved'
     flash[:notice] = "No matches" if errors.blank?
