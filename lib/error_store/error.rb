@@ -91,8 +91,12 @@ module ErrorStore
       data.delete(:project) # remove the project attribute from data as it's not used
 
       # check if we have a message defined in our data
+      data.delete(:message)
       if data.key?(:message)
         data[:message] = trim(data[:message], max_size: MAX_MESSAGE_LENGTH) unless data[:message].blank?
+      elsif data.key?(:exception)
+        data[:message] = "#{data[:exception][:values].first[:type]}: #{data[:exception][:values].first[:value]}"
+        data[:message] = '<no message>' if data[:message] == ': '
       else
         data[:message] = '<no message>'
       end

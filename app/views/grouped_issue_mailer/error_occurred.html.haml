@@ -9,11 +9,11 @@
     %p.gray_text Error message
     %pre
       %code
-        %small #{@issue.get_interfaces(:exception)._data[:values].first._data[:value]}
+        %small=@issue.message
     %p.gray_text When
     %pre
       %code
-        %small #{@issue.created_at}
+        %small=@issue.created_at
     %p.gray_text Where
     %pre
       %code
@@ -36,7 +36,7 @@
     %p.gray_text Message
     %pre
       %code
-        %small #{@issue.message}
+        %small=@issue.message
     %p.gray_text User Agent
     %pre
       %code
