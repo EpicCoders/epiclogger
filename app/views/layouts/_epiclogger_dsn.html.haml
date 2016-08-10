@@ -1,7 +1,8 @@
 :javascript
   Raven.config("#{ENV['EPICLOGGER_DSN']}", {
     whitelistUrls: [
-      /epiclogger.com/
+      /epiclogger.com/,
+      /epiclogger-staging.herokuapp.com/
     ],
   }).install();
 - if current_user

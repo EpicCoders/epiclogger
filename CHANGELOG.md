@@ -1,5 +1,31 @@
 # Change Log
 
+## [Unreleased](https://github.com/epiccoders/epiclogger/tree/HEAD)
+
+[Full Changelog](https://github.com/epiccoders/epiclogger/compare/1.1...HEAD)
+
+**Implemented enhancements:**
+
+- Provide some information in the integrations tab [\#218](https://github.com/EpicCoders/epiclogger/issues/218)
+- Implement filter by environment [\#209](https://github.com/EpicCoders/epiclogger/issues/209)
+- Improvements for the email reports [\#229](https://github.com/EpicCoders/epiclogger/pull/229) ([ungureanu-bogdan-sorin](https://github.com/ungureanu-bogdan-sorin))
+
+**Fixed bugs:**
+
+- Encode the email subject to allow for the special chars [\#226](https://github.com/EpicCoders/epiclogger/issues/226)
+
+**Closed issues:**
+
+- NameError: undefined local variable or method `fsfsdfsdfds' for \#\<HomeController:0x00000005490b88\> [\#249](https://github.com/EpicCoders/epiclogger/issues/249)
+- NameError: undefined local variable or method `dsadsa' for \#\<HomeController:0x00000005490b88\> [\#248](https://github.com/EpicCoders/epiclogger/issues/248)
+- NameError: undefined local variable or method `dsadsa' for \#\<HomeController:0x00000005490b88\> [\#247](https://github.com/EpicCoders/epiclogger/issues/247)
+- Add environment column to group [\#244](https://github.com/EpicCoders/epiclogger/issues/244)
+
+**Merged pull requests:**
+
+- added environment column to group [\#245](https://github.com/EpicCoders/epiclogger/pull/245) ([Panioglo](https://github.com/Panioglo))
+- added a filters tab in the errors sidebar [\#228](https://github.com/EpicCoders/epiclogger/pull/228) ([Panioglo](https://github.com/Panioglo))
+
 ## [1.1](https://github.com/epiccoders/epiclogger/tree/1.1) (2016-08-01)
 [Full Changelog](https://github.com/epiccoders/epiclogger/compare/1.0...1.1)
 
