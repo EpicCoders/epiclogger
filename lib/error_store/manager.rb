@@ -16,7 +16,7 @@ module ErrorStore
 
       # First we pull out our top-level (non-data attr)
       event_id      = data.delete(:event_id)
-      message       = data.delete(:message)
+      message       = get_message(data)
       level         = data.delete(:level)
       environment   = data[:environment]
 
@@ -186,6 +186,18 @@ module ErrorStore
       group.status = :unresolved
 
       is_regression
+    end
+
+    def get_message(data)
+      return data[:message] unless data[:message].nil?
+
+      hash = data.try(:[], :interfaces).try(:[], :exception).try(:[], :values).try(:first)
+      if hash.try(:[], :type).blank? && hash.try(:[], :value).blank?
+        message = '<no message>'
+      else
+        message = "#{hash.try(:[], :type)}: #{hash.try(:[], :value)}"
+      end
+      message
     end
 
     def generate_culprit(data)
