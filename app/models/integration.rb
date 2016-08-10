@@ -6,16 +6,17 @@ class Integration < ActiveRecord::Base
   validates :name, :provider, presence: true
   store_accessor :configuration
 
-  attr_accessor :application
+  attr_accessor :app_name, :app_owner
 
-  before_update :select_application, if: -> { application }
+  before_update :select_application, if: -> { app_name && app_owner }
 
   def driver
     Integrations.create(self)
   end
 
   def select_application
-    self.configuration["selected_application"] = application
+    self.configuration["selected_application"] = app_name
+    self.configuration["application_owner"] = app_owner
   end
 
   def assign_configuration(auth_hash)

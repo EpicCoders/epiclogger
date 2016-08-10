@@ -25,14 +25,14 @@ class GroupedIssueMailer < ApplicationMailer
 
   def notify_daily(user, websites)
     date = Time.now - 1.day
-    user = User.find(user)
+    user = User.find(user.id)
     @data = find_grouped_issues(websites, date)
     mail to: user.email, subject: "Daily report email provides you some information about changes on your website."
   end
 
   def notify_weekly(user, websites)
     date = Time.now - 1.week
-    user = User.find(user)
+    user = User.find(user.id)
     @data = find_grouped_issues(websites, date)
 
     @days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
@@ -49,8 +49,8 @@ class GroupedIssueMailer < ApplicationMailer
 
   def find_grouped_issues(websites, date)
     data = []
-    websites.each do |website_id|
-      website = Website.find(website_id)
+    websites.each do |website|
+      website = Website.find(website.id)
       issues = website.grouped_issues.where('updated_at > ? AND muted = ?', date, false)
       data.push( { title: website.title, domain: website.domain, platform: website.platform, created_at: website.created_at, issues: issues } )
     end

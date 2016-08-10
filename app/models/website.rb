@@ -35,6 +35,10 @@ class Website < ActiveRecord::Base
       define_method("#{integration.to_s}_integration") do
         self.integrations.find_by(provider: integration)
       end
+
+      define_method("#{integration.to_s}_configuration") do
+        self.integrations.find_by(provider: integration).try(:configuration)
+      end
     EOF
   end
 
