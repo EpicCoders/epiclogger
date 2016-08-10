@@ -18,6 +18,7 @@ module ErrorStore
       event_id      = data.delete(:event_id)
       message       = data.delete(:message)
       level         = data.delete(:level)
+      environment   = data[:environment]
 
       culprit       = data.delete(:culprit)
       time_spent    = data.delete(:time_spent)
@@ -65,6 +66,7 @@ module ErrorStore
         culprit: culprit,
         issue_logger: logger_name,
         level: level,
+        environment: environment,
         last_seen: date,
         first_seen: date,
         time_spent_total: time_spent || 0,

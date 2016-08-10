@@ -12,14 +12,6 @@ class GroupedIssue < ActiveRecord::Base
   friendly_id :message, use: :slugged
   before_save :check_fields
 
-  def first_issue
-    issues.first
-  end
-
-  def environment
-    first_issue.try(:environment)
-  end
-
   def users_affected
     subscribers.count
   end

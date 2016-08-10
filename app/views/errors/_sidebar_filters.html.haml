@@ -6,6 +6,11 @@
           %button.btn.btn-info{:type => 'submit', :value => "search-button", :name => 'commit'}
             %span.glyphicon.glyphicon-search
             Submit
+  - unless current_website.unique_environments.blank?
+    .filter-element
+      .form-group
+      %label Environment:
+      = select_tag 'env', options_for_select(current_website.unique_environments), prompt: 'All environments', class: 'form-control'
   .filter-element
     .form-group
       %label Date:

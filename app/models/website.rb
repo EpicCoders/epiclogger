@@ -42,6 +42,12 @@ class Website < ActiveRecord::Base
     website_members.each(&:delete)
   end
 
+  def unique_environments
+    Rails.cache.fetch('unique_envs') do
+      grouped_issues.pluck('DISTINCT environment').compact
+    end
+  end
+
   def check_origins
     return true if origins == '*'
     origins.split('\n').each do |origin|
