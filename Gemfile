@@ -9,7 +9,7 @@ gem 'pg'
 gem 'schema_plus_core', github: 'SchemaPlus/schema_plus_core', branch: 'activerecord-5.0'
 # gem 'schema_plus_foreign_keys', github: 'SchemaPlus/schema_plus_foreign_keys', branch: 'activerecord-5.0'
 # Add enumerize gem
-gem 'enumerize', github: 'brainspec/enumerize', branch: 'rails-5'
+gem 'enumerize'
 
 # Use bootstrap
 gem 'bootstrap-sass', '~> 3.3.6'
@@ -28,14 +28,10 @@ gem 'haml-rails'
 
 # jquery form validation plugin
 gem 'jquery-validation-rails'
-gem 'activeadmin', '~> 1.0.0.pre4'
+gem 'activeadmin', github: 'activeadmin'
 # TODO remove these once activeamdin is rails 5 ready
 # activeadmin dependencies that have rails 5 support
 gem 'inherited_resources', github: 'activeadmin/inherited_resources'
-gem 'ransack',    github: 'activerecord-hackery/ransack'
-gem 'formtastic', github: 'justinfrench/formtastic'
-gem 'activemodel-serializers-xml', github: 'rails/activemodel-serializers-xml'
-gem 'draper',     github: 'audionerd/draper', branch: 'rails5' #, ref: 'e816e0e587'
 # END depedencies
 
 # Use jquery as the JavaScript library
@@ -82,7 +78,7 @@ gem 'useragent'
 gem 'addressable'
 
 #better urls
-gem 'friendly_id', '~> 5.1.0'
+gem 'friendly_id', github: 'norman/friendly_id'
 
 #group objects by time frames
 gem 'groupdate'

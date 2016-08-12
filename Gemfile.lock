@@ -8,6 +8,25 @@ GIT
       schema_monkey (~> 2.1)
 
 GIT
+  remote: git://github.com/activeadmin/activeadmin.git
+  revision: 15820510e4ba3c81dbfeb966f237380123304404
+  specs:
+    activeadmin (1.0.0.pre4)
+      arbre (~> 1.0, >= 1.0.2)
+      bourbon
+      coffee-rails
+      formtastic (~> 3.1)
+      formtastic_i18n
+      inherited_resources (~> 1.6)
+      jquery-rails
+      jquery-ui-rails
+      kaminari (~> 0.15)
+      railties (>= 3.2, < 5.1)
+      ransack (~> 1.3)
+      sass-rails
+      sprockets (< 4.1)
+
+GIT
   remote: git://github.com/activeadmin/inherited_resources.git
   revision: d50b05f7e9e36dd45f065871e836a57a33ba4118
   specs:
@@ -18,51 +37,11 @@ GIT
       responders
 
 GIT
-  remote: git://github.com/activerecord-hackery/ransack.git
-  revision: fd94685abc0d18d30a730a57fb3dbd8aff048f7d
+  remote: git://github.com/norman/friendly_id.git
+  revision: aff0564584e84ffa505e6e278b65ca3c4ee5d698
   specs:
-    ransack (1.7.0)
-      actionpack (>= 3.0)
-      activerecord (>= 3.0)
-      activesupport (>= 3.0)
-      i18n
-      polyamorous (~> 1.3)
-
-GIT
-  remote: git://github.com/audionerd/draper.git
-  revision: e816e0e5876b76c648c0928f1c3f2aa2c7a3d1f2
-  branch: rails5
-  specs:
-    draper (2.1.0)
-      actionpack (>= 3.0)
-      activemodel (>= 3.0)
-      activesupport (>= 3.0)
-      request_store (~> 1.0)
-
-GIT
-  remote: git://github.com/brainspec/enumerize.git
-  revision: dc3c2a7dee8d30754b706329d49fe742507f6aee
-  branch: rails-5
-  specs:
-    enumerize (1.1.1)
-      activesupport (>= 3.2)
-
-GIT
-  remote: git://github.com/justinfrench/formtastic.git
-  revision: f591abe68fe0d3de338425b910e4316b5dcf8fd7
-  specs:
-    formtastic (3.2.0.pre)
-      actionpack (>= 4.1.0)
-
-GIT
-  remote: git://github.com/rails/activemodel-serializers-xml.git
-  revision: 570ee7ed33d60e44ca1f3ccbec3d1fbf61d52cbf
-  specs:
-    activemodel-serializers-xml (1.0.1)
-      activemodel (> 5.x)
-      activerecord (> 5.x)
-      activesupport (> 5.x)
-      builder (~> 3.1)
+    friendly_id (5.2.0.beta.1)
+      activerecord (>= 4.0.0)
 
 GEM
   remote: https://rubygems.org/
@@ -90,20 +69,6 @@ GEM
       erubis (~> 2.7.0)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.0, >= 1.0.2)
-    activeadmin (1.0.0.pre4)
-      arbre (~> 1.0, >= 1.0.2)
-      bourbon
-      coffee-rails
-      formtastic (~> 3.1)
-      formtastic_i18n
-      inherited_resources (~> 1.6)
-      jquery-rails
-      jquery-ui-rails
-      kaminari (~> 0.15)
-      rails (>= 3.2, < 5.1)
-      ransack (~> 1.3)
-      sass-rails
-      sprockets (< 4)
     activejob (5.0.0)
       activesupport (= 5.0.0)
       globalid (>= 0.3.6)
@@ -172,6 +137,8 @@ GEM
     docile (1.1.5)
     domain_name (0.5.20160615)
       unf (>= 0.0.5, < 1.0.0)
+    enumerize (2.0.0)
+      activesupport (>= 3.2)
     erubis (2.7.0)
     eventmachine (1.2.0.1)
     execjs (2.7.0)
@@ -188,9 +155,9 @@ GEM
       thor (~> 0.14)
     font-awesome-sass (4.6.2)
       sass (>= 3.2)
+    formtastic (3.1.4)
+      actionpack (>= 3.2.13)
     formtastic_i18n (0.6.0)
-    friendly_id (5.1.0)
-      activerecord (>= 4.0.0)
     globalid (0.3.6)
       activesupport (>= 4.1.0)
     gon (6.1.0)
@@ -291,7 +258,7 @@ GEM
       rake (>= 0.8.1)
     pg (0.18.4)
     pkg-config (1.1.7)
-    polyamorous (1.3.0)
+    polyamorous (1.3.1)
       activerecord (>= 3.0)
     pry (0.10.4)
       coderay (~> 1.1.0)
@@ -337,6 +304,12 @@ GEM
       rake (>= 0.8.7)
       thor (>= 0.18.1, < 2.0)
     rake (11.2.2)
+    ransack (1.8.2)
+      actionpack (>= 3.0)
+      activerecord (>= 3.0)
+      activesupport (>= 3.0)
+      i18n
+      polyamorous (~> 1.3)
     rdoc (4.2.2)
       json (~> 1.4)
     redis (3.3.1)
@@ -447,8 +420,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  activeadmin (~> 1.0.0.pre4)
-  activemodel-serializers-xml!
+  activeadmin!
   addressable
   bcrypt (~> 3.1.7)
   better_errors
@@ -462,14 +434,12 @@ DEPENDENCIES
   coffee-rails
   dalli
   database_cleaner
-  draper!
-  enumerize!
+  enumerize
   factory_girl_rails
   faker
   figaro
   font-awesome-sass
-  formtastic!
-  friendly_id (~> 5.1.0)
+  friendly_id!
   gon
   groupdate
   haml-rails
@@ -492,7 +462,6 @@ DEPENDENCIES
   rails-controller-testing
   rails_12factor
   rails_warden
-  ransack!
   rest-client
   rspec-rails (~> 3.5)
   sass-rails
