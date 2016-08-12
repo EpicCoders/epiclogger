@@ -35,7 +35,7 @@
             - @issue.get_platform_frames.each_with_index do |frame, index|
               .accordion-group
                 .accordion-heading.heading
-                  %a.accordion-toggle.collapsed{ href: '#' }
+                  %a.accordion-toggle.collapsed
                     %i.icon-fixed-width.fa.fa-plus{"data-parent" => "#frame", "data-toggle" => "collapse", :href => "#collapse#{index}"}
                     = frame.get_culprit_string(with_lineno: true)
                 .accordion-body.collapse{:style => "height: 0px;", :id => "collapse#{index}"}
@@ -57,14 +57,15 @@
           #frame.accordion
             %table.table
               - @issue.breadcrumbs_stacktrace.each_with_index do |crumb, index|
-                %tr
-                  %td.line{ class: crumb[:level].present? ? "#{crumb[:level]}" : "log"}= crumb[:category]
-                  - data = crumb[:data]
-                  - if data.blank?
-                    %td= crumb[:message]
-                  - else
-                    %td #{data[:method]} #{data[:url]} [#{data[:status_code]}]
-                  %td.timestamp= Time.at(crumb[:timestamp]).strftime("%H:%M:%S")
+                .accordion-group
+                  %tr
+                    %td.line{ class: crumb[:level].present? ? "#{crumb[:level]}" : "log"}= crumb[:category]
+                    - data = crumb[:data]
+                    - if data.blank?
+                      %td= crumb[:message]
+                    - else
+                      %td #{data[:method]} #{data[:url]} [#{data[:status_code]}]
+                    %td.timestamp= Time.at(crumb[:timestamp]).strftime("%H:%M:%S")
           %p.read-more.text-center{style: "display:#{valid_stacktrace ? 'block' : 'none'}"}
             %a.btn.btn-default{:href => "#"} View full backtrace
 

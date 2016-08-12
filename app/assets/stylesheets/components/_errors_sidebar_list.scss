@@ -55,8 +55,8 @@ $list-error-height: 100%;
   }
 }
 .scrollable{
-  max-height: 800px;
-  overflow-y: auto;
+  max-height: 85vh;
+  overflow-y: scroll;
 }
 
 @media(max-width: 1000px) and (min-width: 767px){
