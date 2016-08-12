@@ -123,7 +123,7 @@ RSpec.describe ErrorsController, type: :controller do
         before(:each) do session[:epiclogger_website_id] = website.id end
         let!(:errors) do
           array = []
-          number_of_errors = 25
+          number_of_errors = 30
           number_of_errors.times do |index|
             unresolved_error = FactoryGirl.create(:grouped_issue, { website: website, checksum: SecureRandom.hex(), status: 'unresolved', resolved_at: nil, last_seen: Time.now } )
             resolved_error = FactoryGirl.create(:grouped_issue, { website: website, checksum: SecureRandom.hex(), status: 'resolved', resolved_at: Time.now, last_seen: Time.now } )
@@ -166,9 +166,9 @@ RSpec.describe ErrorsController, type: :controller do
             it 'should return 50 matches' do
               params[:search] = 'javascript'
               get_with user, :show, params
-              expect(subject.matching_elements.count).to eq(50)
+              expect(subject.matching_elements.count).to eq(60)
 
-              expect(assigns(:selected_errors).count).to eq(5)
+              expect(assigns(:selected_errors).count).to eq(25)
             end
 
             it 'should contain a flash message and return nil' do
@@ -225,14 +225,14 @@ RSpec.describe ErrorsController, type: :controller do
               params[:status] = 'resolved'
               get_with user, :show, params
 
-              expect(assigns(:selected_errors).find_all{ |e| e.status == 'resolved' }.count).to eq(5)
+              expect(assigns(:selected_errors).find_all{ |e| e.status == 'resolved' }.count).to eq(25)
             end
 
             it 'should filter unresolved errors' do
               params[:status] = 'unresolved'
               get_with user, :show, params
 
-              expect(assigns(:selected_errors).find_all{ |e| e.status == 'unresolved' }.count).to eq(5)
+              expect(assigns(:selected_errors).find_all{ |e| e.status == 'unresolved' }.count).to eq(25)
             end
 
             it 'should return nil' do
@@ -253,7 +253,7 @@ RSpec.describe ErrorsController, type: :controller do
               params[:env] = 'development'
 
               get_with user, :show, params
-              expect(assigns(:selected_errors).count).to eq(5)
+              expect(assigns(:selected_errors).count).to eq(25)
             end
 
             it 'should return nil' do
