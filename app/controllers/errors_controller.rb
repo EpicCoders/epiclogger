@@ -3,7 +3,7 @@ class ErrorsController < ApplicationController
 
   def index
     @filter = params[:filter] || "recent"
-    errors_per_page = params[:error_count].to_i || 10
+    errors_per_page = params[:error_count].to_i || 25
     @page = params[:page] || 1
     case @filter
     when "recent"
@@ -20,7 +20,7 @@ class ErrorsController < ApplicationController
   def show
     page_issue = params[:page_issue] || 1
     page = params[:page] || 1
-    errors_per_page = 5
+    errors_per_page = 25
     errors = current_website.grouped_issues.order('last_seen DESC')
     resolve if params[:commit] == 'Resolve'
     unresolve if params[:commit] == 'Unresolve'
