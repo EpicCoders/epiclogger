@@ -53,11 +53,15 @@ module Integrations
     end
 
     def get_request(url)
-      RestClient.get url, header rescue 'Operation failed!'
+      RestClient.get url, header 
+    rescue => e
+      e.message
     end
 
     def post_request(url, data)
-      RestClient.post url, data.to_json, header rescue 'Operation failed!'
+      RestClient.post url, data.to_json, header
+    rescue => e
+      e.message
     end
   end
 end

@@ -14,7 +14,7 @@ module Integrations::Drivers
     end
 
     def create_task(title)
-      url =  api_url + 'repos/' + self.configuration["username"].to_s + '/' + self.configuration["selected_application"].to_s + '/issues'
+      url =  api_url + 'repos/' + self.configuration["application_owner"].to_s + '/' + self.configuration["selected_application"].to_s + '/issues'
       data = { title: title }
       response = post_request(url, data)
       if response

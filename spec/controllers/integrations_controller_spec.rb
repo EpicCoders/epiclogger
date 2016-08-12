@@ -9,12 +9,13 @@ RSpec.describe IntegrationsController, type: :controller do
   before(:each) do session[:epiclogger_website_id] = website.id end
 
   describe 'PUT#update' do
-    let(:params) { default_params.merge(integration: { application: 'gogu' } ) }
+    let(:params) { default_params.merge(integration: { app_name: 'gogu', app_owner: 'ion' } ) }
     it 'updates the integration' do
       expect {
         put_with user, :update, params
         integration.reload
       }.to change { integration.configuration['selected_application'] }.from('test').to('gogu')
+      .and change { integration.configuration['application_owner'] }.from(nil).to('ion')
     end
 
     it 'redirects to settings_path with success message' do

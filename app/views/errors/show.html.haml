@@ -18,7 +18,7 @@
             %li
               %span.label.badge{:title => 'Checksum'}= @error.checksum
         .col-xs-5.text-right
-          - if @error.website.github_integration?
+          - if @error.website.github_configuration.try(:[], 'selected_application')
             .btn-group
               = button_to 'Create Github Issue', create_task_integration_path(@error.website.github_integration, error_id: @error.id, title: @error.message), class: "btn pull-right btn-primary "
           .btn-group

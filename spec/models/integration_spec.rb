@@ -30,8 +30,9 @@ describe Integration do
 
   describe 'select_application' do
     it 'should save the selected application into the configuration hash' do
-      integration.update_attributes(application: 'my_app')
+      integration.update_attributes(app_name: 'my_app', app_owner: 'gogu')
       expect(integration.configuration['selected_application']).to eq('my_app')
+      expect(integration.configuration['application_owner']).to eq('gogu')
     end
   end
 
