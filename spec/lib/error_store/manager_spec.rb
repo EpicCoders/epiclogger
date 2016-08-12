@@ -50,6 +50,23 @@ RSpec.describe ErrorStore::Manager do
       }.to change(Subscriber, :count).by(1)
     end
 
+    it 'saves message from data' do
+      expect(subject.message).to eq(validated_post_data[:message])
+    end
+
+    context 'when message is not present' do
+      before(:each) { validated_post_data.delete(:message) }
+      it 'should save message from exception' do
+        exception_value = validated_post_data[:interfaces][:exception][:values].first
+        expect(ErrorStore::Manager.new(validated_post_data).store_error.message).to eq("#{exception_value[:type]}: #{exception_value[:value]}")
+      end
+      it 'should save <no message> ' do
+        validated_post_data[:interfaces][:exception][:values].first[:type] = ''
+        validated_post_data[:interfaces][:exception][:values].first[:value] = ''
+        expect(ErrorStore::Manager.new(validated_post_data).store_error.message).to eq('<no message>')
+      end
+    end
+
     it 'saves a new release' do
       expect {
         subject
