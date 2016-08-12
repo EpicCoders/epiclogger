@@ -129,7 +129,7 @@ RSpec.describe ErrorStore::Error do
     it 'returns data[:message] = <no message> if message missing' do
       response.delete('message')
       subject
-      expect( valid_error.data[:message] ).to eq('<no message>')
+      expect( valid_error.data[:message] ).to be_nil
     end
     it 'trims culprit length if too big' do
       # we set a 220 string as culprit
