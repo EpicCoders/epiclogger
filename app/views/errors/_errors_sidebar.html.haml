@@ -24,7 +24,7 @@
           %a{:href => "#{request.path}?tab=resolved"}
             Resolved
 
-    .tab-content
+    .tab-content.scrollable
       #filters.collapse
         = render partial: 'sidebar_filters'
       = render 'shared/flash_messages'
