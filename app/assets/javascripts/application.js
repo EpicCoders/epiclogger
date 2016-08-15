@@ -22,6 +22,7 @@
 //= require sweet-alert/sweet-alert
 //= require jquery.cookie
 //= require jquery.deparam
+//= require jquery_md5
 //= require highlightjs
 //= require chartkick
 //= require highcharts

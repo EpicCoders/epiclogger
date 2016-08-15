@@ -75,23 +75,25 @@
         Broadcast
       .panel-body
         .subscribers
-          = form_for @error, url: notify_subscribers_error_path(), remote: true, html: { method: :post , class: ' broadcast-textarea'}, :data => {:confirm => 'Are you sure?'} do |f|
+          = form_for @error, url: notify_subscribers_error_path(), remote: true, html: { method: :post , class: 'broadcast-textarea', id: 'broadcast-form'} do |f|
             = render partial: 'shared/flash_messages'
-            - subscribers.each do |subscriber|
-              = image_tag subscriber.avatar_url(30)
-              - if subscribers.size > 10
-                = " and #{subscribers.size - 10} more"
-                - break
-            - if subscribers.size > 0
-              %h5.pull-right
-                = t('subscribers.count', count: subscribers.size)
+            .subscriber-icons
+              - subscribers.each do |subscriber|
+                = image_tag subscriber.avatar_url(30)
+                - if subscribers.size > 10
+                  = " and #{subscribers.size - 10} more"
+                  - break
+            .subscriber-count
+              - if subscribers.size > 0
+                %h5.pull-right
+                  = t('subscribers.count', count: subscribers.size)
             .notify
               = text_area_tag 'message', '', placeholder: 'Write a message ...'
               - if current_website.intercom_integration?
                 .intercom-check.pull-left
                   %label.intercom-message
-                    = check_box_tag 'intercom'
+                    = check_box 'subscriber_type', 'intercom', { onclick: "$('#broadcast-form').submit()", id: 'intercom-check'  }, 'true', 'false'
                     Send with Intercom
-              %button.btn.btn-primary{:type => 'submit'}
+              = button_to '', name: 'notify_submit', value: 'true', class: 'btn btn-primary' do
                 %span.fa.fa-paper-plane
                 Send

@@ -51,22 +51,37 @@ class ErrorsController < ApplicationController
   end
 
   def notify_subscribers
-    unless params[:message].blank?
-      return redirect_to error_path(@error), flash: { error: 'Message too short!' } if params[:message].length < 10
-      if params[:intercom]
-        begin
-          current_website.intercom_integration.driver.send_message(@error.subscribers.pluck(:email), params[:message])
+    #true when form has been submitted
+    if params[:notify_submit]
+      unless params[:message].blank?
+        return redirect_to error_path(@error), flash: { error: 'Message too short!' } if params[:message].length < 10
+        if params[:subscriber_type][:intercom] == 'true'
+          begin
+            current_website.intercom_integration.driver.send_message(@error.subscribers.pluck(:email), params[:message])
+            redirect_to error_path(@error), flash: { success: 'Message successfully sent!' }
+          rescue => e
+            Raven.capture_exception(e)
+            redirect_to error_path(@error), flash: { error: 'Operation failed!' }
+          end
+        else
+          @message = Message.create( content: params[:message], issue_id: @error.issues.last.id )
+          @error.subscribers.each do |subscriber|
+            GroupedIssueMailer.notify_subscriber(@error, subscriber, current_user, @message).deliver_later
+          end
           redirect_to error_path(@error), flash: { success: 'Message successfully sent!' }
-        rescue => e
-          Raven.capture_exception(e)
-          redirect_to error_path(@error), flash: { error: 'Operation failed!' }
         end
       else
-        @message = Message.create( content: params[:message], issue_id: @error.issues.last.id )
-        @error.subscribers.each do |subscriber|
-          GroupedIssueMailer.notify_subscriber(@error, subscriber, current_user, @message).deliver_later
-        end
-        redirect_to error_path(@error), flash: { success: 'Message successfully sent!' }
+        redirect_to error_path(@error), flash: { error: 'Message cannot be empty!', status: 403 }
+      end
+    #syncing the subscribers
+    elsif params[:subscriber_type]
+      if params[:subscriber_type][:intercom] == 'true'
+        intercom_subscribers = current_website.intercom_integration.driver.list_subscribers
+        common_subscribers = intercom_subscribers.map{ |x| x[:email] } & @error.subscribers.pluck(:email)
+        render json: common_subscribers
+      elsif params[:subscriber_type][:intercom] == 'false'
+        subscribers = @error.subscribers.pluck(:email)
+        render json: subscribers
       end
     end
   end

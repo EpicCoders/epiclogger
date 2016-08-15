@@ -58,4 +58,18 @@ $(function () {
       return false
     }
   });
+
+  $(document).ready(function() {
+    $('#broadcast-form').on("ajax:success", function(e, data, status, xhr) {
+      if (data.length && data.length > 0){
+        $('.subscriber-count h5').text("This message will be sent to " + data.length + " " + (data.length > 1 ? "users" : "user"))
+        $('.subscriber-icons').empty()
+        for (i = 0; i < data.length; i++) {
+          $('.subscriber-icons').append("<img src=http://gravatar.com/avatar/" + $.md5(data[i].toLowerCase()) + ".png?s=30>")
+        }
+      }
+    }).on("ajax:error", function(e, xhr, status, error) {
+      console.log('failed syncing')
+    });
+  });
 });
