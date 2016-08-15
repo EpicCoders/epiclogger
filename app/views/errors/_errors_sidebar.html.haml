@@ -5,11 +5,11 @@
         .pull-left.error_select
           .btn.btn-default.btn-sm{'data-toggle'=>'button','aria-pressed'=>"false"}
             %input.all{:title => "toggle all", :type => "checkbox"}/
-        = f.submit "#{params['tab'] == 'resolved' || @selected_errors.try(:first).try(:resolved?).present? ? 'Unresolve' : 'Resolve'}", class: "btn btn-sm header-resolve #{params['tab'] == 'resolved' || @selected_errors.try(:first).try(:resolved?).present? ? 'btn-danger' : 'btn-primary'}", id: "multiple-resolve", remote:true, method: :put
+        = f.submit "#{params['tab'] == 'resolved' || @selected_errors.try(:first).try(:resolved?).present? ? 'Unresolve' : 'Resolve'}", class: "btn header-resolve #{params['tab'] == 'resolved' || @selected_errors.try(:first).try(:resolved?).present? ? 'btn-danger' : 'btn-primary'}", id: "multiple-resolve", remote:true, method: :put
         .error_pagination.text-right
           .btn-group.sidebar_pagination_buttons
             = paginate @selected_errors, theme: 'next_prev_theme'
-        %button.btn.btn-default.btn-sm{"data-target" => "#filters", "data-toggle" => "collapse", :type => "button", :title => 'Filters'}
+        %button.btn.btn-default{"data-target" => "#filters", "data-toggle" => "collapse", :type => "button", :title => 'Filters'}
           %span.glyphicon.glyphicon-filter
       .row
         .col-sm-12
@@ -24,7 +24,7 @@
           %a{:href => "#{request.path}?tab=resolved"}
             Resolved
 
-    .tab-content
+    .tab-content.scrollable
       #filters.collapse
         = render partial: 'sidebar_filters'
       = render 'shared/flash_messages'

@@ -18,6 +18,8 @@ class ErrorsController < ApplicationController
   end
 
   def show
+    #in case we visit an error from another website
+    set_website(@error.website) unless @error.website == current_website
     page_issue = params[:page_issue] || 1
     page = params[:page] || 1
     errors_per_page = 25
