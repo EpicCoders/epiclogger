@@ -10,7 +10,7 @@
     .filter-element
       .form-group
       %label Environment:
-      = select_tag 'env', options_for_select(current_website.unique_environments), prompt: 'All environments', class: 'form-control'
+      = select_tag 'env', options_for_select(current_website.unique_environments), prompt: "#{params[:env] || 'All environments'}", class: 'form-control'
   .filter-element
     .form-group
       %label Date:
