@@ -11,6 +11,9 @@ class UsersController < ApplicationController
   def new
     after_login_redirect if logged_in?
 
+    invite = Invite.find_by_token(params[:token]) if params[:token]
+    @email = invite.email if invite
+
     @user = User.new
     gon.token = params[:id]
     gon.website_id = params[:website_id]
