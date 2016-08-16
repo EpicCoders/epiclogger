@@ -13,8 +13,12 @@ class InvitesController < ApplicationController
   def accept
     @invite = Invite.find_by_token(params[:id])
     if !logged_in?
-      # we redirect to signup url because we are not logged in
-      redirect_to signup_url( token: params[:id] )
+      if User.find_by_email(@invite.email).present?
+        url_session(request.url)
+        redirect_to login_url, notice: 'Login to continue'
+      else
+        redirect_to signup_url( token: params[:id] )
+      end
     elsif @invite.email.casecmp(current_user.email) == 0
       @invite.accept(current_user)
       set_website(@invite.website)
