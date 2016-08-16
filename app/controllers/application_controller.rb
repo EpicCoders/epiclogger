@@ -53,6 +53,7 @@ class ApplicationController < ActionController::Base
   end
 
   def after_login_redirect(url_to_redirect = nil)
+    redirect_to(session.delete(:url)) && return unless session[:url].nil?
     redirect_to(url_to_redirect) && return unless url_to_redirect.nil?
     if current_website
       redirect_to errors_url
