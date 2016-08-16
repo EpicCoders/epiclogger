@@ -11,6 +11,7 @@ class SessionsController < ApplicationController
     user = authenticate!(:password)
     set_website(user.default_website)
     after_login_redirect(url_session)
+    session.delete(:url) if session[:url]
   end
 
   def destroy
@@ -19,6 +20,7 @@ class SessionsController < ApplicationController
   end
 
   def unauthorized
+    url_session(request.original_url)
     redirect_to login_url, alert: 'Your credentials are wrong or your email is not confirmed'
   end
 
