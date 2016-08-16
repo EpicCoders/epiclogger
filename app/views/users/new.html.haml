@@ -21,7 +21,7 @@
               = f.input_field :name, class: "form-control input-lg", placeholder: 'Name'
             = f.input :email, label: false, wrapper: :vertical_input_group, required: true do
               %span.input-group-addon @
-              = f.email_field :email, class: "form-control input-lg", placeholder: 'Email address'
+              = f.email_field :email, class: "form-control input-lg", placeholder: 'Email address', value: @email
             = f.input :password, label: false, wrapper: :vertical_input_group, required: true do
               %span.input-group-addon
                 .glyphicon.glyphicon-lock
