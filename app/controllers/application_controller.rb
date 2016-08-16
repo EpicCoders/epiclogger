@@ -4,6 +4,7 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :null_session
   before_filter :set_gon
+  before_filter :redirect_if_needed
   before_action :authenticate!
   before_action :set_raven_context
 
@@ -49,6 +50,12 @@ class ApplicationController < ActionController::Base
   end
   helper_method :current_website
 
+  def redirect_if_needed
+    unless current_user
+      url_session(request.url) unless [root_url,"#{root_url}unauthenticated", login_url, signup_url].include? request.url.split('?').first
+    end
+  end
+
   def set_website(website)
     return unless logged_in?
     return if website.nil?
@@ -65,4 +72,9 @@ class ApplicationController < ActionController::Base
     end
   end
   helper_method :after_login_redirect
+
+  def url_session(url = nil)
+    return session[:url] if url.nil?
+    session[:url] = url
+  end
 end

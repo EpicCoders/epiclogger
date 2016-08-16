@@ -10,7 +10,7 @@ class SessionsController < ApplicationController
   def create
     user = authenticate!(:password)
     set_website(user.default_website)
-    after_login_redirect
+    after_login_redirect(url_session)
   end
 
   def destroy
