@@ -132,6 +132,17 @@ RSpec.describe ErrorsController, type: :controller do
           array.sort_by!(&:last_seen).reverse!
         end
 
+        it 'should change current website' do
+          website1 = create :website
+          group1 = create :grouped_issue, website: website1
+          issue1 = create :issue, group: group1
+          website_member1 = create :website_member, website: website1, user: user
+          params[:id] = group1.id
+          get_with user, :show, params
+
+          expect(session[:epiclogger_website_id]).to eq(website1.id)
+        end
+
         it "displays the page of the current error when no other url params are present" do
           get_with user, :show, params
           expect(assigns(:selected_errors).current_page).to eq(1)
