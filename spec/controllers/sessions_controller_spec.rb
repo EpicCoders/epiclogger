@@ -50,5 +50,17 @@ RSpec.describe SessionsController, :type => :controller do
     it 'should redirect to errors' do
       expect( post :create, user: { email: user.email, password: user.password } ).to redirect_to(errors_path)
     end
+
+    it 'should redirect to expected' do
+      session[:url] = websites_url
+      expect( post :create, user: { email: user.email, password: user.password } ).to redirect_to(websites_url)
+    end
+
+    it 'should remove url session' do
+      session[:url] = websites_url
+      post :create, user: { email: user.email, password: user.password }
+
+      expect(session[:url]).to be_nil
+    end
   end
 end

@@ -10,7 +10,7 @@ class SessionsController < ApplicationController
   def create
     user = authenticate!(:password)
     set_website(user.default_website)
-    after_login_redirect(url_session)
+    after_login_redirect
   end
 
   def destroy
@@ -19,6 +19,7 @@ class SessionsController < ApplicationController
   end
 
   def unauthorized
+    url_session(request.original_url)
     redirect_to login_url, alert: 'Your credentials are wrong or your email is not confirmed'
   end
 
