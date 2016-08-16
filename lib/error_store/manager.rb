@@ -195,7 +195,7 @@ module ErrorStore
       if hash.try(:[], :type).blank? && hash.try(:[], :value).blank?
         message = '<no message>'
       else
-        message = "#{hash.try(:[], :type)}: #{hash.try(:[], :value)}"
+        message = "#{hash[:type]}: #{hash[:value]}"
       end
       message
     end
