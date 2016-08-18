@@ -25,7 +25,7 @@ class GroupedIssue < ActiveRecord::Base
         if found
           data[found]["count"] += 1
         else
-          data.push( { attribute => value, "count" => 0, "created_at" => issue.created_at, "updated_at" => issue.updated_at } )
+          data.push( { attribute => value, "count" => 1, "created_at" => issue.created_at, "updated_at" => issue.updated_at } )
         end
       end
     end
