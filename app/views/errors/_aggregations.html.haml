@@ -1,13 +1,13 @@
 .panel.panel-default
   .panel-heading
-    %a{"data-parent" => "#accordion", "data-toggle" => "collapse", :href => "#collapse#{data.agg_type}"}
-      %h4.panel-title=data.agg_type.humanize
-  .panel-collapse.collapse{ id: "collapse#{data.agg_type}", class: "#{data.agg_type == 'One' ? 'in' : ''}" }
+    %a{"data-parent" => "#accordion", "data-toggle" => "collapse", :href => "#collapse#{data.name}"}
+      %h4.panel-title=data.name.humanize
+  .panel-collapse.collapse{ id: "collapse#{data.name}", class: "#{data.name == @error.aggregates[0].name ? 'in' : ''}" }
     .panel-body
       %table.table#members-container
         %thead
           %tr
-            %th=data.agg_type.humanize
+            %th=data.name.humanize
             %th # of notices
             %th First seen at
             %th Last seen at

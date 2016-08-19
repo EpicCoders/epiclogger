@@ -75,7 +75,7 @@ ActiveRecord::Schema.define(version: 20160818125259) do
 
   create_table "aggregates", force: :cascade do |t|
     t.integer  "grouped_issue_id", :index=>{:name=>"index_aggregates_on_grouped_issue_id"}, :foreign_key=>{:references=>"grouped_issues", :name=>"fk_aggregates_grouped_issue_id", :on_update=>:restrict, :on_delete=>:cascade}
-    t.string   "agg_type"
+    t.string   "name"
     t.jsonb    "value",            :default=>{}
     t.datetime "created_at",       :null=>false
     t.datetime "updated_at",       :null=>false

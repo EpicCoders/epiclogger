@@ -43,5 +43,5 @@
             - if params[:current_tab] == 'aggregations'
               #accordion.panel-group
                 - unless @error.aggregates.blank?
-                  - @error.aggregates.each do |record|
-                    = render partial: 'errors/aggregations', locals: { data: record}
+                  = render partial: 'errors/aggregations', collection: @error.aggregates, as: :data
+d

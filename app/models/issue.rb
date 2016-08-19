@@ -22,7 +22,7 @@ class Issue < ActiveRecord::Base
   end
 
   def increment_aggregate
-    ErrorStore::Aggregates.new.handle_aggregates(self)
+    ErrorStore::Aggregates.new(self).handle_aggregates
   end
 
   def get_interfaces(interface = nil)
