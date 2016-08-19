@@ -7,6 +7,7 @@ class Issue < ActiveRecord::Base
   accepts_nested_attributes_for :messages
   validates :message, presence: true
   after_create :issue_created
+  after_commit :increment_aggregate
 
   def error
     ErrorStore.find(self)
@@ -18,6 +19,10 @@ class Issue < ActiveRecord::Base
 
   def data
     decode_and_decompress(super)
+  end
+
+  def increment_aggregate
+    ErrorStore::Aggregates.new.handle_aggregates(self)
   end
 
   def get_interfaces(interface = nil)

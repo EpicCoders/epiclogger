@@ -6,7 +6,7 @@ class GroupedIssue < ActiveRecord::Base
   has_many :subscribers, -> { uniq }, through: :issues, foreign_key: 'group_id'
   has_many :issues, foreign_key: 'group_id', dependent: :destroy
   has_many :messages, through: :issues
-  has_many :aggregates, dependent: :destroy
+  has_many :aggregates
   enumerize :level, in: [:debug, :error, :fatal, :info, :warning], default: :error
   enumerize :status, in: { muted: 1, resolved: 2, unresolved: 3 }, default: :unresolved, predicates: true, scope: true
   friendly_id :message, use: :slugged
@@ -14,22 +14,6 @@ class GroupedIssue < ActiveRecord::Base
 
   def users_affected
     subscribers.count
-  end
-
-  def aggregations (attribute)
-    data = []
-    self.issues.each do |issue|
-      value = issue.public_send(attribute)
-      unless value.nil?
-        found = data.index { |x| x[attribute] == value }
-        if found
-          data[found]["count"] += 1
-        else
-          data.push( { attribute => value, "count" => 1, "created_at" => issue.created_at, "updated_at" => issue.updated_at } )
-        end
-      end
-    end
-    data
   end
 
   private
