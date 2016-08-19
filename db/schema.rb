@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160808131218) do
+ActiveRecord::Schema.define(version: 20160818125259) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -26,6 +26,14 @@ ActiveRecord::Schema.define(version: 20160808131218) do
     t.string   "author_type",   :index=>{:name=>"index_active_admin_comments_on_author_type_and_author_id", :with=>["author_id"]}
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "aggregates", force: :cascade do |t|
+    t.integer  "group_id"
+    t.string   "type"
+    t.jsonb    "value",      :default=>{}
+    t.datetime "created_at", :null=>false
+    t.datetime "updated_at", :null=>false
   end
 
   create_table "websites", force: :cascade do |t|
