@@ -7,7 +7,7 @@ class Issue < ActiveRecord::Base
   accepts_nested_attributes_for :messages
   validates :message, presence: true
   after_create :issue_created
-  after_commit :increment_aggregate
+  after_commit :refresh_aggregates
 
   def error
     ErrorStore.find(self)
@@ -21,8 +21,10 @@ class Issue < ActiveRecord::Base
     decode_and_decompress(super)
   end
 
-  def increment_aggregate
-    ErrorStore::Aggregates.new(self).handle_aggregates
+  def refresh_aggregates
+    cache_key = self.object_id.to_s
+    Rails.cache.write(cache_key, self)
+    AggregatesWorker.perform_async(cache_key)
   end
 
   def get_interfaces(interface = nil)
@@ -144,6 +146,14 @@ class Issue < ActiveRecord::Base
   def issue_created
     website.website_members.with_realtime.each do |member|
       GroupedIssueMailer.error_occurred(self, member).deliver_later
+    end
+  end
+
+  class AggregatesWorker
+    include Sidekiq::Worker
+    def perform(cache_key)
+      record = Rails.cache.read(cache_key)
+      ErrorStore::Aggregates.new(record).handle_aggregates
     end
   end
 end
