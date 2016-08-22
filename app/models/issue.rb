@@ -146,12 +146,4 @@ class Issue < ActiveRecord::Base
       GroupedIssueMailer.error_occurred(self, member).deliver_later
     end
   end
-
-  class AggregatesWorker
-    include Sidekiq::Worker
-    def perform(issue_id)
-      record = Issue.find(issue_id)
-      ErrorStore::Aggregates.new(record).handle_aggregates
-    end
-  end
 end
