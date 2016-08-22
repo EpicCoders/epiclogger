@@ -84,6 +84,26 @@ describe Issue do
     end
   end
 
+  describe 'refresh_aggregates' do
+    subject { issue.refresh_aggregates }
+    it 'calls perform' do
+      expect(Issue::AggregatesWorker).to receive(:perform_async)
+      subject
+    end
+
+    it 'should push jobs to the queue' do
+      expect {
+        subject
+      }.to change(Issue::AggregatesWorker.jobs, :size).by(1)
+      subject
+    end
+
+    it 'calls handle_aggregates' do
+      expect_any_instance_of(ErrorStore::Aggregates).to receive(:handle_aggregates)
+      Issue::AggregatesWorker.new.perform(issue.id)
+    end
+  end
+
   describe "get_headers" do
     it 'returns all headers if no param' do
       expect(issue.get_headers).to eq(http[:headers])
@@ -96,11 +116,11 @@ describe Issue do
     context 'when http has no data' do
       before(:each) do issue.update_attributes(data: missing_http) end
       it 'should return false' do
-        expect(issue.get_headers).to eq(false)
+        expect(issue.get_headers).to be_nil
       end
 
       it 'should return false even if param is given' do
-        expect(issue.get_headers(:http)).to eq(false)
+        expect(issue.get_headers(:http)).to be_nil
       end
     end
   end
@@ -117,11 +137,11 @@ describe Issue do
     context 'when http has no data' do
       before(:each) do issue.update_attributes(data: missing_http) end
       it 'should return false' do
-        expect(issue.http_data).to eq(false)
+        expect(issue.http_data).to be_nil
       end
 
       it 'should return false even if param is given' do
-        expect(issue.http_data(:headers)).to eq(false)
+        expect(issue.http_data(:headers)).to be_nil
       end
     end
   end

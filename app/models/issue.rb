@@ -22,9 +22,7 @@ class Issue < ActiveRecord::Base
   end
 
   def refresh_aggregates
-    cache_key = self.object_id.to_s
-    Rails.cache.write(cache_key, self)
-    AggregatesWorker.perform_async(cache_key)
+    AggregatesWorker.perform_async(self.id)
   end
 
   def get_interfaces(interface = nil)
@@ -151,8 +149,8 @@ class Issue < ActiveRecord::Base
 
   class AggregatesWorker
     include Sidekiq::Worker
-    def perform(cache_key)
-      record = Rails.cache.read(cache_key)
+    def perform(issue_id)
+      record = Issue.find(issue_id)
       ErrorStore::Aggregates.new(record).handle_aggregates
     end
   end
