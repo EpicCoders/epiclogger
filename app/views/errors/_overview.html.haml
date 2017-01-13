@@ -14,7 +14,7 @@
           %dt Message
           %dd= @issue.try(:message)
           %dt Url
-          %dd #{@issue.http_data(:url) || '<no information>'}
+          %dd #{@issue.try(:http_data, :url) || '<no information>'}
           %dt File
           %dd= @error.culprit
           %dt User Agent
