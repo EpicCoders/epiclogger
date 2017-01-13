@@ -8,7 +8,7 @@ class Website < ActiveRecord::Base
   has_many :releases, dependent: :destroy
   has_many :grouped_issues, dependent: :destroy
   has_many :integrations, dependent: :destroy
-  has_many :website_members, -> { uniq }, autosave: true
+  has_many :website_members, -> { distinct }, autosave: true
   has_many :users, through: :website_members
   has_many :invites, dependent: :destroy
 
@@ -88,7 +88,7 @@ class Website < ActiveRecord::Base
   def self.custom_report(date, field)
     WebsiteMember.joins(website: :grouped_issues)
                  .where('grouped_issues.updated_at > ? AND muted = ?', date, false)
-                 .uniq
+                 .distinct
                  .group_by(&:user_id)
                  .each do |user_id, members|
       if field == :daily

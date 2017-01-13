@@ -38,12 +38,12 @@ module Warden
         if result.is_a?(Hash) && !warden.custom_failure? && !@controller.send(:performed?)
           result[:action] ||= :unauthenticated
 
-          env = @controller.request.env
-          env['PATH_INFO'] = "/#{result[:action]}"
-          env['warden.options'] = result
-          Warden::Manager._run_callbacks(:before_failure, env, result)
+          request_env = @controller.request.env
+          request_env['PATH_INFO'] = "/#{result[:action]}"
+          request_env['warden.options'] = result
+          Warden::Manager._run_callbacks(:before_failure, request_env, result)
 
-          status, headers, body = warden.config[:failure_app].call(env).to_a
+          status, headers, body = warden.config[:failure_app].call(request_env).to_a
           @controller.send :render, :status => status, :text => body,
             :content_type => headers['Content-Type'], :location => headers['Location']
 

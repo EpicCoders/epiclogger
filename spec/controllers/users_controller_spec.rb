@@ -33,12 +33,12 @@ RSpec.describe UsersController, :type => :controller do
     end
 
     it "returns http success" do
-      get :new, params
+      get :new, params: params
       expect(response).to be_success
     end
 
     it "creates new user instance" do
-      get :new, params
+      get :new, params: params
       expect( subject.instance_variable_get(:@user).id ).to be_nil
     end
 
@@ -59,12 +59,12 @@ RSpec.describe UsersController, :type => :controller do
 
       it "returns http success" do
         expect{
-          post :create, params
+          post :create, params: params
           }.to change(User, :count).by(1)
       end
 
       it "redirects to /create" do
-        expect( post :create, params ).to redirect_to(website_wizard_path(:create))
+        expect( post :create, params: params ).to redirect_to(website_wizard_path(:create))
       end
     end
 
@@ -72,7 +72,7 @@ RSpec.describe UsersController, :type => :controller do
       let(:params) { default_params.merge({ token: invite.token, user: { name: 'Name for user', email: 'example@email.com', password: 'password', provider: 'email' } }) }
 
       it 'should update attributes' do
-        post :create, params
+        post :create, params: params
         user = User.find_by_email('example@email.com')
 
         expect(user.confirmation_token).not_to be_nil
@@ -84,14 +84,14 @@ RSpec.describe UsersController, :type => :controller do
         expect(mailer).to receive(:deliver_later)
         expect(UserMailer).to receive(:email_confirmation).with(anything()).and_return(mailer).once
 
-        post :create, params
+        post :create, params: params
       end
     end
 
     context 'wrong creentials' do
       let(:params) { default_params.merge({ user: { name: 'Name for user', email: 'example@email.com', password: 'pass', provider: 'email' } }) }
       it 'should render #new' do
-        expect( post :create, params ).to render_template(:new)
+        expect( post :create, params: params ).to render_template(:new)
       end
     end
   end

@@ -22,7 +22,7 @@ class Notification < Thor
     WebsiteMember.with_frequent_event
       .joins(website: :issues)
       .where('issues.created_at > ?', Time.now - 1.hour)
-      .uniq.find_each(batch_size: 500) do |member|
+      .distinct.find_each(batch_size: 500) do |member|
       Issue.more_than_10_errors(member)
     end
   end

@@ -3,7 +3,7 @@ class GroupedIssue < ActiveRecord::Base
   extend FriendlyId
   belongs_to :website
   belongs_to :release
-  has_many :subscribers, -> { uniq }, through: :issues, foreign_key: 'group_id'
+  has_many :subscribers, -> { distinct }, through: :issues, foreign_key: 'group_id'
   has_many :issues, foreign_key: 'group_id', dependent: :destroy
   has_many :messages, through: :issues
   enumerize :level, in: [:debug, :error, :fatal, :info, :warning], default: :error
