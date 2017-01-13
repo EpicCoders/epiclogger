@@ -7,6 +7,7 @@ class Subscriber < ActiveRecord::Base
   before_validation :check_fields
 
   def check_fields
+    self.email = 'anonymous@email.com' if email.blank?
     self.name = email.partition('@').first if name.blank?
   end
 
