@@ -7,6 +7,7 @@ class Issue < ActiveRecord::Base
   accepts_nested_attributes_for :messages
   validates :message, presence: true
   after_create :issue_created
+  after_commit :refresh_aggregates
 
   def error
     ErrorStore.find(self)
@@ -18,6 +19,10 @@ class Issue < ActiveRecord::Base
 
   def data
     decode_and_decompress(super)
+  end
+
+  def refresh_aggregates
+    AggregatesWorker.perform_async(self.id)
   end
 
   def get_interfaces(interface = nil)
@@ -40,7 +45,7 @@ class Issue < ActiveRecord::Base
 
   def http_data(key = nil)
     all_data = get_interfaces(:http).try(:_data)
-    return false if all_data.blank?
+    return nil if all_data.blank?
     return all_data if key.nil?
     all_data[key]
   end
@@ -57,7 +62,7 @@ class Issue < ActiveRecord::Base
   end
 
   def get_frames(frame = nil)
-    frames = get_platform_frames.first
+    frames = get_platform_frames.try(:first)
     return frames if frame.nil?
     frames._data[frame]
   end
@@ -66,13 +71,67 @@ class Issue < ActiveRecord::Base
     error.data[:environment]
   end
 
-  def browser
-    headers = error.data.try(:[], :interfaces).try(:[], :http).try(:[], :headers)
-    unless headers.nil?
-      headers.each do |hash|
-        return UserAgent.parse(hash[:user_agent]).browser if hash[:user_agent]
+  def version
+    modules = error.data[:modules]
+    unless modules.nil?
+      case self.platform
+      when 'ruby'
+        key = 'rails'
       end
+      "#{key.capitalize}/#{modules[key.to_sym]}" if defined? key
     end
+  rescue => e
+    Raven.capture_exception(e)
+    'Could not parse data!'
+  end
+
+  def notifier_remote_address
+    http_data(:env).try(:[], :REMOTE_ADDR)
+  rescue => e
+    Raven.capture_exception(e)
+    'Could not parse data!'
+  end
+
+  def server_hostnames
+    error.data.try(:[], :server_name)
+  rescue => e
+    Raven.capture_exception(e)
+    'Could not parse data!'
+  end
+
+  def file
+    get_frames.try(:get_culprit_string, with_lineno: get_frames.try(:_data).try(:[], :lineno).present?)
+  rescue => e
+    Raven.capture_exception(e)
+    'Could not parse data!'
+  end
+
+  def url
+    url_string = http_data(:url)
+  rescue => e
+    Raven.capture_exception(e)
+    'Could not parse data!'
+  end
+
+  def browser_platform
+    user_agent = get_headers(:user_agent)
+    return UserAgent.parse(user_agent).platform unless user_agent.nil?
+  rescue => e
+    Raven.capture_exception(e)
+    'Could not parse data!'
+  end
+
+  def browser
+    user_agent = get_headers(:user_agent)
+    return UserAgent.parse(user_agent).browser unless user_agent.nil?
+  rescue => e
+    Raven.capture_exception(e)
+    'Could not parse data!'
+  end
+
+  def user
+    user_data = get_interfaces(:user)
+    return "##{user_data._data[:id]} #{user_data._data[:user_name]} #{user_data._data[:email]}" unless user_data.nil?
   rescue => e
     Raven.capture_exception(e)
     'Could not parse data!'

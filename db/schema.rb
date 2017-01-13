@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160808131218) do
+ActiveRecord::Schema.define(version: 20160818125259) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -72,6 +72,14 @@ ActiveRecord::Schema.define(version: 20160808131218) do
     t.string   "environment"
   end
   add_index "grouped_issues", ["website_id", "checksum"], :name=>"index_grouped_issues_on_website_id_and_checksum", :unique=>true
+
+  create_table "aggregates", force: :cascade do |t|
+    t.integer  "grouped_issue_id", :index=>{:name=>"index_aggregates_on_grouped_issue_id"}, :foreign_key=>{:references=>"grouped_issues", :name=>"fk_aggregates_grouped_issue_id", :on_update=>:restrict, :on_delete=>:cascade}
+    t.string   "name"
+    t.jsonb    "value",            :default=>{}
+    t.datetime "created_at",       :null=>false
+    t.datetime "updated_at",       :null=>false
+  end
 
   create_table "integrations", force: :cascade do |t|
     t.integer  "website_id",    :index=>{:name=>"index_integrations_on_website_id"}, :foreign_key=>{:references=>"websites", :name=>"fk_integrations_website_id", :on_update=>:restrict, :on_delete=>:cascade}

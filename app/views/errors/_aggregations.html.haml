@@ -1,28 +1,24 @@
 .panel.panel-default
   .panel-heading
-    %a{"data-parent" => "#accordion", "data-toggle" => "collapse", :href => "#collapse#{panel}"}
-      %h4.panel-title=title
-  .panel-collapse.collapse{ id: "collapse#{panel}", class: "#{panel == 'One' ? 'in' : ''}" }
+    %a{"data-parent" => "#accordion", "data-toggle" => "collapse", :href => "#collapse#{data.name}"}
+      %h4.panel-title=data.name.humanize
+  .panel-collapse.collapse{ id: "collapse#{data.name}", class: "#{data.name == @error.aggregates[0].name ? 'in' : ''}" }
     .panel-body
       %table.table#members-container
         %thead
           %tr
-            %th=attribute.capitalize
+            %th=data.name.humanize
             %th # of notices
             %th First seen at
             %th Last seen at
         %tbody.websites
-          - data.each do |element|
+          - data.value.keys.each do |key|
             %tr
-              - if defined?(secondary)
-                %td
-                  =element[attribute][secondary]
-              - else
-                %td
-                  =element[attribute]
               %td
-                =element["count"]
+                =key
               %td
-                =element["created_at"].strftime("%Y-%m-%d %l:%M")
+                =data.value[key]["count"]
               %td
-                =element["updated_at"].strftime("%Y-%m-%d %l:%M")
+                =data.value[key]["created_at"].to_time.strftime("%Y-%m-%d %l:%M")
+              %td
+                =data.value[key]["updated_at"].to_time.strftime("%Y-%m-%d %l:%M")
